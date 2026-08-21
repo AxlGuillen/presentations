@@ -1,867 +1,143 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<script src="./support.js"></script>
+<title>Presentaciones con IA</title>
+<meta name="description" content="Portafolio de presentaciones web interactivas hechas con IA: navegables, responsivas y listas para presentar en cualquier dispositivo.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #0D0E12;
+    color: #E7E9EC;
+    font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    min-height: 100vh;
+    background-image: radial-gradient(90% 40% at 50% 0%, rgba(70, 90, 255, 0.10) 0%, rgba(0,0,0,0) 60%);
+  }
+  .wrap { max-width: 1180px; margin: 0 auto; padding: 72px 28px 60px; }
+
+  header.hero { text-align: center; margin-bottom: 64px; }
+  .hero .eyebrow {
+    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 3px;
+    text-transform: uppercase; color: #9BA3AF;
+    border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 18px;
+  }
+  .hero h1 {
+    margin: 26px 0 0; font-size: clamp(40px, 6vw, 68px); font-weight: 800;
+    letter-spacing: -1.5px; line-height: 1.02;
+    background: linear-gradient(#FFFFFF, rgba(255,255,255,0.55));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  .hero p { margin: 18px auto 0; max-width: 640px; font-size: 18px; font-weight: 500; color: #9BA3AF; line-height: 1.55; }
+
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
+
+  .card {
+    display: flex; flex-direction: column; text-decoration: none; color: inherit;
+    background: linear-gradient(165deg, #16181E, #0B0C10);
+    border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; overflow: hidden;
+    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  }
+  .card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.28); box-shadow: 0 24px 50px rgba(0,0,0,0.45); }
+
+  .cover { position: relative; aspect-ratio: 16 / 10; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+
+  /* Portada DYMMSA: blanca, logo + barra roja */
+  .cover--dymmsa { background: #FFFFFF; flex-direction: column; gap: 14px; }
+  .cover--dymmsa img { height: 42%; width: auto; }
+  .cover--dymmsa .bar { width: 54px; height: 4px; background: #C31722; }
+  .cover--dymmsa .t { font-size: 21px; font-weight: 800; color: #16181D; letter-spacing: -0.4px; }
+  .cover--dymmsa .s { font-size: 12.5px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #9AA0A6; }
+
+  /* Portada SoloQ: negra con glow verde */
+  .cover--soloq { background: #0B0B0B; background-image: radial-gradient(120% 85% at 50% 0%, rgba(83,252,24,0.25) 0%, rgba(0,0,0,0) 60%); flex-direction: column; gap: 10px; }
+  .cover--soloq img { height: 38%; width: auto; filter: drop-shadow(0 0 24px rgba(83,252,24,0.45)); }
+  .cover--soloq .t { font-size: 21px; font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -0.3px; background: linear-gradient(#FFFFFF, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+  .cover--soloq .s { font-size: 15px; font-weight: 800; font-style: italic; color: #53FC18; text-shadow: 0 0 18px rgba(83,252,24,0.5); }
+
+  .cover .badge {
+    position: absolute; top: 14px; right: 14px; font-size: 11.5px; font-weight: 700;
+    letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 6px 13px;
+  }
+
+  .body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+  .body h2 { margin: 0; font-size: 23px; font-weight: 750; letter-spacing: -0.3px; color: #FFFFFF; }
+  .body p { margin: 0; font-size: 15.5px; font-weight: 500; color: #9BA3AF; line-height: 1.5; flex: 1; }
+  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+  .meta span {
+    font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
+    color: #B9C0CA; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 999px; padding: 5px 12px;
+  }
+  .cta { margin-top: 16px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #FFFFFF; }
+  .cta .arrow { transition: transform 160ms ease; }
+  .card:hover .cta .arrow { transform: translateX(5px); }
+
+  footer { margin-top: 72px; text-align: center; font-size: 14px; font-weight: 500; color: #6B7280; line-height: 1.7; }
+  footer strong { color: #9BA3AF; }
+</style>
 </head>
 <body>
-<x-dc>
-<helmet>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
-<link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800&amp;family=Barlow+Condensed:wght@600;700&amp;display=swap" rel="stylesheet">
-<style>
-html, body { margin: 0; padding: 0; background: #101216; }
-a { color: #C31722; text-decoration: none; }
-a:hover { color: #8E0F19; }
-@keyframes dsUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
-@keyframes dsImg { from { opacity: 0; transform: translateY(34px) scale(0.97); } to { opacity: 1; transform: none; } }
-@keyframes dsBar { from { transform: scaleX(0); } to { transform: scaleX(1); } }
-@keyframes dsGhost { from { opacity: 0; transform: translateX(50px); } to { opacity: 1; transform: none; } }
-@media (prefers-reduced-motion: no-preference) {
-  [data-deck-active] [data-a="up"] { animation: dsUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  [data-deck-active] [data-a="up2"] { animation: dsUp 0.7s 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  [data-deck-active] [data-a="up3"] { animation: dsUp 0.8s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  [data-deck-active] [data-a="img"] { animation: dsImg 0.9s 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  [data-deck-active] [data-a="bar"] { animation: dsBar 0.9s 0.35s cubic-bezier(0.22, 0.61, 0.36, 1) both; transform-origin: left; }
-  [data-deck-active] [data-a="ghost"] { animation: dsGhost 1.2s 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-}
-</style>
-</helmet>
-<x-import component-from-global-scope="deck-stage" from="./deck-stage.js" width="1920" height="1080" hint-size="100%,100%">
+<div class="wrap">
 
-  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Presentación del comparativo de tabletas rugged: 14 modelos en tres rangos de costo." style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-sizing: border-box;">
-    <div data-a="up" style="display: flex; flex-direction: column; align-items: center;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 510px; width: auto;">
-      <div style="width: 96px; height: 6px; background: #C31722; margin: 34px 0 44px;" data-a="bar"></div>
-      <h1 style="margin: 0; font-size: 88px; font-weight: 800; color: #16181D; letter-spacing: -1.5px; line-height: 1.05;">Tabletas Rugged Empresariales</h1>
-      <p data-a="up2" style="margin: 30px 0 0; font-size: 30px; font-weight: 500; color: #6B7076; letter-spacing: 0.5px;">Comparativo técnico y de costos &nbsp;·&nbsp; 14 modelos en tres rangos</p>
-    </div>
-    <div data-a="up3" style="position: absolute; bottom: 70px; left: 0; right: 0; display: flex; justify-content: center; gap: 56px; font-size: 24px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #9AA0A6;">
-      <span>Costo bajo</span><span style="color: #D5D8DC;">/</span><span>Costo medio</span><span style="color: #D5D8DC;">/</span><span>Costo alto</span>
-    </div>
-  </section>
+  <header class="hero">
+    <span class="eyebrow">Portafolio</span>
+    <h1>Presentaciones<br>hechas con IA</h1>
+    <p>Decks web interactivos: se navegan con teclado o táctil, tienen modo presentación a pantalla completa, se exportan a PDF y se comparten con un simple enlace. Cada proyecto vive en su propia ruta.</p>
+  </header>
 
-  <section data-label="Costo bajo" data-screen-label="Divisor — Costo bajo" data-speaker-notes="Rango de entrada: seis modelos desde $6,059.56 hasta $22,649.78." style="background: linear-gradient(135deg, #16181D 0%, #101216 100%); font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 0 150px 150px; box-sizing: border-box; overflow: hidden;">
-    <div data-a="ghost" style="position: absolute; top: -80px; right: 40px; font-family: 'Barlow Condensed', sans-serif; font-size: 640px; font-weight: 700; line-height: 1; color: rgba(255, 255, 255, 0.045); letter-spacing: -10px;">01</div>
-    <div data-a="up" style="font-size: 25px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C31722;">Rango de costo</div>
-    <div style="width: 88px; height: 6px; background: #C31722; margin: 30px 0 36px;" data-a="bar"></div>
-    <h2 data-a="up2" style="margin: 0; font-size: 140px; font-weight: 800; color: #F4F5F7; letter-spacing: -3px; line-height: 1;">Costo bajo</h2>
-    <p data-a="up3" style="margin: 36px 0 0; font-size: 30px; font-weight: 500; color: #9AA0A6;">6 modelos &nbsp;·&nbsp; desde $6,059.56 hasta $22,649.78</p>
-  </section>
+  <main class="grid">
 
-  <section data-label="Cubot King Kong Mini" data-screen-label="Cubot King Kong Mini" data-speaker-notes="Opción más accesible del comparativo." style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 01 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image5.png" alt="Cubot King Kong Mini" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
+    <!-- ── Tabletas Rugged · /tabletas/ ─────────────────────────────── -->
+    <a class="card" href="tabletas/">
+      <div class="cover cover--dymmsa">
+        <img src="tabletas/assets/logo-dymmsa.png" alt="DYMMSA">
+        <span class="bar"></span>
+        <span class="t">Tabletas Rugged Empresariales</span>
+        <span class="s">Comparativo técnico y de costos</span>
+        <span class="badge" style="background: #C31722; color: #FFFFFF;">Horizontal 16:9</span>
       </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 44px 90px 40px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Cubot</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">King Kong Mini</h2>
-        <div data-a="up3" style="margin-top: 30px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8.68 pulgadas</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">16 GB de capacidad total</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 48 MP con flash para fotos claras</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Control parental</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Modo de gestión para un uso seguro</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 15 · Certificación militar MIL-STD-810H</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">10,200 mAh con carga rápida de 33W</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 30px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$6,059.56</span>
-          </div>
-        </sc-if>
+      <div class="body">
+        <h2>Comparativo de Tabletas Rugged</h2>
+        <p>14 modelos en tres rangos de precio: ficha técnica por equipo, tablas comparativas con puntuaciones para público no técnico y recomendación final por rango.</p>
+        <div class="meta"><span>22 diapositivas</span><span>B2B · Producto</span><span>DYMMSA</span></div>
+        <div class="cta">Ver presentación <span class="arrow">→</span></div>
       </div>
-    </div>
-  </section>
+    </a>
 
-  <section data-label="Emdoor T81P" data-screen-label="Emdoor T81P" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 02 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image6.png" alt="Emdoor T81P" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
+    <!-- ── SoloQ Challenge · /soloq/ ────────────────────────────────── -->
+    <a class="card" href="soloq/">
+      <div class="cover cover--soloq">
+        <img src="soloq/assets/soloq-logo.webp" alt="SoloQ Challenge">
+        <span class="t">SoloQ Challenge 2026</span>
+        <span class="s">125 000 € en premios</span>
+        <span class="badge" style="background: #E9FF1F; color: #000000;">Vertical 9:16</span>
       </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">T81P</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">TFT de 8.0 pulgadas HD (1280 × 800 píxeles)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">MediaTek MTK Octa-Core de alto rendimiento</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">6 GB para ejecución fluida multitarea</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB (expandible con MicroSD hasta 512 GB)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 11 nativo empresarial</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Polímero de litio de 6,000 mAh (≈ 7 horas)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 13 MP con enfoque automático / Frontal de 5 MP</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Peso</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Aproximadamente 680 gramos</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$10,785.56</span>
-          </div>
-        </sc-if>
+      <div class="body">
+        <h2>SoloQ Challenge · Premios vs Salario Mínimo</h2>
+        <p>El ranking completo de ganadores con sus fotos y premios, y cuántos días de salario mínimo tomaría ganar cada cifra en México, Chile, Colombia y Argentina.</p>
+        <div class="meta"><span>28 diapositivas</span><span>Esports · Data</span><span>Vertical</span></div>
+        <div class="cta">Ver presentación <span class="arrow">→</span></div>
       </div>
-    </div>
-  </section>
+    </a>
 
-  <section data-label="Emdoor EM-T17X" data-screen-label="Emdoor EM-T17X" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 03 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image7.png" alt="Emdoor EM-T17X" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">EM-T17X</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 10.1" WUXGA FHD (1920 × 1200), 700 nits</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Rendimiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">MediaTek Octa-Core (2× A76 2.2 GHz + 6× A55)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB de RAM LPDDR3 + 128 GB de almacenamiento eMMC</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 12 con certificación Google Mobile Services (GMS)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Energía</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Batería removible de 10,000 mAh (hasta 9 horas de uso)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 13 MP con autoenfoque y flash / Frontal de 5 MP</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Peso / Tamaño</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">1,140 g · 274.9 × 188.7 × 23.1 mm</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$16,723.06</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
+    <!--
+      Para agregar una presentación nueva:
+      1. Crea la carpeta /nombre con su index.html y assets propios (rutas relativas).
+      2. Copia un bloque <a class="card"> y ajusta cover, textos y href="nombre/".
+    -->
 
-  <section data-label="Onerugged M105Q" data-screen-label="Onerugged M105Q" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 04 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image8.png" alt="Onerugged M105Q" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Onerugged</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">M105Q</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 10.1 pulgadas WUXGA (1920 × 1200)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Brillo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">1,000 nits · alta visibilidad bajo luz solar directa</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Qualcomm QCM6490 Octa-Core (Kryo 670 hasta 2.7 GHz, 6 nm)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB RAM + 128 GB ROM (expandible hasta 512 GB MicroSD)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">10,000 mAh removible · carga rápida DC 20W y USB-C PD 18W</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 13 MP con enfoque automático / Frontal de 5 MP</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 14px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 14 nativo empresarial</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$19,783.40</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
+  </main>
 
-  <section data-label="Zebra ET401" data-screen-label="Zebra ET401" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 05 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image9.png" alt="Zebra ET401" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Zebra</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">ET401</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 8.0" WUXGA (1920 × 1200) con 600 nits de brillo</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Protección</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Cristal ultra resistente Corning Gorilla Glass 5</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Qualcomm Dragonwing Q-6690 Octa-Core (2.0 GHz) con NPU para IA</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB LPDDR5 de alta velocidad</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB Flash (expandible por MicroSD)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Escáner integrado</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Lector físico imager 2D Zebra SE4100 de lectura rápida</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android con Google Mobile Services (GMS) empresariales</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">6,100 mAh de polímero de litio, totalmente intercambiable</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$22,498.92</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
+  <footer>
+    Presentaciones web generadas con IA · diseño, datos y desarrollo asistidos por Claude.<br>
+    <strong>¿Quieres una para tu marca?</strong> Cada deck se entrega como enlace listo para compartir.
+  </footer>
 
-  <section data-label="Emdoor I87J" data-screen-label="Emdoor I87J" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 06 de 06</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image10.png" alt="Emdoor I87J" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">I87J</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">TFT de 8.0 pulgadas WUXGA de alta definición (1920 × 1200)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Brillo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">550 nits · legible bajo luz solar o entornos industriales</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Celeron N5100 (Jasper Lake, Quad-Core hasta 2.80 GHz)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB · ideal para software corporativo x86 o x64</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB ROM de estado sólido</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 10 Pro original de 64 bits</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Polímero de litio de 5,000 mAh removible (≈ 7 horas)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Peso</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Aprox. 910 g · chasis reforzado e interfaces de metal</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$22,649.78</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Costo medio" data-screen-label="Divisor — Costo medio" data-speaker-notes="Rango intermedio: cinco modelos desde $24,233.83 hasta $36,852.37." style="background: linear-gradient(135deg, #16181D 0%, #101216 100%); font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 0 150px 150px; box-sizing: border-box; overflow: hidden;">
-    <div data-a="ghost" style="position: absolute; top: -80px; right: 40px; font-family: 'Barlow Condensed', sans-serif; font-size: 640px; font-weight: 700; line-height: 1; color: rgba(255, 255, 255, 0.045); letter-spacing: -10px;">02</div>
-    <div data-a="up" style="font-size: 25px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C31722;">Rango de costo</div>
-    <div style="width: 88px; height: 6px; background: #C31722; margin: 30px 0 36px;" data-a="bar"></div>
-    <h2 data-a="up2" style="margin: 0; font-size: 140px; font-weight: 800; color: #F4F5F7; letter-spacing: -3px; line-height: 1;">Costo medio</h2>
-    <p data-a="up3" style="margin: 36px 0 0; font-size: 30px; font-weight: 500; color: #9AA0A6;">5 modelos &nbsp;·&nbsp; desde $24,233.83 hasta $36,852.37</p>
-  </section>
-
-  <section data-label="Honeywell EDA10A" data-screen-label="Honeywell EDA10A" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 01 de 05</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image11.png" alt="Honeywell EDA10A" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Honeywell</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">EDA10A</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">10.1" multitáctil Full HD (1920 × 1200) de alto brillo</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Protección</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Cristal reforzado Corning Gorilla Glass 5</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Qualcomm Snapdragon SM4350-AC Octa-Core a 2.2 GHz</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">4 GB LPDDR4X dedicada para software industrial</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">64 GB Flash internos (expandible vía MicroSD)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Escáner integrado</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Imager físico Honeywell S0703 SR · lectura ultra rápida 1D y 2D</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 12 con certificación oficial GMS</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 13px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8,000 mAh intercambiable en caliente (hot-swap)</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$24,233.83</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Emdoor I10J" data-screen-label="Emdoor I10J" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 02 de 05</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image12.png" alt="Emdoor I10J" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 38px 90px 36px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 56px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">I10J</h2>
-        <div data-a="up3" style="margin-top: 20px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 10.1 pulgadas con resolución WUXGA (1920 × 1200)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Brillo</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">700 nits · apta para luz solar directa o cuartos fríos</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Celeron N5105 (Jasper Lake, Quad-Core hasta 2.90 GHz)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">16 GB DDR · configuración máxima para multitarea compleja</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB ROM de estado sólido</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 10 / Windows 11 Pro de 64 bits (según lote de fábrica)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Dual: integrada (7.4V / 700 mAh) + removible de 5,000 mAh</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 8 MP con enfoque automático / Frontal de 5 MP</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 9px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Peso</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">1,140 g · chasis metálico y armadura protectora</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 22px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 58px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$29,772.62</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Emdoor EM-I17J" data-screen-label="Emdoor EM-I17J" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 03 de 05</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image13.png" alt="Emdoor EM-I17J" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">EM-I17J</h2>
-        <div data-a="up3" style="margin-top: 24px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 10.1" con resolución Full HD / WUXGA (1920 × 1200)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Panel táctil</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Cristal templado capacitivo de 10 puntos · opera con guantes</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Celeron N5100 (Jasper Lake, Quad-Core hasta 2.80 GHz)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">4 GB LPDDR4 dedicada</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">64 GB de estado sólido (expandible hasta 256 GB MicroSD)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 11 Pro de 64 bits · compatible con software x86/x64</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Removible de 5,000 mAh / 7.6V (≈ 8 horas de autonomía)</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$32,466.59</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Emdoor EMD-I20J" data-screen-label="Emdoor EMD-I20J" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 04 de 05</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image14.png" alt="Emdoor EMD-I20J" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 38px 90px 36px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Emdoor</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">EMD-I20J</h2>
-        <div data-a="up3" style="margin-top: 20px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS táctil de 12.2 pulgadas con resolución WUXGA (1920 × 1200)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Brillo</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">650 nits · legible bajo luz solar directa o en exteriores</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Celeron N5105 (Jasper Lake, Quad-Core hasta 2.90 GHz)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">16 GB DDR4 para software pesado (ERP / CAD) en simultáneo</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB SSD (expandible por tarjeta TF hasta 128 GB extra)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 10 Pro / Windows 11 Pro / IoT de 64 bits de fábrica</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">6,300 mAh / 7.4V de polímero de litio de alta eficiencia</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 22px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 58px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$36,647.62</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Zebra ET60" data-screen-label="Zebra ET60" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 05 de 05</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image15.png" alt="Zebra ET60" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Zebra</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">ET60</h2>
-        <div data-a="up3" style="margin-top: 20px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS de 10.1 pulgadas WUXGA (1920 × 1200 píxeles)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Brillo extremo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">1,000 nits · visibilidad total en patios abiertos bajo el sol</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Qualcomm Snapdragon 6490 Octa-Core (2.7 GHz) con NPU para IA</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB de RAM de alta velocidad</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB Flash UFS (expandible hasta 2 TB mediante MicroSD)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Escáner físico</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Sin lector láser integrado · cámara trasera de 16 MP para capturas</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 14 nativo empresarial (GMS, soporte hasta Android 16)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Estándar de 8,920 mAh intercambiable (hot-swap)</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$36,852.37</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Costo alto" data-screen-label="Divisor — Costo alto" data-speaker-notes="Rango premium: tres modelos desde $63,274.78 hasta $85,774.78." style="background: linear-gradient(135deg, #16181D 0%, #101216 100%); font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; justify-content: flex-end; padding: 0 0 150px 150px; box-sizing: border-box; overflow: hidden;">
-    <div data-a="ghost" style="position: absolute; top: -80px; right: 40px; font-family: 'Barlow Condensed', sans-serif; font-size: 640px; font-weight: 700; line-height: 1; color: rgba(255, 255, 255, 0.045); letter-spacing: -10px;">03</div>
-    <div data-a="up" style="font-size: 25px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C31722;">Rango de costo</div>
-    <div style="width: 88px; height: 6px; background: #C31722; margin: 30px 0 36px;" data-a="bar"></div>
-    <h2 data-a="up2" style="margin: 0; font-size: 140px; font-weight: 800; color: #F4F5F7; letter-spacing: -3px; line-height: 1;">Costo alto</h2>
-    <p data-a="up3" style="margin: 36px 0 0; font-size: 30px; font-weight: 500; color: #9AA0A6;">3 modelos &nbsp;·&nbsp; desde $63,274.78 hasta $85,774.78</p>
-  </section>
-
-  <section data-label="Onerugged T1Max" data-screen-label="Onerugged T1Max" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo alto</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 01 de 03</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image16.png" alt="Onerugged T1Max" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 44px 90px 40px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Onerugged</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">T1Max</h2>
-        <div data-a="up3" style="margin-top: 30px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS InCell de 10.95 pulgadas FHD (1920 × 1200 píxeles)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">MediaTek Helio G99 (MT8781) de 8 núcleos (hasta 2.2 GHz)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB LPDDR4X de alta velocidad</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB ROM empresariales</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Android 14 nativo con certificación GMS oficial</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">10,000 mAh · carga rápida de 33W y carga inversa</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 15px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Cámaras</div><div style="font-size: 27px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Trasera de 48 MP con autoenfoque / Frontal de 32 MP</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 30px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$63,274.78</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Zebra ET60W" data-screen-label="Zebra ET60W" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo alto</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 02 de 03</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image17.png" alt="Zebra ET60W" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 40px 90px 38px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Zebra</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 58px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">ET60W</h2>
-        <div data-a="up3" style="margin-top: 20px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Táctil de 10.1 pulgadas WUXGA FHD (1920 × 1200 píxeles)</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Protección</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Corning Gorilla Glass · antirrayaduras y golpes</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Core Ultra 5 125U (hasta 4.3 GHz) con NPU dedicada para IA</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">8 GB LPDDR5x de alta velocidad</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">128 GB SSD de estado sólido</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Escáner integrado</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Sin motor de escaneo físico · capturas vía cámara trasera</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 11 IoT Enterprise de 64 bits de nivel corporativo</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 26px; font-weight: 500; color: #1A1D22; line-height: 1.3;">36 Wh con supercondensador para intercambio en caliente</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 26px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 60px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$71,345.90</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Zebra ET60WW" data-screen-label="Zebra ET60WW" style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo alto</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Modelo 03 de 03</span></div>
-    </header>
-    <div style="flex: 1; display: grid; grid-template-columns: 780px 1fr; min-height: 0;">
-      <div style="background: #FFFFFF; border-right: 1px solid #E4E6E9; display: flex; align-items: center; justify-content: center; padding: 50px;">
-        <img data-a="img" src="assets/image18.png" alt="Zebra ET60WW" style="max-width: 640px; max-height: 700px; object-fit: contain; filter: drop-shadow(0 34px 40px rgba(16, 18, 22, 0.16));">
-      </div>
-      <div style="background-color: #F7F8F9; background-image: radial-gradient(rgba(22, 24, 29, 0.07) 1.5px, transparent 1.5px); background-size: 26px 26px; display: flex; flex-direction: column; padding: 38px 90px 36px; box-sizing: border-box; min-height: 0;">
-        <div data-a="up" style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Zebra</div>
-        <h2 data-a="up" style="margin: 8px 0 0; font-size: 56px; font-weight: 750; color: #16181D; letter-spacing: -1px; line-height: 1.05;">ET60WW</h2>
-        <div data-a="up3" style="margin-top: 20px; display: flex; flex-direction: column;">
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Escáner integrado</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Imager 1D/2D Zebra SE55 · lectura desde centímetros hasta 14 m</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Procesador</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Intel Core Ultra 5 125U con motor NPU para Inteligencia Artificial</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Memoria RAM</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">16 GB LPDDR5x de alta velocidad</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Almacenamiento</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">256 GB SSD de estado sólido</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Pantalla</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">IPS táctil de 10.1" WUXGA FHD (1920 × 1200) con 1,000 nits</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Sistema operativo</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Windows 11 Pro de 64 bits nativo empresarial</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Conectividad local</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Wi-Fi 7 (según lote) / Wi-Fi 6E, Bluetooth 5.4 y NFC</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Variante de red</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">Configuración Wi-Fi Only · sin ranura SIM celular 4G/5G</div></div>
-          <div style="display: grid; grid-template-columns: 320px 1fr; gap: 26px; align-items: baseline; padding: 11px 0; border-bottom: 1px solid #E4E6E9;"><div style="font-size: 22px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Batería</div><div style="font-size: 25px; font-weight: 500; color: #1A1D22; line-height: 1.3;">4.6 Ah (36 Wh) con hot-swap · intercambio sin apagar el equipo</div></div>
-        </div>
-        <sc-if value="{{ mostrarPrecios }}" hint-placeholder-val="{{ true }}">
-          <div data-a="up3" style="margin-top: auto; padding-top: 22px; display: flex; align-items: baseline; gap: 22px;">
-            <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A9098;">Precio</span>
-            <span style="font-size: 58px; font-weight: 800; color: #C31722; letter-spacing: -1px; font-variant-numeric: tabular-nums;">$85,774.78</span>
-          </div>
-        </sc-if>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Comparativa — Costo bajo" data-screen-label="Comparativa — Costo bajo" data-speaker-notes="Comparativa de costo bajo. Recomendada: Onerugged M105Q por equilibrio entre pantalla, potencia, bateria y precio." style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo bajo</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Comparativa del rango</span></div>
-    </header>
-    <div style="flex: 1; display: flex; flex-direction: column; padding: 34px 80px 30px; box-sizing: border-box; min-height: 0;">
-      <div data-a="up" style="display: flex; align-items: baseline; justify-content: space-between;">
-        <h2 style="margin: 0; font-size: 52px; font-weight: 800; color: #16181D; letter-spacing: -1px;">¿Cuál elegir?</h2>
-        <span style="font-size: 21px; font-weight: 500; color: #8A9098;"><span style="color: #C31722;">●</span> Puntuación de 1 a 5 &nbsp;·&nbsp; Nota general sobre 10</span>
-      </div>
-      <div data-a="up3" style="margin-top: 22px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-        <div style="flex: none; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 14px 26px; border-bottom: 2px solid #16181D; box-sizing: border-box;">
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Modelo</div>
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Pantalla</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Potencia</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Batería</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Funciones</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Nota</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: right;">Precio</div>
-        </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Cubot King Kong Mini</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Compacta · la más económica del comparativo</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$6,059.56</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor T81P</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Muy ligera (680 g) · para tareas básicas</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●</span><span style="color: #DADDE0;">●●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">6.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$10,785.56</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor EM-T17X</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Pantalla de 10.1″ y batería removible</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$16,723.06</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; background: #FBF0F0; border-left: 6px solid #C31722; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Onerugged M105Q</span> <span style="background: #C31722; color: #FFFFFF; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 6px 16px; white-space: nowrap;">★ Recomendada</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Pantalla de 1,000 nits · Android 14 · batería de 10,000 mAh</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #C31722; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">8.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$19,783.40</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Zebra ET401</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Escáner profesional integrado · marca líder</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">8.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$22,498.92</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor I87J</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">La única con Windows del rango</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●</span><span style="color: #DADDE0;">●●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$22,649.78</div>
-      </div>
-      </div>
-      <div data-a="up2" style="flex: none; margin-top: 24px; background: #16181D; border-radius: 16px; padding: 20px 34px; display: flex; align-items: center; gap: 24px;">
-        <span style="flex: none; font-size: 20px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Recomendación</span>
-        <span style="font-size: 24px; font-weight: 500; color: #F4F5F7; line-height: 1.35;">Onerugged M105Q — el mejor equilibrio del rango: pantalla brillante de 1,000 nits, Android 14 moderno y batería removible de 10,000 mAh.</span>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Comparativa — Costo medio" data-screen-label="Comparativa — Costo medio" data-speaker-notes="Comparativa de costo medio. Recomendada: Zebra ET60. Alternativa con escaner: Honeywell EDA10A." style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo medio</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Comparativa del rango</span></div>
-    </header>
-    <div style="flex: 1; display: flex; flex-direction: column; padding: 34px 80px 30px; box-sizing: border-box; min-height: 0;">
-      <div data-a="up" style="display: flex; align-items: baseline; justify-content: space-between;">
-        <h2 style="margin: 0; font-size: 52px; font-weight: 800; color: #16181D; letter-spacing: -1px;">¿Cuál elegir?</h2>
-        <span style="font-size: 21px; font-weight: 500; color: #8A9098;"><span style="color: #C31722;">●</span> Puntuación de 1 a 5 &nbsp;·&nbsp; Nota general sobre 10</span>
-      </div>
-      <div data-a="up3" style="margin-top: 22px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-        <div style="flex: none; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 14px 26px; border-bottom: 2px solid #16181D; box-sizing: border-box;">
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Modelo</div>
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Pantalla</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Potencia</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Batería</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Funciones</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Nota</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: right;">Precio</div>
-        </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Honeywell EDA10A</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Escáner ultrarrápido · ideal para almacén</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$24,233.83</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor I10J</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Windows con 16 GB de RAM</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$29,772.62</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor EM-I17J</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Pantalla táctil que opera con guantes</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●</span><span style="color: #DADDE0;">●●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">6.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$32,466.59</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Emdoor EMD-I20J</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">La pantalla más grande: 12.2 pulgadas</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$36,647.62</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; background: #FBF0F0; border-left: 6px solid #C31722; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Zebra ET60</span> <span style="background: #C31722; color: #FFFFFF; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 6px 16px; white-space: nowrap;">★ Recomendada</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Pantalla de 1,000 nits · batería hot-swap · soporte largo</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #C31722; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">9.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$36,852.37</div>
-      </div>
-      </div>
-      <div data-a="up2" style="flex: none; margin-top: 24px; background: #16181D; border-radius: 16px; padding: 20px 34px; display: flex; align-items: center; gap: 24px;">
-        <span style="flex: none; font-size: 20px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Recomendación</span>
-        <span style="font-size: 24px; font-weight: 500; color: #F4F5F7; line-height: 1.35;">Zebra ET60 — pantalla de 1,000 nits, batería intercambiable sin apagar y soporte hasta Android 16. Si necesitas escáner integrado, elige la Honeywell EDA10A.</span>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Comparativa — Costo alto" data-screen-label="Comparativa — Costo alto" data-speaker-notes="Comparativa de costo alto. Recomendada: Zebra ET60WW, la mas completa. Aclarar que es Wi-Fi only, sin SIM celular." style="background: #FFFFFF; font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; box-sizing: border-box;">
-    <header style="height: 200px; flex: none; display: flex; align-items: center; justify-content: space-between; padding: 0 80px; border-bottom: 1px solid #E4E6E9;">
-      <img src="assets/logo-dymmsa.png" alt="DYMMSA" style="height: 190px; width: auto;">
-      <div style="display: flex; align-items: baseline; gap: 18px;"><span style="font-size: 22px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Costo alto</span><span style="font-size: 22px; font-weight: 500; color: #9AA0A6;">Comparativa del rango</span></div>
-    </header>
-    <div style="flex: 1; display: flex; flex-direction: column; padding: 34px 80px 30px; box-sizing: border-box; min-height: 0;">
-      <div data-a="up" style="display: flex; align-items: baseline; justify-content: space-between;">
-        <h2 style="margin: 0; font-size: 52px; font-weight: 800; color: #16181D; letter-spacing: -1px;">¿Cuál elegir?</h2>
-        <span style="font-size: 21px; font-weight: 500; color: #8A9098;"><span style="color: #C31722;">●</span> Puntuación de 1 a 5 &nbsp;·&nbsp; Nota general sobre 10</span>
-      </div>
-      <div data-a="up3" style="margin-top: 22px; flex: 1; display: flex; flex-direction: column; min-height: 0;">
-        <div style="flex: none; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 14px 26px; border-bottom: 2px solid #16181D; box-sizing: border-box;">
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098;">Modelo</div>
-          <div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Pantalla</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Potencia</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Batería</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Funciones</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: center;">Nota</div><div style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A9098; text-align: right;">Precio</div>
-        </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Onerugged T1Max</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Android con cámaras de 48 MP y carga inversa</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">7.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$63,274.78</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; border-left: 6px solid transparent; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Zebra ET60W</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Windows 11 con procesador Intel Core Ultra</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●</span><span style="color: #DADDE0;">●●</span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #16181D; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">8.0</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$71,345.90</div>
-      </div>
-      <div style="flex: 1; min-height: 0; display: grid; grid-template-columns: 1fr 170px 170px 170px 170px 150px 220px; align-items: center; padding: 0 20px 0 26px; border-bottom: 1px solid #E4E6E9; background: #FBF0F0; border-left: 6px solid #C31722; box-sizing: border-box;">
-        <div style="display: flex; flex-direction: column; gap: 3px; padding-right: 20px;">
-          <div style="display: flex; align-items: center; gap: 14px;"><span style="font-size: 29px; font-weight: 750; color: #16181D; letter-spacing: -0.5px;">Zebra ET60WW</span> <span style="background: #C31722; color: #FFFFFF; font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 6px 16px; white-space: nowrap;">★ Recomendada</span></div>
-          <span style="font-size: 19px; font-weight: 500; color: #8A9098;">Potencia máxima · escáner de largo alcance de 14 m</span>
-        </div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●</span><span style="color: #DADDE0;">●</span></span></div>
-        <div style="text-align: center;"><span style="font-size: 30px; letter-spacing: 4px;"><span style="color: #C31722;">●●●●●</span><span style="color: #DADDE0;"></span></span></div>
-        <div style="text-align: center;"><span style="display: inline-block; background: #C31722; color: #FFFFFF; border-radius: 12px; padding: 7px 0; width: 88px; font-weight: 800; font-size: 28px;">9.5</span></div>
-        <div style="text-align: right; font-size: 29px; font-weight: 800; color: #C31722; letter-spacing: -0.5px;">$85,774.78</div>
-      </div>
-      </div>
-      <div data-a="up2" style="flex: none; margin-top: 24px; background: #16181D; border-radius: 16px; padding: 20px 34px; display: flex; align-items: center; gap: 24px;">
-        <span style="flex: none; font-size: 20px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #C31722;">Recomendación</span>
-        <span style="font-size: 24px; font-weight: 500; color: #F4F5F7; line-height: 1.35;">Zebra ET60WW — la más completa: máxima potencia, 16 GB de RAM y escáner de hasta 14 metros. Considera que es solo Wi-Fi (sin SIM celular).</span>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Recomendación final" data-screen-label="Recomendación final" data-speaker-notes="Cierre: una recomendación por rango. M105Q en bajo, ET60 en medio y ET60WW en alto." style="background: linear-gradient(135deg, #16181D 0%, #101216 100%); font-family: 'Barlow', sans-serif; display: flex; flex-direction: column; padding: 74px 120px 70px; box-sizing: border-box; overflow: hidden;">
-    <div data-a="ghost" style="position: absolute; top: -90px; right: 40px; font-family: 'Barlow Condensed', sans-serif; font-size: 560px; font-weight: 700; line-height: 1; color: rgba(255, 255, 255, 0.045); letter-spacing: -10px;">★</div>
-    <div data-a="up" style="font-size: 25px; font-weight: 600; letter-spacing: 4px; text-transform: uppercase; color: #C31722;">Conclusión</div>
-    <div style="width: 88px; height: 6px; background: #C31722; margin: 24px 0 28px;" data-a="bar"></div>
-    <h2 data-a="up2" style="margin: 0; font-size: 84px; font-weight: 800; color: #F4F5F7; letter-spacing: -2px; line-height: 1;">Nuestra recomendación por rango</h2>
-    <div data-a="up3" style="margin-top: 48px; flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; min-height: 0;">
-      <div style="background: #FFFFFF; border-radius: 20px; padding: 38px 34px 34px; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 0;">
-        <span style="font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Costo bajo</span>
-        <img src="assets/image8.png" alt="Onerugged M105Q" style="height: 250px; max-width: 100%; object-fit: contain; margin: 26px 0 22px; filter: drop-shadow(0 20px 26px rgba(16, 18, 22, 0.18));">
-        <h3 style="margin: 0; font-size: 36px; font-weight: 800; color: #16181D; letter-spacing: -0.5px;">Onerugged M105Q</h3>
-        <span style="margin-top: 16px; background: #16181D; color: #F4F5F7; border-radius: 999px; padding: 8px 24px; font-weight: 800; font-size: 23px;">Nota 8.5 / 10</span>
-        <div style="margin-top: 18px; font-size: 40px; font-weight: 800; color: #C31722; letter-spacing: -1px;">$19,783.40</div>
-        <p style="margin: 14px 0 0; font-size: 21px; font-weight: 500; color: #6B7076; line-height: 1.4;">El mejor equilibrio entre pantalla, batería y precio.</p>
-      </div>
-      <div style="background: #FFFFFF; border-radius: 20px; padding: 38px 34px 34px; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 0;">
-        <span style="font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Costo medio</span>
-        <img src="assets/image15.png" alt="Zebra ET60" style="height: 250px; max-width: 100%; object-fit: contain; margin: 26px 0 22px; filter: drop-shadow(0 20px 26px rgba(16, 18, 22, 0.18));">
-        <h3 style="margin: 0; font-size: 36px; font-weight: 800; color: #16181D; letter-spacing: -0.5px;">Zebra ET60</h3>
-        <span style="margin-top: 16px; background: #16181D; color: #F4F5F7; border-radius: 999px; padding: 8px 24px; font-weight: 800; font-size: 23px;">Nota 9.0 / 10</span>
-        <div style="margin-top: 18px; font-size: 40px; font-weight: 800; color: #C31722; letter-spacing: -1px;">$36,852.37</div>
-        <p style="margin: 14px 0 0; font-size: 21px; font-weight: 500; color: #6B7076; line-height: 1.4;">Pantalla brillante, batería intercambiable y años de soporte.</p>
-      </div>
-      <div style="background: #FFFFFF; border-radius: 20px; padding: 38px 34px 34px; display: flex; flex-direction: column; align-items: center; text-align: center; min-height: 0;">
-        <span style="font-size: 20px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #C31722;">Costo alto</span>
-        <img src="assets/image18.png" alt="Zebra ET60WW" style="height: 250px; max-width: 100%; object-fit: contain; margin: 26px 0 22px; filter: drop-shadow(0 20px 26px rgba(16, 18, 22, 0.18));">
-        <h3 style="margin: 0; font-size: 36px; font-weight: 800; color: #16181D; letter-spacing: -0.5px;">Zebra ET60WW</h3>
-        <span style="margin-top: 16px; background: #16181D; color: #F4F5F7; border-radius: 999px; padding: 8px 24px; font-weight: 800; font-size: 23px;">Nota 9.5 / 10</span>
-        <div style="margin-top: 18px; font-size: 40px; font-weight: 800; color: #C31722; letter-spacing: -1px;">$85,774.78</div>
-        <p style="margin: 14px 0 0; font-size: 21px; font-weight: 500; color: #6B7076; line-height: 1.4;">La más completa: máxima potencia y escáner profesional.</p>
-      </div>
-    </div>
-  </section>
-
-</x-import>
-
-<template id="__bundler_thumbnail"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="#16181D"></rect><rect x="30" y="56" width="40" height="6" fill="#C31722"></rect><text x="50" y="52" font-family="Arial, sans-serif" font-size="22" font-weight="bold" fill="#F4F5F7" text-anchor="middle">DY</text></svg></template></x-dc>
-<script type="text/x-dc" data-dc-script data-props="{
-  &quot;mostrarPrecios&quot;: { &quot;editor&quot;: &quot;boolean&quot;, &quot;default&quot;: true, &quot;tsType&quot;: &quot;boolean&quot;, &quot;section&quot;: &quot;Contenido&quot; }
-}">
-class Component extends DCLogic {
-  renderVals() {
-    return {
-      mostrarPrecios: this.props.mostrarPrecios ?? true
-    };
-  }
-}
-</script>
-<style>
-#modo-presentacion {
-  position: fixed; top: 16px; right: 16px; z-index: 2147483000;
-  padding: 9px 18px; border: 1px solid rgba(255,255,255,0.22); border-radius: 999px;
-  background: rgba(16,18,22,0.78); color: #F4F5F7; cursor: pointer;
-  font: 600 13px/1 'Barlow', sans-serif; letter-spacing: 0.8px;
-  opacity: 0.45; transition: opacity 160ms ease;
-}
-#modo-presentacion:hover { opacity: 1; }
-#modo-presentacion[data-on] { opacity: 0; }
-#modo-presentacion[data-on]:hover { opacity: 1; }
-</style>
-<script>
-(function () {
-  var presenting = false;
-  var btn = document.createElement('button');
-  btn.id = 'modo-presentacion';
-  btn.type = 'button';
-
-  function render() {
-    btn.textContent = presenting ? 'Salir  ·  Esc' : 'Presentar  ·  P';
-    btn.title = presenting ? 'Salir del modo presentación (Esc o P)' : 'Modo presentación: oculta las miniaturas y pone pantalla completa (P)';
-    if (presenting) btn.setAttribute('data-on', '');
-    else btn.removeAttribute('data-on');
-  }
-
-  function setPresenting(on) {
-    if (on === presenting) return;
-    presenting = on;
-    // deck-stage escucha este mensaje: oculta la barra de miniaturas y el pie de navegación.
-    window.postMessage({ __omelette_presenting: on }, '*');
-    if (on) {
-      if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(function () {});
-      }
-    } else if (document.fullscreenElement && document.exitFullscreen) {
-      document.exitFullscreen().catch(function () {});
-    }
-    render();
-  }
-
-  btn.addEventListener('click', function () {
-    setPresenting(!presenting);
-    btn.blur();
-  });
-
-  window.addEventListener('keydown', function (e) {
-    if (e.metaKey || e.ctrlKey || e.altKey) return;
-    var t = e.target;
-    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
-    if (e.key === 'p' || e.key === 'P') {
-      setPresenting(!presenting);
-      e.preventDefault();
-    } else if (e.key === 'Escape' && presenting && !document.fullscreenElement) {
-      setPresenting(false);
-    }
-  });
-
-  // Esc dentro de pantalla completa la cierra sin pasar por keydown: sincronizar.
-  document.addEventListener('fullscreenchange', function () {
-    if (!document.fullscreenElement && presenting) setPresenting(false);
-  });
-
-  render();
-  if (document.body) document.body.appendChild(btn);
-  else document.addEventListener('DOMContentLoaded', function () { document.body.appendChild(btn); });
-})();
-</script>
+</div>
 </body>
 </html>

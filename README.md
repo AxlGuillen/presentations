@@ -1,14 +1,23 @@
-# Comparativo Tabletas Rugged — DYMMSA
+# Presentaciones con IA
 
-Presentación web (18 diapositivas) con el comparativo técnico y de costos de tabletas rugged empresariales.
+Portafolio de presentaciones web interactivas generadas con IA. La raíz es una galería con cards; cada presentación vive en su propia subruta con sus propios assets (100% estático, sin build).
 
 ## Estructura
 
-- `index.html` — la presentación (diseño exportado de Claude Design)
-- `deck-stage.js` / `support.js` — runtime del deck (navegación con teclado ←/→, escalado automático, impresión a PDF)
-- `assets/` — imágenes de los modelos y logo
+```
+/                 → galería (index.html)
+/tabletas/        → Comparativo Tabletas Rugged DYMMSA (horizontal 16:9, 22 slides)
+/soloq/           → SoloQ Challenge 2026: premios vs salario mínimo (vertical 9:16, 28 slides)
+vercel.json       → trailingSlash: true (necesario para que las rutas relativas de cada subruta resuelvan)
+```
 
-Es un sitio 100% estático: no requiere build ni dependencias.
+Cada carpeta de presentación es autocontenida: `index.html`, runtime del deck (`deck-stage.js`), y `assets/` propios con rutas relativas. Los decks se navegan con ←/→, tecla **P** para modo presentación a pantalla completa, y Ctrl+P para exportar a PDF.
+
+## Agregar una presentación
+
+1. Crea `/nombre/` con `index.html` + `assets/` (usa rutas relativas).
+2. Añade su card en el `index.html` de la raíz (hay un bloque comentado de ejemplo).
+3. Commit y push: Vercel la publica en `/nombre/`.
 
 ## Ver localmente
 
@@ -16,6 +25,6 @@ Es un sitio 100% estático: no requiere build ni dependencias.
 npx serve .
 ```
 
-## Deploy en Vercel
+## Deploy
 
-Importa el repositorio en Vercel y despliega con la configuración por defecto (framework preset: **Other**, sin build command, output directory: raíz). No se necesita `vercel.json`.
+Vercel, preset **Other**, sin build command. Conectado al repo: cada push a `main` despliega.
