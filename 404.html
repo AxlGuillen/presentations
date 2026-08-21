@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>404 · Presentaciones con IA</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,500;0,600;0,700;0,800;1,800&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: #0D0E12;
+    color: #E7E9EC;
+    font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex; align-items: center; justify-content: center;
+    padding: 28px;
+    background-image: radial-gradient(90% 45% at 50% 0%, rgba(195, 23, 34, 0.12) 0%, rgba(0,0,0,0) 55%),
+                      radial-gradient(80% 40% at 50% 100%, rgba(83, 252, 24, 0.08) 0%, rgba(0,0,0,0) 55%);
+    text-align: center;
+  }
+  .code {
+    font-size: clamp(120px, 24vw, 240px); font-weight: 800; font-style: italic;
+    letter-spacing: -8px; line-height: 1; margin: 0;
+    background: linear-gradient(#FFFFFF, rgba(255,255,255,0.25));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  }
+  h1 { margin: 10px 0 0; font-size: clamp(22px, 4vw, 32px); font-weight: 750; letter-spacing: -0.5px; }
+  p { margin: 14px auto 0; max-width: 460px; font-size: 17px; font-weight: 500; color: #9BA3AF; line-height: 1.55; }
+  .actions { margin-top: 34px; display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }
+  .actions a {
+    text-decoration: none; font-size: 15px; font-weight: 700; border-radius: 999px;
+    padding: 12px 24px; transition: transform 150ms ease, opacity 150ms ease;
+  }
+  .actions a:hover { transform: translateY(-2px); opacity: 0.92; }
+  .primary { background: #FFFFFF; color: #0D0E12; }
+  .ghost { color: #E7E9EC; border: 1px solid rgba(255,255,255,0.22); }
+</style>
+</head>
+<body>
+<main>
+  <p class="code">404</p>
+  <h1>Esta diapositiva no existe</h1>
+  <p>La ruta que buscas no está en el portafolio — quizá la presentación cambió de lugar o el enlace venía incompleto.</p>
+  <div class="actions">
+    <a class="primary" href="/">Ver todas las presentaciones</a>
+    <a class="ghost" href="/tabletas/">Tabletas Rugged</a>
+    <a class="ghost" href="/soloq/">SoloQ Challenge</a>
+  </div>
+</main>
+</body>
+</html>
