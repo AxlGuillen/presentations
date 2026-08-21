@@ -6,6 +6,12 @@
       "runtimeExecutable": "npx",
       "runtimeArgs": ["-y", "serve", "-l", "3123", "."],
       "port": 3123
+    },
+    {
+      "name": "soloq",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["-y", "serve", "-l", "3124", "../presentacion-soloq"],
+      "port": 3124
     }
   ]
 }
