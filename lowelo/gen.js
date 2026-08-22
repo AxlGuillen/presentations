@@ -32,7 +32,7 @@ const CORTES = [
 const IRON_A_MASTER = 2800;          // 28 divisiones × 100 LP
 const BRONCE_A_DIAMANTE = 2000;      // 20 divisiones × 100 LP
 const CORTE_EUW = 2377;
-const TOP1 = { nombre: 'J1HUIV', server: 'EUW', lp: 5144, wr: '55%' }; // lols.gg 21/08/2026
+const TOP1 = { nombre: 'J1HUIV', server: 'EUW', lp: 5219, wr: '55%' }; // OP.GG 21/08/2026 (captura de Axl)
 const CAMINO_EUW = IRON_A_MASTER + CORTE_EUW;                 // 5,177
 const MITAD_EUW = Math.round(CAMINO_EUW / 2);                 // 2,588 → cae en Diamante
 const CORTE_FINO = Math.round((IRON_A_MASTER + TOP1.lp) / 2) - IRON_A_MASTER; // ≈ Master +1,172
@@ -93,7 +93,7 @@ for (let i = 1; i < pts.length - 1; i++) {
 }
 dCurva += ` L ${pts[9][0].toFixed(1)} ${pts[9][1]}`;
 const curvaSvg = `<svg class="curva" viewBox="0 0 ${BARW} ${ROWH * 10}" style="position: absolute; left: ${76 + 16 + 230 + 16}px; top: 0; width: ${BARW}px; height: ${ROWH * 10}px; overflow: visible; pointer-events: none;">
-      <path d="${dCurva}" fill="none" stroke="${GOLD}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 12px rgba(200,155,60,0.55));"/>
+      <path d="${dCurva}" fill="none" stroke="${TEAL}" stroke-width="6" stroke-dasharray="16 14" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 14px rgba(10,200,185,0.65));"/>
     </svg>`;
 
 const campana = baseSection(
@@ -141,40 +141,50 @@ const edificio = baseSection(
 );
 
 // ── Slide 4 · El camino en LP (EUW, a escala) ───────────────────────────
-const H_TRACK = 1430; // px que representan CAMINO_EUW (5,177 LP)
-const y = lp => Math.round((lp / CAMINO_EUW) * H_TRACK);
-const delayLp = lp => (0.2 + (lp / CAMINO_EUW) * 1.3).toFixed(2); // aparece cuando la barra "pasa" por ahí
+const CAMINO_TOTAL = IRON_A_MASTER + TOP1.lp;      // 8,019 LP: de Hierro IV al top 1 mundial
+const MITAD_TOTAL = Math.round(CAMINO_TOTAL / 2);  // ≈ 4,010 → Master +1,210
+const H_TRACK = 1430; // px que representan CAMINO_TOTAL
+const y = lp => Math.round((lp / CAMINO_TOTAL) * H_TRACK);
+const delayLp = lp => (0.2 + (lp / CAMINO_TOTAL) * 1.3).toFixed(2); // aparece cuando la barra "pasa" por ahí
 const marcas = TIERS.filter(t => t.lp !== null).map(t => `
-    <div data-fade style="position: absolute; left: 0; bottom: ${y(t.lp) - 40}px; display: flex; align-items: center; gap: 14px; animation-delay: ${delayLp(t.lp)}s;">
-      ${emblem(t.id, 80)}
+    <div data-fade style="position: absolute; left: 0; bottom: ${y(t.lp) - 32}px; display: flex; align-items: center; gap: 12px; animation-delay: ${delayLp(t.lp)}s;">
+      ${emblem(t.id, 62)}
       <div>
-        <div style="font-size: 23px; font-weight: 700;">${t.nombre}</div>
-        <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">${fmt(t.lp)} LP</div>
+        <div style="font-size: 21px; font-weight: 700;">${t.nombre}</div>
+        <div style="font-size: 17px; font-weight: 600; color: rgba(240,230,210,0.5);">${fmt(t.lp)} LP</div>
       </div>
     </div>`).join('');
 
+// Cortes de Challenger por servidor, como marcas intermedias del tramo apex
+const cortesTicks = CORTES.filter(c => ['LAS', 'KR', 'EUW'].includes(c.id)).map(c => `
+    <div data-fade style="position: absolute; left: 356px; bottom: ${y(IRON_A_MASTER + c.lp) - 13}px; display: flex; align-items: center; gap: 10px; animation-delay: ${delayLp(IRON_A_MASTER + c.lp)}s;">
+      <div style="width: 34px; height: 3px; background: rgba(240,230,210,0.55); flex: none;"></div>
+      <div style="font-size: 19px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">Corte Challenger ${c.id} <span style="font-weight: 600; color: rgba(240,230,210,0.45);">· ${fmt(IRON_A_MASTER + c.lp)} LP</span></div>
+    </div>`).join('');
+
 const camino = baseSection(
-  'El camino en LP — EUW a escala', 'El camino',
-  'El camino completo en Europa a escala: de Hierro a Master 2800 LP, y de Master a Challenger 2377 mas. La mitad exacta del camino cae en Diamante.',
+  'El camino en LP — de Hierro al top 1', 'El camino',
+  'El camino completo a escala: de Hierro a Master 2800 LP, luego los cortes de Challenger por servidor, y hasta arriba el top 1 mundial. La mitad exacta cae arriba de Master.',
   `<h2 data-a="up" style="${TITLE} font-size: 66px; margin: 0 0 10px;">El camino real, a escala</h2>
-    <p data-a="up" style="margin: 6px 0 26px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">Servidor EUW · corte Challenger de hoy: ${fmt(CORTE_EUW)} LP arriba de Master</p>
+    <p data-a="up" style="margin: 6px 0 26px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">De Hierro IV al top 1 mundial: ${fmt(CAMINO_TOTAL)} LP · cortes del 21/08</p>
     <div data-a="up2" style="position: relative; height: ${H_TRACK + 90}px; margin-left: 8px;">
-      <div data-grow-y style="position: absolute; left: 330px; bottom: 0; width: 26px; height: ${H_TRACK}px; border-radius: 13px; background: linear-gradient(180deg, ${TEAL} 0%, ${TEAL} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, ${GOLD} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, #6B4E1B 100%);"></div>
+      <div data-grow-y style="position: absolute; left: 330px; bottom: 0; width: 26px; height: ${H_TRACK}px; border-radius: 13px; background: linear-gradient(180deg, ${TEAL} 0%, ${TEAL} ${100 - (IRON_A_MASTER / CAMINO_TOTAL) * 100}%, ${GOLD} ${100 - (IRON_A_MASTER / CAMINO_TOTAL) * 100}%, #6B4E1B 100%);"></div>
       ${marcas}
-      <div data-fade style="position: absolute; left: 330px; bottom: ${y(CAMINO_EUW) - 42}px; display: flex; align-items: center; gap: 14px; transform: translateX(44px); animation-delay: ${delayLp(CAMINO_EUW)}s;">
+      ${cortesTicks}
+      <div data-fade style="position: absolute; left: 356px; bottom: ${y(CAMINO_TOTAL) - 46}px; display: flex; align-items: center; gap: 14px; animation-delay: ${delayLp(CAMINO_TOTAL)}s;">
         ${emblem('challenger', 92)}
         <div>
-          <div style="font-size: 24px; font-weight: 800; color: ${TEAL};">Challenger</div>
-          <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.55);">${fmt(CAMINO_EUW)} LP desde Hierro</div>
+          <div style="font-size: 24px; font-weight: 800; color: ${TEAL};">Top 1 mundial · ${TOP1.nombre}</div>
+          <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.55);">${fmt(TOP1.lp)} LP en Challenger · ${fmt(CAMINO_TOTAL)} desde Hierro</div>
         </div>
       </div>
-      <div data-fade style="position: absolute; left: 330px; bottom: ${y(IRON_A_MASTER + 900) - 34}px; transform: translateX(44px); display: flex; align-items: center; gap: 12px; opacity: 0.85; animation-delay: ${delayLp(IRON_A_MASTER + 900)}s;">
-        ${emblem('grandmaster', 68)}
-        <div style="font-size: 20px; font-weight: 600; color: rgba(240,230,210,0.6);">Gran Maestro,<br>en medio del brinco</div>
+      <div data-fade style="position: absolute; left: 356px; bottom: ${y(IRON_A_MASTER + 700) - 12}px; display: flex; align-items: center; gap: 10px; opacity: 0.8; animation-delay: ${delayLp(IRON_A_MASTER + 700)}s;">
+        <div style="width: 34px; height: 3px; background: rgba(240,230,210,0.35); flex: none;"></div>
+        <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.55); white-space: nowrap;">Gran Maestro, en medio del brinco</div>
       </div>
-      <div data-fade style="position: absolute; left: 0; right: 60px; bottom: ${y(MITAD_EUW)}px; border-top: 3px dashed ${GOLD}; animation-delay: 1.75s;">
-        <div style="position: absolute; right: 0; top: -46px; font-size: 23px; font-weight: 800; font-style: italic; text-transform: uppercase; color: ${GOLD};">Mitad del camino · ${fmt(MITAD_EUW)} LP</div>
-        <div style="position: absolute; right: 0; top: 10px; font-size: 20px; font-weight: 600; color: rgba(200,155,60,0.8);">cae en Diamante</div>
+      <div data-fade style="position: absolute; left: 0; width: 322px; bottom: ${y(MITAD_TOTAL)}px; border-top: 3px dashed ${TEAL}; animation-delay: 1.7s;">
+        <div style="position: absolute; left: 0; top: -50px; font-size: 23px; font-weight: 800; font-style: italic; text-transform: uppercase; color: ${TEAL};">Mitad del camino</div>
+        <div style="position: absolute; left: 0; top: 8px; font-size: 20px; font-weight: 600; color: rgba(10,200,185,0.85);">${fmt(MITAD_TOTAL)} LP ≈ Master +${fmt(MITAD_TOTAL - IRON_A_MASTER)}</div>
       </div>
     </div>`
 );
@@ -221,7 +231,9 @@ const cuspide = baseSection(
         <div style="text-align: center; font-size: 23px; font-weight: 700; line-height: 1.3;">Hierro → Master<br><span style="color: ${GOLD}; font-style: italic; font-weight: 800;">${fmt(IRON_A_MASTER)} LP</span></div>
       </div>
       <div style="display: flex; flex-direction: column; align-items: center; gap: 14px;">
-        <div style="width: 190px; height: ${H2}px; border-radius: 16px 0; background: linear-gradient(180deg, ${TEAL}, #044A44); display: flex; align-items: flex-start; justify-content: center; padding-top: 16px; box-sizing: border-box; box-shadow: 0 0 60px rgba(10,200,185,0.18);">${emblem('challenger', 96)}</div>
+        <div style="width: 190px; height: ${H2}px; border-radius: 16px 0; background: linear-gradient(180deg, ${TEAL}, #044A44); display: flex; align-items: flex-start; justify-content: center; padding-top: 16px; box-sizing: border-box; box-shadow: 0 0 60px rgba(10,200,185,0.18); position: relative;">${emblem('challenger', 96)}
+          ${CORTES.filter(c => ['LAS', 'KR', 'EUW'].includes(c.id)).map(c => `<div style="position: absolute; left: 0; right: 0; bottom: ${Math.round((c.lp / TOP1.lp) * H2)}px; border-top: 2px dashed rgba(255,255,255,0.6);"><span style="position: absolute; right: 8px; top: 5px; font-size: 17px; font-weight: 700; color: #FFFFFF; opacity: 0.9;">corte ${c.id} · ${fmt(c.lp)}</span></div>`).join('')}
+        </div>
         <div style="text-align: center; font-size: 23px; font-weight: 700; line-height: 1.3;">Master → top 1<br><span style="color: ${TEAL}; font-style: italic; font-weight: 800;">${fmt(TOP1.lp)} LP</span></div>
       </div>
     </div>
@@ -270,7 +282,7 @@ const html = `<!DOCTYPE html>
     [data-deck-active] [data-grow-c] { transform-origin: center; animation: dsGrowX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-grow-y] { transform-origin: center bottom; animation: dsGrowY 1.5s cubic-bezier(0.33, 0.8, 0.4, 1) both; }
     [data-deck-active] [data-fade] { animation: dsUp 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] .curva path { stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: dsDraw 1.8s 1.15s ease-out both; }
+    [data-deck-active] .curva { animation: dsUp 0.9s 1.15s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
   }
   #modo-presentacion {
     position: fixed; top: 16px; right: 16px; z-index: 2147483000;
