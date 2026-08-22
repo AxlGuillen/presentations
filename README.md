@@ -11,6 +11,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /tabletas/           Comparativo Tabletas Rugged DYMMSA   · 16:9 · 22 slides
 /soloq/              SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
+/estancia/           Propuesta: sistema integral para estancia infantil · 16:9 · 16 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features

@@ -9,6 +9,7 @@ Sin build, sin dependencias, sin framework. Una carpeta por presentación, autoc
 ```
 tabletas/   index.html + deck-stage.js + support.js + assets/
 soloq/      index.html + gen.js + deck-stage.js + assets/
+estancia/   index.html + gen.js + deck-stage.js   (sin assets: todo es CSS)
 index.html  galería raíz con las cards
 ```
 
@@ -21,6 +22,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | Archivo | Origen |
 |---|---|
 | `soloq/index.html` | **GENERADO** por `soloq/gen.js`. Nunca lo edites a mano: edita `gen.js` y corre `node soloq/gen.js`. Los datos (premios, salarios mínimos, tipos de cambio) están arriba de ese archivo. |
+| `estancia/index.html` | **GENERADO** por `estancia/gen.js`. Mismo trato que soloq: edita el generador y corre `node estancia/gen.js`. |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
 
@@ -48,6 +50,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 
 - **tabletas** — fondo blanco, rojo `#C31722`, gris oscuro `#16181D`, tipografía Barlow. Corporativo, sobrio.
 - **soloq** — fondo `#0B0B0B`, verde neón `#53FC18`, amarillo `#E9FF1F`, General Sans (Fontshare). Títulos en MAYÚSCULAS itálicas peso 800 con gradiente blanco→55%, tarjetas con radio asimétrico `34px 0`. Estilo esports, tomado de soloqchallenge.gg.
+- **estancia** — propuesta comercial, no deck de datos. Crema `#FFFBF7`, teal `#123B4A`, coral `#FF7A59`, ámbar `#FFB547`, verde `#2FA37A`, tipografía Poppins. Cálido pero serio: es para una junta con cliente.
 - **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
 
 ## Agregar una presentación
