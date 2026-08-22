@@ -22,7 +22,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | Archivo | Origen |
 |---|---|
 | `soloq/index.html` | **GENERADO** por `soloq/gen.js`. Nunca lo edites a mano: edita `gen.js` y corre `node soloq/gen.js`. Los datos (premios, salarios mínimos, tipos de cambio) están arriba de ese archivo. |
-| `estancia/index.html` | **GENERADO** por `estancia/gen.js`. Mismo trato que soloq: edita el generador y corre `node estancia/gen.js`. |
+| `estancia/index.html` | **GENERADO** por `estancia/gen.js`. Mismo trato que soloq: edita el generador y corre `node estancia/gen.js`. El alcance acordado está documentado en el comentario de cabecera de `gen.js`: 8 diapositivas de primer contacto, **sin app para padres** (el seguimiento a papás queda deliberadamente por definir). |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
 

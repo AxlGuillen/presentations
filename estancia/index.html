@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Propuesta · Sistema integral para estancia infantil</title>
+<title>Propuesta · Web y sistema de administración para estancia infantil</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -33,679 +33,332 @@
 <body>
 <deck-stage width="1920" height="1080">
 
-  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Presentacion de la propuesta. Sistema integral para la estancia infantil, construido por fases." style="background: #123B4A; background-image: radial-gradient(90% 70% at 85% 15%, rgba(255,122,89,0.28) 0%, rgba(0,0,0,0) 60%); font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Primer contacto. La propuesta son dos cosas: una web que atrae familias y un sistema que ordena la administracion." style="background: #123B4A; background-image: radial-gradient(90% 70% at 85% 15%, rgba(255,122,89,0.28) 0%, rgba(0,0,0,0) 60%); font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     <div data-a="ghost" style="position: absolute; right: -60px; bottom: -120px; width: 620px; height: 620px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
     <div data-a="ghost" style="position: absolute; right: 190px; top: -90px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,181,71,0.12);"></div>
     <div data-a="up" style="display: flex; align-items: center; gap: 16px;">
       <span style="width: 46px; height: 46px; border-radius: 15px; background: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">e</span>
       <span style="font-size: 23px; font-weight: 500; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.75);">[ Nombre de la estancia ]</span>
     </div>
-    <h1 data-a="up2" style="margin: 46px 0 0; font-size: 104px; font-weight: 700; letter-spacing: -3.5px; line-height: 1.02; max-width: 1350px;">Un sistema que acompaña<br>el día completo de<br>cada niño</h1>
-    <p data-a="up3" style="margin: 36px 0 0; font-size: 30px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 1080px;">Propuesta de desarrollo por fases: presencia web, operación diaria, control de cobranza y comunicación con las familias.</p>
-    <div data-a="up3" style="margin-top: 54px; display: flex; gap: 14px;">
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">4 fases</span>
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Web + app para padres</span>
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Hasta 60 menores</span>
+    <h1 data-a="up2" style="margin: 46px 0 0; font-size: 100px; font-weight: 700; letter-spacing: -3.4px; line-height: 1.03; max-width: 1380px;">Una web que atrae familias<br>y un sistema que ordena<br>la administración</h1>
+    <p data-a="up3" style="margin: 36px 0 0; font-size: 29px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 1060px;">Propuesta de desarrollo por etapas, empezando por lo que hoy cuesta más tiempo y más dinero.</p>
+    <div data-a="up3" style="margin-top: 52px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Sitio web y blog</span>
+      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Administración y cobranza</span>
+      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Entrada y salida</span>
     </div>
   </section>
 
-  <section data-label="Lo que entendimos" data-screen-label="Lo que entendimos" data-speaker-notes="Demostrar que escuchamos: repetir su operacion tal como nos la contaron antes de proponer nada." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
+  <section data-label="El punto de partida" data-screen-label="Punto de partida" data-speaker-notes="Demostrar que escuchamos y nombrar el dolor. OJO: la columna derecha son hipotesis, hay que validarlas en la junta." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
     
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
       <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
       </div>
       <div style="display: flex; align-items: center; gap: 18px;">
         
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Contexto</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Punto de partida</span>
       </div>
     </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Lo que entendimos de su operación</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Antes de proponer tecnología, así es como funciona hoy la escuela. Si algo de esto no es exacto, lo ajustamos juntos.</p>
-    <div data-a="up3" style="margin-top: 52px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px;">
+    <h2 data-a="up" style="margin: 0; font-size: 64px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Dónde está hoy la escuela</h2>
+    <div data-a="up3" style="margin-top: 46px; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 44px 42px; display: flex; flex-direction: column; gap: 24px; border-top: 6px solid #2FA37A;">
+        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #2FA37A;">Lo que ya funciona</span>
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Hasta 60 menores, desde los 2 meses de edad</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Reporte diario individual de cada alumno</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Programa de motricidad fina y desarrollo cognitivo</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Trato cercano con las familias</span>
+          </div>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 44px 42px; display: flex; flex-direction: column; gap: 24px; border-top: 6px solid #FF7A59;">
+        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Dónde se va el tiempo</span>
+        <div style="display: flex; flex-direction: column; gap: 18px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Quién pagó, quién debe y desde cuándo vive en una libreta o un Excel</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Los datos de cada familia están en papel y en varias carpetas</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Cobrar tarde o no cobrar depende de que alguien se acuerde</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">La escuela casi no aparece cuando buscan guardería en internet</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div data-a="up3" style="background: #123B4A0D; border-left: 5px solid #123B4A; border-radius: 0 18px 18px 0; padding: 24px 32px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;">Por eso la propuesta <strong style="font-weight: 600; color: #123B4A;">no empieza por la tecnología más vistosa, sino por lo que más cuesta hoy</strong>: la administración y la captación de familias nuevas.</div>
+  </section>
+
+  <section data-label="Fase 1 · La web" data-screen-label="Fase 1 · Web" data-speaker-notes="La web no es un folleto: es captacion. El blog de eventos alimenta el posicionamiento y las tarjetas de WhatsApp." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #FF7A59; color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Proyecto cerrado</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 01</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 64px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Una web que trabaja<br>aunque nadie la esté viendo</h2>
+    <div data-a="up3" style="margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; flex: 1;">
       
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">60</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Hasta 60 menores</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Desde los 2 meses de edad, con necesidades muy distintas entre lactantes y preescolares.</span>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">◧</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">El sitio completo</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Filosofía, programa, instalaciones, horarios y contacto. Pensada primero para el celular, que es donde la van a ver.</span>
         </div>
       
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">1×1</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Reporte diario</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Cada maestra entrega un reporte individual del día de cada alumno a su familia.</span>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">✎</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Blog de eventos</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Cada festival, actividad o aviso se publica y queda registrado. La escuela construye su propia memoria pública.</span>
         </div>
       
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">★</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Programa formativo</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Materias enfocadas en motricidad fina y desarrollo cognitivo.</span>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">◍</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Se comparte bonito</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Al mandar el enlace por WhatsApp aparece una tarjeta con la foto y el título del evento, no una liga sin más. Se ve profesional y da más ganas de abrirlo.</span>
         </div>
       
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #2FA37A1A; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">♥</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Trato cercano</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Comunicación constante con los padres: es parte del valor de la escuela.</span>
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">◎</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Posicionamiento con IA</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Optimizamos textos y estructura para que la escuela aparezca al buscar guardería en la zona — en Google y también cuando le preguntan a un asistente de IA.</span>
         </div>
+    </div>
+    
+    <div data-a="up3" style="background: #FF7A590D; border-left: 5px solid #FF7A59; border-radius: 0 18px 18px 0; padding: 24px 32px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;">Cada evento que se publica es una razón más para que la escuela aparezca en las búsquedas. <strong style="font-weight: 600; color: #123B4A;">El blog no es decoración: es lo que mantiene viva la página</strong> ante Google.</div>
+  </section>
+
+  <section data-label="Fase 2 · Administración y cobranza" data-screen-label="Fase 2 · Administración" data-speaker-notes="El corazon de la propuesta. Padron + cobranza. Aclarar que NO sustituye al contador ni emite facturas." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #1E5A6E; color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">El corazón del sistema</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 02</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 64px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Administración y cobranza</h2>
+    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1360px;">Todo lo que hoy está en carpetas, libretas y hojas de cálculo, en un solo lugar y siempre al día.</p>
+    <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; flex: 1;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">◫</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Expediente de cada niño</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Datos, familiares autorizados, contactos de emergencia, alergias y documentos. Todo en una ficha.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">$</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Colegiaturas</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Inscripción, mensualidad y extras, con sus fechas de corte, descuentos y recargos según sus reglas.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">▤</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Estado de cuenta</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Por alumno: qué pagó, qué debe y desde cuándo. Sin buscar en una libreta.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 32px 32px 30px; display: flex; flex-direction: column; gap: 11px;">
+          <span style="width: 52px; height: 52px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 23px; font-weight: 700;">◷</span>
+          <span style="font-size: 26px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Recordatorios</span>
+          <span style="font-size: 20px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Avisos automáticos a las familias antes y después del vencimiento, sin que nadie tenga que perseguirlas.</span>
+        </div>
+    </div>
+    
+    <div data-a="up3" style="background: #123B4A0D; border-left: 5px solid #123B4A; border-radius: 0 18px 18px 0; padding: 24px 32px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;"><strong style="font-weight: 600; color: #123B4A;">No sustituye a su contador ni emite facturas.</strong> Es el control de cobranza del día a día. Si más adelante necesitan facturación fiscal, se conecta con un proveedor autorizado en lugar de construirla desde cero. Los datos de los menores se manejan con aviso de privacidad y accesos por rol.</div>
+  </section>
+
+  <section data-label="El valor de centralizar" data-screen-label="Datos e IA" data-speaker-notes="Diapositiva diferenciadora. Centralizar pagos = respuestas que hoy no existen. El asistente de IA se conecta al sistema y responde en lenguaje natural." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 02 · El diferenciador</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Cuando todos los pagos pasan<br>por un solo lugar,<br>aparecen las respuestas</h2>
+    <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1.08fr; gap: 34px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 18px; padding-top: 6px;">
+        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FFB547;">Lo que se puede ver</span>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Ingresos del mes y comparación con los anteriores</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Cuánto dinero hay pendiente de cobrar, y de quién</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Proyección de lo que debería entrar este mes</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Altas y bajas de alumnos a lo largo del año</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.4;">Qué tan bien funcionan los descuentos y promociones</span>
+          </div>
+      </div>
+      <div style="background: #123B4A; border-radius: 30px; padding: 42px 40px; display: flex; flex-direction: column; gap: 20px; color: #FFFFFF;">
+        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FFB547;">Y para consultarlo…</span>
+        <span style="font-size: 33px; font-weight: 600; line-height: 1.25; letter-spacing: -0.6px;">No hace falta aprender a usar el sistema</span>
+        <span style="font-size: 21px; font-weight: 400; color: rgba(255,255,255,0.78); line-height: 1.5;">Conectamos un asistente de inteligencia artificial al sistema. Usted pregunta como le hablaría a una persona, y él consulta los datos y responde.</span>
+        <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 4px;">
+          <span style="background: rgba(255,255,255,0.1); border-radius: 18px 18px 18px 6px; padding: 13px 20px; font-size: 20px; font-weight: 400; color: #FFFFFF;">“¿Cuánto llevo cobrado este mes?”</span><span style="background: rgba(255,255,255,0.1); border-radius: 18px 18px 18px 6px; padding: 13px 20px; font-size: 20px; font-weight: 400; color: #FFFFFF;">“¿Quién tiene más de 15 días de retraso?”</span><span style="background: rgba(255,255,255,0.1); border-radius: 18px 18px 18px 6px; padding: 13px 20px; font-size: 20px; font-weight: 400; color: #FFFFFF;">“¿Cómo va agosto comparado con julio?”</span><span style="background: rgba(255,255,255,0.1); border-radius: 18px 18px 18px 6px; padding: 13px 20px; font-size: 20px; font-weight: 400; color: #FFFFFF;">“¿Qué familias siempre pagan tarde?”</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Fases 3 y 4" data-screen-label="Fases 3 y 4" data-speaker-notes="QR primero, comunicacion despues. El seguimiento a padres queda POR DEFINIR a proposito: no pagar por una app que nadie instala." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+      <div style="display: flex; align-items: center; gap: 16px;">
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Después</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 64px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Lo que sigue,<br>una vez ordenada la base</h2>
+    <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 1fr 1fr; gap: 28px;">
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 40px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #1E5A6E;">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #1E5A6E;">Fase 03</span>
+        <span style="font-size: 34px; font-weight: 600; color: #123B4A; letter-spacing: -0.7px; line-height: 1.2;">Entrada y salida con QR</span>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">El familiar trae su código en el celular y se escanea con una tablet común en recepción. Queda registrada la hora, quién entregó, quién recogió y el estado de salud confirmado.</span>
+        <div style="height: 1px; background: #E9E1D9; margin: 4px 0;"></div>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;"><strong style="color: #123B4A; font-weight: 600;">Ante cualquier aclaración, la escuela tiene el registro.</strong> Es un respaldo que protege a la institución tanto como tranquiliza a la familia.</span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 40px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #2FA37A;">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #2FA37A;">Fase 04</span>
+        <span style="font-size: 34px; font-weight: 600; color: #123B4A; letter-spacing: -0.7px; line-height: 1.2;">Comunicación avanzada</span>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">Avisos y circulares que llegan de verdad y con confirmación de lectura, alarma de emergencia y el canal de comunicación con las familias.</span>
+        <div style="height: 1px; background: #E9E1D9; margin: 4px 0;"></div>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">Aquí también entra el <strong style="color: #123B4A; font-weight: 600;">seguimiento diario para los papás</strong>, si deciden que lo quieren.</span>
+      </div>
     </div>
     <div style="flex: 1;"></div>
-    <div data-a="up3" style="background: #123B4A0D; border-left: 5px solid #123B4A; border-radius: 0 18px 18px 0; padding: 26px 34px; font-size: 24px; font-weight: 400; color: #123B4A; line-height: 1.5;">
-      El objetivo no es cambiar cómo trabajan, sino <strong style="font-weight: 600;">quitarles trabajo administrativo</strong> y dejar registro de lo que hoy se pierde en papel.
-    </div>
+    
+    <div data-a="up3" style="background: #FFB5470D; border-left: 5px solid #FFB547; border-radius: 0 18px 18px 0; padding: 24px 32px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;"><strong style="font-weight: 600; color: #123B4A;">El seguimiento para padres lo dejamos a propósito sin definir.</strong> Es la parte más cara y la que más depende de qué usen realmente las familias. Con el sistema ya funcionando sabremos si conviene una aplicación, un portal o simplemente mandarlo por donde los papás ya están. Decidirlo ahora sería adivinar.</div>
   </section>
 
-  <section data-label="El reto de hoy" data-screen-label="El reto" data-speaker-notes="Los dolores. Ojo: son hipotesis, hay que validarlas en la junta y ajustar." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
+  <section data-label="Cómo trabajamos" data-screen-label="Modelo de trabajo" data-speaker-notes="Fase 1 cerrada. Fases 2 a 4 con bloque de horas mensuales: se prioriza juntos y hay demo cada mes." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 168px 100px 70px; box-sizing: border-box; overflow: hidden;">
     
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
       <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
+        <span style="width: 38px; height: 38px; border-radius: 12px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 20px; font-weight: 700;">e</span>
+        <span style="font-size: 20px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta · [ Nombre de la estancia ]</span>
       </div>
       <div style="display: flex; align-items: center; gap: 18px;">
         
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Diagnóstico</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Modelo de trabajo</span>
       </div>
     </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Lo que hoy vive en papel,<br>en WhatsApp o en la memoria</h2>
-    <div data-a="up3" style="margin-top: 48px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">01</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">El reporte diario se queda en el papel</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Se llena a mano y se entrega. No hay historial consultable: si un padre pregunta cómo comió su hijo la semana pasada, no hay dónde buscarlo.</span>
+    <h2 data-a="up" style="margin: 0; font-size: 64px; font-weight: 700; color: #123B4A; letter-spacing: -1.7px; line-height: 1.06;">Cómo trabajamos</h2>
+    <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 30px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 42px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #FF7A59;">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 1 · La web</span>
+        <span style="font-size: 36px; font-weight: 600; color: #123B4A; letter-spacing: -0.8px; line-height: 1.2;">Proyecto cerrado</span>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.55;">Es un alcance claro y acotado, así que se cotiza cerrado: precio y fecha de entrega definidos desde el inicio.</span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 42px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #1E5A6E;">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #1E5A6E;">Fases 2 a 4 · El sistema</span>
+        <span style="font-size: 36px; font-weight: 600; color: #123B4A; letter-spacing: -0.8px; line-height: 1.2;">Horas de desarrollo al mes</span>
+        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.55;">Un bloque de horas dedicadas al sistema cada mes. Priorizamos juntos qué módulo sigue, se entrega funcionando y se revisa en una demo.</span>
+        <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #16262E; line-height: 1.4;">Usted decide el orden de lo que se construye</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #16262E; line-height: 1.4;">Ve avance real cada mes, no promesas</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #16262E; line-height: 1.4;">Se puede cambiar el rumbo sin renegociar nada</span>
+          </div>
         </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">02</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">La comunicación está dispersa</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Los avisos importantes se mezclan con conversaciones personales en WhatsApp. Nadie sabe con certeza quién leyó qué.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">03</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">La entrada y salida no deja constancia</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">No queda registro formal de a qué hora ni a quién se entregó al menor, ni del estado de salud confirmado por ambas partes.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">04</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">La cobranza consume horas</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Saber quién debe, cuánto y desde cuándo depende de una libreta, un Excel y la memoria de alguien.</span>
-        </div>
+      </div>
     </div>
-    <div style="flex: 1;"></div>
-    <div data-a="up3" style="font-size: 23px; font-weight: 400; color: #6B7C85; line-height: 1.5;">Ninguno de estos puntos es una falla de la escuela: es lo que pasa cuando la operación crece y las herramientas siguen siendo manuales.</div>
-  </section>
-
-  <section data-label="Hacia dónde vamos" data-screen-label="La visión" data-speaker-notes="La vision: que cada dia quede registrado, cada familia informada y la administracion deje de perseguir papeles." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
     
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Visión</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Lo mismo que hacen hoy,<br>con registro y sin fricción</h2>
-    <div data-a="up3" style="margin-top: 52px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; flex: 1;">
-      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 44px 38px; display: flex; flex-direction: column; gap: 20px;">
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Para las familias</span>
-        <span style="font-size: 32px; font-weight: 600; color: #123B4A; line-height: 1.25; letter-spacing: -0.5px;">Saber cómo estuvo su hijo, sin tener que preguntar</span>
-        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">El reporte del día llega a su celular con fotos. Los avisos de la escuela no se pierden entre mensajes.</span>
-      </div>
-      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 44px 38px; display: flex; flex-direction: column; gap: 20px;">
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #1E5A6E;">Para las maestras</span>
-        <span style="font-size: 32px; font-weight: 600; color: #123B4A; line-height: 1.25; letter-spacing: -0.5px;">Menos papeleo, más tiempo con los niños</span>
-        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">El reporte se llena a toques desde una tablet o celular, en segundos, sin escribir párrafos.</span>
-      </div>
-      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 44px 38px; display: flex; flex-direction: column; gap: 20px;">
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #2FA37A;">Para la dirección</span>
-        <span style="font-size: 32px; font-weight: 600; color: #123B4A; line-height: 1.25; letter-spacing: -0.5px;">Control de quién pagó, quién debe y qué pasó cada día</span>
-        <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">Y una bitácora que respalda a la institución ante cualquier aclaración.</span>
-      </div>
-    </div>
+    <div data-a="up3" style="background: #123B4A0D; border-left: 5px solid #123B4A; border-radius: 0 18px 18px 0; padding: 24px 32px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;"><strong style="font-weight: 600; color: #123B4A;">¿Por qué no cotizar todo el sistema de una vez?</strong> Porque nadie puede estimar con precisión un sistema así antes de empezar, y alguien termina perdiendo: o se infla el precio para cubrir lo desconocido, o se recorta el alcance a la mitad del camino. Cuando el sistema esté terminado, esas mismas horas se convierten en soporte y mejoras.</div>
   </section>
 
-  <section data-label="El plan por fases" data-screen-label="El plan" data-speaker-notes="Cada fase entrega algo usable por si sola. Fases 2 y 3 se pueden invertir segun donde duela mas: cobrar o llenar lugares." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">El plan</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Cuatro fases, cada una<br>útil por sí sola</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">No hay que esperar al final para ver resultados: al terminar cada fase la escuela ya está usando algo.</p>
-    <div data-a="up3" style="margin-top: 46px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; flex: 1;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 38px 32px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #FF7A59;">
-          <span style="font-size: 54px; font-weight: 700; color: #FF7A59; letter-spacing: -2px; line-height: 1;">01</span>
-          <span style="font-size: 29px; font-weight: 600; color: #123B4A; letter-spacing: -0.5px; line-height: 1.2;">Presencia web</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45; flex: 1;">La cara pública de la escuela: sitio, programa, blog y captación de informes.</span>
-          <span style="font-size: 17px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #FF7A59;">Proyecto cerrado</span>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 38px 32px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #1E5A6E;">
-          <span style="font-size: 54px; font-weight: 700; color: #1E5A6E; letter-spacing: -2px; line-height: 1;">02</span>
-          <span style="font-size: 29px; font-weight: 600; color: #123B4A; letter-spacing: -0.5px; line-height: 1.2;">Operación diaria</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45; flex: 1;">Reporte diario, entrada/salida con QR y portal para padres. El corazón del sistema.</span>
-          <span style="font-size: 17px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #1E5A6E;">Desarrollo continuo</span>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 38px 32px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #FFB547;">
-          <span style="font-size: 54px; font-weight: 700; color: #FFB547; letter-spacing: -2px; line-height: 1;">03</span>
-          <span style="font-size: 29px; font-weight: 600; color: #123B4A; letter-spacing: -0.5px; line-height: 1.2;">Control de cobranza</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45; flex: 1;">Estado de cuenta por alumno, adeudos y recordatorios automáticos.</span>
-          <span style="font-size: 17px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #FFB547;">Desarrollo continuo</span>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 26px; padding: 38px 32px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid #2FA37A;">
-          <span style="font-size: 54px; font-weight: 700; color: #2FA37A; letter-spacing: -2px; line-height: 1;">04</span>
-          <span style="font-size: 29px; font-weight: 600; color: #123B4A; letter-spacing: -0.5px; line-height: 1.2;">Comunicación avanzada</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45; flex: 1;">Chat con las familias, muro de la escuela y métricas.</span>
-          <span style="font-size: 17px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #2FA37A;">Desarrollo continuo</span>
-        </div>
-    </div>
-    <div data-a="up3" style="margin-top: 34px; font-size: 23px; font-weight: 400; color: #6B7C85; line-height: 1.5;">El orden de las fases 2 y 3 puede intercambiarse: si la prioridad es cobrar a tiempo, empezamos por cobranza; si es diferenciarse para llenar lugares, empezamos por la operación diaria.</div>
-  </section>
-
-  <section data-label="Fase 1 · Presencia web" data-screen-label="Fase 1" data-speaker-notes="Fase 1: sitio publico. Rapido, barato, se paga solo porque capta inscripciones. Modalidad proyecto cerrado." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        <span style="background: #FF7A59; color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Proyecto cerrado</span>
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 01</span>
-      </div>
-    </header>
-    <div style="display: flex; gap: 70px; flex: 1;">
-      <div style="flex: 1.05; display: flex; flex-direction: column;">
-        <h2 data-a="up" style="margin: 0; font-size: 74px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Presencia web</h2>
-        <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">La cara pública de la escuela: lo primero que ve una mamá o un papá que está buscando dónde dejar a su hijo.</p>
-        <div data-a="up3" style="margin-top: 40px; display: flex; flex-direction: column; gap: 20px;">
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Inicio, filosofía, programa e instalaciones</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Blog para publicar noticias y actividades</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Formulario de informes que llega directo a la escuela</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Diseñada para celular y para aparecer en buscadores</span>
-          </div>
-        </div>
-      </div>
-      <div style="flex: 0.95; display: flex; flex-direction: column; justify-content: center;">
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 46px 44px; display: flex; flex-direction: column; gap: 22px;">
-          <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Por qué empezar aquí</span>
-          <span style="font-size: 34px; font-weight: 600; color: #123B4A; line-height: 1.25; letter-spacing: -0.6px;">Es la fase que se paga sola</span>
-          <span style="font-size: 22px; font-weight: 400; color: #6B7C85; line-height: 1.55;">Sale a producción en semanas, no en meses. Empieza a captar inscripciones desde el primer día y da algo tangible sobre lo que seguir construyendo.</span>
-          <div style="height: 1px; background: #E9E1D9;"></div>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">Alcance, precio y fecha definidos desde el inicio.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Fase 2 · Operación diaria" data-screen-label="Fase 2" data-speaker-notes="Fase 2 es el corazon. Aqui los padres ya reciben la app instalable: la app NO es una fase aparte." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        <span style="background: #1E5A6E; color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">El corazón del sistema</span>
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 02</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Operación diaria</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Todo lo que ocurre con un niño durante el día queda registrado, y su familia lo ve en su celular.</p>
-    <div data-a="up3" style="margin-top: 48px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◧</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Padrón y grupos</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Alumnos, familias autorizadas, maestras y grupos. La base sobre la que funciona todo lo demás.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">✎</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Reporte diario digital</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Comidas, siestas, cambios, ánimo, actividades y fotos. En segundos, sin escribir.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">⇄</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Entrada y salida con QR</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Quién entrega, quién recoge, a qué hora y en qué estado de salud. Con bitácora.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">▣</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Portal para padres</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Aplicación instalable en el celular: el día de su hijo, fotos y avisos de la escuela.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◈</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Avisos y circulares</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Comunicados que llegan como notificación y con confirmación de lectura.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FF7A591A; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">!</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Alarma de emergencia</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Difusión inmediata a todas las familias cuando algo urgente ocurre.</span>
-        </div>
-    </div>
-  </section>
-
-  <section data-label="El reporte diario" data-screen-label="Reporte diario" data-speaker-notes="La clave de exito del proyecto: si llenar un reporte tarda mas de 30 segundos, las maestras lo abandonan." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 02 · A fondo</span>
-      </div>
-    </header>
-    <div style="display: flex; gap: 70px; flex: 1;">
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <h2 data-a="up" style="margin: 0; font-size: 66px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">El reporte diario,<br>en 30 segundos</h2>
-        <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Una maestra con diez bebés no puede escribir párrafos. Por eso el reporte se llena <strong style="color: #123B4A; font-weight: 600;">a toques, no con el teclado</strong>.</p>
-        <div data-a="up3" style="margin-top: 38px; display: flex; flex-direction: column; gap: 18px;">
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Opciones predefinidas: comió todo / la mitad / poco</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Siestas, cambios de pañal y estado de ánimo con un toque</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Acciones en grupo: marca a todo el salón y ajusta las excepciones</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Fotos del día, que es lo que más valoran los padres</span>
-          </div>
-        </div>
-      </div>
-      <div style="flex: 0.85; display: flex; flex-direction: column; justify-content: center; gap: 24px;">
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 40px 38px; display: flex; flex-direction: column; gap: 14px; border-left: 6px solid #FF7A59;">
-          <span style="font-size: 26px; font-weight: 600; color: #123B4A; line-height: 1.3;">Aquí se decide si el sistema vive o muere</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">La razón número uno por la que fracasan estos sistemas es que las maestras dejan de usarlos porque les quitan tiempo. Todo el diseño está puesto en evitar eso.</span>
-        </div>
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 40px 38px; display: flex; flex-direction: column; gap: 14px; border-left: 6px solid #2FA37A;">
-          <span style="font-size: 26px; font-weight: 600; color: #123B4A; line-height: 1.3;">Del otro lado</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.5;">El padre recibe una notificación, abre y ve el día completo de su hijo con fotos. Sin pedirlo, sin preguntar en la puerta.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Entrada y salida" data-screen-label="Entrada y salida" data-speaker-notes="Argumento fuerte de venta: la bitacora protege legalmente a la escuela, no es solo comodidad." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 02 · A fondo</span>
-      </div>
-    </header>
-    <div style="display: flex; gap: 70px; flex: 1;">
-      <div style="flex: 1; display: flex; flex-direction: column;">
-        <h2 data-a="up" style="margin: 0; font-size: 66px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Entrada y salida:<br>tranquilidad y respaldo</h2>
-        <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">El padre trae su código QR en el celular y en recepción se escanea con una tablet común. Sin equipos especiales.</p>
-        <div data-a="up3" style="margin-top: 38px; display: flex; flex-direction: column; gap: 18px;">
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Hora exacta de entrada y de salida</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Quién entregó y quién recogió, de la lista de personas autorizadas</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Confirmación del estado de salud del menor por ambas partes</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #2FA37A1F; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Foto del momento, opcional</span>
-          </div>
-        </div>
-      </div>
-      <div style="flex: 0.9; display: flex; align-items: center;">
-        <div style="background: #123B4A; border-radius: 30px; padding: 52px 46px; display: flex; flex-direction: column; gap: 22px; color: #FFFFFF;">
-          <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FFB547;">El valor que no se ve</span>
-          <span style="font-size: 36px; font-weight: 600; line-height: 1.25; letter-spacing: -0.7px;">Ante una aclaración, la escuela tiene el registro</span>
-          <span style="font-size: 22px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55;">Una bitácora con hora, persona y estado de salud confirmado protege a la institución tanto como tranquiliza a la familia. Es el tipo de respaldo que solo se echa de menos el día que hace falta.</span>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section data-label="Fase 3 · Cobranza" data-screen-label="Fase 3" data-speaker-notes="Cobranza, NO contabilidad. Aclarar que no sustituye al contador ni emite facturas: eso se integra si hace falta." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        <span style="background: #FFB547; color: #16262E; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">ROI directo</span>
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 03</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Control de cobranza</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">El control que hoy vive en una libreta o un Excel, automatizado y siempre al día.</p>
-    <div data-a="up3" style="margin-top: 46px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">$</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Estado de cuenta</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Por alumno: qué pagó, cuánto debe y desde cuándo.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◷</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Recordatorios</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Avisos automáticos a los padres antes y después del vencimiento.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">▤</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Colegiaturas</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Conceptos, fechas de corte, descuentos y recargos según sus reglas.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #FFB5471A; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◔</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Reportes</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Ingresos del mes y lista de morosidad, de un vistazo.</span>
-        </div>
-    </div>
-    <div style="flex: 1;"></div>
-    <div data-a="up3" style="background: #FFFFFF; border: 1px solid #E9E1D9; border-radius: 20px; padding: 30px 36px; display: flex; align-items: flex-start; gap: 20px;">
-      <span style="flex: none; width: 34px; height: 34px; border-radius: 50%; background: #123B4A14; color: #123B4A; display: inline-flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700;">i</span>
-      <span style="font-size: 23px; font-weight: 400; color: #6B7C85; line-height: 1.5;"><strong style="color: #123B4A; font-weight: 600;">Esto no sustituye a su contador ni emite facturas.</strong> Es control de cobranza. Si más adelante necesitan facturación fiscal, se conecta con un proveedor autorizado en lugar de construirla desde cero: es más rápido, más barato y siempre está al día con los cambios del SAT.</span>
-    </div>
-  </section>
-
-  <section data-label="Fase 4 · Comunicación" data-screen-label="Fase 4" data-speaker-notes="Fase 4 al final a proposito: el chat es lo mas caro y lo que mas carga operativa mete a las maestras." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        <span style="background: #2FA37A; color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Al final, a propósito</span>
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 04</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Comunicación avanzada</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Se construye cuando el sistema ya está en uso y sabemos qué comunicación hace falta de verdad.</p>
-    <div data-a="up3" style="margin-top: 46px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #2FA37A1A; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◍</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Chat con las familias</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Conversación por alumno entre maestra y padres, dentro del sistema y con historial.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #2FA37A1A; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◫</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Muro de la escuela</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Publicaciones, eventos y galería para toda la comunidad.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #2FA37A1A; color: #2FA37A; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◎</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Métricas</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Asistencia, participación y uso del sistema para la dirección.</span>
-        </div>
-    </div>
-    <div style="flex: 1;"></div>
-    <div data-a="up3" style="background: #2FA37A0F; border-left: 5px solid #2FA37A; border-radius: 0 18px 18px 0; padding: 28px 34px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;">
-      <strong style="font-weight: 600; color: #123B4A;">Por qué el chat va al final:</strong> es la función más costosa de construir y la que más carga operativa le mete a las maestras. Antes de abrir un canal de mensajes que alguien tiene que contestar todo el día, conviene tener resuelto el reporte diario y los avisos — que es lo que la mayoría de los padres realmente quiere.
-    </div>
-  </section>
-
-  <section data-label="Decisiones que cuidan su inversión" data-screen-label="Decisiones técnicas" data-speaker-notes="Slide de credibilidad: mostrar donde NO gastamos su dinero y por que." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Enfoque técnico</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Decisiones que cuidan<br>su inversión</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Tan importante como lo que se construye es lo que decidimos no construir.</p>
-    <div data-a="up3" style="margin-top: 46px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; flex: 1;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◱</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">App instalable, no app de tienda</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Los padres la instalan desde el navegador y funciona igual en Android y iPhone. Sin pagos anuales a Apple ni Google, sin esperar aprobaciones y con actualizaciones inmediatas.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">▭</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Sin hardware a la medida</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Una tablet común en recepción hace de terminal de entrada y salida. Nada que mandar fabricar, instalar ni reparar.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◰</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">No reinventamos la facturación</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Si hace falta CFDI, se integra un proveedor autorizado. Son semanas de desarrollo que no tiene sentido cobrarles.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">☁</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Infraestructura administrada</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Sin servidores propios que mantener ni actualizar. Para una escuela de 60 alumnos el costo mensual de operación es mínimo.</span>
-        </div>
-    </div>
-  </section>
-
-  <section data-label="Cómo trabajamos" data-screen-label="Modelo de trabajo" data-speaker-notes="Modelo comercial: fase 1 cerrada, fases 2-4 con bloque de horas mensuales. Explicar por que conviene a AMBAS partes." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Modelo de trabajo</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Cómo trabajamos</h2>
-    <div data-a="up3" style="margin-top: 44px; display: grid; grid-template-columns: 1fr 1.25fr; gap: 30px; flex: 1;">
-      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 44px 40px; display: flex; flex-direction: column; gap: 18px; border-top: 6px solid #FF7A59;">
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Fase 1</span>
-        <span style="font-size: 38px; font-weight: 600; color: #123B4A; letter-spacing: -0.8px; line-height: 1.2;">Proyecto cerrado</span>
-        <span style="font-size: 22px; font-weight: 400; color: #6B7C85; line-height: 1.55;">El sitio web tiene un alcance claro y acotado, así que se cotiza cerrado: precio y fecha de entrega definidos desde el inicio.</span>
-      </div>
-      <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 28px; padding: 44px 40px; display: flex; flex-direction: column; gap: 18px; border-top: 6px solid #1E5A6E;">
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #1E5A6E;">Fases 2 a 4</span>
-        <span style="font-size: 38px; font-weight: 600; color: #123B4A; letter-spacing: -0.8px; line-height: 1.2;">Desarrollo continuo por módulos</span>
-        <span style="font-size: 22px; font-weight: 400; color: #6B7C85; line-height: 1.55;">Un bloque de horas de desarrollo dedicadas al sistema cada mes. Cada mes: priorizamos juntos qué módulo sigue, se entrega funcionando y se revisa en una demo.</span>
-        <div style="height: 1px; background: #E9E1D9;"></div>
-        <div style="display: flex; flex-direction: column; gap: 12px;">
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Ustedes deciden el orden de lo que se construye</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Ven avance real cada mes, no promesas</span>
-          </div>
-          
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #1E5A6E1F; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">Se puede ajustar el rumbo sin renegociar un contrato</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <div data-a="up3" style="margin-top: 30px; background: #123B4A0D; border-left: 5px solid #123B4A; border-radius: 0 18px 18px 0; padding: 26px 34px; font-size: 23px; font-weight: 400; color: #16262E; line-height: 1.5;">
-      <strong style="font-weight: 600; color: #123B4A;">¿Por qué no cotizar el sistema completo de una vez?</strong> Porque nadie puede estimar con precisión un sistema de este tamaño antes de empezar, y alguien termina perdiendo: o se infla el precio para cubrir lo desconocido, o se recorta el alcance a la mitad del camino. Cuando el sistema esté terminado, esas mismas horas se convierten en soporte, mantenimiento y mejoras.
-    </div>
-  </section>
-
-  <section data-label="Datos de menores" data-screen-label="Privacidad" data-speaker-notes="Datos de menores = datos sensibles. Mencionarlo posiciona como el proveedor serio. Recomendar revisar el aviso de privacidad con su abogado." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Responsabilidad</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Estamos manejando datos<br>de menores de edad</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Fotos, reportes de salud y datos de familias. Eso exige cuidado desde el diseño, no como un parche al final.</p>
-    <div data-a="up3" style="margin-top: 48px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; flex: 1;">
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">§</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Aviso de privacidad y consentimiento</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Cada familia acepta explícitamente qué datos se guardan y para qué, incluida la autorización para tomar y compartir fotografías.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◐</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Cada quien ve solo lo suyo</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Un padre ve únicamente a su hijo. Una maestra, solo a su grupo. La dirección, todo. Definido por permisos, no por confianza.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◭</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Fotos con criterio</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Solo se comparten con las familias autorizadas, cuidando que no aparezcan menores cuyos padres no dieron su consentimiento.</span>
-        </div>
-      
-        <div style="background: #FFFFFF; border: 1px solid #E9E1D9; box-shadow: 0 10px 28px rgba(18, 59, 74, 0.06); border-radius: 24px; padding: 34px 34px 32px; display: flex; flex-direction: column; gap: 12px;">
-          <span style="width: 54px; height: 54px; border-radius: 16px; background: #1E5A6E1A; color: #1E5A6E; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">◫</span>
-          <span style="font-size: 27px; font-weight: 600; color: #123B4A; letter-spacing: -0.4px; line-height: 1.2;">Respaldos y bitácora</span>
-          <span style="font-size: 21px; font-weight: 400; color: #6B7C85; line-height: 1.45;">Copias de seguridad automáticas y registro de quién accedió a qué información.</span>
-        </div>
-    </div>
-  </section>
-
-  <section data-label="Lo que necesitamos de ustedes" data-screen-label="Siguientes datos" data-speaker-notes="Preguntas abiertas que cambian el alcance. Sacarlas en la junta y anotar respuestas." style="background: #FFFBF7; font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #16262E; display: flex; flex-direction: column; padding: 176px 100px 74px; box-sizing: border-box; overflow: hidden; ">
-    
-    <header style="position: absolute; top: 0; left: 0; right: 0; height: 120px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E9E1D9;">
-      <div style="display: flex; align-items: center; gap: 16px;">
-        <span style="width: 40px; height: 40px; border-radius: 13px; background: #123B4A; display: inline-flex; align-items: center; justify-content: center; color: #FFFFFF; font-size: 21px; font-weight: 700;">e</span>
-        <span style="font-size: 21px; font-weight: 600; color: #123B4A; letter-spacing: -0.2px;">Propuesta de sistema integral</span>
-      </div>
-      <div style="display: flex; align-items: center; gap: 18px;">
-        
-        <span style="font-size: 20px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FF7A59;">Para afinar la propuesta</span>
-      </div>
-    </header>
-    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #123B4A; letter-spacing: -1.6px; line-height: 1.05;">Lo que necesitamos<br>saber de ustedes</h2>
-    <p data-a="up2" style="margin: 20px 0 0; font-size: 27px; font-weight: 400; color: #6B7C85; line-height: 1.5; max-width: 1320px;">Estas respuestas definen el alcance real y el calendario. Ninguna detiene el arranque de la Fase 1.</p>
-    <div data-a="up3" style="margin-top: 44px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px 60px;">
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Las maestras usarían su propio celular o la escuela proveería tablets?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Hoy emiten facturas (CFDI) o entregan recibos?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Cómo cobran actualmente: efectivo, transferencia, terminal?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Cuántas maestras y personal usarían el sistema?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Ya tienen consentimiento firmado para fotografiar a los menores?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Quién sería la persona administradora del sistema?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Tienen logo, manual de marca y dominio de internet?</span>
-          </div>
-      
-          <div style="display: flex; align-items: flex-start; gap: 16px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #FF7A591F; color: #FF7A59; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
-            <span style="font-size: 24px; font-weight: 400; color: #16262E; line-height: 1.4;">¿Hay una fecha objetivo, como el inicio del ciclo escolar?</span>
-          </div>
-    </div>
-  </section>
-
-  <section data-label="Siguiente paso" data-screen-label="Cierre" data-speaker-notes="Cierre: proponer arrancar fase 1 y agendar la sesion de alcance." style="background: #123B4A; background-image: radial-gradient(80% 70% at 20% 90%, rgba(255,122,89,0.26) 0%, rgba(0,0,0,0) 60%); font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Siguiente paso" data-screen-label="Cierre" data-speaker-notes="Cierre: arrancar con la web mientras definimos el detalle de administracion. Dejar las 3 preguntas sobre la mesa." style="background: #123B4A; background-image: radial-gradient(80% 70% at 20% 90%, rgba(255,122,89,0.26) 0%, rgba(0,0,0,0) 60%); font-family: 'Poppins', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     <div data-a="ghost" style="position: absolute; right: -80px; top: -80px; width: 520px; height: 520px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
     <span data-a="up" style="font-size: 22px; font-weight: 600; letter-spacing: 3px; text-transform: uppercase; color: #FFB547;">Siguiente paso</span>
-    <h2 data-a="up2" style="margin: 30px 0 0; font-size: 88px; font-weight: 700; letter-spacing: -2.8px; line-height: 1.05; max-width: 1280px;">Empecemos por la<br>presencia web</h2>
-    <p data-a="up3" style="margin: 34px 0 0; font-size: 28px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55; max-width: 1080px;">Es la fase más rápida de poner en marcha y la que empieza a traer inscripciones mientras construimos el resto. Definimos juntos el alcance y el calendario, y arrancamos.</p>
-    <div data-a="up3" style="margin-top: 54px; display: flex; gap: 16px;">
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Sesión de alcance</span>
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Calendario de Fase 1</span>
-      <span style="background: rgba(255,255,255,0.14); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.5px; white-space: nowrap;">Propuesta económica</span>
+    <h2 data-a="up2" style="margin: 28px 0 0; font-size: 82px; font-weight: 700; letter-spacing: -2.6px; line-height: 1.05; max-width: 1300px;">Empezamos por la web,<br>y en paralelo definimos<br>la administración</h2>
+    <p data-a="up3" style="margin: 32px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55; max-width: 1080px;">La web es lo más rápido de poner en marcha y empieza a traer familias mientras ordenamos por dentro. Para afinar la siguiente etapa necesitaríamos saber:</p>
+    <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 14px; max-width: 1160px;">
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">¿Cómo cobran hoy: efectivo, transferencia o terminal? ¿Emiten factura?</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">¿Cuántas personas usarían el sistema y quién lo administraría?</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: #FFB5471F; color: #FFB547; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">¿Hay una fecha objetivo, como el inicio del ciclo escolar?</span>
+          </div>
     </div>
   </section>
 </deck-stage>
