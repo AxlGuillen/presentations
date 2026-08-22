@@ -11,11 +11,19 @@
   html, body { margin: 0; padding: 0; background: #010A13; }
   @keyframes dsUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
   @keyframes dsImg { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: none; } }
+  @keyframes dsGrowX { from { transform: scaleX(0); } to { transform: none; } }
+  @keyframes dsGrowY { from { transform: scaleY(0); } to { transform: none; } }
+  @keyframes dsDraw { to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: no-preference) {
     [data-deck-active] [data-a="up"] { animation: dsUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="up2"] { animation: dsUp 0.7s 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="up3"] { animation: dsUp 0.8s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="img"] { animation: dsImg 0.9s 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow] { transform-origin: left center; animation: dsGrowX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow-c] { transform-origin: center; animation: dsGrowX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow-y] { transform-origin: center bottom; animation: dsGrowY 1.5s cubic-bezier(0.33, 0.8, 0.4, 1) both; }
+    [data-deck-active] [data-fade] { animation: dsUp 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] .curva path { stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: dsDraw 1.8s 1.15s ease-out both; }
   }
   #modo-presentacion {
     position: fixed; top: 16px; right: 16px; z-index: 2147483000;
@@ -40,77 +48,79 @@
 <section data-label="La campana — % de jugadores por rango" data-screen-label="La campana" data-speaker-notes="Asi se reparte la gente: dos de cada tres viven entre Hierro y Oro. Diamante ya es top 5. Pero esto mide gente amontonada, no altura." style="background: #010A13; background-image: radial-gradient(130% 55% at 50% 0%, rgba(200,155,60,0.18) 0%, rgba(0,0,0,0) 60%); font-family: 'General Sans', 'GeneralSans', ui-sans-serif, system-ui, sans-serif; color: #F0E6D2; display: flex; flex-direction: column; padding: 110px 64px 70px; box-sizing: border-box; overflow: hidden; position: relative;">
 <h2 data-a="up" style="font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -1px; line-height: 1.04; background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 66px; margin: 0 0 10px;">La campanita<br>de la distribución</h2>
     <p data-a="up" style="margin: 6px 0 30px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">% de jugadores por rango · soloQ · agosto 2026</p>
-    <div data-a="up2" style="display: flex; flex-direction: column;"><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/iron.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Hierro</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 14.468085106382977%; height: 100%; background: #C89B3C; border-radius: 10px 0;"></div>
+    <div data-a="up2" style="display: flex; flex-direction: column; position: relative;"><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/iron.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Hierro</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 14.468085106382977%; height: 100%; background: #C89B3C; border-radius: 10px 0; animation-delay: 0.25s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">3.4%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/bronze.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Bronce</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 67.2340425531915%; height: 100%; background: #C89B3C; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">3.4%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/bronze.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Bronce</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 67.2340425531915%; height: 100%; background: #C89B3C; border-radius: 10px 0; animation-delay: 0.34s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">15.8%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/silver.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Plata</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 89.7872340425532%; height: 100%; background: #C89B3C; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">15.8%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/silver.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Plata</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 89.7872340425532%; height: 100%; background: #C89B3C; border-radius: 10px 0; animation-delay: 0.43s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">21.1%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/gold.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Oro</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 100%; height: 100%; background: #C89B3C; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">21.1%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/gold.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Oro</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 100%; height: 100%; background: #C89B3C; border-radius: 10px 0; animation-delay: 0.52s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">23.5%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/platinum.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Platino</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 78.29787234042553%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #C89B3C;">23.5%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/platinum.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Platino</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 78.29787234042553%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0; animation-delay: 0.61s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">18.4%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/emerald.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Esmeralda</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 54.8936170212766%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">18.4%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/emerald.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Esmeralda</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 54.8936170212766%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0; animation-delay: 0.70s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">12.9%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/diamond.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Diamante</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 17.23404255319149%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">12.9%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/diamond.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Diamante</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 17.23404255319149%; height: 100%; background: rgba(240,230,210,0.45); border-radius: 10px 0; animation-delay: 0.79s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">4.05%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/master.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Master</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 3.5319148936170213%; height: 100%; background: #0AC8B9; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.45);">4.05%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/master.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Master</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 3.5319148936170213%; height: 100%; background: #0AC8B9; border-radius: 10px 0; animation-delay: 0.88s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.83%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/grandmaster.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Gran Maestro</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 1.2%; height: 100%; background: #0AC8B9; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.83%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/grandmaster.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Gran Maestro</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 1.2%; height: 100%; background: #0AC8B9; border-radius: 10px 0; animation-delay: 0.97s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.054%</div>
-    </div><div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      <img src="assets/emblems/challenger.png" alt="" style="width: 84px; height: 84px; object-fit: contain; flex: none; ">
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">Challenger</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: 1.2%; height: 100%; background: #0AC8B9; border-radius: 10px 0;"></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.054%</div>
+    </div><div style="display: flex; align-items: center; gap: 16px; height: 96px;">
+      <img src="assets/emblems/challenger.png" alt="" style="width: 76px; height: 76px; object-fit: contain; flex: none; ">
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">Challenger</div>
+      <div style="width: 420px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: 1.2%; height: 100%; background: #0AC8B9; border-radius: 10px 0; animation-delay: 1.06s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.023%</div>
-    </div></div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.023%</div>
+    </div><svg class="curva" viewBox="0 0 420 960" style="position: absolute; left: 338px; top: 0; width: 420px; height: 960px; overflow: visible; pointer-events: none;">
+      <path d="M 60.8 48 Q 282.4 144 329.7 192 Q 377.1 240 398.6 288 Q 420.0 336 374.4 384 Q 328.9 432 279.7 480 Q 230.6 528 151.5 576 Q 72.4 624 43.6 672 Q 14.8 720 7.9 768 Q 1.0 816 0.7 864 L 0.4 912" fill="none" stroke="#C89B3C" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 12px rgba(200,155,60,0.55));"/>
+    </svg></div>
     <div data-a="up3" style="margin-top: 34px; display: flex; gap: 20px;">
       <div style="background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-radius: 34px 0; padding: 24px 28px; flex: 1;">
         <div style="font-size: 46px; font-weight: 800; font-style: italic; color: #C89B3C; line-height: 1;">63.8%</div>
@@ -126,56 +136,66 @@
 <section data-label="El edificio — la altura no son vecinos" data-screen-label="El edificio" data-speaker-notes="Metafora: presumir high elo por percentiles es presumir que vives arriba porque en tu piso viven poquitos. La altura se mide en pisos, no en vecinos." style="background: #010A13; background-image: radial-gradient(130% 55% at 50% 100%, rgba(200,155,60,0.14) 0%, rgba(0,0,0,0) 60%); font-family: 'General Sans', 'GeneralSans', ui-sans-serif, system-ui, sans-serif; color: #F0E6D2; display: flex; flex-direction: column; padding: 110px 64px 70px; box-sizing: border-box; overflow: hidden; position: relative;">
 <h2 data-a="up" style="font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -1px; line-height: 1.04; background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 66px; margin: 0 0 10px;">¿En qué piso vives?</h2>
     <p data-a="up" style="margin: 6px 0 24px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">Cada piso, un rango · su ancho: cuánta gente vive ahí</p>
-    <div data-a="up2" style="display: flex; flex-direction: column; align-items: stretch;"><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 96px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/challenger.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">0.023%</span>
+    <div data-a="up2" style="display: flex; flex-direction: column; align-items: stretch;"><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/challenger.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 60px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; animation-delay: 1.15s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 96px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/grandmaster.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">0.054%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.023%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/grandmaster.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 60px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; animation-delay: 1.05s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 96px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/master.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">0.83%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.054%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/master.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 60px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12); border-radius: 12px 0; animation-delay: 0.95s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 134.4255319148936px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/diamond.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">4.05%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: #0AC8B9;">0.83%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/diamond.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 110.29787234042553px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.85s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 428.17021276595744px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/emerald.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">12.9%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">4.05%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/emerald.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 351.3191489361702px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.75s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 610.7234042553191px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/platinum.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">18.4%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">12.9%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/platinum.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 501.10638297872333px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.65s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 780px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/gold.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">23.5%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">18.4%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/gold.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 640px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.55s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 700.340425531915px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/silver.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">21.1%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">23.5%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/silver.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 574.6382978723404px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.45s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 524.4255319148937px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/bronze.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">15.8%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">21.1%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/bronze.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 430.29787234042556px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.35s;"></div>
       </div>
-    </div><div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: 112.85106382978722px; height: 104px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        <img src="assets/emblems/iron.png" alt="" style="width: 66px; height: 66px; object-fit: contain; flex: none; ">
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">3.4%</span>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">15.8%</div>
+    </div><div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      <img src="assets/emblems/iron.png" alt="" style="width: 78px; height: 78px; object-fit: contain; flex: none; ">
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: 92.59574468085106px; height: 100px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35);  border-radius: 12px 0; animation-delay: 0.25s;"></div>
       </div>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: rgba(240,230,210,0.75);">3.4%</div>
     </div></div>
     <div data-a="up3" style="margin-top: 30px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-radius: 34px 0; padding: 28px 34px; text-align: center;">
       <div style="font-size: 40px; font-weight: 800; font-style: italic; text-transform: uppercase; color: #C89B3C; line-height: 1.2;">La altura se mide en pisos,<br>no en vecinos</div>
@@ -185,82 +205,81 @@
 <section data-label="El camino en LP — EUW a escala" data-screen-label="El camino" data-speaker-notes="El camino completo en Europa a escala: de Hierro a Master 2800 LP, y de Master a Challenger 2377 mas. La mitad exacta del camino cae en Diamante." style="background: #010A13; background-image: radial-gradient(130% 55% at 50% 0%, rgba(200,155,60,0.18) 0%, rgba(0,0,0,0) 60%); font-family: 'General Sans', 'GeneralSans', ui-sans-serif, system-ui, sans-serif; color: #F0E6D2; display: flex; flex-direction: column; padding: 110px 64px 70px; box-sizing: border-box; overflow: hidden; position: relative;">
 <h2 data-a="up" style="font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -1px; line-height: 1.04; background: linear-gradient(180deg, #FFFFFF 30%, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 66px; margin: 0 0 10px;">El camino real, a escala</h2>
     <p data-a="up" style="margin: 6px 0 26px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">Servidor EUW · corte Challenger de hoy: 2 377 LP arriba de Master</p>
-    <div data-a="up2" style="position: relative; height: 1400px; margin-left: 8px;">
-      <div style="position: absolute; left: 330px; bottom: 0; width: 26px; height: 1310px; border-radius: 13px; background: linear-gradient(180deg, #0AC8B9 0%, #0AC8B9 45.91462236816689%, #C89B3C 45.91462236816689%, #6B4E1B 100%);"></div>
+    <div data-a="up2" style="position: relative; height: 1520px; margin-left: 8px;">
+      <div data-grow-y style="position: absolute; left: 330px; bottom: 0; width: 26px; height: 1430px; border-radius: 13px; background: linear-gradient(180deg, #0AC8B9 0%, #0AC8B9 45.91462236816689%, #C89B3C 45.91462236816689%, #6B4E1B 100%);"></div>
       
-    <div style="position: absolute; left: 0; bottom: -40px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: -40px; display: flex; align-items: center; gap: 14px; animation-delay: 0.20s;">
       <img src="assets/emblems/iron.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Hierro</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">0 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 61px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 70px; display: flex; align-items: center; gap: 14px; animation-delay: 0.30s;">
       <img src="assets/emblems/bronze.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Bronce</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">400 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 162px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 181px; display: flex; align-items: center; gap: 14px; animation-delay: 0.40s;">
       <img src="assets/emblems/silver.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Plata</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">800 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 264px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 291px; display: flex; align-items: center; gap: 14px; animation-delay: 0.50s;">
       <img src="assets/emblems/gold.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Oro</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">1 200 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 365px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 402px; display: flex; align-items: center; gap: 14px; animation-delay: 0.60s;">
       <img src="assets/emblems/platinum.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Platino</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">1 600 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 466px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 512px; display: flex; align-items: center; gap: 14px; animation-delay: 0.70s;">
       <img src="assets/emblems/emerald.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Esmeralda</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">2 000 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 567px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 623px; display: flex; align-items: center; gap: 14px; animation-delay: 0.80s;">
       <img src="assets/emblems/diamond.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Diamante</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">2 400 LP</div>
       </div>
     </div>
-    <div style="position: absolute; left: 0; bottom: 669px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: 733px; display: flex; align-items: center; gap: 14px; animation-delay: 0.90s;">
       <img src="assets/emblems/master.png" alt="" style="width: 80px; height: 80px; object-fit: contain; flex: none; ">
       <div>
         <div style="font-size: 23px; font-weight: 700;">Master</div>
         <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.5);">2 800 LP</div>
       </div>
     </div>
-      <div style="position: absolute; left: 330px; bottom: 1268px; display: flex; align-items: center; gap: 14px; transform: translateX(44px);">
+      <div data-fade style="position: absolute; left: 330px; bottom: 1388px; display: flex; align-items: center; gap: 14px; transform: translateX(44px); animation-delay: 1.50s;">
         <img src="assets/emblems/challenger.png" alt="" style="width: 92px; height: 92px; object-fit: contain; flex: none; ">
         <div>
           <div style="font-size: 24px; font-weight: 800; color: #0AC8B9;">Challenger</div>
           <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.55);">5 177 LP desde Hierro</div>
         </div>
       </div>
-      <div style="position: absolute; left: 330px; bottom: 902px; transform: translateX(44px); display: flex; align-items: center; gap: 12px; opacity: 0.85;">
+      <div data-fade style="position: absolute; left: 330px; bottom: 988px; transform: translateX(44px); display: flex; align-items: center; gap: 12px; opacity: 0.85; animation-delay: 1.13s;">
         <img src="assets/emblems/grandmaster.png" alt="" style="width: 68px; height: 68px; object-fit: contain; flex: none; ">
         <div style="font-size: 20px; font-weight: 600; color: rgba(240,230,210,0.6);">Gran Maestro,<br>en medio del brinco</div>
       </div>
-      <div style="position: absolute; left: 0; right: 60px; bottom: 655px; border-top: 3px dashed #C89B3C;">
+      <div data-fade style="position: absolute; left: 0; right: 60px; bottom: 715px; border-top: 3px dashed #C89B3C; animation-delay: 1.75s;">
         <div style="position: absolute; right: 0; top: -46px; font-size: 23px; font-weight: 800; font-style: italic; text-transform: uppercase; color: #C89B3C;">Mitad del camino · 2 589 LP</div>
         <div style="position: absolute; right: 0; top: 10px; font-size: 20px; font-weight: 600; color: rgba(200,155,60,0.8);">cae en Diamante</div>
       </div>
     </div>
-    <div data-a="up3" style="margin-top: 26px; background: linear-gradient(160deg, #0E1B26, #050C14); border: 1px solid rgba(200,155,60,0.35); border-radius: 34px 0; padding: 22px 30px; font-size: 25px; font-weight: 600; line-height: 1.4; color: rgba(240,230,210,0.85);">Un Master 0 LP de Europa tiene enfrente <b style="color: #C89B3C;">más camino que el que hay de Bronce a Diamante</b>. Dos brincos que equivalen a los otros 7 rangos.</div>
 <div style="position: absolute; bottom: 26px; left: 0; right: 0; text-align: center; font-size: 19px; font-weight: 600; letter-spacing: 2px; color: rgba(240,230,210,0.35); text-transform: uppercase;">@axelsine13 · datos 21/08/2026</div>
   </section>
 <section data-label="Master a Challenger por servidor" data-screen-label="Por servidor" data-speaker-notes="El brinco de Master a Challenger por servidor, comparado contra el camino completo de Hierro a Master que son 2800 LP. En Europa son 2377: casi el camino entero otra vez." style="background: #010A13; background-image: radial-gradient(130% 55% at 50% 0%, rgba(200,155,60,0.18) 0%, rgba(0,0,0,0) 60%); font-family: 'General Sans', 'GeneralSans', ui-sans-serif, system-ui, sans-serif; color: #F0E6D2; display: flex; flex-direction: column; padding: 110px 64px 70px; box-sizing: border-box; overflow: hidden; position: relative;">

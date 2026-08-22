@@ -69,26 +69,39 @@ const portada = `<section data-label="Portada" data-screen-label="Portada" data-
 
 // ── Slide 2 · La campana (distribución por gente) ───────────────────────
 const MAXPCT = 23.5;
-const filasCampana = TIERS.map(t => {
+const BARW = 420, ROWH = 96; // barra de ancho fijo para poder trazar la curva encima
+const filasCampana = TIERS.map((t, i) => {
   const w = Math.max((t.pct / MAXPCT) * 100, 1.2);
   const esLow = ['iron', 'bronze', 'silver', 'gold'].includes(t.id);
   const color = esLow ? GOLD : (t.id === 'master' || t.id === 'grandmaster' || t.id === 'challenger') ? TEAL : 'rgba(240,230,210,0.45)';
-  return `<div style="display: flex; align-items: center; gap: 18px; height: 96px;">
-      ${emblem(t.id, 84)}
-      <div style="width: 250px; flex: none; font-size: 27px; font-weight: 700; letter-spacing: 0.5px;">${t.nombre}</div>
-      <div style="flex: 1; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
-        <div style="width: ${w}%; height: 100%; background: ${color}; border-radius: 10px 0;"></div>
+  return `<div style="display: flex; align-items: center; gap: 16px; height: ${ROWH}px;">
+      ${emblem(t.id, 76)}
+      <div style="width: 230px; flex: none; font-size: 26px; font-weight: 700; letter-spacing: 0.5px;">${t.nombre}</div>
+      <div style="width: ${BARW}px; flex: none; height: 46px; border-radius: 10px 0; background: rgba(255,255,255,0.06); overflow: hidden;">
+        <div data-grow style="width: ${w}%; height: 100%; background: ${color}; border-radius: 10px 0; animation-delay: ${(0.25 + i * 0.09).toFixed(2)}s;"></div>
       </div>
-      <div style="width: 150px; flex: none; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: ${color};">${t.pct}%</div>
+      <div style="flex: 1; text-align: right; font-size: 26px; font-weight: 800; font-style: italic; color: ${color};">${t.pct}%</div>
     </div>`;
 }).join('');
+
+// La curva de la campana: pasa por la punta de cada barra
+const pts = TIERS.map((t, i) => [(t.pct / MAXPCT) * BARW, i * ROWH + ROWH / 2]);
+let dCurva = `M ${pts[0][0].toFixed(1)} ${pts[0][1]}`;
+for (let i = 1; i < pts.length - 1; i++) {
+  const mx = (pts[i][0] + pts[i + 1][0]) / 2, my = (pts[i][1] + pts[i + 1][1]) / 2;
+  dCurva += ` Q ${pts[i][0].toFixed(1)} ${pts[i][1]} ${mx.toFixed(1)} ${my}`;
+}
+dCurva += ` L ${pts[9][0].toFixed(1)} ${pts[9][1]}`;
+const curvaSvg = `<svg class="curva" viewBox="0 0 ${BARW} ${ROWH * 10}" style="position: absolute; left: ${76 + 16 + 230 + 16}px; top: 0; width: ${BARW}px; height: ${ROWH * 10}px; overflow: visible; pointer-events: none;">
+      <path d="${dCurva}" fill="none" stroke="${GOLD}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" style="filter: drop-shadow(0 0 12px rgba(200,155,60,0.55));"/>
+    </svg>`;
 
 const campana = baseSection(
   'La campana — % de jugadores por rango', 'La campana',
   'Asi se reparte la gente: dos de cada tres viven entre Hierro y Oro. Diamante ya es top 5. Pero esto mide gente amontonada, no altura.',
   `<h2 data-a="up" style="${TITLE} font-size: 66px; margin: 0 0 10px;">La campanita<br>de la distribución</h2>
     <p data-a="up" style="margin: 6px 0 30px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">% de jugadores por rango · soloQ · agosto 2026</p>
-    <div data-a="up2" style="display: flex; flex-direction: column;">${filasCampana}</div>
+    <div data-a="up2" style="display: flex; flex-direction: column; position: relative;">${filasCampana}${curvaSvg}</div>
     <div data-a="up3" style="margin-top: 34px; display: flex; gap: 20px;">
       <div style="${CARD} border-radius: 34px 0; padding: 24px 28px; flex: 1;">
         <div style="font-size: 46px; font-weight: 800; font-style: italic; color: ${GOLD}; line-height: 1;">63.8%</div>
@@ -102,14 +115,16 @@ const campana = baseSection(
 );
 
 // ── Slide 3 · El edificio ───────────────────────────────────────────────
-const pisos = [...TIERS].reverse().map(t => {
-  const w = Math.max((t.pct / MAXPCT) * 780, 96);
+const pisos = [...TIERS].reverse().map((t, idx) => {
+  const w = Math.max((t.pct / MAXPCT) * 640, 60);
   const esAlto = ['master', 'grandmaster', 'challenger'].includes(t.id);
-  return `<div style="display: flex; align-items: center; justify-content: center; gap: 16px; height: 118px;">
-      <div style="width: ${w}px; height: 104px; ${CARD} ${esAlto ? `border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12);` : ''} border-radius: 12px 0; display: flex; align-items: center; justify-content: center; gap: 12px; overflow: hidden;">
-        ${emblem(t.id, 66)}
-        <span style="font-size: 21px; font-weight: 700; color: rgba(240,230,210,0.8); white-space: nowrap;">${t.pct}%</span>
+  const delay = (0.25 + (9 - idx) * 0.1).toFixed(2); // nacen de abajo hacia arriba
+  return `<div style="display: flex; align-items: center; gap: 18px; height: 118px;">
+      ${emblem(t.id, 78)}
+      <div style="flex: 1; display: flex; justify-content: center;">
+        <div data-grow-c style="width: ${w}px; height: 100px; ${CARD} ${esAlto ? `border-color: rgba(10,200,185,0.55); box-shadow: 0 0 30px rgba(10,200,185,0.12);` : ''} border-radius: 12px 0; animation-delay: ${delay}s;"></div>
       </div>
+      <div style="width: 120px; flex: none; text-align: right; font-size: 23px; font-weight: 800; font-style: italic; color: ${esAlto ? TEAL : 'rgba(240,230,210,0.75)'};">${t.pct}%</div>
     </div>`;
 }).join('');
 
@@ -126,10 +141,11 @@ const edificio = baseSection(
 );
 
 // ── Slide 4 · El camino en LP (EUW, a escala) ───────────────────────────
-const H_TRACK = 1310; // px que representan CAMINO_EUW (5,177 LP)
+const H_TRACK = 1430; // px que representan CAMINO_EUW (5,177 LP)
 const y = lp => Math.round((lp / CAMINO_EUW) * H_TRACK);
+const delayLp = lp => (0.2 + (lp / CAMINO_EUW) * 1.3).toFixed(2); // aparece cuando la barra "pasa" por ahí
 const marcas = TIERS.filter(t => t.lp !== null).map(t => `
-    <div style="position: absolute; left: 0; bottom: ${y(t.lp) - 40}px; display: flex; align-items: center; gap: 14px;">
+    <div data-fade style="position: absolute; left: 0; bottom: ${y(t.lp) - 40}px; display: flex; align-items: center; gap: 14px; animation-delay: ${delayLp(t.lp)}s;">
       ${emblem(t.id, 80)}
       <div>
         <div style="font-size: 23px; font-weight: 700;">${t.nombre}</div>
@@ -143,25 +159,24 @@ const camino = baseSection(
   `<h2 data-a="up" style="${TITLE} font-size: 66px; margin: 0 0 10px;">El camino real, a escala</h2>
     <p data-a="up" style="margin: 6px 0 26px; font-size: 26px; font-weight: 600; color: rgba(240,230,210,0.65);">Servidor EUW · corte Challenger de hoy: ${fmt(CORTE_EUW)} LP arriba de Master</p>
     <div data-a="up2" style="position: relative; height: ${H_TRACK + 90}px; margin-left: 8px;">
-      <div style="position: absolute; left: 330px; bottom: 0; width: 26px; height: ${H_TRACK}px; border-radius: 13px; background: linear-gradient(180deg, ${TEAL} 0%, ${TEAL} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, ${GOLD} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, #6B4E1B 100%);"></div>
+      <div data-grow-y style="position: absolute; left: 330px; bottom: 0; width: 26px; height: ${H_TRACK}px; border-radius: 13px; background: linear-gradient(180deg, ${TEAL} 0%, ${TEAL} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, ${GOLD} ${100 - (IRON_A_MASTER / CAMINO_EUW) * 100}%, #6B4E1B 100%);"></div>
       ${marcas}
-      <div style="position: absolute; left: 330px; bottom: ${y(CAMINO_EUW) - 42}px; display: flex; align-items: center; gap: 14px; transform: translateX(44px);">
+      <div data-fade style="position: absolute; left: 330px; bottom: ${y(CAMINO_EUW) - 42}px; display: flex; align-items: center; gap: 14px; transform: translateX(44px); animation-delay: ${delayLp(CAMINO_EUW)}s;">
         ${emblem('challenger', 92)}
         <div>
           <div style="font-size: 24px; font-weight: 800; color: ${TEAL};">Challenger</div>
           <div style="font-size: 19px; font-weight: 600; color: rgba(240,230,210,0.55);">${fmt(CAMINO_EUW)} LP desde Hierro</div>
         </div>
       </div>
-      <div style="position: absolute; left: 330px; bottom: ${y(IRON_A_MASTER + 900) - 34}px; transform: translateX(44px); display: flex; align-items: center; gap: 12px; opacity: 0.85;">
+      <div data-fade style="position: absolute; left: 330px; bottom: ${y(IRON_A_MASTER + 900) - 34}px; transform: translateX(44px); display: flex; align-items: center; gap: 12px; opacity: 0.85; animation-delay: ${delayLp(IRON_A_MASTER + 900)}s;">
         ${emblem('grandmaster', 68)}
         <div style="font-size: 20px; font-weight: 600; color: rgba(240,230,210,0.6);">Gran Maestro,<br>en medio del brinco</div>
       </div>
-      <div style="position: absolute; left: 0; right: 60px; bottom: ${y(MITAD_EUW)}px; border-top: 3px dashed ${GOLD};">
+      <div data-fade style="position: absolute; left: 0; right: 60px; bottom: ${y(MITAD_EUW)}px; border-top: 3px dashed ${GOLD}; animation-delay: 1.75s;">
         <div style="position: absolute; right: 0; top: -46px; font-size: 23px; font-weight: 800; font-style: italic; text-transform: uppercase; color: ${GOLD};">Mitad del camino · ${fmt(MITAD_EUW)} LP</div>
         <div style="position: absolute; right: 0; top: 10px; font-size: 20px; font-weight: 600; color: rgba(200,155,60,0.8);">cae en Diamante</div>
       </div>
-    </div>
-    <div data-a="up3" style="margin-top: 26px; ${CARD} border-radius: 34px 0; padding: 22px 30px; font-size: 25px; font-weight: 600; line-height: 1.4; color: rgba(240,230,210,0.85);">Un Master 0 LP de Europa tiene enfrente <b style="color: ${GOLD};">más camino que el que hay de Bronce a Diamante</b>. Dos brincos que equivalen a los otros 7 rangos.</div>`
+    </div>`
 );
 
 // ── Slide 5 · El brinco por servidor ────────────────────────────────────
@@ -243,11 +258,19 @@ const html = `<!DOCTYPE html>
   html, body { margin: 0; padding: 0; background: ${BG}; }
   @keyframes dsUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
   @keyframes dsImg { from { opacity: 0; transform: translateY(30px) scale(0.96); } to { opacity: 1; transform: none; } }
+  @keyframes dsGrowX { from { transform: scaleX(0); } to { transform: none; } }
+  @keyframes dsGrowY { from { transform: scaleY(0); } to { transform: none; } }
+  @keyframes dsDraw { to { stroke-dashoffset: 0; } }
   @media (prefers-reduced-motion: no-preference) {
     [data-deck-active] [data-a="up"] { animation: dsUp 0.7s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="up2"] { animation: dsUp 0.7s 0.15s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="up3"] { animation: dsUp 0.8s 0.28s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
     [data-deck-active] [data-a="img"] { animation: dsImg 0.9s 0.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow] { transform-origin: left center; animation: dsGrowX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow-c] { transform-origin: center; animation: dsGrowX 0.8s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-grow-y] { transform-origin: center bottom; animation: dsGrowY 1.5s cubic-bezier(0.33, 0.8, 0.4, 1) both; }
+    [data-deck-active] [data-fade] { animation: dsUp 0.55s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] .curva path { stroke-dasharray: 2600; stroke-dashoffset: 2600; animation: dsDraw 1.8s 1.15s ease-out both; }
   }
   #modo-presentacion {
     position: fixed; top: 16px; right: 16px; z-index: 2147483000;
