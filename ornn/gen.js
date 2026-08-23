@@ -70,64 +70,77 @@ slides.push(`
     </div>
   </section>`);
 
-// ── 2 · El one trick #1 (capturas reales de op.gg) ─────────────────────
-// Las dos capturas se guardan a mano en assets/. Si faltan, cada hueco cae
-// a una versión maquetada con los mismos datos (ver onerror más abajo).
-const opgg = (archivo, etiqueta, fallback) => `
-        <div style="flex: 1; display: flex; flex-direction: column; gap: 12px; min-width: 0;">
-          <div style="height: 640px; border-radius: 16px; overflow: hidden; background: #14181F; border: 1px solid rgba(255,162,58,0.28); display: flex; align-items: center; justify-content: center;">
-            <img src="assets/${archivo}" alt="${etiqueta}"
-                 onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';"
-                 style="width: 100%; height: 100%; object-fit: contain;">
-            <div style="display: none; width: 100%; height: 100%; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 26px; box-sizing: border-box; text-align: center;">${fallback}</div>
-          </div>
-          <span style="font-size: 24px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: ${MUTED}; text-align: center;">${etiqueta}</span>
+// ── 2 · El one trick #1 ─────────────────────────────────────────────────
+// Los emblemas de rango vienen del deck /lowelo/ (copiados a assets/emblems).
+const rangos = [
+  ['S2025', 'Esmeralda 4', 'emerald.png', false],
+  ['S2024', 'Diamante 3', 'diamond.png', true],
+  ['S2023', 'Diamante 4', 'diamond.png', false],
+  ['S2022', 'Platino 4', 'platinum.png', false],
+  ['S2021', 'Oro 3', 'gold.png', false],
+  ['S7', 'Plata 2', 'silver.png', false],
+];
+
+const panel = (etiqueta, contenido) => `
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+          <div style="height: 616px; border-radius: 18px; background: rgba(20,24,31,0.85); border: 1px solid rgba(255,162,58,0.28); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 20px; box-sizing: border-box;">${contenido}</div>
+          <span style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: ${MUTED}; text-align: center;">${etiqueta}</span>
         </div>`;
 
-const fbMaestria = `
-              <span style="font-family: ${DISPLAY}; font-size: 108px; line-height: 0.86; color: ${EMBER};">456</span>
-              <span style="font-size: 25px; font-weight: 600; color: ${MUTED};">nivel de maestría</span>
-              <span style="font-family: ${DISPLAY}; font-size: 74px; line-height: 0.9; color: ${GOLD}; margin-top: 14px;">7 079 757</span>
-              <span style="font-size: 25px; font-weight: 600; color: ${MUTED};">puntos en Ornn</span>`;
+const panelMaestria = panel('Maestría', `
+              <div style="position: relative; margin-bottom: 18px;">
+                <img src="assets/ornn-icon.png" alt="Ornn" style="width: 168px; height: 168px; border-radius: 50%; border: 4px solid ${EMBER}; box-shadow: 0 0 46px rgba(255,107,26,0.45);">
+                <span style="position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); background: ${EMBER}; color: #0B0605; font-family: ${DISPLAY}; font-size: 40px; line-height: 1; padding: 7px 22px 4px; border-radius: 999px;">456</span>
+              </div>
+              <span style="margin-top: 10px; font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">Nivel de maestría</span>
+              <span style="font-family: ${DISPLAY}; font-size: 86px; line-height: 0.9; color: ${GOLD}; margin-top: 22px;">7 079 757</span>
+              <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">puntos en Ornn</span>`);
 
-const fbTemporadas = ['S2025 · Esmeralda 4', 'S2024 · Diamante 3', 'S2023 · Diamante 4', 'S2022 · Platino 4', 'S2021 · Oro 3', 'S7 · Plata 2']
-  .map(t => `<span style="font-size: 28px; font-weight: 500; color: ${TEXT};">${t}</span>`).join('');
+const panelRangos = panel('Historial de rangos', `
+              <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                ${rangos.map(([temp, nombre, emblema, top]) => `
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; ${top ? `background: ${GOLD}1F; border: 1px solid ${GOLD}66;` : 'border: 1px solid rgba(255,255,255,0.06);'}">
+                  <img src="assets/emblems/${emblema}" alt="${nombre}" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 86px; font-size: 22px; font-weight: 600; color: ${MUTED};">${temp}</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: ${top ? '700' : '500'}; color: ${top ? GOLD : TEXT};">${nombre}</span>
+                </div>`).join('')}
+              </div>`);
 
 slides.push(`
-  <section data-label="El one trick #1" data-screen-label="02 · El OTP" data-speaker-notes="El one trick con mas puntos del mundo. Maestria 456, siete millones de puntos, unas nueve mil partidas. La captura de rangos se sostiene: nunca paso de Diamante 3." style="${seccion()}">
+  <section data-label="El one trick #1" data-screen-label="02 · El OTP" data-speaker-notes="El one trick con mas puntos del mundo. Maestria 456, siete millones de puntos, unas nueve mil partidas. Nunca paso de Diamante 3." style="${seccion()}">
     ${glow(EMBER, '50% 40%', '115% 60%')}
     <div style="position: relative;">
       ${eyebrow('El one trick #1 del mundo')}
       <div data-a="up2" style="display: flex; align-items: baseline; gap: 22px; flex-wrap: wrap;">
-        <span style="font-family: ${DISPLAY}; font-size: 96px; line-height: 0.95; color: ${TEXT};">창 활 한</span>
-        <span style="font-family: ${DISPLAY}; font-size: 96px; line-height: 0.95; color: ${EMBER};">#KR1</span>
+        <span style="font-family: ${DISPLAY}; font-size: 92px; line-height: 0.95; color: ${TEXT};">쾌 활 한</span>
+        <span style="font-family: ${DISPLAY}; font-size: 92px; line-height: 0.95; color: ${EMBER};">#KR1</span>
       </div>
-      <p data-a="up2" style="margin: 14px 0 0; font-size: 28px; font-weight: 500; color: ${MUTED};">Corea · CHZZK 창활한 (Cheerful)</p>
+      <p data-a="up2" style="margin: 12px 0 0; font-size: 27px; font-weight: 500; color: ${MUTED};">Corea · CHZZK 쾌활한 (Cheerful)</p>
 
-      <div data-a="img" style="margin-top: 34px; display: flex; gap: 22px;">
-        ${opgg('opgg-maestria.png', 'Maestría', fbMaestria)}
-        ${opgg('opgg-temporadas.png', 'Historial de rangos', fbTemporadas)}
+      <div data-a="img" style="margin-top: 30px; display: flex; gap: 22px;">
+        ${panelMaestria}
+        ${panelRangos}
       </div>
 
-      <div data-a="up3" style="margin-top: 32px; display: flex; align-items: center; gap: 40px;">
+      <div data-a="up3" style="margin-top: 28px; display: flex; align-items: center; gap: 36px;">
         <div style="flex: 1;">
-          <div style="font-family: ${DISPLAY}; font-size: 112px; line-height: 0.86; color: ${TEXT};">~9 000</div>
-          <div style="font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">partidas de Ornn</div>
+          <div style="font-family: ${DISPLAY}; font-size: 108px; line-height: 0.86; color: ${TEXT};">~9 000</div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">partidas de Ornn</div>
         </div>
-        <div style="width: 2px; height: 92px; background: rgba(255,162,58,0.3);"></div>
+        <div style="width: 2px; height: 88px; background: rgba(255,162,58,0.3);"></div>
         <div style="flex: 1;">
-          <div style="font-family: ${DISPLAY}; font-size: 112px; line-height: 0.86; color: ${EMBER};">~1 000</div>
-          <div style="font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">por año del campeón</div>
+          <div style="font-family: ${DISPLAY}; font-size: 108px; line-height: 0.86; color: ${EMBER};">~1 000</div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">por año del campeón</div>
         </div>
       </div>
 
-      <div data-a="up3" style="margin-top: 24px; font-size: 28px; font-weight: 500; color: ${HOT}; line-height: 1.4;">
-        Más de la <strong style="color: ${EMBER};">mitad</strong> de los puntos de su cuenta son de Ornn… y aun así <strong style="color: ${EMBER};">nunca pasó de Diamante 3</strong>.
+      <div data-a="up3" style="margin-top: 22px; font-size: 27px; font-weight: 500; color: ${HOT}; line-height: 1.4;">
+        Más de la <strong style="color: ${EMBER};">mitad</strong> de los puntos de su cuenta son de Ornn… y aun así <strong style="color: ${EMBER};">nunca pasó de Diamante&nbsp;3</strong>.
       </div>
     </div>
   </section>`);
 
-// ── 3 · Las skins: sequía, precio y cero legendarias ───────────────────
+// ── 3 · Las skins ────────────────────────────────────────────────────────
 const skins = [
   ['Ornn_1.jpg', 'Señor del Trueno', 'ago 2017'],
   ['Ornn_2.jpg', 'Bosqueviejo', 'dic 2020'],
@@ -135,47 +148,48 @@ const skins = [
   ['Ornn_20.jpg', 'ConductOrnn', 'abr 2024'],
   ['Ornn_29.jpg', 'Egidatrón', 'ene 2026'],
 ];
+const celdaSkin = ([img, nombre, fecha]) => `
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            <img src="assets/${img}" alt="${nombre}" style="width: 100%; height: 228px; object-fit: cover; object-position: center 20%; border-radius: 14px; border: 1px solid rgba(255,162,58,0.28);">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 25px; font-weight: 600; color: ${TEXT}; line-height: 1.15;">${nombre}</span>
+              <span style="font-size: 21px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: ${GOLD};">${fecha}</span>
+            </div>
+          </div>`;
+
 slides.push(`
   <section data-label="Las skins" data-screen-label="03 · Las skins" data-speaker-notes="Cinco skins en nueve anos. Tres anos y cuatro meses entre la primera y la segunda. Todas a 1350: ni legendaria, ni definitiva, ni prestigio." style="${seccion()}">
     ${glow(CRIMSON, '50% 42%', '115% 58%')}
     <div style="position: relative;">
       ${eyebrow('Las skins')}
-      ${titulo('5 skins<br>en 9 años', 100)}
+      ${titulo('5 skins en 9 años', 88)}
 
-      <div data-a="img" style="margin-top: 34px; display: flex; gap: 14px;">
-        ${skins.map(([img, nombre, fecha]) => `
-        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px;">
-          <img src="assets/${img}" alt="${nombre}" style="width: 100%; height: 104px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(255,162,58,0.2);">
-          <span style="font-size: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${GOLD}; text-align: center;">${fecha}</span>
-        </div>`).join('')}
+      <div data-a="img" style="margin-top: 30px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+        ${skins.slice(0, 3).map(celdaSkin).join('')}
+      </div>
+      <div data-a="img" style="margin-top: 20px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
+        ${skins.slice(3).map(celdaSkin).join('')}
+        <div style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px; border-radius: 14px; border: 2px dashed rgba(192,39,45,0.55); background: rgba(192,39,45,0.09); padding: 10px;">
+          <span style="font-family: ${DISPLAY}; font-size: 66px; line-height: 0.85; color: ${CRIMSON};">0</span>
+          <span style="font-size: 21px; font-weight: 600; color: ${TEXT}; text-align: center; line-height: 1.3;">legendarias<br>definitivas<br>prestigio</span>
+        </div>
       </div>
 
-      <div data-a="up3" style="margin-top: 28px; padding: 22px 26px; border-radius: 16px; background: rgba(192,39,45,0.14); border: 1px solid rgba(192,39,45,0.42); display: flex; align-items: center; gap: 24px;">
-        <span style="font-family: ${DISPLAY}; font-size: 86px; line-height: 0.85; color: ${EMBER}; white-space: nowrap;">3 AÑOS</span>
-        <span style="font-size: 26px; font-weight: 500; color: ${TEXT}; line-height: 1.35;">y 4 meses entre su primera<br>y su segunda skin</span>
+      <div data-a="up3" style="margin-top: 28px; padding: 20px 26px; border-radius: 16px; background: rgba(192,39,45,0.14); border: 1px solid rgba(192,39,45,0.42); display: flex; align-items: center; gap: 24px;">
+        <span style="font-family: ${DISPLAY}; font-size: 80px; line-height: 0.85; color: ${EMBER}; white-space: nowrap;">3 AÑOS</span>
+        <span style="font-size: 25px; font-weight: 500; color: ${TEXT}; line-height: 1.35;">y 4 meses entre su primera<br>y su segunda skin</span>
       </div>
 
-      <div data-a="up3" style="margin-top: 28px; display: flex; align-items: flex-end; gap: 36px;">
+      <div data-a="up3" style="margin-top: 26px; display: flex; align-items: flex-end; gap: 36px;">
         <div style="flex: 1;">
-          <div style="font-family: ${DISPLAY}; font-size: 108px; line-height: 0.86; color: ${EMBER};">~52 <span style="font-size: 58px;">USD</span></div>
-          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">las cinco · 6 750 RP</div>
+          <div style="font-family: ${DISPLAY}; font-size: 100px; line-height: 0.86; color: ${EMBER};">~52 <span style="font-size: 54px;">USD</span></div>
+          <div style="font-size: 22px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">las cinco · 6 750 RP</div>
         </div>
-        <div style="width: 2px; height: 90px; background: rgba(255,162,58,0.3);"></div>
+        <div style="width: 2px; height: 84px; background: rgba(255,162,58,0.3);"></div>
         <div style="flex: 1;">
-          <div style="font-family: ${DISPLAY}; font-size: 108px; line-height: 0.86; color: ${GOLD};">3,3</div>
-          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">días de salario mínimo</div>
+          <div style="font-family: ${DISPLAY}; font-size: 100px; line-height: 0.86; color: ${GOLD};">3,3</div>
+          <div style="font-size: 22px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">días de salario mínimo</div>
         </div>
-      </div>
-
-      <div data-a="up3" style="margin-top: 30px; padding-top: 24px; border-top: 2px solid rgba(255,162,58,0.28);">
-        <div style="display: flex; gap: 14px;">
-          ${['Legendarias', 'Definitivas', 'Prestigio'].map(t => `
-          <div style="flex: 1; text-align: center; padding: 16px 8px; border-radius: 14px; background: rgba(192,39,45,0.12); border: 1px solid rgba(192,39,45,0.4);">
-            <div style="font-family: ${DISPLAY}; font-size: 62px; line-height: 0.85; color: ${CRIMSON};">0</div>
-            <div style="font-size: 22px; font-weight: 600; color: ${TEXT}; margin-top: 4px;">${t}</div>
-          </div>`).join('')}
-        </div>
-        <div style="margin-top: 16px; font-size: 28px; font-weight: 500; color: ${HOT}; text-align: center;">Las cinco a 1350 RP. En nueve años, nada.</div>
       </div>
     </div>
   </section>`);
