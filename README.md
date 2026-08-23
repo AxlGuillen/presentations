@@ -12,7 +12,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /soloq/              SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
 /estancia/           Propuesta: web + administración para estancia infantil · 16:9 · 8 slides
-/ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 12 slides
+/ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
