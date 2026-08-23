@@ -10,6 +10,7 @@ Sin build, sin dependencias, sin framework. Una carpeta por presentación, autoc
 tabletas/   index.html + deck-stage.js + support.js + assets/
 soloq/      index.html + gen.js + deck-stage.js + assets/
 estancia/   index.html + gen.js + deck-stage.js   (sin assets: todo es CSS)
+ornn/       index.html + gen.js + deck-stage.js + assets/
 index.html  galería raíz con las cards
 ```
 
@@ -23,6 +24,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 |---|---|
 | `soloq/index.html` | **GENERADO** por `soloq/gen.js`. Nunca lo edites a mano: edita `gen.js` y corre `node soloq/gen.js`. Los datos (premios, salarios mínimos, tipos de cambio) están arriba de ese archivo. |
 | `estancia/index.html` | **GENERADO** por `estancia/gen.js`. Mismo trato que soloq: edita el generador y corre `node estancia/gen.js`. El alcance acordado está documentado en el comentario de cabecera de `gen.js`: 8 diapositivas de primer contacto, **sin app para padres** (el seguimiento a papás queda deliberadamente por definir). |
+| `ornn/index.html` | **GENERADO** por `ornn/gen.js`. Los splash arts vienen de Data Dragon; el cuadro de Hefesto es *La fragua de Vulcano* de Velázquez (dominio público, Wikimedia). |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
 
@@ -51,6 +53,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **tabletas** — fondo blanco, rojo `#C31722`, gris oscuro `#16181D`, tipografía Barlow. Corporativo, sobrio.
 - **soloq** — fondo `#0B0B0B`, verde neón `#53FC18`, amarillo `#E9FF1F`, General Sans (Fontshare). Títulos en MAYÚSCULAS itálicas peso 800 con gradiente blanco→55%, tarjetas con radio asimétrico `34px 0`. Estilo esports, tomado de soloqchallenge.gg.
 - **estancia** — propuesta comercial, no deck de datos. Crema `#FFFBF7`, teal `#123B4A`, coral `#FF7A59`, ámbar `#FFB547`, verde `#2FA37A`, tipografía Poppins. Cálido pero serio: es para una junta con cliente.
+- **ornn** — apoyo visual para video vertical de TikTok, no deck de lectura. Negro forja `#0B0605`, carmesí `#C0272D`, brasa `#FF6B1A`, oro `#FFA23A`, Bebas Neue para cifras y titulares. El contenido va en una banda central (`padding: 300px 84px 350px`) para que la interfaz de TikTok no tape nada: **si tocas esos márgenes, revisa que todo siga dentro de la zona segura**.
 - **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
 
 ## Agregar una presentación
