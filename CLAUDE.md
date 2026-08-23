@@ -52,7 +52,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 
 - **tabletas** — fondo blanco, rojo `#C31722`, gris oscuro `#16181D`, tipografía Barlow. Corporativo, sobrio.
 - **soloq** — fondo `#0B0B0B`, verde neón `#53FC18`, amarillo `#E9FF1F`, General Sans (Fontshare). Títulos en MAYÚSCULAS itálicas peso 800 con gradiente blanco→55%, tarjetas con radio asimétrico `34px 0`. Estilo esports, tomado de soloqchallenge.gg.
-- **estancia** — propuesta comercial, no deck de datos. Crema `#FFFBF7`, teal `#123B4A`, coral `#FF7A59`, ámbar `#FFB547`, verde `#2FA37A`, tipografía Poppins. Cálido pero serio: es para una junta con cliente.
+- **estancia** — propuesta comercial para **La Casita Feliz** (CAI). La paleta sale del logo del cliente: crema `#FFF9FA`, morado `#5B2168` / `#7B2E8E`, rosa `#E94B85`, verde `#6CBE45` / `#2FA84F`, amarillo `#FFC510`, café `#8D5B3F`, tipografía Poppins. El logo va como marca de agua al 5–7% en todas las diapositivas vía `marca()`; se pinta con `background-image` **a propósito**, para que si el archivo falta no se vea nada roto.
 - **ornn** — apoyo visual para video vertical de TikTok, no deck de lectura. Negro forja `#0B0605`, carmesí `#C0272D`, brasa `#FF6B1A`, oro `#FFA23A`, Bebas Neue para cifras y titulares. El contenido va en una banda central (`padding: 300px 84px 350px`) para que la interfaz de TikTok no tape nada: **si tocas esos márgenes, revisa que todo siga dentro de la zona segura**.
 - **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
 
