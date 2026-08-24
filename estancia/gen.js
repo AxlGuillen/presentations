@@ -68,10 +68,10 @@ const tarjeta = (icono, titulo, texto, acento = PINK) => `
           <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">${texto}</span>
         </div>`;
 
-const bullet = (txt, acento = GREEN, size = 24) => `
+const bullet = (txt, acento = GREEN, size = 24, color = INK) => `
           <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 4px; width: 25px; height: 25px; border-radius: 50%; background: ${acento}1F; color: ${acento}; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
-            <span style="font-size: ${size}px; font-weight: 400; color: ${INK}; line-height: 1.4;">${txt}</span>
+            <span style="flex: none; margin-top: 4px; width: 27px; height: 27px; border-radius: 50%; background: ${acento}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 700;">✓</span>
+            <span style="font-size: ${size}px; font-weight: 400; color: ${color}; line-height: 1.4;">${txt}</span>
           </div>`;
 
 const nota = (txt, color = PLUM) => `
@@ -254,9 +254,9 @@ slides.push(`
     <h2 data-a="up2" style="margin: 28px 0 0; font-size: 82px; font-weight: 700; letter-spacing: -2.6px; line-height: 1.05; max-width: 1300px;">Empezamos por la web,<br>y en paralelo definimos<br>la administración</h2>
     <p data-a="up3" style="margin: 32px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.55; max-width: 1080px;">La web es lo más rápido de poner en marcha y empieza a traer familias mientras ordenamos por dentro. Para afinar la siguiente etapa necesitaríamos saber:</p>
     <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 14px; max-width: 1160px;">
-      ${bullet('¿Cómo cobran hoy: efectivo, transferencia o terminal? ¿Emiten factura?', YELLOW, 24).replace(/color: #16262E/, 'color: #FFFFFF')}
-      ${bullet('¿Cuántas personas usarían el sistema y quién lo administraría?', YELLOW, 24).replace(/color: #16262E/, 'color: #FFFFFF')}
-      ${bullet('¿Hay una fecha objetivo, como el inicio del ciclo escolar?', YELLOW, 24).replace(/color: #16262E/, 'color: #FFFFFF')}
+      ${bullet('¿Cómo cobran hoy: efectivo, transferencia o terminal? ¿Emiten factura?', YELLOW, 25, '#FFFFFF')}
+      ${bullet('¿Cuántas personas usarían el sistema y quién lo administraría?', YELLOW, 25, '#FFFFFF')}
+      ${bullet('¿Hay una fecha objetivo, como el inicio del ciclo escolar?', YELLOW, 25, '#FFFFFF')}
     </div>
   </section>`);
 
