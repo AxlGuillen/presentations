@@ -1,0 +1,15 @@
+# Secretos — el repositorio es público, nada de API keys aquí
+.env
+.env.*
+!.env.example
+
+# Node
+node_modules/
+
+# Salidas del módulo de video (pesan mucho; se regeneran)
+**/video-out/
+*.mp4.tmp
+
+# Sistema
+.DS_Store
+Thumbs.db

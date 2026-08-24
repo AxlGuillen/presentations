@@ -1,0 +1,9 @@
+{
+  "name": "presentaciones-tools",
+  "private": true,
+  "type": "module",
+  "description": "Herramientas locales (captura y montaje de video). NO forma parte del sitio estatico.",
+  "dependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}
