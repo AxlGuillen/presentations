@@ -1,0 +1,39 @@
+{
+  "voz": "bfed5c0810a347dbb62e8ccce7f59c48",
+  "voz_nombre": "Voz Femenina Español (catálogo Fish Audio)",
+  "nota": "Narración concisa por diapositiva para el video de la propuesta. Editar aquí y volver a correr: node tools/video.mjs estancia",
+  "slides": [
+    {
+      "slide": 1,
+      "texto": "Esta es nuestra propuesta para La Casita Feliz: una página web que atrae nuevas familias, y un sistema que ordena la administración. Todo por etapas."
+    },
+    {
+      "slide": 2,
+      "texto": "La escuela ya funciona muy bien. Donde se va el tiempo es en lo administrativo: cobros en libreta, expedientes en papel y poca presencia en internet."
+    },
+    {
+      "slide": 3,
+      "texto": "La primera etapa es la página web, con un blog de eventos. Cada publicación se comparte por WhatsApp con su foto, y ayuda a que la escuela aparezca en las búsquedas."
+    },
+    {
+      "slide": 4,
+      "texto": "La segunda etapa es el corazón del sistema: el expediente de cada niño, las colegiaturas, el estado de cuenta y recordatorios de pago automáticos."
+    },
+    {
+      "slide": 5,
+      "texto": "Al centralizar los pagos aparecen las respuestas: cuánto entró este mes, quién tiene retraso, cómo va el año. Y con el asistente de inteligencia artificial, basta con preguntarlo."
+    },
+    {
+      "slide": 6,
+      "texto": "Después viene la entrada y salida con código QR, que deja registro de quién entrega y quién recoge a cada niño. Y al final, la comunicación con las familias."
+    },
+    {
+      "slide": 7,
+      "texto": "La web se cotiza como proyecto cerrado, con precio y fecha. El sistema se construye por módulos, con horas mensuales y una demo cada mes."
+    },
+    {
+      "slide": 8,
+      "texto": "Empezamos por la web, y en paralelo definimos juntos la administración. Nos encantaría platicarlo."
+    }
+  ]
+}

@@ -19,14 +19,14 @@ const url = 'https://api.fish.audio/v1/tts/stream/with-timestamp';
 const body = { text: texto, format: 'wav', chunk_length: 200, latency: 'normal' };
 
 console.log('→ POST', url);
-console.log('  modelo: s1 · formato: wav · caracteres:', texto.length);
+console.log('  modelo: s2.1-pro-free · formato: wav · caracteres:', texto.length);
 
 const res = await fetch(url, {
   method: 'POST',
   headers: {
     'Authorization': `Bearer ${KEY}`,
     'Content-Type': 'application/json',
-    'model': 's1',
+    'model': 's2.1-pro-free',
   },
   body: JSON.stringify(body),
 });
