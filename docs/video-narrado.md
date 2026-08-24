@@ -18,7 +18,7 @@ La materia prima ya existe en el repo:
 ## Pipeline
 
 ```
-gen.js / speaker-notes  →  guion.json  →  ElevenLabs (audio + timestamps)
+gen.js / speaker-notes  →  guion.json  →  Fish Audio (audio + timestamps)
                                               ↓
         Playwright (PNG por slide)  →  ffmpeg  →  video.mp4 + subs.srt
 ```
