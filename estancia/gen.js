@@ -291,6 +291,15 @@ const html = `<!DOCTYPE html>
   #modo-presentacion:hover { opacity: 1; }
   #modo-presentacion[data-on] { opacity: 0; }
   #modo-presentacion[data-on]:hover { opacity: 1; }
+  #ver-video {
+    position: fixed; top: 16px; right: 148px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px;
+    background: ${PINK}; color: #FFFFFF; cursor: pointer; text-decoration: none;
+    font: 600 13px/1 ${FONT}; letter-spacing: 0.6px;
+    opacity: 0.85; transition: opacity 160ms ease;
+  }
+  #ver-video:hover { opacity: 1; }
+  #ver-video[data-on] { opacity: 0; pointer-events: none; }
 </style>
 </head>
 <body>
@@ -303,9 +312,14 @@ ${slides.join('\n')}
   var btn = document.createElement('button');
   btn.id = 'modo-presentacion';
   btn.type = 'button';
+  var video = document.createElement('a');
+  video.id = 'ver-video';
+  video.href = 'video.mp4';
+  video.textContent = '▶ Ver video · 1:21';
   function render() {
     btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
-    if (presenting) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on');
+    if (presenting) { btn.setAttribute('data-on', ''); video.setAttribute('data-on', ''); }
+    else { btn.removeAttribute('data-on'); video.removeAttribute('data-on'); }
   }
   function setPresenting(on) {
     if (on === presenting) return;
@@ -327,6 +341,7 @@ ${slides.join('\n')}
   document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
   render();
   document.body.appendChild(btn);
+  document.body.appendChild(video);
 })();
 </script>
 </body>
