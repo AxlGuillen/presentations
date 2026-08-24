@@ -16,6 +16,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
+tools/               módulo de video (captura + voz + montaje), solo local
 ```
 
 Cada carpeta de presentación es autocontenida: su `index.html`, el runtime del deck (`deck-stage.js`) y su `assets/` con **rutas relativas**. Por eso `vercel.json` fija `trailingSlash: true`: sin la barra final, `/soloq` resolvería `assets/...` contra la raíz del sitio y las imágenes darían 404.
@@ -46,7 +47,7 @@ npx serve .
 
 ## Roadmap
 
-- [**Presentación → video narrado**](docs/video-narrado.md): convertir cualquier deck en un MP4 con voz y subtítulos automáticos usando los timestamps de ElevenLabs. Propuesta completa documentada, pendiente de arrancar.
+- [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. Primer video publicado: `/estancia/video.mp4`.
 
 ## Deploy
 

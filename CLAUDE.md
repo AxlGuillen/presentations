@@ -62,6 +62,10 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 2. Card en el `index.html` raíz — hay un bloque comentado de plantilla.
 3. Actualiza la tabla de estructura del README.
 
+## Módulo de video (tools/)
+
+`node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema, puppeteer-core), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck (ej. `estancia/video.mp4`) y se enlaza desde su card.
+
 ## Notas de entorno
 
 - Shell primario: PowerShell en Windows. Al escribir archivos con contenido acentuado desde PowerShell, usa UTF-8 **sin BOM** (`New-Object System.Text.UTF8Encoding($false)`); si no, salen mojibake tipo `tÃ©cnico`.

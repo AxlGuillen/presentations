@@ -97,6 +97,19 @@
   .cta .arrow { transition: transform 160ms ease; }
   .card:hover .cta .arrow { transform: translateX(5px); }
 
+
+  /* Card con dos accesos (deck + video): el contenedor es div, no <a>,
+     para no anidar enlaces. */
+  .card-main { display: flex; flex-direction: column; text-decoration: none; color: inherit; flex: 1; }
+  .ctas { display: flex; border-top: 1px solid rgba(255,255,255,0.1); }
+  .ctas a {
+    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
+    padding: 15px 10px; font-size: 14.5px; font-weight: 700; color: #FFFFFF; text-decoration: none;
+    transition: background 150ms ease;
+  }
+  .ctas a:hover { background: rgba(255,255,255,0.07); }
+  .ctas a + a { border-left: 1px solid rgba(255,255,255,0.1); }
+
   footer { margin-top: 72px; text-align: center; font-size: 14px; font-weight: 500; color: #6B7280; line-height: 1.7; }
   footer strong { color: #9BA3AF; }
 </style>
@@ -162,20 +175,25 @@
     </a>
 
     <!-- ── Propuesta Estancia Infantil · /estancia/ ─────────────────── -->
-    <a class="card" href="estancia/">
-      <div class="cover cover--estancia">
-        <span class="mark"></span>
-        <span class="t">La Casita Feliz · Web y administración</span>
-        <span class="s">Propuesta por fases</span>
-        <span class="badge" style="background: #E94B85; color: #FFFFFF;">Horizontal 16:9</span>
+    <div class="card">
+      <a class="card-main" href="estancia/">
+        <div class="cover cover--estancia">
+          <span class="mark"></span>
+          <span class="t">La Casita Feliz · Web y administración</span>
+          <span class="s">Propuesta por fases</span>
+          <span class="badge" style="background: #E94B85; color: #FFFFFF;">Horizontal 16:9</span>
+        </div>
+        <div class="body">
+          <h2>Propuesta · Estancia Infantil</h2>
+          <p>Propuesta de primer contacto en cuatro etapas: web con blog y posicionamiento, administración y cobranza centralizada con asistente de IA, y control de entrada y salida.</p>
+          <div class="meta"><span>8 diapositivas</span><span>Propuesta · B2B</span><span>Video narrado con IA</span></div>
+        </div>
+      </a>
+      <div class="ctas">
+        <a href="estancia/">Ver presentación <span class="arrow">→</span></a>
+        <a href="estancia/video.mp4">▶ Ver video · 1:21</a>
       </div>
-      <div class="body">
-        <h2>Propuesta · Estancia Infantil</h2>
-        <p>Propuesta de primer contacto en cuatro etapas: web con blog y posicionamiento, administración y cobranza centralizada con asistente de IA, y control de entrada y salida.</p>
-        <div class="meta"><span>8 diapositivas</span><span>Propuesta · B2B</span><span>Producto</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
+    </div>
 
     <!-- ── Ornn cumple 9 años · /ornn/ ──────────────────────────────── -->
     <a class="card" href="ornn/">
