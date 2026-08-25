@@ -75,6 +75,12 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 
 Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente) y sombras en capas. Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
 
+## Animación (GSAP, opcional por deck)
+
+La copia maestra vive en `tools/vendor/gsap.min.js` (v3.12.5). Para animar un deck: **copia** `gsap.min.js` a su carpeta (vendorizado, como `deck-stage.js`) y en el `gen.js` incluye al final del body `<script src="./gsap.min.js"></script>` seguido de `${kit.animador()}`. Con solo eso, cada slide obtiene una entrada por defecto sobre los grupos `data-a`. Para coreografías propias se registra `animar('<data-label de la slide>', (tl, s) => { tl.from(...); })` en un script posterior; `cuenta(tl, el, pos)` anima contadores sobre elementos con `data-cuenta`/`data-sufijo` (semana34 es el ejemplo de referencia).
+
+Reglas: los estados iniciales se ponen con `tl.from()`, **nunca ocultando en CSS** — sin JS el deck se ve completo y la impresión a PDF funciona. `prefers-reduced-motion` salta al final. Las timelines quedan en `section.__tl` y son seekeables (`tl.time(t)`) pensando en el futuro render de video cuadro a cuadro. Si una timeline supera ~1.8s, sube la espera en `tools/capturar.mjs` (hoy 2000 ms) para que la captura tome el estado final.
+
 ## Módulo de video (tools/)
 
 `node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema vía puppeteer-core, con rutas para macOS y Windows), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck (ej. `estancia/video.mp4`) y se enlaza desde su card.

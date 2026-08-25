@@ -72,4 +72,74 @@ const sombra = ({ tinta = '#172B4D', halo = null, nivel = 1 } = {}) => {
   return `box-shadow: ${capas.join(', ')};`;
 };
 
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra };
+/** Pegamento de animación para GSAP (opcional). Devuelve un <script> inline.
+ *
+ *  Requisitos en el deck: copiar `tools/vendor/gsap.min.js` a la carpeta del
+ *  deck (vendorizado, como deck-stage.js) y en el HTML generado incluir
+ *  `<script src="./gsap.min.js"></script>` seguido de `kit.animador()`.
+ *
+ *  Qué hace: cuando deck-stage activa una diapositiva (data-deck-active),
+ *  construye y lanza una timeline GSAP fresca para esa slide. Sin registro
+ *  explícito aplica una entrada por defecto sobre los grupos data-a
+ *  ("up"/"up2"/"up3"/"ghost"), así que basta incluirlo para tener animación.
+ *  Para coreografías propias, después de este script se registra:
+ *
+ *    animar('Etiqueta de la slide', (tl, s) => { tl.from(...); ... });
+ *
+ *  donde la etiqueta es el data-label de la <section> y `s` es la sección.
+ *  También expone `cuenta(tl, el, pos)`: contador numérico para elementos
+ *  con data-cuenta="37" (y data-sufijo="%" opcional).
+ *
+ *  Detalles deliberados: los estados iniciales se ponen con tl.from(), nunca
+ *  con CSS — si GSAP no carga, el deck se ve completo y estático (y la
+ *  impresión a PDF no se rompe). Con prefers-reduced-motion la timeline
+ *  salta directo al final. Las timelines quedan en section.__tl, seekeables
+ *  para el futuro render de video cuadro a cuadro. */
+const animador = () => `<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) lanzar(activa);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</${'script'}>`;
+
+module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, animador };

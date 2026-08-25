@@ -62,7 +62,7 @@ const key = (k, dark = false) =>
   `<span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: ${dark ? '#FFFFFF' : BLUE}; background: ${dark ? 'rgba(255,255,255,0.14)' : WASH}; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">${k}</span>`;
 
 const nota = (txt, color = BLUE) => `
-    <div data-a="up3" style="background: ${color === BLUE ? WASH : color + '14'}; border-left: 5px solid ${color}; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: ${INK}; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">${txt}</div>`;
+    <div data-a="up3" data-nota style="background: ${color === BLUE ? WASH : color + '14'}; border-left: 5px solid ${color}; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: ${INK}; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">${txt}</div>`;
 
 const slides = [];
 
@@ -92,8 +92,8 @@ slides.push(`
 
 // ── 2 · La semana en números ─────────────────────────────────────────────
 const stat = (v, k, sub = '') => `
-        <div style="${CARD} border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid ${BLUE};">
-          <span style="font-size: 66px; font-weight: 800; color: ${BLUE}; letter-spacing: -2.5px; line-height: 1; ${NUM}">${v}</span>
+        <div data-stat style="${CARD} border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid ${BLUE};">
+          <span ${/^\d+$/.test(v) ? `data-cuenta="${v}" ` : ''}style="font-size: 66px; font-weight: 800; color: ${BLUE}; letter-spacing: -2.5px; line-height: 1; ${NUM}">${v}</span>
           <span style="font-size: 23px; font-weight: 600; color: ${INK}; line-height: 1.25;">${k}</span>
           ${sub ? `<span style="font-size: 19px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">${sub}</span>` : ''}
         </div>`;
@@ -116,13 +116,13 @@ slides.push(`
 
 // ── 3 · Dónde se fue el tiempo ───────────────────────────────────────────
 const tema = (nombre, tiempo, pct, ancho, desc) => `
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: ${INK}; letter-spacing: -0.4px;">${nombre}</span>
             <span style="font-size: 23px; font-weight: 700; color: ${BLUE}; white-space: nowrap; ${NUM}">${tiempo} · ${pct}%</span>
           </div>
           <div style="background: ${SOFT}; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: ${ancho}%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, ${BLUE}, ${BRIGHT}); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: ${ancho}%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, ${BLUE}, ${BRIGHT}); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">${desc}</span>
         </div>`;
@@ -142,8 +142,8 @@ slides.push(`
 
 // ── 4 · Historia central: Zouk Tokio ─────────────────────────────────────
 const logro = (txt) => `
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: ${BLUE}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: ${BLUE}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: ${INK}; line-height: 1.42;">${txt}</span>
           </div>`;
 slides.push(`
@@ -151,8 +151,8 @@ slides.push(`
     ${header('Historia central')}
     ${h2('Zouk Tokio ya se explica<br>en japonés')}
     <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 0.9fr 1.25fr; gap: 34px; flex: 1;">
-      <div style="${kit.fondo(BLUE, puntosAzul(26), kit.lavado({ color: BRIGHT, en: '85% 8%', ancho: 90, alto: 70, fuerza: 0.6, alcance: 60 }))} border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
-        <span style="font-size: 128px; font-weight: 800; letter-spacing: -5px; line-height: 1; ${NUM}">37%</span>
+      <div data-panel style="${kit.fondo(BLUE, puntosAzul(26), kit.lavado({ color: BRIGHT, en: '85% 8%', ancho: 90, alto: 70, fuerza: 0.6, alcance: 60 }))} border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
+        <span data-cuenta="37" data-sufijo="%" style="font-size: 128px; font-weight: 800; letter-spacing: -5px; line-height: 1; ${NUM}">37%</span>
         <span style="font-size: 26px; font-weight: 600; margin-top: 10px; line-height: 1.3;">de la semana — 7 h 19 m en 7 worklogs</span>
         <div style="flex: 1;"></div>
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -161,7 +161,7 @@ slides.push(`
           <span style="margin-top: 6px; align-self: flex-start; background: #FFFFFF; color: ${BLUE}; font-size: 18px; font-weight: 700; border-radius: 999px; padding: 8px 20px;">Ambas en control de calidad</span>
         </div>
       </div>
-      <div style="${CARD} border-radius: 26px; padding: 42px 40px; display: flex; flex-direction: column; gap: 20px;">
+      <div data-detalle style="${CARD} border-radius: 26px; padding: 42px 40px; display: flex; flex-direction: column; gap: 20px;">
         <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: ${BLUE};">Qué implicó</span>
         ${logro('Soporte de japonés extendido a toda la UI de la integración, con el ambiente apuntado a LIVE.')}
         ${logro('Traducción de las etiquetas de <strong style="font-weight: 700;">precios dinámicos</strong>: desglose, tipos de pago y cadenas compuestas.')}
@@ -174,7 +174,7 @@ slides.push(`
 
 // ── 5 · Día por día ──────────────────────────────────────────────────────
 const dia = (nombre, total, items, pico = false) => `
-        <div style="${CARD} ${pico ? `border: 2px solid ${BLUE};` : ''} border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="${CARD} ${pico ? `border: 2px solid ${BLUE};` : ''} border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${pico ? BLUE : MUTED};">${nombre}${pico ? ' · pico' : ''}</span>
             <span style="font-size: 44px; font-weight: 800; color: ${INK}; letter-spacing: -1.5px; ${NUM}">${total}</span>
@@ -200,14 +200,14 @@ slides.push(`
 
 // ── 6 · Estado del tablero ───────────────────────────────────────────────
 const col = (titulo, color, wash, issues) => `
-        <div style="background: ${wash}; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+        <div data-col style="background: ${wash}; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: ${color};">${titulo}</span>
             <span style="font-size: 40px; font-weight: 800; color: ${color}; letter-spacing: -1px; ${NUM}">${issues.length}</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 9px;">
             ${issues.map(([k, n]) => `
-            <div style="background: ${BG}; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: ${BG}; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: ${color}; letter-spacing: 0.3px;">${k}</span>
               <span style="font-size: 15.5px; font-weight: 400; color: ${INK}; line-height: 1.3;">${n}</span>
             </div>`).join('')}
@@ -245,7 +245,7 @@ slides.push(`
 
 // ── 7 · Lo que viene ─────────────────────────────────────────────────────
 const siguiente = (n, titulo, texto, color = BLUE) => `
-        <div style="${CARD} border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid ${color};">
+        <div data-sig style="${CARD} border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid ${color};">
           <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${color};">${n}</span>
           <span style="font-size: 27px; font-weight: 700; color: ${INK}; letter-spacing: -0.5px; line-height: 1.2;">${titulo}</span>
           <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.48;">${texto}</span>
@@ -290,14 +290,9 @@ const html = `<!DOCTYPE html>
 <script src="./deck-stage.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: ${BLUE}; }
-  @keyframes dsUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  @keyframes dsGhost { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: no-preference) {
-    [data-deck-active] [data-a="up"] { animation: dsUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="up2"] { animation: dsUp 0.65s 0.13s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="up3"] { animation: dsUp 0.75s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="ghost"] { animation: dsGhost 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  }
+  /* Las entradas las orquesta GSAP (timelines por slide al final del documento).
+     No hay estados iniciales ocultos en CSS a propósito: si GSAP no carga,
+     el deck se ve completo y estático, y la impresión a PDF no se rompe. */
   #modo-presentacion {
     position: fixed; top: 16px; right: 16px; z-index: 2147483000;
     padding: 9px 18px; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
@@ -314,6 +309,72 @@ const html = `<!DOCTYPE html>
 <deck-stage width="1920" height="1080">
 ${slides.join('\n')}
 </deck-stage>
+<script src="./gsap.min.js"></script>
+${kit.animador()}
+<script>
+// Coreografía por diapositiva (requiere gsap.min.js + el pegamento del kit).
+(function () {
+  if (!window.animar) return;
+
+  animar('Portada', function (tl, s) {
+    tl.from(s.querySelectorAll('[data-a="ghost"]'), { scale: 0.85, opacity: 0, duration: 1.1 }, 0)
+      .from(s.querySelector('[data-a="up"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.05)
+      .from(s.querySelector('h1'), { y: 44, opacity: 0, duration: 0.75 }, 0.2)
+      .from(s.querySelector('p'), { y: 24, opacity: 0, duration: 0.6 }, 0.45)
+      .from(s.querySelectorAll('div[data-a="up3"] span'), { y: 18, opacity: 0, duration: 0.5, stagger: 0.07 }, 0.55);
+  });
+
+  animar('La semana en números', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-stat]'), { y: 34, opacity: 0, scale: 0.97, duration: 0.6, stagger: 0.08 }, 0.2)
+      .from(s.querySelector('[data-nota]'), { y: 20, opacity: 0, duration: 0.6 }, 0.85);
+    s.querySelectorAll('[data-cuenta]').forEach(function (el) { cuenta(tl, el, 0.35); });
+  });
+
+  animar('Dónde se fue el tiempo', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-tema]'), { y: 26, opacity: 0, duration: 0.55, stagger: 0.09 }, 0.2)
+      .from(s.querySelectorAll('[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.9, ease: 'power2.inOut', stagger: 0.09 }, 0.5);
+  });
+
+  animar('Zouk Tokio en japonés', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-panel]'), { x: -46, opacity: 0, duration: 0.7 }, 0.15)
+      .from(s.querySelector('[data-detalle]'), { x: 46, opacity: 0, duration: 0.7 }, 0.25)
+      .from(s.querySelectorAll('[data-logro]'), { y: 18, opacity: 0, duration: 0.5, stagger: 0.11 }, 0.55)
+      .from(s.querySelectorAll('[data-check]'), { scale: 0, duration: 0.45, ease: 'back.out(2.4)', stagger: 0.11 }, 0.6);
+    cuenta(tl, s.querySelector('[data-cuenta]'), 0.35);
+  });
+
+  animar('Día por día', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelectorAll('[data-dia]'), { y: 40, opacity: 0, duration: 0.6, stagger: 0.1 }, 0.15)
+      .from(s.querySelector('[data-nota]'), { y: 20, opacity: 0, duration: 0.6 }, 0.8);
+  });
+
+  animar('Estado del tablero', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-col]'), { y: 34, opacity: 0, duration: 0.55, stagger: 0.12 }, 0.2)
+      .from(s.querySelectorAll('[data-issue]'), { y: 14, opacity: 0, duration: 0.4, stagger: 0.04 }, 0.5);
+  });
+
+  animar('Lo que viene', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelectorAll('[data-sig]'), { y: 34, opacity: 0, duration: 0.6, stagger: 0.11 }, 0.18);
+  });
+
+  animar('Cierre', function (tl, s) {
+    tl.from(s.querySelectorAll('[data-a="ghost"]'), { scale: 0.85, opacity: 0, duration: 1.1 }, 0)
+      .from(s.querySelector('[data-a="up"]'), { y: 22, opacity: 0, duration: 0.55 }, 0.05)
+      .from(s.querySelector('h2'), { y: 40, opacity: 0, duration: 0.75 }, 0.18)
+      .from(s.querySelector('p'), { y: 22, opacity: 0, duration: 0.6 }, 0.45)
+      .from(s.querySelectorAll('div[data-a="up3"] span'), { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, 0.6);
+  });
+})();
+</script>
 <script>
 (function () {
   var presenting = false;

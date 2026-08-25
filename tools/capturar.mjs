@@ -74,8 +74,8 @@ for (let i = 0; i < n; i++) {
     if (typeof ds._go === 'function') ds._go(idx);
     else location.hash = '#' + (idx + 1);
   }, i);
-  // dejar correr las animaciones de entrada
-  await new Promise(r => setTimeout(r, 1100));
+  // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
+  await new Promise(r => setTimeout(r, 2000));
   const archivo = path.join(salida, `slide-${String(i + 1).padStart(2, '0')}.png`);
   await pagina.screenshot({ path: archivo });
   rutas.push(archivo);

@@ -10,14 +10,9 @@
 <script src="./deck-stage.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: #0052CC; }
-  @keyframes dsUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
-  @keyframes dsGhost { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: none; } }
-  @media (prefers-reduced-motion: no-preference) {
-    [data-deck-active] [data-a="up"] { animation: dsUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="up2"] { animation: dsUp 0.65s 0.13s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="up3"] { animation: dsUp 0.75s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-    [data-deck-active] [data-a="ghost"] { animation: dsGhost 1.1s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
-  }
+  /* Las entradas las orquesta GSAP (timelines por slide al final del documento).
+     No hay estados iniciales ocultos en CSS a propósito: si GSAP no carga,
+     el deck se ve completo y estático, y la impresión a PDF no se rompe. */
   #modo-presentacion {
     position: fixed; top: 16px; right: 16px; z-index: 2147483000;
     padding: 9px 18px; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
@@ -71,45 +66,45 @@
     <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">Cinco días hábiles con carga pareja: entre 3 h 36 m y 4 h 43 m diarias, repartidas en frentes de ocho clientes distintos.</p>
     <div data-a="up3" style="margin-top: 44px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
           <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">19 h 45 m</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Tiempo registrado</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">71 100 segundos en 31 worklogs</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
-          <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">15</span>
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="15" style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">15</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Issues trabajadas</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Todas en el proyecto UWS</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
           <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">3 h 57 m</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Promedio por día</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">El viernes fue el pico: 4 h 43 m</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
-          <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">7</span>
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="7" style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">7</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Issues finalizadas</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Y al menos 8 pases a LIVE / UAT</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
-          <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">4</span>
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="4" style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">4</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Quedaron en QA</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Zouk Tokio ×2, plugin WP y tracking RWLV</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
-          <span style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">8</span>
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 36px 34px 32px; display: flex; flex-direction: column; gap: 10px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="8" style="font-size: 66px; font-weight: 800; color: #0052CC; letter-spacing: -2.5px; line-height: 1; font-variant-numeric: tabular-nums;">8</span>
           <span style="font-size: 23px; font-weight: 600; color: #172B4D; line-height: 1.25;">Clientes atendidos</span>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">De Las Vegas a Nashville y Tokio</span>
         </div>
     </div>
     <div style="flex: 1;"></div>
     
-    <div data-a="up3" style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Ninguna issue se quedó abierta por olvido: las 8 que no cerraron están <strong style="font-weight: 700;">en control de calidad o esperando respuesta externa</strong>, no en el tintero.</div>
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Ninguna issue se quedó abierta por olvido: las 8 que no cerraron están <strong style="font-weight: 700;">en control de calidad o esperando respuesta externa</strong>, no en el tintero.</div>
   </section>
 
   <section data-label="Dónde se fue el tiempo" data-screen-label="Tiempo por tema" data-speaker-notes="Cinco frentes. Zouk Tokio en japones domina con 37%: uno de cada tres minutos de la semana." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
@@ -128,57 +123,57 @@
     <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">Cinco frentes concentran las 19 h 45 m. La localización de Zouk Tokio al japonés es por mucho el mayor: <strong style="font-weight: 700; color: #172B4D;">uno de cada tres minutos</strong> de la semana.</p>
     <div data-a="up3" style="margin-top: 46px; display: flex; flex-direction: column; gap: 30px; flex: 1;">
       
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Zouk Tokio · integración en japonés</span>
             <span style="font-size: 23px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">7 h 19 m · 37%</span>
           </div>
           <div style="background: #F5F7FA; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: 100%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: 100%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">UWS-9369 y UWS-9213 — soporte JA en la UI, precios dinámicos, vista de mapa y estilos del micrositio.</span>
         </div>
       
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Checkouts y micrositios de clientes</span>
             <span style="font-size: 23px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">4 h 30 m · 23%</span>
           </div>
           <div style="background: #F5F7FA; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: 62%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: 62%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Parton’s Nashville, HFTP Las Vegas, Tailgate Beachclub y la landing de ZoukLV.</span>
         </div>
       
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Plugin y núcleo de WordPress</span>
             <span style="font-size: 23px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">3 h 24 m · 17%</span>
           </div>
           <div style="background: #F5F7FA; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: 47%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: 47%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Air Datepicker a LIVE y limpieza de integraciones no configurables.</span>
         </div>
       
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">RWLV · tracking y cookies</span>
             <span style="font-size: 23px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">1 h 54 m · 10%</span>
           </div>
           <div style="background: #F5F7FA; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: 26%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: 26%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Tracking v2 en STG con migración V1→V2 y el bug del pop-up de cookies.</span>
         </div>
       
-        <div style="display: grid; grid-template-columns: 1fr; gap: 8px;">
+        <div data-tema style="display: grid; grid-template-columns: 1fr; gap: 8px;">
           <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px;">
             <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Otros frentes</span>
             <span style="font-size: 23px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">2 h 34 m · 13%</span>
           </div>
           <div style="background: #F5F7FA; border-radius: 6px; height: 16px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.14);">
-            <div style="width: 35%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+            <div data-barra style="width: 35%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
           </div>
           <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Guest list de Wynn, «Open site» de GPM Studio, estimación de Turning Stone y la reunión semanal.</span>
         </div>
@@ -199,8 +194,8 @@
     </header>
     <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Zouk Tokio ya se explica<br>en japonés</h2>
     <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 0.9fr 1.25fr; gap: 34px; flex: 1;">
-      <div style="background: #0052CC; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(90% 70% at 85% 8%, rgba(38,132,255,0.6) 0%, rgba(38,132,255,0) 60%); background-size: 26px 26px, 100% 100%; border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
-        <span style="font-size: 128px; font-weight: 800; letter-spacing: -5px; line-height: 1; font-variant-numeric: tabular-nums;">37%</span>
+      <div data-panel style="background: #0052CC; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(90% 70% at 85% 8%, rgba(38,132,255,0.6) 0%, rgba(38,132,255,0) 60%); background-size: 26px 26px, 100% 100%; border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
+        <span data-cuenta="37" data-sufijo="%" style="font-size: 128px; font-weight: 800; letter-spacing: -5px; line-height: 1; font-variant-numeric: tabular-nums;">37%</span>
         <span style="font-size: 26px; font-weight: 600; margin-top: 10px; line-height: 1.3;">de la semana — 7 h 19 m en 7 worklogs</span>
         <div style="flex: 1;"></div>
         <div style="display: flex; flex-direction: column; gap: 12px;">
@@ -209,31 +204,31 @@
           <span style="margin-top: 6px; align-self: flex-start; background: #FFFFFF; color: #0052CC; font-size: 18px; font-weight: 700; border-radius: 999px; padding: 8px 20px;">Ambas en control de calidad</span>
         </div>
       </div>
-      <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 26px; padding: 42px 40px; display: flex; flex-direction: column; gap: 20px;">
+      <div data-detalle style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 26px; padding: 42px 40px; display: flex; flex-direction: column; gap: 20px;">
         <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Qué implicó</span>
         
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: #172B4D; line-height: 1.42;">Soporte de japonés extendido a toda la UI de la integración, con el ambiente apuntado a LIVE.</span>
           </div>
         
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: #172B4D; line-height: 1.42;">Traducción de las etiquetas de <strong style="font-weight: 700;">precios dinámicos</strong>: desglose, tipos de pago y cadenas compuestas.</span>
           </div>
         
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: #172B4D; line-height: 1.42;">Vista de mapa completa en japonés: controles, datepicker, tarjetas y el modal de More Info.</span>
           </div>
         
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: #172B4D; line-height: 1.42;">Diagnóstico del CSP que bloqueaba el logo.</span>
           </div>
         
-          <div style="display: flex; align-items: flex-start; gap: 15px;">
-            <span style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 5px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
             <span style="font-size: 23px; font-weight: 400; color: #172B4D; line-height: 1.42;">Estilos igualados al micrositio y ambientes sincronizados, con pruebas en la página del wizard.</span>
           </div>
       </div>
@@ -255,7 +250,7 @@
     <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Carga pareja, viernes de pico<br>y lunes de cierres</h2>
     <div data-a="up3" style="margin-top: 44px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; flex: 1; align-content: start;">
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #5E6C84;">Mar 18</span>
             <span style="font-size: 44px; font-weight: 800; color: #172B4D; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">3:46</span>
@@ -266,7 +261,7 @@
           </div>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #5E6C84;">Mié 19</span>
             <span style="font-size: 44px; font-weight: 800; color: #172B4D; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">3:55</span>
@@ -277,7 +272,7 @@
           </div>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #5E6C84;">Jue 20</span>
             <span style="font-size: 44px; font-weight: 800; color: #172B4D; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">3:45</span>
@@ -288,7 +283,7 @@
           </div>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border: 2px solid #0052CC; border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border: 2px solid #0052CC; border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0052CC;">Vie 21 · pico</span>
             <span style="font-size: 44px; font-weight: 800; color: #172B4D; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">4:43</span>
@@ -299,7 +294,7 @@
           </div>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 20px; padding: 28px 26px 24px; display: flex; flex-direction: column; gap: 14px;">
           <div style="display: flex; flex-direction: column; gap: 2px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #5E6C84;">Lun 24</span>
             <span style="font-size: 44px; font-weight: 800; color: #172B4D; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">3:36</span>
@@ -311,7 +306,7 @@
         </div>
     </div>
     
-    <div data-a="up3" style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">El lunes casi todo fue <strong style="font-weight: 700;">cierre</strong>: sincronizar ambientes, pasar a LIVE, probar y reportar — ocho issues en 3 h 36 m.</div>
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">El lunes casi todo fue <strong style="font-weight: 700;">cierre</strong>: sincronizar ambientes, pasar a LIVE, probar y reportar — ocho issues en 3 h 36 m.</div>
   </section>
 
   <section data-label="Estado del tablero" data-screen-label="Estado" data-speaker-notes="Como quedo el tablero al lunes 25 en la manana. Verde: cerrado. Azul: en QA. Ambar: espera externa. Rojo: ZoukLV regreso de QA hoy y es prioridad Highest." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
@@ -330,92 +325,92 @@
     <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">Estado en Jira al lunes 25 por la mañana, ordenado como fluye el trabajo: lo cerrado, lo que espera veredicto y lo que regresó.</p>
     <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: 1.35fr 1.15fr 1fr 1fr; gap: 20px; flex: 1; align-content: start;">
       
-        <div style="background: #E3FCEF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+        <div data-col style="background: #E3FCEF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #00875A;">Finalizadas</span>
             <span style="font-size: 40px; font-weight: 800; color: #00875A; letter-spacing: -1px; font-variant-numeric: tabular-nums;">5</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 9px;">
             
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9116</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Air Datepicker en el núcleo</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9522</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Checkout de HFTP Las Vegas</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9477</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Verbiage de Tailgate</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9465 · 9283</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Parton’s: bullets y branding</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9291 · 9535</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">«Open site» GPM y cookies RWLV</span>
             </div>
           </div>
         </div>
       
-        <div style="background: #DEEBFF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+        <div data-col style="background: #DEEBFF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #0052CC;">En QA</span>
             <span style="font-size: 40px; font-weight: 800; color: #0052CC; letter-spacing: -1px; font-variant-numeric: tabular-nums;">4</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 9px;">
             
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-9369</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Zouk Tokio · checkout JA</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-9213</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Zouk Tokio · estilos</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-9262</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Limpieza del plugin WP</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-9493</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Tracking v2 de RWLV</span>
             </div>
           </div>
         </div>
       
-        <div style="background: #FFF0B3; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+        <div data-col style="background: #FFF0B3; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #974F0C;">En espera</span>
             <span style="font-size: 40px; font-weight: 800; color: #974F0C; letter-spacing: -1px; font-variant-numeric: tabular-nums;">3</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 9px;">
             
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #974F0C; letter-spacing: 0.3px;">UWS-9452</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Wynn · guest list</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #974F0C; letter-spacing: 0.3px;">UWS-9375</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Turning Stone · estimación</span>
             </div>
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #974F0C; letter-spacing: 0.3px;">UWS-8489</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Gestión de integraciones (ongoing)</span>
             </div>
           </div>
         </div>
       
-        <div style="background: #FFEBE6; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+        <div data-col style="background: #FFEBE6; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #DE350B;">Regresó de QA</span>
             <span style="font-size: 40px; font-weight: 800; color: #DE350B; letter-spacing: -1px; font-variant-numeric: tabular-nums;">1</span>
           </div>
           <div style="display: flex; flex-direction: column; gap: 9px;">
             
-            <div style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
               <span style="font-size: 15px; font-weight: 700; color: #DE350B; letter-spacing: 0.3px;">UWS-9511</span>
               <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">ZoukLV · landing del 16 de septiembre — prioridad Highest, volvió hoy lunes</span>
             </div>
@@ -439,25 +434,25 @@
     <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">La semana 35 empieza<br>con una devolución</h2>
     <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; flex: 1; align-content: start;">
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
           <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #DE350B;">Primero</span>
           <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Retrabajo de ZoukLV</span>
           <span style="font-size: 20px; font-weight: 400; color: #5E6C84; line-height: 1.48;">UWS-9511 regresó de QA hoy lunes por la mañana. Es prioridad Highest y la landing del Día de la Independencia tiene fecha dura: el 16 de septiembre no se mueve.</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #0052CC;">
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #0052CC;">
           <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0052CC;">Vigilar</span>
           <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Cuatro issues en QA</span>
           <span style="font-size: 20px; font-weight: 400; color: #5E6C84; line-height: 1.48;">Zouk Tokio (×2), la limpieza del plugin WP y el tracking de RWLV esperan veredicto. Cualquiera puede regresar con observaciones, como pasó con ZoukLV.</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #0052CC;">
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #0052CC;">
           <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0052CC;">Arrancar</span>
           <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Dos nuevas de GPM</span>
           <span style="font-size: 20px; font-weight: 400; color: #5E6C84; line-height: 1.48;">UWS-9544 (el itinerario en móvil solo se navega semana por semana) y UWS-9513 (el preview del wizard muestra tags fantasma). UWS-9293 sigue en pausa.</span>
         </div>
       
-        <div style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #974F0C;">
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 34px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #974F0C;">
           <span style="font-size: 18px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #974F0C;">Esperar</span>
           <span style="font-size: 27px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Respuestas externas</span>
           <span style="font-size: 20px; font-weight: 400; color: #5E6C84; line-height: 1.48;">Wynn quedó con página de pruebas solicitada para la guest list, y la estimación de Turning Stone ya está entregada. Ninguna bloquea trabajo propio.</span>
@@ -478,6 +473,117 @@
     </div>
   </section>
 </deck-stage>
+<script src="./gsap.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) lanzar(activa);
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script>
+// Coreografía por diapositiva (requiere gsap.min.js + el pegamento del kit).
+(function () {
+  if (!window.animar) return;
+
+  animar('Portada', function (tl, s) {
+    tl.from(s.querySelectorAll('[data-a="ghost"]'), { scale: 0.85, opacity: 0, duration: 1.1 }, 0)
+      .from(s.querySelector('[data-a="up"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.05)
+      .from(s.querySelector('h1'), { y: 44, opacity: 0, duration: 0.75 }, 0.2)
+      .from(s.querySelector('p'), { y: 24, opacity: 0, duration: 0.6 }, 0.45)
+      .from(s.querySelectorAll('div[data-a="up3"] span'), { y: 18, opacity: 0, duration: 0.5, stagger: 0.07 }, 0.55);
+  });
+
+  animar('La semana en números', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-stat]'), { y: 34, opacity: 0, scale: 0.97, duration: 0.6, stagger: 0.08 }, 0.2)
+      .from(s.querySelector('[data-nota]'), { y: 20, opacity: 0, duration: 0.6 }, 0.85);
+    s.querySelectorAll('[data-cuenta]').forEach(function (el) { cuenta(tl, el, 0.35); });
+  });
+
+  animar('Dónde se fue el tiempo', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-tema]'), { y: 26, opacity: 0, duration: 0.55, stagger: 0.09 }, 0.2)
+      .from(s.querySelectorAll('[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.9, ease: 'power2.inOut', stagger: 0.09 }, 0.5);
+  });
+
+  animar('Zouk Tokio en japonés', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-panel]'), { x: -46, opacity: 0, duration: 0.7 }, 0.15)
+      .from(s.querySelector('[data-detalle]'), { x: 46, opacity: 0, duration: 0.7 }, 0.25)
+      .from(s.querySelectorAll('[data-logro]'), { y: 18, opacity: 0, duration: 0.5, stagger: 0.11 }, 0.55)
+      .from(s.querySelectorAll('[data-check]'), { scale: 0, duration: 0.45, ease: 'back.out(2.4)', stagger: 0.11 }, 0.6);
+    cuenta(tl, s.querySelector('[data-cuenta]'), 0.35);
+  });
+
+  animar('Día por día', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelectorAll('[data-dia]'), { y: 40, opacity: 0, duration: 0.6, stagger: 0.1 }, 0.15)
+      .from(s.querySelector('[data-nota]'), { y: 20, opacity: 0, duration: 0.6 }, 0.8);
+  });
+
+  animar('Estado del tablero', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.6 }, 0.12)
+      .from(s.querySelectorAll('[data-col]'), { y: 34, opacity: 0, duration: 0.55, stagger: 0.12 }, 0.2)
+      .from(s.querySelectorAll('[data-issue]'), { y: 14, opacity: 0, duration: 0.4, stagger: 0.04 }, 0.5);
+  });
+
+  animar('Lo que viene', function (tl, s) {
+    tl.from(s.querySelector('h2'), { y: 26, opacity: 0, duration: 0.6 }, 0)
+      .from(s.querySelectorAll('[data-sig]'), { y: 34, opacity: 0, duration: 0.6, stagger: 0.11 }, 0.18);
+  });
+
+  animar('Cierre', function (tl, s) {
+    tl.from(s.querySelectorAll('[data-a="ghost"]'), { scale: 0.85, opacity: 0, duration: 1.1 }, 0)
+      .from(s.querySelector('[data-a="up"]'), { y: 22, opacity: 0, duration: 0.55 }, 0.05)
+      .from(s.querySelector('h2'), { y: 40, opacity: 0, duration: 0.75 }, 0.18)
+      .from(s.querySelector('p'), { y: 22, opacity: 0, duration: 0.6 }, 0.45)
+      .from(s.querySelectorAll('div[data-a="up3"] span'), { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, 0.6);
+  });
+})();
+</script>
 <script>
 (function () {
   var presenting = false;
