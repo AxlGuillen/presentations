@@ -23,6 +23,8 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 
 `velocidad` (0.5–2, global o por slide — p. ej. 0.9 en el cierre) y `temperatura` (global; más baja = entonación más consistente entre clips) son opcionales.
 
+**Elegir voz** (la palanca de calidad más grande): `node tools/fish-voces.mjs` lista voces del marketplace de Fish por idioma/título con su `reference_id`; prueba candidatas con un clip corto antes de generar todo el video, y guarda el id elegido en `"voz"`. Sin `voz` usa la default, que suena genérica.
+
 ## Escribir el guion
 
 - Parte del contenido real de cada slide y de sus `data-speaker-notes` (ahí está la intención de cada diapositiva). No leas la slide en voz alta: nárrala — tono conversacional, números redondeados al hablar, una idea por slide.
