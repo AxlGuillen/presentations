@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Talon cumple 15 años</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #07080F; }
+  @keyframes dsUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes dsImg { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+  @keyframes dsGhost { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] [data-a="up"] { animation: dsUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up2"] { animation: dsUp 0.65s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up3"] { animation: dsUp 0.75s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="img"] { animation: dsImg 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="ghost"] { animation: dsGhost 1.2s both; }
+  }
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(111,199,240,0.45); border-radius: 999px;
+    background: rgba(7,8,15,0.85); color: #6FC7F0; cursor: pointer;
+    font: 600 13px/1 'Barlow', ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1080" height="1920">
+
+  <section data-label="Portada · 15 años" data-screen-label="01 · Portada" data-speaker-notes="Cumpleanos doble: hoy tambien es cumpleanos de Talon, quince anos en el juegito. Serie Cumplelolero." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden;  background-image: linear-gradient(180deg, rgba(7,8,15,0.25) 0%, rgba(7,8,15,0.95) 78%), url('assets/Talon_0.jpg'); background-size: cover; background-position: center 18%;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 45% at 50% 30%, #2E5F9429 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; margin-top: auto;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #6FC7F0;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #6FC7F0;">Cumplelolero · 24 ago 2011 — 2026</span>
+    </div>
+      <h1 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 210px; font-weight: 400; line-height: 0.82; letter-spacing: 2px; color: #E9EEF5; text-shadow: 0 0 90px rgba(111,199,240,0.4);">TALON<br><span style="color: #6FC7F0;">15 AÑOS</span></h1>
+      <p data-a="up3" style="margin: 34px 0 0; font-size: 38px; font-weight: 500; color: #6FC7F0; line-height: 1.3;">La Sombra de la Navaja</p>
+      <p data-a="up3" style="margin: 12px 0 0; font-size: 30px; font-weight: 400; color: #8A93A8;">Mid / Jungla · Asesino · Noxus</p>
+    </div>
+  </section>
+
+  <section data-label="El one trick #1" data-screen-label="02 · El OTP" data-speaker-notes="Masieh: maestria 1039, 12.4 millones de puntos, 311 veces mas que su segundo campeon. Y aqui si hay que darselo: Diamante 2, top 2 por ciento de su servidor. El primero de la serie que si es bueno." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 60% at 50% 40%, #6FC7F029 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #6FC7F0;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #6FC7F0;">El one trick #1 del mundo</span>
+    </div>
+      <div data-a="up2" style="display: flex; align-items: baseline; gap: 22px; flex-wrap: wrap;">
+        <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; line-height: 0.95; color: #E9EEF5;">MASIEH</span>
+        <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; line-height: 0.95; color: #6FC7F0;">#EUNE</span>
+      </div>
+      <p data-a="up2" style="margin: 12px 0 0; font-size: 27px; font-weight: 500; color: #8A93A8;">Europa · nivel de invocador 1 281 · también europeo, como el de Urgot</p>
+
+      <div data-a="img" style="margin-top: 30px; display: flex; gap: 22px;">
+        
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+          <div style="height: 616px; border-radius: 18px; background: #10131FD9; border: 1px solid rgba(111,199,240,0.28); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 20px; box-sizing: border-box;">
+              <div style="position: relative; margin-bottom: 18px;">
+                <img src="assets/talon-icon.png" alt="Talon" style="width: 168px; height: 168px; border-radius: 50%; border: 4px solid #6FC7F0; box-shadow: 0 0 46px rgba(111,199,240,0.4);">
+                <span style="position: absolute; bottom: -14px; left: 50%; transform: translateX(-50%); background: #6FC7F0; color: #07080F; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; padding: 7px 20px 4px; border-radius: 999px;">1039</span>
+              </div>
+              <span style="margin-top: 10px; font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">Nivel de maestría</span>
+              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 80px; line-height: 0.9; color: #6FC7F0; margin-top: 20px;">12 408 195</span>
+              <span style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">puntos en Talon</span>
+              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 56px; line-height: 0.9; color: #E9EEF5; margin-top: 20px;">311×</span>
+              <span style="font-size: 21px; font-weight: 600; letter-spacing: 1.5px; text-transform: uppercase; color: #8A93A8; text-align: center;">más que su 2º campeón<br>(Darius · 39 888)</span></div>
+          <span style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #8A93A8; text-align: center;">Maestría</span>
+        </div>
+        
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 12px;">
+          <div style="height: 616px; border-radius: 18px; background: #10131FD9; border: 1px solid rgba(111,199,240,0.28); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; padding: 24px 20px; box-sizing: border-box;">
+              <div style="width: 100%; display: flex; flex-direction: column; gap: 8px;">
+                
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; background: #E8B84B1F; border: 1px solid #E8B84B66;">
+                  <img src="assets/emblems/diamond.png" alt="Diamante 2" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2026</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 700; color: #E8B84B;">Diamante 2  ◄</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                  <img src="assets/emblems/emerald.png" alt="Esmeralda 1" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2025</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 500; color: #E9EEF5;">Esmeralda 1</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                  <img src="assets/emblems/emerald.png" alt="Esmeralda 2" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2024 S3</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 500; color: #E9EEF5;">Esmeralda 2</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                  <img src="assets/emblems/emerald.png" alt="Esmeralda 1" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2024 S2</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 500; color: #E9EEF5;">Esmeralda 1</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                  <img src="assets/emblems/diamond.png" alt="Diamante 4" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2024 S1</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 500; color: #E9EEF5;">Diamante 4</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 12px; padding: 9px 14px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.06);">
+                  <img src="assets/emblems/diamond.png" alt="Diamante 1" style="width: 58px; height: 58px; object-fit: contain; flex: none;">
+                  <span style="flex: none; width: 96px; font-size: 22px; font-weight: 600; color: #8A93A8;">S2023 S2</span>
+                  <span style="flex: 1; font-size: 26px; font-weight: 500; color: #E9EEF5;">Diamante 1</span>
+                </div>
+              </div>
+              <span style="margin-top: 14px; font-size: 22px; font-weight: 600; color: #8A93A8; text-align: center;">Pico esta temporada: <strong style="color: #E8B84B;">Diamante 1</strong></span></div>
+          <span style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #8A93A8; text-align: center;">Historial de rangos</span>
+        </div>
+      </div>
+
+      <div data-a="up3" style="margin-top: 28px; display: flex; align-items: center; gap: 36px;">
+        <div style="flex: 1;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 104px; line-height: 0.86; color: #E8B84B;">TOP 2,62 <span style="font-size: 58px;">%</span></div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">de EUNE · puesto 36 869</div>
+        </div>
+        <div style="width: 2px; height: 88px; background: rgba(111,199,240,0.3);"></div>
+        <div style="flex: 1;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 104px; line-height: 0.86; color: #E9EEF5;">51 <span style="font-size: 58px;">%</span></div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">winrate · 279V – 273D</div>
+        </div>
+      </div>
+
+      <div data-a="up3" style="margin-top: 22px; font-size: 27px; font-weight: 500; color: #E9EEF5; line-height: 1.4;">
+        El primero de la serie que <strong style="color: #E8B84B;">sí es bueno</strong>: Diamante 2 y la obsesión más alta de las tres — 311× su segundo campeón.
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El campeón de los latinos" data-screen-label="03 · Latinos" data-speaker-notes="El dato que nos toca: de los 15 mejores Talon del mundo, 6 son de Latinoamerica (4 de LAS, 2 de LAN). Con los 2 brasilenos son 8 de 15. Como buenos migrantes, nos la pasamos saltando muros." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 58% at 50% 38%, #E8B84B29 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #E8B84B;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #E8B84B;">El dato que nos toca</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #E9EEF5;">Talon es el campeón<br><span style="color: #E8B84B;">de los latinos</span></h2>
+
+      <div data-a="up3" style="margin-top: 30px; font-size: 29px; font-weight: 500; color: #E9EEF5; line-height: 1.4;">Del <strong style="color: #E8B84B;">top 15 mundial</strong> por puntos de maestría…</div>
+
+      <div data-a="img" style="margin-top: 24px; display: flex; flex-direction: column; gap: 10px;">
+        
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#4</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">TTV SLASH2290</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAS</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">8 497 385</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#6</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">Whitning</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAN</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">7 689 267</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#8</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">Axems</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAS</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">7 451 627</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#10</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">cubil</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAS</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">7 355 500</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#12</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">qiqe</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAS</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">6 540 520</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 16px; padding: 14px 22px; border-radius: 14px; background: #E8B84B14; border: 1px solid #E8B84B4D;">
+          <span style="flex: none; width: 76px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #E8B84B;">#15</span>
+          <span style="flex: 1; font-size: 29px; font-weight: 600; color: #E9EEF5;">Grim</span>
+          <span style="flex: none; background: #E8B84B; color: #07080F; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAN</span>
+          <span style="flex: none; width: 190px; text-align: right; font-size: 25px; font-weight: 500; color: #8A93A8;">5 905 879</span>
+        </div>
+      </div>
+
+      <div data-a="up3" style="margin-top: 30px; display: flex; align-items: center; gap: 36px;">
+        <div style="flex: none;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 150px; line-height: 0.86; color: #E8B84B; text-shadow: 0 0 60px #E8B84B59;">6 / 15</div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">son de LAS o LAN</div>
+        </div>
+        <div style="flex: 1; font-size: 27px; font-weight: 400; color: #8A93A8; line-height: 1.4;">…y con los dos brasileños (Toih #3 y Zaczao #7) son <strong style="color: #E9EEF5;">8 de 15</strong>.</div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El rework" data-screen-label="04 · El rework" data-speaker-notes="Assassin Update, pretemporada 2017. Le dieron lo que hoy lo define: saltar paredes. Y la pasiva de sangrado al tercer golpe." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 55% at 50% 35%, #2E5F9429 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #6FC7F0;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #6FC7F0;">El rework</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 96px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #E9EEF5;">2017: le dieron<br>lo que hoy <span style="color: #6FC7F0;">lo define</span></h2>
+      
+      <div data-a="img" style="position: relative; width: 100%; height: 420px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(111,199,240,0.28); box-shadow: 0 30px 70px rgba(0,0,0,0.6); margin-top: 36px;">
+        <img src="assets/Talon_5.jpg" alt="Talon Luna de Sangre" style="width: 100%; height: 100%; object-fit: cover; object-position: center 22%;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,8,15,0) 40%, rgba(7,8,15,0.85) 100%);"></div>
+      </div>
+      <div data-a="up3" style="margin-top: 36px; display: flex; flex-direction: column; gap: 18px;">
+        
+        <div style="display: flex; align-items: center; gap: 24px;">
+          <span style="flex: none; width: 140px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #6FC7F0;">E</span>
+          <span style="font-size: 29px; font-weight: 400; color: #8A93A8; line-height: 1.35;"><strong style="color:#E9EEF5;">Salta paredes.</strong> La habilidad que lo volvió el rey del roam</span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px;">
+          <span style="flex: none; width: 140px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #6FC7F0;">Pasiva</span>
+          <span style="font-size: 29px; font-weight: 400; color: #8A93A8; line-height: 1.35;">Sus habilidades hieren; al tercer golpe, <strong style="color:#E9EEF5;">te desangras</strong></span>
+        </div>
+        <div style="display: flex; align-items: center; gap: 24px;">
+          <span style="flex: none; width: 140px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #6FC7F0;">R</span>
+          <span style="font-size: 29px; font-weight: 400; color: #8A93A8; line-height: 1.35;">Anillo de cuchillas + <strong style="color:#E9EEF5;">invisibilidad</strong></span>
+        </div>
+      </div>
+      <div data-a="up3" style="margin-top: 30px; font-size: 27px; font-weight: 500; color: #E9EEF5; line-height: 1.4;">Assassin Update · pretemporada 2017. Antes era un asesino más; después, <strong style="color: #6FC7F0;">el que salta muros</strong>.</div>
+    </div>
+  </section>
+
+  <section data-label="Las skins" data-screen-label="05 · Las skins" data-speaker-notes="Nueve skins, pero entre 2012 y 2017 pasaron cinco anos sin nada. Y la sequia acabo justo con el rework. Igual que Urgot: Riot reworkea y aprovecha para sacar skins." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 58% at 50% 42%, #C4304829 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #6FC7F0;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #6FC7F0;">Las skins</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 84px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #E9EEF5;">9 skins en 15 años</h2>
+
+      <div data-a="img" style="margin-top: 28px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+        
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_1.jpg" alt="Renegado" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Renegado</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">ago 2011</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_2.jpg" alt="Élite Carmesí" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Élite Carmesí</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">ago 2011</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_3.jpg" alt="Espadragón" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Espadragón</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">ene 2012</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_5.jpg" alt="Luna de Sangre" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Luna de Sangre</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">feb 2017</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_12.jpg" alt="Filo Perpetuo" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Filo Perpetuo</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">sep 2018</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_20.jpg" alt="Bosque Negro" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Bosque Negro</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">mar 2020</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_29.jpg" alt="Rosa Marchita" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Rosa Marchita</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">feb 2021</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_38.jpg" alt="El Forajido" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">El Forajido</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">may 2022</span>
+            </div>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            <img src="assets/Talon_49.jpg" alt="Emboscada Primigenia" style="width: 100%; height: 158px; object-fit: cover; object-position: center 20%; border-radius: 12px; border: 1px solid rgba(111,199,240,0.25);">
+            <div style="display: flex; flex-direction: column; gap: 1px;">
+              <span style="font-size: 22px; font-weight: 600; color: #E9EEF5; line-height: 1.15;">Emboscada Primigenia</span>
+              <span style="font-size: 20px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #6FC7F0;">ene 2024</span>
+            </div>
+          </div>
+      </div>
+
+      <div data-a="up3" style="margin-top: 28px; padding: 22px 28px; border-radius: 16px; background: rgba(196,48,72,0.13); border: 1px solid rgba(196,48,72,0.45); display: flex; align-items: center; gap: 24px;">
+        <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 76px; line-height: 0.85; color: #C43048; white-space: nowrap;">5 AÑOS</span>
+        <span style="font-size: 24px; font-weight: 500; color: #E9EEF5; line-height: 1.35;">sin una sola skin (2012 → 2017)…<br>y la sequía terminó <strong style="color: #6FC7F0;">justo con el rework</strong></span>
+      </div>
+
+      <div data-a="up3" style="margin-top: 22px; font-size: 26px; font-weight: 500; color: #E9EEF5; line-height: 1.45;">
+        Igual que Urgot. <strong style="color: #C43048;">Riot deja de sacarle skins a un campeón cuando deja de creer en él</strong> — y vuelve cuando lo arregla.
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El precio" data-screen-label="06 · El precio" data-speaker-notes="Las nueve: 80 dolares, unos 1550 pesos, casi una semana de salario minimo. El mas caro de la serie. Y hay tres mas que ya no se pueden comprar, una es la de campeon del mundo de Samsung White." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 58% at 50% 40%, #6FC7F029 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #6FC7F0;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #6FC7F0;">Comprarlas todas</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 96px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #E9EEF5;">El más caro<br>de la serie</h2>
+
+      <div data-a="up3" style="margin-top: 40px; display: flex; align-items: flex-end; gap: 36px;">
+        <div style="flex: 1;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 120px; line-height: 0.86; color: #6FC7F0;">~80 <span style="font-size: 64px;">USD</span></div>
+          <div style="font-size: 23px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8A93A8;">las nueve · 10 345 RP · ~1 550 MXN</div>
+        </div>
+      </div>
+
+      <div data-a="up3" style="margin-top: 44px; display: flex; flex-direction: column; gap: 16px;">
+        <span style="font-size: 24px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #8A93A8;">Días de salario mínimo (México)</span>
+        
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="flex: none; width: 130px; font-size: 27px; font-weight: 600; color: #8A93A8;">Ornn</span>
+          <div style="flex: 1; height: 46px; border-radius: 10px; background: rgba(255,255,255,0.06); overflow: hidden;">
+            <div style="width: 64%; height: 100%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: flex-end; padding-right: 14px; box-sizing: border-box;">
+              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; color: #E9EEF5;">3,3</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="flex: none; width: 130px; font-size: 27px; font-weight: 600; color: #8A93A8;">Urgot</span>
+          <div style="flex: 1; height: 46px; border-radius: 10px; background: rgba(255,255,255,0.06); overflow: hidden;">
+            <div style="width: 70%; height: 100%; background: rgba(255,255,255,0.18); display: flex; align-items: center; justify-content: flex-end; padding-right: 14px; box-sizing: border-box;">
+              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; color: #E9EEF5;">3,5</span>
+            </div>
+          </div>
+        </div>
+        <div style="display: flex; align-items: center; gap: 20px;">
+          <span style="flex: none; width: 130px; font-size: 27px; font-weight: 600; color: #E9EEF5;">Talon</span>
+          <div style="flex: 1; height: 46px; border-radius: 10px; background: rgba(255,255,255,0.06); overflow: hidden;">
+            <div style="width: 98%; height: 100%; background: #6FC7F0; display: flex; align-items: center; justify-content: flex-end; padding-right: 14px; box-sizing: border-box;">
+              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; color: #07080F;">4,9</span>
+            </div>
+          </div>
+        </div>
+        <span style="font-size: 25px; font-weight: 500; color: #E9EEF5;">4,9 días — <strong style="color: #6FC7F0;">casi una semana</strong> de trabajo</span>
+      </div>
+
+      <div data-a="up3" style="margin-top: 34px; display: flex; align-items: center; gap: 18px; padding: 16px 22px; border-radius: 14px; border: 2px dashed rgba(138,147,168,0.4);">
+        <img src="assets/Talon_4.jpg" alt="Talon SSW" style="width: 96px; height: 58px; object-fit: cover; object-position: center 20%; border-radius: 8px; filter: grayscale(0.6);">
+        <span style="font-size: 23px; font-weight: 400; color: #8A93A8; line-height: 1.35;">Y hay <strong style="color: #E9EEF5;">3 más que ya no puedes comprar</strong> — una es la <strong style="color: #E9EEF5;">SSW</strong>, la skin de campeón del mundo de Samsung White.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Lore · Du Couteau" data-screen-label="07 · El lore" data-speaker-notes="Huerfano sin nombre de los bajos fondos de Noxus. El General Du Couteau lo vencio en duelo y le dio a elegir: morir o servir. Eligio vivir con una condicion: solo acepta ordenes de quien no puede derrotar." style="background: #07080F; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #E9EEF5; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 42% at 50% 32%, #C4304829 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #C43048;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #C43048;">El lore</span>
+    </div>
+      
+      <div data-a="img" style="position: relative; width: 100%; height: 380px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(111,199,240,0.28); box-shadow: 0 30px 70px rgba(0,0,0,0.6); ">
+        <img src="assets/Talon_2.jpg" alt="Talon Élite Carmesí" style="width: 100%; height: 100%; object-fit: cover; object-position: center 18%;">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,8,15,0) 40%, rgba(7,8,15,0.85) 100%);"></div>
+      </div>
+      <h2 data-a="up2" style="margin: 38px 0 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 86px; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #E9EEF5;">Solo obedece a quien<br><span style="color: #C43048;">no puede derrotar</span></h2>
+      <div data-a="up3" style="margin-top: 40px; display: flex; flex-direction: column; gap: 20px;">
+        
+        <div style="display: flex; align-items: flex-start; gap: 20px;">
+          <span style="flex: none; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #C43048; width: 44px;">1</span>
+          <span style="font-size: 30px; font-weight: 400; color: #8A93A8; line-height: 1.35;"><strong style="color:#E9EEF5;">Huérfano sin nombre</strong> de los bajos fondos de Noxus: ladrón y asesino a sueldo</span>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 20px;">
+          <span style="flex: none; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #C43048; width: 44px;">2</span>
+          <span style="font-size: 30px; font-weight: 400; color: #8A93A8; line-height: 1.35;">No recuerda a su familia <strong style="color:#E9EEF5;">ni una sola muestra de cariño</strong> en toda su vida</span>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 20px;">
+          <span style="flex: none; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #C43048; width: 44px;">3</span>
+          <span style="font-size: 30px; font-weight: 400; color: #8A93A8; line-height: 1.35;">El General <strong style="color:#E9EEF5;">Du Couteau</strong> fue por él en persona y lo venció en duelo</span>
+        </div>
+        <div style="display: flex; align-items: flex-start; gap: 20px;">
+          <span style="flex: none; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 46px; line-height: 1; color: #C43048; width: 44px;">4</span>
+          <span style="font-size: 30px; font-weight: 400; color: #8A93A8; line-height: 1.35;">Le dio a elegir: <strong style="color:#E9EEF5;">morir o servir</strong>. Eligió vivir — sirviendo solo al General</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</deck-stage>
+<script>
+(function () {
+  var presenting = false;
+  var btn = document.createElement('button');
+  btn.id = 'modo-presentacion';
+  btn.type = 'button';
+  function render() {
+    btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
+    if (presenting) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on');
+  }
+  function setPresenting(on) {
+    if (on === presenting) return;
+    presenting = on;
+    window.postMessage({ __omelette_presenting: on }, '*');
+    if (on) {
+      if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+    } else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    render();
+  }
+  btn.addEventListener('click', function () { setPresenting(!presenting); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { setPresenting(!presenting); e.preventDefault(); }
+    else if (e.key === 'Escape' && presenting && !document.fullscreenElement) setPresenting(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
+  render();
+  document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>
