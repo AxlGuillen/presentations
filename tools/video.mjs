@@ -53,11 +53,11 @@ if (fs.existsSync(path.join(dirDeck, 'gsap.min.js')) && !fs.existsSync(path.join
 const LEAD = 0.35;  // aire antes de que empiece a hablar en cada slide
 const TAIL = 0.65;  // aire después
 
-async function tts(texto) {
+async function tts(texto, extra = {}) {
   const res = await fetch('https://api.fish.audio/v1/tts/stream/with-timestamp', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.FISH_API_KEY}`, 'Content-Type': 'application/json', model: 's2.1-pro-free' },
-    body: JSON.stringify({ text: texto, format: 'wav', reference_id: guion.voz || undefined, latency: 'normal' }),
+    body: JSON.stringify({ text: texto, format: 'wav', reference_id: guion.voz || undefined, latency: 'normal', ...extra }),
   });
   if (!res.ok) throw new Error(`TTS ${res.status}: ${(await res.text()).slice(0, 200)}`);
   const trozos = [];
@@ -94,7 +94,13 @@ const clips = [];
 for (const s of guion.slides) {
   const wav = path.join(dirAudio, `clip-${String(s.slide).padStart(2, '0')}.wav`);
   process.stdout.write(`♪ slide ${s.slide} (${s.texto.length} chars)… `);
-  const { audio, palabras, dur } = await tts(s.texto);
+  // prosodia opcional desde guion.json: "velocidad" (0.5–2, global o por
+  // slide) y "temperatura" (global; más baja = clips más consistentes)
+  const extra = {};
+  const velocidad = s.velocidad ?? guion.velocidad;
+  if (velocidad) extra.prosody = { speed: velocidad };
+  if (guion.temperatura != null) extra.temperature = guion.temperatura;
+  const { audio, palabras, dur } = await tts(s.texto, extra);
   fs.writeFileSync(wav, audio);
   // duración real medida por ffprobe (más fiable que el reporte del API)
   const real = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
@@ -126,6 +132,9 @@ for (const c of clips) {
     linea = []; iniLinea = null;
   };
   for (const p of c.palabras) {
+    // por si el alignment devolviera una etiqueta de expresión ([break],
+    // [excited]…) como "palabra": nunca va a los subtítulos
+    if (/^\s*[\[\(][^\]\)]*[\]\)]\s*$/.test(p.t)) continue;
     if (iniLinea == null) iniLinea = p.ini;
     linea.push(p.t);
     if (linea.join(' ').length > 40 || /[.!?…:]$/.test(p.t)) cerrar(p.fin);

@@ -12,12 +12,16 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 ```json
 {
   "voz": "<reference_id de Fish Audio, opcional — sin él usa la voz por defecto>",
+  "velocidad": 1.0,
+  "temperatura": 0.5,
   "slides": [
-    { "slide": 1, "texto": "Narración de la primera diapositiva…" },
-    { "slide": 2, "texto": "…" }
+    { "slide": 1, "texto": "[excited] Narración de la primera diapositiva…" },
+    { "slide": 8, "texto": "…", "velocidad": 0.9 }
   ]
 }
 ```
+
+`velocidad` (0.5–2, global o por slide — p. ej. 0.9 en el cierre) y `temperatura` (global; más baja = entonación más consistente entre clips) son opcionales.
 
 ## Escribir el guion
 
@@ -25,6 +29,17 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 - Longitud: la slide dura lo que dure su narración (+1 s de aire). Para TikTok apunta a 6–12 s por slide; para decks informativos hasta ~20 s.
 - El texto va a TTS: evita siglas crípticas y símbolos (escribe «diecinueve horas», no «19 h»), y usa puntuación normal — los subtítulos se parten por puntuación y ~40 caracteres.
 - Enseña el borrador del guion al usuario antes de gastar API.
+
+## Etiquetas de expresión (que no suene plano)
+
+El modelo `s2.1-pro-free` (familia S2) honra etiquetas **entre corchetes** dentro del texto — verificado: cambian la interpretación y NO aparecen en los subtítulos (y video.mjs las filtra por si acaso):
+
+- **Emoción** al inicio de la oración: `[excited]`, `[confident]`, `[calm]`, `[curious]`, `[proud]`, `[worried]`, `[sarcastic]`, `[hopeful]`, `[determined]`…
+- **Tono**: `[whispering]`, `[soft tone]`, `[emphasis]`, `[in a hurry tone]`.
+- **Pausas**: `[break]` (corta), `[long-break]` (~1 s) — mejores que las comas para el ritmo dramático.
+- **Efectos** (con moderación): `[sighing]`, `[chuckling]`.
+
+Reglas de la doc de Fish: **una emoción primaria por oración** (al inicio), máximo 3 etiquetas por oración, espaciar los cambios emocionales, y no saturar textos cortos. Un guion bien etiquetado usa 1–2 por slide: la emoción de arranque y quizá un `[long-break]` antes del remate. El modelo S1 legacy usa paréntesis `(tag)` pero **cobra** — no usarlo.
 
 ## Generar
 
