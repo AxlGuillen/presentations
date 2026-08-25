@@ -137,6 +137,15 @@ const animador = () => `<script>
     var activa = ds.querySelector('section[data-deck-active]');
     if (activa) lanzar(activa);
   }
+  // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
+  // elementos recién visibles entran animados; ocultar o revelar de golpe
+  // (llegar en reversa) no anima nada.
+  document.addEventListener('stepchange', function (e) {
+    var d = e.detail;
+    if (reducido || !d || d.step !== d.previousStep + 1) return;
+    var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
+    if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
+  });
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
 })();

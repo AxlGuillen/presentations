@@ -73,6 +73,9 @@ for (let i = 0; i < n; i++) {
     const ds = document.querySelector('deck-stage');
     if (typeof ds._go === 'function') ds._go(idx);
     else location.hash = '#' + (idx + 1);
+    // la captura muestra la slide completa: todos los pasos revelados
+    const s = ds.querySelectorAll('section')[idx];
+    s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   }, i);
   // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
   await new Promise(r => setTimeout(r, 2000));

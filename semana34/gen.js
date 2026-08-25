@@ -199,8 +199,8 @@ slides.push(`
   </section>`);
 
 // ── 6 · Estado del tablero ───────────────────────────────────────────────
-const col = (titulo, color, wash, issues) => `
-        <div data-col style="background: ${wash}; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+const col = (titulo, color, wash, issues, paso) => `
+        <div data-col${paso ? ` data-step="${paso}"` : ''} style="background: ${wash}; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
           <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
             <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: ${color};">${titulo}</span>
             <span style="font-size: 40px; font-weight: 800; color: ${color}; letter-spacing: -1px; ${NUM}">${issues.length}</span>
@@ -225,21 +225,21 @@ slides.push(`
         ['UWS-9477', 'Verbiage de Tailgate'],
         ['UWS-9465 · 9283', 'Parton’s: bullets y branding'],
         ['UWS-9291 · 9535', '«Open site» GPM y cookies RWLV'],
-      ])}
+      ], 1)}
       ${col('En QA', BLUE, WASH, [
         ['UWS-9369', 'Zouk Tokio · checkout JA'],
         ['UWS-9213', 'Zouk Tokio · estilos'],
         ['UWS-9262', 'Limpieza del plugin WP'],
         ['UWS-9493', 'Tracking v2 de RWLV'],
-      ])}
+      ], 2)}
       ${col('En espera', WARN, WARN_WASH, [
         ['UWS-9452', 'Wynn · guest list'],
         ['UWS-9375', 'Turning Stone · estimación'],
         ['UWS-8489', 'Gestión de integraciones (ongoing)'],
-      ])}
+      ], 3)}
       ${col('Regresó de QA', BAD, BAD_WASH, [
         ['UWS-9511', 'ZoukLV · landing del 16 de septiembre — prioridad Highest, volvió hoy lunes'],
-      ])}
+      ], 4)}
     </div>
   </section>`);
 

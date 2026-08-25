@@ -88,6 +88,8 @@ for (let i = 0; i < n; i++) {
   }, i);
   const dur = await pagina.evaluate(async idx => {
     const s = document.querySelectorAll('deck-stage section')[idx];
+    // el video muestra la slide completa: todos los pasos revelados
+    s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
     for (let esperas = 0; esperas < 20 && !s.__tl; esperas++) await new Promise(r => setTimeout(r, 25));
     if (!s.__tl) return 0;
     s.__tl.pause(0);           // desde aquí solo avanzamos con seeks explícitos

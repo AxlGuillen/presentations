@@ -40,6 +40,8 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 
 Cada deck añade un botón "Presentar · P" que hace `postMessage({__omelette_presenting: true})` — el runtime ya escuchaba ese mensaje y oculta miniaturas y pie de navegación. No hace falta tocar `deck-stage.js` para eso.
 
+**Pasos dentro de una slide** (opt-in): elementos con `data-step="1"`, `"2"`… se revelan por etapas con la navegación normal — → revela el siguiente paso, ← lo oculta; agotados los pasos se cambia de slide. Al llegar avanzando la slide arranca en 0 pasos; al regresar llega con todos. La ocultación es `visibility` (no mueve layout), miniaturas e impresión muestran siempre todo, y `capturar.mjs`/`cuadros.mjs` revelan todo antes de capturar (PNG y video llevan la slide completa). Cada cambio emite `stepchange` (bubbles) con `{slide, step, previousStep, total}`; el pegamento `kit.animador()` ya anima por defecto los elementos recién revelados. Ejemplo: las columnas del tablero en `semana34`. Sin `data-step` el comportamiento es idéntico al de siempre.
+
 Tamaños de diseño: **tabletas 1920×1080**, **soloq 1080×1920**.
 
 ## Verificar que nada desborda

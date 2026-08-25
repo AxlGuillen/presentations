@@ -1126,7 +1126,11 @@
       tag.setAttribute('data-omelette-injected', '');
       tag.textContent =
         ':where(h1,h2,h3,h4,h5,h6){text-wrap:balance}' +
-        ':where(p,li,blockquote,figcaption){text-wrap:pretty}';
+        ':where(p,li,blockquote,figcaption){text-wrap:pretty}' +
+        // Pasos (data-step): lo aún no revelado se oculta con visibility
+        // para no mover el layout; al imprimir se ve todo siempre.
+        '[data-step-hidden]{visibility:hidden}' +
+        '@media print{[data-step-hidden]{visibility:visible}}';
       document.head.appendChild(tag);
     }
 
@@ -1225,6 +1229,16 @@
         if (i === curr) s.setAttribute('data-deck-active', '');
         else s.removeAttribute('data-deck-active');
       });
+      // Pasos: al entrar avanzando la slide arranca sin pasos revelados; al
+      // regresar desde una posterior llega con todos (como reveal.js).
+      if (prev !== curr) {
+        const slideActual = this._slides[curr];
+        const maxPasos = slideActual ? this._stepMax(slideActual) : 0;
+        if (maxPasos) {
+          const previo = slideActual.__paso == null ? 0 : slideActual.__paso;
+          this._applySteps(slideActual, prev > curr ? maxPasos : 0, previo);
+        }
+      }
       if (this._countEl) this._countEl.textContent = String(curr + 1);
       // Follow-scroll on every navigation (init deep-link, keyboard, click,
       // tap, external goTo) — the only time we *don't* want the rail to
@@ -1486,12 +1500,63 @@
      *  nothing further in that direction. */
     _advance(dir, reason) {
       if (!this._slides.length) return;
+      // Pasos dentro de la slide: si hay uno pendiente en esa dirección,
+      // la navegación se consume revelándolo/ocultándolo.
+      if (this._stepAdvance(dir)) return;
       let i = this._index + dir;
       while (i >= 0 && i < this._slides.length && this._slides[i].hasAttribute('data-deck-skip')) {
         i += dir;
       }
       if (i < 0 || i >= this._slides.length) { this._flashOverlay(); return; }
       this._go(i, reason);
+    }
+
+    // ── Pasos dentro de una slide (data-step) ─────────────────────────────
+    //
+    // Opt-in y estrictamente aditivo: sin elementos [data-step] en la slide
+    // nada de esto actúa. Los elementos marcados data-step="1", "2", … se
+    // revelan por etapas con la navegación normal (→ revela, ← oculta); al
+    // llegar avanzando la slide arranca en 0 pasos, al regresar desde la
+    // siguiente llega con todos revelados. La ocultación es visibility (no
+    // display) para no mover el layout, la impresión muestra siempre todo y
+    // cada cambio emite un CustomEvent 'stepchange' (bubbles+composed) con
+    // {slide, step, previousStep, total} para que el deck pueda animar.
+
+    /** Mayor número de paso declarado en la slide (0 = no usa pasos). */
+    _stepMax(slide) {
+      let max = 0;
+      slide.querySelectorAll('[data-step]').forEach((el) => {
+        const n = parseInt(el.getAttribute('data-step'), 10);
+        if (n > max) max = n;
+      });
+      return max;
+    }
+
+    _applySteps(slide, paso, previo) {
+      slide.querySelectorAll('[data-step]').forEach((el) => {
+        const n = parseInt(el.getAttribute('data-step'), 10);
+        if (n > paso) el.setAttribute('data-step-hidden', '');
+        else el.removeAttribute('data-step-hidden');
+      });
+      slide.setAttribute('data-step-active', String(paso));
+      slide.__paso = paso;
+      this.dispatchEvent(new CustomEvent('stepchange', {
+        detail: { slide, step: paso, previousStep: previo, total: this._stepMax(slide) },
+        bubbles: true,
+        composed: true,
+      }));
+    }
+
+    /** true si consumió la navegación revelando/ocultando un paso. */
+    _stepAdvance(dir) {
+      const slide = this._slides[this._index];
+      if (!slide) return false;
+      const max = this._stepMax(slide);
+      if (!max) return false;
+      const actual = slide.__paso == null ? max : slide.__paso;
+      if (dir > 0 && actual < max) { this._applySteps(slide, actual + 1, actual); return true; }
+      if (dir < 0 && actual > 0) { this._applySteps(slide, actual - 1, actual); return true; }
+      return false;
     }
 
     // ── Thumbnail rail ────────────────────────────────────────────────────
@@ -1653,6 +1718,9 @@
       if (entry.host) return;
       const dw = this.designWidth, dh = this.designHeight;
       let clone = entry.slide.cloneNode(true);
+      // Las miniaturas muestran la slide completa, sin pasos ocultos.
+      clone.removeAttribute('data-step-active');
+      clone.querySelectorAll('[data-step-hidden]').forEach((el) => el.removeAttribute('data-step-hidden'));
       // Canvas bitmaps don't clone — swap each cloned canvas for an <img>
       // of the live pixels. Best-effort: tainted canvases throw (left
       // as-is); zero-size are skipped; WebGL without preserveDrawingBuffer
@@ -2079,6 +2147,8 @@
       }
       const copy = slide.cloneNode(true);
       copy.removeAttribute('id');
+      copy.removeAttribute('data-step-active');
+      copy.querySelectorAll('[data-step-hidden]').forEach((el) => el.removeAttribute('data-step-hidden'));
       const ids = this._remintDuplicateIds(copy);
       const op = { op: 'duplicate' };
       if (ids) op.ids = ids;
