@@ -72,6 +72,29 @@ const sombra = ({ tinta = '#172B4D', halo = null, nivel = 1 } = {}) => {
   return `box-shadow: ${capas.join(', ')};`;
 };
 
+/** Dominio de producción — única fuente para URLs absolutas (OG las exige). */
+const PROD = 'https://presentations-three-phi.vercel.app';
+
+/** Bloque de metas Open Graph / Twitter para el <head> de un deck, para que
+ *  el enlace se comparta con card y preview (WhatsApp, Slack, X…). La imagen
+ *  es `assets/og.png` (1200×630), generada con `node tools/og.mjs <carpeta>`.
+ *  Sin `carpeta` produce las metas de la galería raíz (imagen /og.png). */
+const og = ({ titulo, descripcion, carpeta = '' }) => {
+  const url = `${PROD}/${carpeta ? carpeta + '/' : ''}`;
+  const img = carpeta ? `${url}assets/og.png` : `${PROD}/og.png`;
+  return [
+    `<meta name="description" content="${descripcion}">`,
+    `<meta property="og:type" content="website">`,
+    `<meta property="og:title" content="${titulo}">`,
+    `<meta property="og:description" content="${descripcion}">`,
+    `<meta property="og:url" content="${url}">`,
+    `<meta property="og:image" content="${img}">`,
+    `<meta property="og:image:width" content="1200">`,
+    `<meta property="og:image:height" content="630">`,
+    `<meta name="twitter:card" content="summary_large_image">`,
+  ].join('\n');
+};
+
 /** Diagrama Mermaid → SVG inline, renderizado en build-time (tools/diagrama.mjs
  *  con el Chrome del sistema). El SVG se incrusta en el HTML generado: el deck
  *  no carga Mermaid en runtime. `config` es el objeto de mermaid.initialize()
@@ -170,4 +193,4 @@ const animador = () => `<script>
 })();
 </${'script'}>`;
 
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador };
+module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, og, PROD };

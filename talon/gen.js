@@ -6,6 +6,7 @@
 // Paleta muestreada del splash original: noche azul acero + filo cian,
 // carmesí de Noxus para peligro/sequía y dorado para los logros.
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Paleta Talon: noche, acero y filo ────────────────────────────────────
 const BG = '#07080F';
@@ -304,6 +305,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Talon cumple 15 años</title>
+${kit.og({ titulo: "Talon cumple 15 años", descripcion: "Quince años de la Sombra de la Espada: el OTP de 12.4 millones de puntos y el top mundial lleno de latinos. Apoyo visual para TikTok.", carpeta: "talon" })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">

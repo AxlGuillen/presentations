@@ -284,6 +284,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Semana 34 · Reporte semanal Jira</title>
+${kit.og({ titulo: "Semana 34 · Reporte semanal Jira", descripcion: "19 h 45 m en 15 issues del 18 al 24 de agosto: la localización de Zouk Tokio al japonés, siete finalizadas y ocho clientes atendidos.", carpeta: "semana34" })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">

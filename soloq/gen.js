@@ -1,6 +1,7 @@
 // Generador de index.html — Presentación vertical SoloQ Challenge 2026
 // Ejecutar: node gen.js
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Datos ────────────────────────────────────────────────────────────────
 // Tipos de cambio (open.er-api.com, 20/ago/2026) y salario mínimo diario:
@@ -295,6 +296,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>SoloQ Challenge 2026 — Premios vs Salario Mínimo</title>
+${kit.og({ titulo: "SoloQ Challenge 2026 · Premios vs salario mínimo", descripcion: "El ranking completo de ganadores con sus premios, y cuántos días de salario mínimo tomaría ganar cada cifra en México, Chile, Colombia y Argentina.", carpeta: "soloq" })}
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,401,500,501,600,601,700,701&display=swap" rel="stylesheet">
 <script src="./deck-stage.js"></script>

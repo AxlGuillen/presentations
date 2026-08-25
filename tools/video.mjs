@@ -117,6 +117,44 @@ const srtT = t => {
   return `${h}:${m}:${s},${String(ms % 1000).padStart(3, '0')}`;
 };
 
+// ── 2b · Karaoke opcional (guion.json: "subtitulos": "karaoke") ──────────
+// Subtítulos estilo TikTok: líneas cortas centradas, la palabra hablada se
+// pinta con el color de acento del deck ("acento": "#RRGGBB", opcional).
+// Usa los timestamps palabra a palabra de Fish, así que la sincronía es real.
+const esKaraoke = guion.subtitulos === 'karaoke';
+const assLineas = [];
+let assHeader = '';
+if (esKaraoke) {
+  const [W, H] = execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'stream=width,height', '-of', 'csv=p=0', pngEsperados[0]])
+    .toString().trim().split(',').map(Number);
+  const vertical = H > W;
+  const tam = Math.round(W * (vertical ? 0.062 : 0.036));
+  const margen = Math.round(H * (vertical ? 0.21 : 0.08)); // en 9:16, arriba de la interfaz de TikTok
+  const assColor = hex => {
+    const n = parseInt((hex || '#FFC800').replace('#', ''), 16);
+    const b = n & 255, g = (n >> 8) & 255, r = (n >> 16) & 255;
+    return ('&H00' + [b, g, r].map(x => x.toString(16).padStart(2, '0')).join('') + '&').toUpperCase();
+  };
+  assHeader = `[Script Info]
+ScriptType: v4.00+
+PlayResX: ${W}
+PlayResY: ${H}
+WrapStyle: 2
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: K,Arial,${tam},${assColor(guion.acento)},&H00FFFFFF,&H00141414,&H78000000,-1,0,0,0,100,100,0,0,1,${Math.max(2, Math.round(tam * 0.07))},${Math.max(1, Math.round(tam * 0.05))},2,60,60,${margen},1
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+`;
+}
+const assT = t => {
+  const cs = Math.round(t * 100);
+  const h = Math.floor(cs / 360000), m = Math.floor(cs / 6000) % 60, s = Math.floor(cs / 100) % 60;
+  return `${h}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}.${String(cs % 100).padStart(2, '0')}`;
+};
+
 let t0 = 0, nSub = 0;
 const srt = [];
 const tiempos = [];
@@ -140,11 +178,33 @@ for (const c of clips) {
     if (linea.join(' ').length > 40 || /[.!?…:]$/.test(p.t)) cerrar(p.fin);
   }
   cerrar(c.palabras.at(-1)?.fin ?? c.dur);
+
+  if (esKaraoke) {
+    // líneas de hasta 3 palabras; cada palabra dura hasta que arranca la
+    // siguiente ({\k} en centésimas), así el resalte no deja huecos
+    const abs = c.palabras
+      .filter(p => !/^\s*[\[\(][^\]\)]*[\]\)]\s*$/.test(p.t))
+      .map(p => ({ t: p.t, ini: iniSlide + LEAD + p.ini, fin: iniSlide + LEAD + p.fin }));
+    for (let j = 0; j < abs.length; j += 3) {
+      const grupo = abs.slice(j, j + 3);
+      const partes = grupo.map((p, k) => {
+        const hasta = k < grupo.length - 1 ? grupo[k + 1].ini : p.fin;
+        return `{\\k${Math.max(1, Math.round((hasta - p.ini) * 100))}}${p.t}`;
+      }).join(' ');
+      assLineas.push(`Dialogue: 0,${assT(grupo[0].ini)},${assT(grupo.at(-1).fin)},K,,0,0,0,,${partes}`);
+    }
+  }
   t0 += total;
 }
 const rutaSrt = path.join(out, 'subs.srt');
 fs.writeFileSync(rutaSrt, srt.join('\n'), 'utf8');
 console.log(`\nSubtítulos: ${nSub} líneas → ${path.relative(raiz, rutaSrt)}`);
+let rutaAss = null;
+if (esKaraoke) {
+  rutaAss = path.join(out, 'subs.ass');
+  fs.writeFileSync(rutaAss, assHeader + assLineas.join('\n') + '\n', 'utf8');
+  console.log(`Karaoke: ${assLineas.length} líneas → ${path.relative(raiz, rutaAss)}`);
+}
 fs.writeFileSync(path.join(out, 'tiempos.json'), JSON.stringify(tiempos, null, 2));
 
 // ── 3 · Segmentos de video y concatenación ───────────────────────────────
@@ -188,7 +248,7 @@ const estilo = 'FontName=Segoe UI,FontSize=13,Bold=1,PrimaryColour=&H00FFFFFF,Ou
 // el filtro subtitles es quisquilloso con rutas de Windows → cwd relativo
 const rel = p => path.relative(out, p).replace(/\\/g, '/');
 execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', rel(sinSubs),
-  '-vf', `subtitles=${rel(rutaSrt)}:force_style='${estilo}'`,
+  '-vf', esKaraoke ? `ass=${rel(rutaAss)}` : `subtitles=${rel(rutaSrt)}:force_style='${estilo}'`,
   '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
   '-c:a', 'copy', rel(final)], { cwd: out, stdio: ['ignore', 'inherit', 'inherit'] });
 
