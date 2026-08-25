@@ -13,7 +13,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
 /estancia/           Propuesta: web + administración para estancia infantil · 16:9 · 8 slides
 /ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
-/urgot/              Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 7 slides
+/urgot/              Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features

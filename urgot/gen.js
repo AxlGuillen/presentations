@@ -245,30 +245,6 @@ slides.push(`
     </div>
   </section>`);
 
-// ── 6 · Lore: las cadenas ────────────────────────────────────────────────
-slides.push(`
-  <section data-label="Lore · Las cadenas" data-screen-label="06 · Las cadenas" data-speaker-notes="El detalle mas cabron: las cadenas con las que lo esclavizaron son hoy sus armas." style="${seccion()}">
-    ${glow(ACID, '50% 34%', '110% 45%')}
-    <div style="position: relative;">
-      ${eyebrow('Y el detalle más cabrón')}
-      ${arte('Urgot_0.jpg', 'Las cadenas de Urgot', 640, 'center 35%')}
-      <h2 data-a="up2" style="margin: 40px 0 0; font-family: ${DISPLAY}; font-size: 96px; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: ${STEEL};">Las cadenas que<br>lo esclavizaron<br><span style="color: ${ACID};">hoy son sus armas</span></h2>
-      <p data-a="up3" style="margin: 30px 0 0; font-size: 30px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">Salió de la mina convertido en lo que es… y se quedó con los grilletes.</p>
-    </div>
-  </section>`);
-
-// ── 7 · Cierre ───────────────────────────────────────────────────────────
-slides.push(`
-  <section data-label="Cierre" data-screen-label="07 · Cierre" data-speaker-notes="Cierre: gigi easy, tirenme un follow o les meto la cuarta." style="${seccion()} background-image: linear-gradient(180deg, rgba(7,10,9,0.55) 0%, rgba(7,10,9,0.96) 72%), url('assets/Urgot_0.jpg'); background-size: cover; background-position: center 26%;">
-    ${glow(ACID, '50% 62%', '120% 50%')}
-    <div style="position: relative; text-align: center; margin-top: auto;">
-      <div data-a="up" style="font-size: 28px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: ${ACID};">16 años después</div>
-      <h2 data-a="up2" style="margin: 34px 0 0; font-family: ${DISPLAY}; font-size: 136px; line-height: 0.88; letter-spacing: 1px; text-transform: uppercase; color: ${STEEL}; text-shadow: 0 0 70px rgba(150,227,46,0.35);">Tírenme<br>un <span style="color: ${ACID};">follow</span></h2>
-      <p data-a="up3" style="margin: 40px 0 0; font-size: 34px; font-weight: 500; color: ${STEEL};">Feliz cumpleaños, Urgot ⛓️</p>
-      <p data-a="up3" style="margin: 12px 0 0; font-size: 25px; font-weight: 500; color: ${MUTED};">…o les voy a meter la cuarta</p>
-    </div>
-  </section>`);
-
 // ── Documento ────────────────────────────────────────────────────────────
 const html = `<!DOCTYPE html>
 <html lang="es">
