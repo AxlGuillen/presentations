@@ -6,6 +6,7 @@
 // 71 100 s = 19 h 45 m sobre 15 issues. Estados al lunes 25 ago ~9:40 PT.
 // Paleta: azul y blanco de Jira/Atlassian (#0052CC sobre blanco, tinta #172B4D).
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // texturas, fondos y sombras en build-time
 
 // ── Identidad · paleta Jira ──────────────────────────────────────────────
 const BLUE = '#0052CC';       // azul Jira — acento único
@@ -24,12 +25,14 @@ const BAD = '#DE350B';   const BAD_WASH = '#FFEBE6';
 const FONT = `'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif`;
 const NUM = 'font-variant-numeric: tabular-nums;';
 // Sombra en capas: contacto + elevación + un halo azul muy tenue
-const SOMBRA = `box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);`;
+const SOMBRA = kit.sombra({ tinta: INK, halo: BLUE });
 const CARD = `background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid ${LINE}; ${SOMBRA}`;
-// Textura de puntitos para los fondos blancos + un lavado azul en la esquina
-const DOTS = `background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%;`;
-// Variante clara de los puntitos para los fondos azules
-const DOTS_AZUL = `radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px)`;
+// Fondo blanco con textura: puntitos azules + lavado en la esquina superior derecha
+const FONDO_BLANCO = kit.fondo(BG,
+  kit.puntos({ color: kit.alpha(BLUE, 0.14) }),
+  kit.lavado({ color: WASH, fuerza: 0.6 }));
+// Puntitos claros para los fondos azules (portada, cierre y panel de Zouk)
+const puntosAzul = (paso = 30) => kit.puntos({ color: 'rgba(255,255,255,0.13)', paso });
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 const header = (etiqueta, extra = '') => `
@@ -44,7 +47,7 @@ const header = (etiqueta, extra = '') => `
       </div>
     </header>`;
 
-const seccion = () => `background: ${BG}; ${DOTS} font-family: ${FONT}; color: ${INK}; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;`;
+const seccion = () => `${FONDO_BLANCO} font-family: ${FONT}; color: ${INK}; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;`;
 
 const h2 = (txt, size = 62) =>
   `<h2 data-a="up" style="margin: 0; font-size: ${size}px; font-weight: 800; color: ${INK}; letter-spacing: -1.8px; line-height: 1.06;">${txt}</h2>`;
@@ -65,7 +68,7 @@ const slides = [];
 
 // ── 1 · Portada ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Semana del 18 al 24 de agosto. Todo sale de los worklogs de Jira: 31 registros, casi 20 horas." style="background: ${BLUE}; background-image: ${DOTS_AZUL}, radial-gradient(85% 75% at 88% 10%, rgba(38,132,255,0.55) 0%, rgba(0,0,0,0) 62%), radial-gradient(70% 60% at 8% 95%, rgba(23,43,77,0.35) 0%, rgba(0,0,0,0) 55%); background-size: 30px 30px, 100% 100%, 100% 100%; font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Semana del 18 al 24 de agosto. Todo sale de los worklogs de Jira: 31 registros, casi 20 horas." style="${kit.fondo(BLUE, puntosAzul(), kit.lavado({ color: BRIGHT, en: '88% 10%', ancho: 85, alto: 75, fuerza: 0.55 }), kit.lavado({ color: INK, en: '8% 95%', ancho: 70, alto: 60, fuerza: 0.35, alcance: 55 }))} font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
       <div data-a="ghost" style="position: absolute; right: -110px; bottom: -170px; width: 640px; height: 640px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
       <div data-a="ghost" style="position: absolute; right: 240px; top: -120px; width: 330px; height: 330px; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
@@ -148,7 +151,7 @@ slides.push(`
     ${header('Historia central')}
     ${h2('Zouk Tokio ya se explica<br>en japonés')}
     <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 0.9fr 1.25fr; gap: 34px; flex: 1;">
-      <div style="background: ${BLUE}; background-image: ${DOTS_AZUL}, radial-gradient(90% 70% at 85% 8%, rgba(38,132,255,0.6) 0%, rgba(0,0,0,0) 60%); background-size: 26px 26px, 100% 100%; border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
+      <div style="${kit.fondo(BLUE, puntosAzul(26), kit.lavado({ color: BRIGHT, en: '85% 8%', ancho: 90, alto: 70, fuerza: 0.6, alcance: 60 }))} border-radius: 26px; padding: 44px 40px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
         <span style="font-size: 128px; font-weight: 800; letter-spacing: -5px; line-height: 1; ${NUM}">37%</span>
         <span style="font-size: 26px; font-weight: 600; margin-top: 10px; line-height: 1.3;">de la semana — 7 h 19 m en 7 worklogs</span>
         <div style="flex: 1;"></div>
@@ -261,7 +264,7 @@ slides.push(`
 
 // ── 8 · Cierre ───────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Cierre" data-screen-label="Cierre" data-speaker-notes="Resumen en una frase: 7 cerradas, 8 clientes, Zouk Tokio en japones. La semana 35 abre con el retrabajo de ZoukLV." style="background: ${BLUE}; background-image: ${DOTS_AZUL}, radial-gradient(80% 70% at 15% 90%, rgba(38,132,255,0.5) 0%, rgba(0,0,0,0) 60%); background-size: 30px 30px, 100% 100%; font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Cierre" data-screen-label="Cierre" data-speaker-notes="Resumen en una frase: 7 cerradas, 8 clientes, Zouk Tokio en japones. La semana 35 abre con el retrabajo de ZoukLV." style="${kit.fondo(BLUE, puntosAzul(), kit.lavado({ color: BRIGHT, en: '15% 90%', ancho: 80, alto: 70, fuerza: 0.5, alcance: 60 }))} font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
       <div data-a="ghost" style="position: absolute; right: -90px; top: -90px; width: 540px; height: 540px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
     </div>
