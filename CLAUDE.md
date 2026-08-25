@@ -81,6 +81,8 @@ La copia maestra vive en `tools/vendor/gsap.min.js` (v3.12.5). Para animar un de
 
 Reglas: los estados iniciales se ponen con `tl.from()`, **nunca ocultando en CSS** — sin JS el deck se ve completo y la impresión a PDF funciona. `prefers-reduced-motion` salta al final. Las timelines quedan en `section.__tl` y son seekeables (`tl.time(t)`) pensando en el futuro render de video cuadro a cuadro. Si una timeline supera ~1.8s, sube la espera en `tools/capturar.mjs` (hoy 2000 ms) para que la captura tome el estado final.
 
+En `.claude/skills/` están los skills oficiales de GreenSock (MIT, instalados con `npx skills add greensock/gsap-skills`): **al escribir o revisar coreografías carga `gsap-timeline`** (secuenciación y position parameter) y `gsap-core` (tweens, eases, stagger); `gsap-performance` para animaciones que tiemblan o pensando en el render de video, y `gsap-utils` para helpers (snap, mapRange, random determinista). No instalamos `gsap-scrolltrigger` (los decks no scrollean) ni `gsap-react`/`gsap-frameworks` (aquí todo es vanilla).
+
 ## Módulo de video (tools/)
 
 `node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema vía puppeteer-core, con rutas para macOS y Windows), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck (ej. `estancia/video.mp4`) y se enlaza desde su card.
