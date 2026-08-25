@@ -38,6 +38,17 @@ if (!pngEsperados.every(f => fs.existsSync(f))) {
   if (r.status !== 0) process.exit(r.status ?? 1);
 }
 
+// ── 0b · Clips animados (si el deck usa GSAP y faltan) ───────────────────
+// tools/cuadros.mjs recorre las timelines con seeks exactos a 30 fps; cada
+// slide con animación entra al video con su clip y se congela en el último
+// cuadro el resto de su narración. Las slides sin timeline siguen con PNG.
+const dirAnim = path.join(out, 'anim');
+if (fs.existsSync(path.join(dirDeck, 'gsap.min.js')) && !fs.existsSync(path.join(dirAnim, 'anim.json'))) {
+  console.log('El deck usa GSAP y no hay clips: corriendo tools/cuadros.mjs…');
+  const r = spawnSync(process.execPath, [path.join(raiz, 'tools', 'cuadros.mjs'), deck], { stdio: 'inherit' });
+  if (r.status !== 0) process.exit(r.status ?? 1);
+}
+
 // ── 1 · Voz por diapositiva, con alineamiento ────────────────────────────
 const LEAD = 0.35;  // aire antes de que empiece a hablar en cada slide
 const TAIL = 0.65;  // aire después
@@ -137,14 +148,24 @@ for (const [i, c] of clips.entries()) {
   const png = pngEsperados[i];
   const seg = path.join(dirSeg, `seg-${String(c.slide).padStart(2, '0')}.mp4`);
   const total = (LEAD + c.dur + TAIL).toFixed(3);
-  ff(['-loop', '1', '-framerate', '30', '-i', png, '-i', c.wav,
-      '-af', `adelay=${Math.round(LEAD * 1000)}|${Math.round(LEAD * 1000)},apad`,
-      '-t', total,
-      '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
-      '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-ac', '2',
-      seg]);
+  const anim = path.join(dirAnim, `anim-${String(c.slide).padStart(2, '0')}.mp4`);
+  const audioArgs = ['-af', `adelay=${Math.round(LEAD * 1000)}|${Math.round(LEAD * 1000)},apad`, '-t', total];
+  const codecs = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
+                  '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-ac', '2'];
+  if (fs.existsSync(anim)) {
+    // clip animado + congelar el último cuadro hasta cubrir la narración
+    const durAnim = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', anim]).toString());
+    const resto = Math.max(0, +total - durAnim).toFixed(3);
+    ff(['-i', anim, '-i', c.wav,
+        '-vf', `tpad=stop_mode=clone:stop_duration=${resto}`,
+        ...audioArgs, ...codecs, seg]);
+    process.stdout.write(`▢ seg ${c.slide} (${total}s · animado ${durAnim.toFixed(2)}s)\n`);
+  } else {
+    ff(['-loop', '1', '-framerate', '30', '-i', png, '-i', c.wav,
+        ...audioArgs, ...codecs, seg]);
+    process.stdout.write(`▢ seg ${c.slide} (${total}s)\n`);
+  }
   lista.push(`file '${seg.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`);
-  process.stdout.write(`▢ seg ${c.slide} (${total}s)\n`);
 }
 const rutaLista = path.join(dirSeg, 'lista.txt');
 fs.writeFileSync(rutaLista, lista.join('\n'));
