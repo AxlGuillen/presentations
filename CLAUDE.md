@@ -69,13 +69,22 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 
 ## Agregar una presentación
 
+Usa el skill `nuevo-deck`, que encapsula el flujo completo. En corto:
+
 1. `nuevo/` con `index.html` + `assets/` (rutas relativas) + copia de `deck-stage.js`.
 2. Card en el `index.html` raíz — hay un bloque comentado de plantilla.
 3. Actualiza la tabla de estructura del README.
 
+## Skills del proyecto (.claude/skills/)
+
+- **nuevo-deck** — scaffold de una presentación nueva (carpeta, gen.js, card, docs).
+- **verificar-deck** — desbordes + revisión visual + captura real en Chrome (la verificación de GSAP va ahí: el Browser pane embebido no corre rAF).
+- **guion-video** — escribir `guion.json` y generar el MP4 narrado.
+- **gsap-core / gsap-timeline / gsap-performance / gsap-utils** — oficiales de GreenSock para escribir coreografías (ver sección de Animación).
+
 ## Kit de diseño (tools/kit.cjs)
 
-Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente) y sombras en capas. Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
+Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente), sombras en capas y diagramas — `kit.diagrama(codigoMermaid, config)` renderiza Mermaid a **SVG inline** vía `tools/diagrama.mjs` (Chrome del sistema + `tools/vendor/mermaid.min.js`); pásale la paleta del deck en `config.themeVariables` para que el diagrama no salga con el tema default. Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
 
 ## Animación (GSAP, opcional por deck)
 

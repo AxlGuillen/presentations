@@ -72,6 +72,25 @@ const sombra = ({ tinta = '#172B4D', halo = null, nivel = 1 } = {}) => {
   return `box-shadow: ${capas.join(', ')};`;
 };
 
+/** Diagrama Mermaid → SVG inline, renderizado en build-time (tools/diagrama.mjs
+ *  con el Chrome del sistema). El SVG se incrusta en el HTML generado: el deck
+ *  no carga Mermaid en runtime. `config` es el objeto de mermaid.initialize()
+ *  — pasa ahí el tema del deck, p. ej.:
+ *    kit.diagrama(`flowchart LR\n  A --> B`, {
+ *      theme: 'base',
+ *      themeVariables: { primaryColor: '#DEEBFF', primaryTextColor: '#172B4D',
+ *                        primaryBorderColor: '#0052CC', lineColor: '#5E6C84',
+ *                        fontFamily: 'Figtree, sans-serif' },
+ *    })
+ *  Tarda ~2 s por diagrama (levanta Chrome); solo se paga al correr gen.js. */
+const diagrama = (codigo, config = {}) => {
+  const { execFileSync } = require('child_process');
+  const path = require('path');
+  return execFileSync(process.execPath,
+    [path.join(__dirname, 'diagrama.mjs'), JSON.stringify(config)],
+    { input: codigo, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
+};
+
 /** Pegamento de animación para GSAP (opcional). Devuelve un <script> inline.
  *
  *  Requisitos en el deck: copiar `tools/vendor/gsap.min.js` a la carpeta del
@@ -151,4 +170,4 @@ const animador = () => `<script>
 })();
 </${'script'}>`;
 
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, animador };
+module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador };
