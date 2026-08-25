@@ -15,6 +15,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
 /urgot/              Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
 /talon/              Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
+/semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
