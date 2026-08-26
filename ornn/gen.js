@@ -6,6 +6,7 @@
 // (usuario, caption, botones) no tape nada.
 // Un slide por momento clave del guion, en el orden en que se narra.
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Paleta Ornn: forja, hierro y lava ────────────────────────────────────
 const BG = '#0B0605';
@@ -288,6 +289,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Ornn cumple 9 años</title>
+${kit.og({ titulo: "Ornn cumple 9 años", descripcion: "Nueve años del herrero de Freljord, el campeón que forja mientras pelea. Apoyo visual para TikTok.", carpeta: "ornn" })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">

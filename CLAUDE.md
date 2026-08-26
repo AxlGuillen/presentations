@@ -9,10 +9,11 @@ Sin build, sin dependencias, sin framework. Una carpeta por presentación, autoc
 ```
 tabletas/   index.html + deck-stage.js + support.js + assets/
 soloq/      index.html + gen.js + deck-stage.js + assets/
-estancia/   index.html + gen.js + deck-stage.js   (sin assets: todo es CSS)
+estancia/   index.html + gen.js + deck-stage.js + assets/ (solo og.png)
 ornn/       index.html + gen.js + deck-stage.js + assets/
 urgot/      index.html + gen.js + deck-stage.js + assets/
 talon/      index.html + gen.js + deck-stage.js + assets/
+semana34/   index.html + gen.js + deck-stage.js + gsap.min.js + assets/ (solo og.png)
 index.html  galería raíz con las cards
 ```
 
@@ -29,6 +30,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | `ornn/index.html` | **GENERADO** por `ornn/gen.js`. Los splash arts vienen de Data Dragon; el cuadro de Hefesto es *La fragua de Vulcano* de Velázquez (dominio público, Wikimedia). |
 | `urgot/index.html` | **GENERADO** por `urgot/gen.js`. Serie Cumplelolero, mismo formato que ornn. Splashes de Data Dragon; el splash pre-rework viene de la wiki de LoL (`urgot-viejo.jpg`). |
 | `talon/index.html` | **GENERADO** por `talon/gen.js`. Serie Cumplelolero #3. Splashes de Data Dragon; paleta muestreada del splash original (noche azul + filo cian `#6FC7F0`). |
+| `semana34/index.html` | **GENERADO** por `semana34/gen.js`. Reporte semanal de Jira (18–24 ago 2026); los datos vienen de los worklogs y están fijos en el generador. Usa `tools/kit.cjs` en build-time. |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
 
@@ -37,6 +39,8 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 `deck-stage.js` define el custom element `<deck-stage width height>`; las diapositivas son `<section>` hermanas con estilos inline. Aporta navegación por teclado, escalado automático al viewport, barra de miniaturas, `@media print` (una slide por página) y speaker notes vía `data-speaker-notes`.
 
 Cada deck añade un botón "Presentar · P" que hace `postMessage({__omelette_presenting: true})` — el runtime ya escuchaba ese mensaje y oculta miniaturas y pie de navegación. No hace falta tocar `deck-stage.js` para eso.
+
+**Pasos dentro de una slide** (opt-in): elementos con `data-step="1"`, `"2"`… se revelan por etapas con la navegación normal — → revela el siguiente paso, ← lo oculta; agotados los pasos se cambia de slide. Al llegar avanzando la slide arranca en 0 pasos; al regresar llega con todos. La ocultación es `visibility` (no mueve layout), miniaturas e impresión muestran siempre todo, y `capturar.mjs`/`cuadros.mjs` revelan todo antes de capturar (PNG y video llevan la slide completa). Cada cambio emite `stepchange` (bubbles) con `{slide, step, previousStep, total}`; el pegamento `kit.animador()` ya anima por defecto los elementos recién revelados. Ejemplo: las columnas del tablero en `semana34`. Sin `data-step` el comportamiento es idéntico al de siempre.
 
 Tamaños de diseño: **tabletas 1920×1080**, **soloq 1080×1920**.
 
@@ -60,17 +64,43 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **ornn** — apoyo visual para video vertical de TikTok, no deck de lectura. Negro forja `#0B0605`, carmesí `#C0272D`, brasa `#FF6B1A`, oro `#FFA23A`, Bebas Neue para cifras y titulares. El contenido va en una banda central (`padding: 300px 84px 350px`) para que la interfaz de TikTok no tape nada: **si tocas esos márgenes, revisa que todo siga dentro de la zona segura**.
 - **urgot** — serie Cumplelolero, mismo formato TikTok que ornn (banda central 300/350). Acero de Zaun `#070A09`, verde ácido `#96E32E`, rojo `#D8342C` para traición/sequía, Bebas Neue. Mantener Bebas Neue y la banda segura en toda la serie Cumplelolero para que los videos se vean de la misma familia.
 - **talon** — serie Cumplelolero #3, mismo formato TikTok (banda 300/350, Bebas Neue). Noche `#07080F`, filo cian `#6FC7F0`, azul `#2E5F94`, carmesí Noxus `#C43048` para la sequía, dorado `#E8B84B` para logros y el bloque de latinos.
+- **semana34** — reporte semanal de trabajo, paleta Jira/Atlassian: azul `#0052CC` sobre blanco, tinta navy `#172B4D`, lavado `#DEEBFF`, tipografía Figtree. Textura de puntitos y sombras en capas vía `tools/kit.cjs`. Semánticos aparte del acento: verde `#00875A` (hecho), ámbar `#974F0C` (espera), rojo `#DE350B` (regresó de QA).
 - **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
 
 ## Agregar una presentación
+
+Usa el skill `nuevo-deck`, que encapsula el flujo completo. En corto:
 
 1. `nuevo/` con `index.html` + `assets/` (rutas relativas) + copia de `deck-stage.js`.
 2. Card en el `index.html` raíz — hay un bloque comentado de plantilla.
 3. Actualiza la tabla de estructura del README.
 
+## Skills del proyecto (.claude/skills/)
+
+- **nuevo-deck** — scaffold de una presentación nueva (carpeta, gen.js, card, docs).
+- **verificar-deck** — desbordes + revisión visual + captura real en Chrome (la verificación de GSAP va ahí: el Browser pane embebido no corre rAF).
+- **guion-video** — escribir `guion.json` y generar el MP4 narrado.
+- **gsap-core / gsap-timeline / gsap-performance / gsap-utils** — oficiales de GreenSock para escribir coreografías (ver sección de Animación).
+
+## Kit de diseño (tools/kit.cjs)
+
+Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente), sombras en capas y diagramas — `kit.diagrama(codigoMermaid, config)` renderiza Mermaid a **SVG inline** vía `tools/diagrama.mjs` (Chrome del sistema + `tools/vendor/mermaid.min.js`); pásale la paleta del deck en `config.themeVariables` para que el diagrama no salga con el tema default. Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
+
+## Animación (GSAP, opcional por deck)
+
+La copia maestra vive en `tools/vendor/gsap.min.js` (v3.12.5). Para animar un deck: **copia** `gsap.min.js` a su carpeta (vendorizado, como `deck-stage.js`) y en el `gen.js` incluye al final del body `<script src="./gsap.min.js"></script>` seguido de `${kit.animador()}`. Con solo eso, cada slide obtiene una entrada por defecto sobre los grupos `data-a`. Para coreografías propias se registra `animar('<data-label de la slide>', (tl, s) => { tl.from(...); })` en un script posterior; `cuenta(tl, el, pos)` anima contadores sobre elementos con `data-cuenta`/`data-sufijo` (semana34 es el ejemplo de referencia).
+
+Reglas: los estados iniciales se ponen con `tl.from()`, **nunca ocultando en CSS** — sin JS el deck se ve completo y la impresión a PDF funciona. `prefers-reduced-motion` salta al final. Las timelines quedan en `section.__tl` y son seekeables (`tl.time(t)`) pensando en el futuro render de video cuadro a cuadro. Si una timeline supera ~1.8s, sube la espera en `tools/capturar.mjs` (hoy 2000 ms) para que la captura tome el estado final.
+
+En `.claude/skills/` están los skills oficiales de GreenSock (MIT, instalados con `npx skills add greensock/gsap-skills`): **al escribir o revisar coreografías carga `gsap-timeline`** (secuenciación y position parameter) y `gsap-core` (tweens, eases, stagger); `gsap-performance` para animaciones que tiemblan o pensando en el render de video, y `gsap-utils` para helpers (snap, mapRange, random determinista). No instalamos `gsap-scrolltrigger` (los decks no scrollean) ni `gsap-react`/`gsap-frameworks` (aquí todo es vanilla).
+
 ## Módulo de video (tools/)
 
-`node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema, puppeteer-core), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck (ej. `estancia/video.mp4`) y se enlaza desde su card.
+`node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema vía puppeteer-core, con rutas para macOS y Windows), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. **Si el deck usa GSAP** (existe `<carpeta>/gsap.min.js`), `tools/cuadros.mjs` renderiza además las timelines **cuadro a cuadro** — seeks exactos con `section.__tl.time(t)` a 30 fps, determinista, sin frames perdidos — en clips `video-out/anim/anim-NN.mp4`, y cada slide entra animada al video congelando su último cuadro el resto de su narración (las slides sin timeline siguen con PNG estático). Se puede correr suelto: `node tools/cuadros.mjs <carpeta> [fps]`. La narración acepta **etiquetas de expresión entre corchetes** en el texto del guion (`[excited]`, `[break]`, `[whispering]`…, no salen en los subtítulos) y `guion.json` admite `voz` (reference_id, buscar con `tools/fish-voces.mjs`), `velocidad`, `temperatura`, y `"subtitulos": "karaoke"` — **subtítulos estilo TikTok**: líneas de 3 palabras centradas donde la palabra hablada se pinta con `"acento"` (#RRGGBB del deck) usando los timestamps reales, vía ASS/libass. El detalle vive en el skill `guion-video`. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck (ej. `estancia/video.mp4`) y se enlaza desde su card.
+
+## Cards al compartir (Open Graph)
+
+Cada deck (y la galería raíz) lleva metas OG/Twitter en el `<head>` para que el enlace salga con card y preview en WhatsApp/Slack/X. En los generados las emite `kit.og({ titulo, descripcion, carpeta })`; en `tabletas/index.html` y la raíz están pegadas a mano. La imagen es `<carpeta>/assets/og.png` (raíz: `/og.png`), 1200×630, **committeada** porque las metas apuntan a su URL absoluta en producción (`kit.PROD`). Se genera con `node tools/og.mjs <carpeta|raiz>` desde la primera diapositiva (horizontales: recorte centrado; verticales: portada sobre sí misma desenfocada) — **regenérala si cambia la portada del deck**. Las previews solo se ven tras deployar a `main`.
 
 ## Notas de entorno
 

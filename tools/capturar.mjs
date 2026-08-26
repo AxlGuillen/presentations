@@ -16,6 +16,10 @@ if (!deck || !fs.existsSync(path.join(raiz, deck, 'index.html'))) {
 }
 
 const CHROME = [
+  // macOS
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+  // Windows
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
@@ -69,9 +73,12 @@ for (let i = 0; i < n; i++) {
     const ds = document.querySelector('deck-stage');
     if (typeof ds._go === 'function') ds._go(idx);
     else location.hash = '#' + (idx + 1);
+    // la captura muestra la slide completa: todos los pasos revelados
+    const s = ds.querySelectorAll('section')[idx];
+    s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   }, i);
-  // dejar correr las animaciones de entrada
-  await new Promise(r => setTimeout(r, 1100));
+  // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
+  await new Promise(r => setTimeout(r, 2000));
   const archivo = path.join(salida, `slide-${String(i + 1).padStart(2, '0')}.png`);
   await pagina.screenshot({ path: archivo });
   rutas.push(archivo);

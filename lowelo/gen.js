@@ -3,6 +3,7 @@
 // Datos verificados 21/08/2026 — fuentes: esportstales.com (distribución),
 // replays.lol/cutoff (cortes Challenger), lols.gg (top 1 mundial).
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Datos ────────────────────────────────────────────────────────────────
 // % de jugadores por tier (soloQ, agosto 2026, esportstales.com)
@@ -263,6 +264,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Low Elo vs High Elo — El corte por LP</title>
+${kit.og({ titulo: "Low Elo vs High Elo · El corte por LP", descripcion: "Dónde empieza de verdad el high elo: el corte por puntos de liga, no por percepción.", carpeta: "lowelo" })}
 <link rel="preconnect" href="https://api.fontshare.com">
 <link href="https://api.fontshare.com/v2/css?f[]=general-sans@400,401,500,501,600,601,700,701&display=swap" rel="stylesheet">
 <script src="./deck-stage.js"></script>

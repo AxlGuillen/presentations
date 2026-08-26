@@ -8,6 +8,7 @@
 //   Fase 4 · Comunicación avanzada
 //   El seguimiento para padres (app / reporte diario) queda POR DEFINIR a propósito.
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Identidad · colores tomados del logo de La Casita Feliz ─────────────
 const CREAM = '#FFF9FA';      // fondo, crema con matiz rosado
@@ -267,6 +268,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Propuesta · La Casita Feliz</title>
+${kit.og({ titulo: "Propuesta · La Casita Feliz", descripcion: "Web con blog y posicionamiento, administración y cobranza centralizada con asistente de IA, y control de entrada y salida con QR.", carpeta: "estancia" })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">

@@ -6,6 +6,7 @@
 // Un slide por momento clave del guion, en el orden en que se narra.
 // Paleta: acero de Zaun + verde ácido químico, del splash post-rework.
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // metas OG (y demás helpers de build-time)
 
 // ── Paleta Urgot: acero, química y humo de Zaun ──────────────────────────
 const BG = '#070A09';
@@ -252,6 +253,7 @@ const html = `<!DOCTYPE html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Urgot cumple 16 años</title>
+${kit.og({ titulo: "Urgot cumple 16 años", descripcion: "Dieciséis años del Redentor de Zaun: del campeón olvidado al rework que lo volvió leyenda. Apoyo visual para TikTok.", carpeta: "urgot" })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
