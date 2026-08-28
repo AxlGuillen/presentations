@@ -13,6 +13,7 @@ estancia/   index.html + gen.js + deck-stage.js + assets/ (solo og.png)
 ornn/       index.html + gen.js + deck-stage.js + assets/
 urgot/      index.html + gen.js + deck-stage.js + assets/
 talon/      index.html + gen.js + deck-stage.js + assets/
+skins/      index.html + gen.js + deck-stage.js + assets/
 semana34/   index.html + gen.js + deck-stage.js + gsap.min.js + assets/ (solo og.png)
 index.html  galería raíz con las cards
 ```
@@ -30,6 +31,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | `ornn/index.html` | **GENERADO** por `ornn/gen.js`. Los splash arts vienen de Data Dragon; el cuadro de Hefesto es *La fragua de Vulcano* de Velázquez (dominio público, Wikimedia). |
 | `urgot/index.html` | **GENERADO** por `urgot/gen.js`. Serie Cumplelolero, mismo formato que ornn. Splashes de Data Dragon; el splash pre-rework viene de la wiki de LoL (`urgot-viejo.jpg`). |
 | `talon/index.html` | **GENERADO** por `talon/gen.js`. Serie Cumplelolero #3. Splashes de Data Dragon; paleta muestreada del splash original (noche azul + filo cian `#6FC7F0`). |
+| `skins/index.html` | **GENERADO** por `skins/gen.js`. Serie «Datos curiosos», mismo formato TikTok que Cumplelolero. Los collages usan tiles de pantalla de carga de Data Dragon; los mapas nombre→num están hardcodeados en gen.js. |
 | `semana34/index.html` | **GENERADO** por `semana34/gen.js`. Reporte semanal de Jira (18–24 ago 2026); los datos vienen de los worklogs y están fijos en el generador. Usa `tools/kit.cjs` en build-time. |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
@@ -65,6 +67,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **urgot** — serie Cumplelolero, mismo formato TikTok que ornn (banda central 300/350). Acero de Zaun `#070A09`, verde ácido `#96E32E`, rojo `#D8342C` para traición/sequía, Bebas Neue. Mantener Bebas Neue y la banda segura en toda la serie Cumplelolero para que los videos se vean de la misma familia.
 - **talon** — serie Cumplelolero #3, mismo formato TikTok (banda 300/350, Bebas Neue). Noche `#07080F`, filo cian `#6FC7F0`, azul `#2E5F94`, carmesí Noxus `#C43048` para la sequía, dorado `#E8B84B` para logros y el bloque de latinos.
 - **semana34** — reporte semanal de trabajo, paleta Jira/Atlassian: azul `#0052CC` sobre blanco, tinta navy `#172B4D`, lavado `#DEEBFF`, tipografía Figtree. Textura de puntitos y sombras en capas vía `tools/kit.cjs`. Semánticos aparte del acento: verde `#00875A` (hecho), ámbar `#974F0C` (espera), rojo `#DE350B` (regresó de QA).
+- **skins** — serie «Datos curiosos» #1, formato TikTok (banda 300/350, Bebas Neue). Violeta `#0B0714`, oro `#F5C042` para el dinero, magenta `#E75FB4`, rojo `#E0475B` para lo bloqueado (tiles en escala de grises).
 - **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
 
 ## Agregar una presentación

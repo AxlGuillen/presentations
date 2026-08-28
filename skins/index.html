@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Los campeones con más skins</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0B0714; }
+  @keyframes dsUp { from { opacity: 0; transform: translateY(26px); } to { opacity: 1; transform: none; } }
+  @keyframes dsImg { from { opacity: 0; transform: scale(1.04); } to { opacity: 1; transform: none; } }
+  @keyframes dsGhost { from { opacity: 0; } to { opacity: 1; } }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] [data-a="up"] { animation: dsUp 0.6s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up2"] { animation: dsUp 0.65s 0.12s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up3"] { animation: dsUp 0.75s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="img"] { animation: dsImg 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="ghost"] { animation: dsGhost 1.2s both; }
+  }
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(245,192,66,0.45); border-radius: 999px;
+    background: rgba(11,7,20,0.85); color: #F5C042; cursor: pointer;
+    font: 600 13px/1 'Barlow', ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1080" height="1920">
+
+  <section data-label="El triple empate" data-screen-label="01 · Hook" data-speaker-notes="Quien tiene mas skins? A priori, triple empate a ~22 entre Lux, Miss Fortune y Ezreal. Pero vamos a descontar las que ya no se pueden conseguir." style="background: #0B0714; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F4EFF9; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden;  background-image: linear-gradient(180deg, rgba(11,7,20,0.45) 0%, rgba(11,7,20,0.96) 74%), url('assets/Lux_7_splash.jpg'); background-size: cover; background-position: center 20%;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 45% at 50% 30%, #E75FB42B 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; margin-top: auto;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #E75FB4;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #E75FB4;">Datos curiosos</span>
+    </div>
+      <h1 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 132px; font-weight: 400; line-height: 0.86; letter-spacing: 1px; color: #F4EFF9; text-shadow: 0 0 80px rgba(231,95,180,0.4);">¿Quién tiene<br><span style="color: #E75FB4;">más skins?</span></h1>
+      <div data-a="up3" style="margin-top: 44px; display: flex; align-items: center; gap: 20px;">
+        <img src="assets/Lux-icon.png" alt="Lux" style="width: 110px; height: 110px; border-radius: 18px; border: 2px solid rgba(244,239,249,0.35);"><img src="assets/MissFortune-icon.png" alt="MissFortune" style="width: 110px; height: 110px; border-radius: 18px; border: 2px solid rgba(244,239,249,0.35);"><img src="assets/Ezreal-icon.png" alt="Ezreal" style="width: 110px; height: 110px; border-radius: 18px; border: 2px solid rgba(244,239,249,0.35);">
+        <div style="margin-left: 8px;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; line-height: 0.86; color: #F4EFF9;">EMPATE <span style="color: #E75FB4;">~22</span></div>
+          <div style="font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #9C93B5;">Lux · Miss Fortune · Ezreal</div>
+        </div>
+      </div>
+      <div data-a="up3" style="margin-top: 40px; padding: 22px 30px; border-radius: 16px; background: rgba(224,71,91,0.13); border: 1px solid rgba(224,71,91,0.45); font-size: 28px; font-weight: 500; color: #F4EFF9; line-height: 1.4;">
+        Pero vamos a <strong style="color: #E0475B;">descontar las que ya no puedes conseguir</strong>: bóveda y prestigio.
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Las que ya no puedes comprar" data-screen-label="02 · Bloqueadas" data-speaker-notes="Estas existen pero ya no se pueden conseguir: boveda heredada y prestigio. No dejan de existir, solo dejan de estar a la venta." style="background: #0B0714; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F4EFF9; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 58% at 50% 38%, #E0475B2B 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #E0475B;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #E0475B;">Primero, las descartadas</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #F4EFF9;">Las que ya no<br><span style="color: #E0475B;">puedes comprar</span></h2>
+      <div data-a="img" style="margin-top: 36px; display: flex; flex-direction: column; gap: 22px;">
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #F4EFF9;">Lux</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #E0475B;">5</span>
+            <span style="font-size: 22px; font-weight: 500; color: #9C93B5;">2 bóveda + 3 prestigio</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/Lux_4.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Lux_8.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Lux_16.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Lux_40.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Lux_70.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);">
+        </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #F4EFF9;">Ahri</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #E0475B;">5</span>
+            <span style="font-size: 22px; font-weight: 500; color: #9C93B5;">incluida la de Faker</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/Ahri_5.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ahri_16.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ahri_85.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ahri_86.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ahri_89.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);">
+        </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #F4EFF9;">Miss Fortune</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #E0475B;">8</span>
+            <span style="font-size: 22px; font-weight: 500; color: #9C93B5;">la que más: 4 en bóveda</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/MissFortune_3.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_4.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_5.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_18.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_20.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_32.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_41.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/MissFortune_69.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);">
+        </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #F4EFF9;">Ezreal</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 38px; line-height: 1; color: #E0475B;">6</span>
+            <span style="font-size: 22px; font-weight: 500; color: #9C93B5;">6 en bóveda, récord del top</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/Ezreal_1.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ezreal_2.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ezreal_3.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ezreal_4.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ezreal_6.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);"><img src="assets/loading/Ezreal_8.jpg" alt="" style="width: 108px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12); filter: grayscale(0.85) brightness(0.75);">
+        </div>
+        </div>
+      </div>
+      <div data-a="up3" style="margin-top: 30px; font-size: 26px; font-weight: 500; color: #F4EFF9; line-height: 1.45;">
+        No dejan de existir — <strong style="color: #E0475B;">solo dejan de estar a la venta</strong>.
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El podio" data-screen-label="03 · El podio" data-speaker-notes="Con ese criterio Lux gana sola con 16 comprables. Ahri 15, Miss Fortune 14. Ezreal se queda cuarto con 13." style="background: #0B0714; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F4EFF9; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(115% 58% at 50% 38%, #F5C0422B 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #F5C042;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #F5C042;">Las que sí puedes comprar hoy</span>
+    </div>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 96px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #F4EFF9;"><span style="color: #F5C042;">Lux gana</span>, sola</h2>
+      <div data-a="img" style="margin-top: 36px; display: flex; flex-direction: column; gap: 26px;">
+        
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-size: 34px;">🥇</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 42px; line-height: 1; color: #F4EFF9;">Lux</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #F5C042;">16</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 24px; font-weight: 600; color: #9C93B5;">21 805 RP · ~168 USD</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/Lux_1.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_2.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_3.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_5.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_6.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_7.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_14.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_15.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_18.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_17.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_19.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_29.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_42.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_38.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_61.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Lux_72.jpg" alt="" style="width: 53px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);">
+        </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-size: 34px;">🥈</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 42px; line-height: 1; color: #F4EFF9;">Ahri</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #F5C042;">15</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 24px; font-weight: 600; color: #9C93B5;">19 335 RP · ~149 USD</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/Ahri_1.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_2.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_3.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_4.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_6.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_7.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_14.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_15.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_17.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_27.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_28.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_42.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_66.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_76.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/Ahri_88.jpg" alt="" style="width: 57px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);">
+        </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 10px;">
+          <div style="display: flex; align-items: baseline; gap: 14px;">
+            <span style="font-size: 34px;">🥉</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 42px; line-height: 1; color: #F4EFF9;">Miss Fortune</span>
+            <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 54px; line-height: 1; color: #F5C042;">14</span>
+            <span style="flex: 1;"></span>
+            <span style="font-size: 24px; font-weight: 600; color: #9C93B5;">18 615 RP · ~143 USD</span>
+          </div>
+          
+        <div style="display: flex; gap: 4px; flex-wrap: nowrap;">
+          <img src="assets/loading/MissFortune_1.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_2.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_6.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_7.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_8.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_9.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_15.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_16.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_17.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_21.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_31.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_40.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_50.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);"><img src="assets/loading/MissFortune_60.jpg" alt="" style="width: 61px; aspect-ratio: 308/560; object-fit: cover; border-radius: 7px; border: 1px solid rgba(255,255,255,0.12);">
+        </div>
+        </div>
+      </div>
+      <div data-a="up3" style="margin-top: 30px; font-size: 25px; font-weight: 500; color: #9C93B5; line-height: 1.45;">
+        Ezreal se queda 4º con 13. Y sí: <strong style="color: #F4EFF9;">las que más tienen son mujeres y personajes de los más viejos del juego</strong>.
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El tarjetazo" data-screen-label="04 · El tarjetazo" data-speaker-notes="Las 16 de Lux: 168 dolares, diez dias de salario minimo. Y no suena a tanto porque hay skins como la de Faker de Ahri que valen un dineral: 450 dolares una sola. No lo normalicemos." style="background: #0B0714; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F4EFF9; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden;  background-image: linear-gradient(180deg, rgba(11,7,20,0.5) 0%, rgba(11,7,20,0.96) 70%), url('assets/Ahri_86_splash.jpg'); background-size: cover; background-position: center 18%;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 50% at 50% 55%, #F5C0422B 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; margin-top: auto;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
+      <span style="width: 54px; height: 5px; background: #F5C042;"></span>
+      <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #F5C042;">El tarjetazo</span>
+    </div>
+      <div data-a="up2" style="display: flex; align-items: flex-end; gap: 40px;">
+        <div>
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 118px; line-height: 0.86; color: #F5C042;">~168 <span style="font-size: 62px;">USD</span></div>
+          <div style="font-size: 24px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #9C93B5;">las 16 de Lux · 21 805 RP</div>
+        </div>
+        <div style="padding-bottom: 6px;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 76px; line-height: 0.9; color: #F4EFF9;">10,4</div>
+          <div style="font-size: 22px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #9C93B5;">días de salario mínimo</div>
+        </div>
+      </div>
+      <div data-a="up3" style="margin-top: 44px; padding: 26px 32px; border-radius: 18px; background: rgba(22,16,34,0.88); border: 1px solid rgba(245,192,66,0.4);">
+        <div style="font-size: 24px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #E75FB4;">Y no deberíamos normalizarlo</div>
+        <div style="margin-top: 14px; font-size: 29px; font-weight: 500; color: #F4EFF9; line-height: 1.4;">Una sola skin de Ahri — la del Hall of Legends de Faker — costó <strong style="color: #F5C042; white-space: nowrap;">59&nbsp;260 RP ≈ 450 USD</strong>: casi el triple que TODAS las de Lux juntas.</div>
+        <div style="margin-top: 12px; font-size: 24px; font-weight: 500; color: #9C93B5;">27,9 días de salario mínimo. Casi un mes. Pero eso es tema para otro video…</div>
+      </div>
+    </div>
+  </section>
+</deck-stage>
+<script>
+(function () {
+  var presenting = false;
+  var btn = document.createElement('button');
+  btn.id = 'modo-presentacion';
+  btn.type = 'button';
+  function render() {
+    btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
+    if (presenting) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on');
+  }
+  function setPresenting(on) {
+    if (on === presenting) return;
+    presenting = on;
+    window.postMessage({ __omelette_presenting: on }, '*');
+    if (on) {
+      if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+    } else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    render();
+  }
+  btn.addEventListener('click', function () { setPresenting(!presenting); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { setPresenting(!presenting); e.preventDefault(); }
+    else if (e.key === 'Escape' && presenting && !document.fullscreenElement) setPresenting(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
+  render();
+  document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>
