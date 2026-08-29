@@ -3,10 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Presentaciones con IA</title>
-<meta name="description" content="Decks web interactivos: se navegan con teclado o táctil, tienen modo presentación, se exportan a PDF y se comparten con un simple enlace.">
+<title>El programa · Presentaciones con IA</title>
+<meta name="description" content="El programa: presentaciones web hechas con IA. Decks interactivos que se navegan con teclado o táctil, con modo presentación, exportación a PDF y videos narrados.">
 <meta property="og:type" content="website">
-<meta property="og:title" content="Presentaciones hechas con IA">
+<meta property="og:title" content="El programa · Presentaciones hechas con IA">
 <meta property="og:description" content="Decks web interactivos: se navegan con teclado o táctil, tienen modo presentación, se exportan a PDF y se comparten con un simple enlace.">
 <meta property="og:url" content="https://presentations-three-phi.vercel.app/">
 <meta property="og:image" content="https://presentations-three-phi.vercel.app/og.png">
@@ -15,342 +15,294 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,400;0,500;0,600;0,700;0,800;1,700;1,800&family=Bebas+Neue&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
+  /* ── La cartelera · línea de diseño en docs/linea-diseno-galeria.md ── */
+  :root {
+    --tinta: #16130E;
+    --papel: #EDE8DD;
+    --humo: #8F887A;
+    --linea: #2C2822;
+    --lampara: #E8B54D;
+    --deck-acento: #E8B54D;      /* lo pisa el deck activo */
+    --deck-glow: 232, 181, 77;
+  }
   * { box-sizing: border-box; }
   html, body { margin: 0; padding: 0; }
   body {
-    background: #0D0E12;
-    color: #E7E9EC;
-    font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif;
+    background: var(--tinta);
+    color: var(--papel);
+    font-family: 'Archivo', ui-sans-serif, system-ui, sans-serif;
     min-height: 100vh;
-    background-image: radial-gradient(90% 40% at 50% 0%, rgba(70, 90, 255, 0.10) 0%, rgba(0,0,0,0) 60%);
   }
-  .wrap { max-width: 1180px; margin: 0 auto; padding: 72px 28px 60px; }
+  .mono { font-family: 'Spline Sans Mono', ui-monospace, monospace; font-variant-numeric: tabular-nums; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--lampara); outline-offset: 3px; border-radius: 2px; }
 
-  header.hero { text-align: center; margin-bottom: 64px; }
-  .hero .eyebrow {
-    display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: 3px;
-    text-transform: uppercase; color: #9BA3AF;
-    border: 1px solid rgba(255,255,255,0.16); border-radius: 999px; padding: 8px 18px;
+  .escenario { display: grid; grid-template-columns: minmax(0, 1.18fr) minmax(0, 1fr); min-height: 100vh; }
+
+  /* ── Pantalla de proyección ─────────────────────────────────────── */
+  .pantalla {
+    position: relative; overflow: hidden; background: #0B0906;
+    display: flex; flex-direction: column; justify-content: flex-end;
+    padding: 46px 56px 40px; min-height: 100vh;
   }
-  .hero h1 {
-    margin: 26px 0 0; font-size: clamp(40px, 6vw, 68px); font-weight: 800;
-    letter-spacing: -1.5px; line-height: 1.02;
-    background: linear-gradient(#FFFFFF, rgba(255,255,255,0.55));
-    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;
+  .pantalla .fondo {
+    position: absolute; inset: 0; background-size: cover; background-position: center 22%;
+    opacity: 0; transition: opacity 600ms ease; filter: saturate(0.96);
   }
-  .hero p { margin: 18px auto 0; max-width: 640px; font-size: 18px; font-weight: 500; color: #9BA3AF; line-height: 1.55; }
-
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
-
-  .card {
-    display: flex; flex-direction: column; text-decoration: none; color: inherit;
-    background: linear-gradient(165deg, #16181E, #0B0C10);
-    border: 1px solid rgba(255,255,255,0.12); border-radius: 22px; overflow: hidden;
-    transition: transform 180ms ease, border-color 180ms ease, box-shadow 180ms ease;
+  .pantalla .fondo.activa { opacity: 1; }
+  .pantalla .velo {
+    position: absolute; inset: 0; pointer-events: none;
+    background: linear-gradient(180deg, rgba(11, 9, 6, 0.30) 0%, rgba(11, 9, 6, 0.66) 52%, rgba(11, 9, 6, 0.97) 100%);
   }
-  .card:hover { transform: translateY(-6px); border-color: rgba(255,255,255,0.28); box-shadow: 0 24px 50px rgba(0,0,0,0.45); }
+  .pantalla .brillo {
+    position: absolute; inset: 0; pointer-events: none; transition: background 500ms ease;
+    background: radial-gradient(115% 75% at 45% 32%, rgba(var(--deck-glow), 0.22) 0%, rgba(0, 0, 0, 0) 65%);
+  }
+  .pantalla .contenido { position: relative; z-index: 2; }
 
-  .cover { position: relative; aspect-ratio: 16 / 10; overflow: hidden; display: flex; align-items: center; justify-content: center; }
+  .senal { position: absolute; top: 38px; left: 56px; z-index: 3; display: flex; align-items: center; gap: 12px; }
+  .senal .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--lampara); box-shadow: 0 0 12px rgba(232, 181, 77, 0.8); }
+  .senal .txt { font-size: 11px; letter-spacing: 2.5px; color: var(--lampara); }
 
-  /* Portada DYMMSA: blanca, logo + barra roja */
-  .cover--dymmsa { background: #FFFFFF; flex-direction: column; gap: 14px; }
-  .cover--dymmsa img { height: 42%; width: auto; }
-  .cover--dymmsa .bar { width: 54px; height: 4px; background: #C31722; }
-  .cover--dymmsa .t { font-size: 21px; font-weight: 800; color: #16181D; letter-spacing: -0.4px; }
-  .cover--dymmsa .s { font-size: 12.5px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #9AA0A6; }
+  .navegacion { position: absolute; top: 32px; right: 56px; z-index: 3; display: flex; align-items: center; gap: 16px; }
+  .navegacion .contador { font-size: 12px; color: var(--humo); }
+  .navegacion button {
+    width: 32px; height: 32px; border-radius: 50%; cursor: pointer; font-size: 15px; line-height: 1;
+    background: transparent; border: 1px solid #3A332A; color: var(--humo);
+    transition: border-color 150ms ease, color 150ms ease;
+  }
+  .navegacion button:hover { border-color: rgba(232, 181, 77, 0.7); color: var(--lampara); }
 
-  /* Portada SoloQ: negra con glow verde */
-  .cover--soloq { background: #0B0B0B; background-image: radial-gradient(120% 85% at 50% 0%, rgba(83,252,24,0.25) 0%, rgba(0,0,0,0) 60%); flex-direction: column; gap: 10px; }
-  .cover--soloq img { height: 38%; width: auto; filter: drop-shadow(0 0 24px rgba(83,252,24,0.45)); }
-  .cover--soloq .t { font-size: 21px; font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -0.3px; background: linear-gradient(#FFFFFF, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .cover--soloq .s { font-size: 15px; font-weight: 800; font-style: italic; color: #53FC18; text-shadow: 0 0 18px rgba(83,252,24,0.5); }
+  .chip-serie {
+    display: inline-flex; align-self: flex-start; align-items: center; border-radius: 999px;
+    padding: 7px 16px; margin-bottom: 20px; border: 1px solid var(--deck-acento);
+    font-size: 10px; letter-spacing: 2px; color: var(--deck-acento);
+    transition: border-color 400ms ease, color 400ms ease;
+  }
+  .barra-acento { width: 48px; height: 5px; background: var(--deck-acento); margin-bottom: 18px; transition: background 400ms ease; }
+  .pantalla h1 {
+    margin: 0; font-family: 'Bricolage Grotesque', 'Arial Black', sans-serif; font-weight: 800; font-style: italic;
+    font-size: clamp(44px, 6.2vw, 92px); line-height: 0.92; text-transform: uppercase; text-wrap: balance;
+    color: #F7F2E9; text-shadow: 0 0 70px rgba(var(--deck-glow), 0.35);
+  }
+  .pantalla .descripcion { margin: 18px 0 0; font-size: 17px; font-weight: 500; color: var(--papel); opacity: 0.85; max-width: 540px; line-height: 1.5; }
+  .acciones { margin-top: 28px; display: flex; align-items: center; flex-wrap: wrap; gap: 18px; }
+  .abrir {
+    display: inline-block; font-family: 'Spline Sans Mono', monospace; font-size: 12px; letter-spacing: 1px;
+    color: var(--tinta); background: var(--lampara); border-radius: 999px; padding: 13px 26px; font-weight: 500;
+    transition: transform 150ms ease, box-shadow 150ms ease;
+  }
+  .abrir:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232, 181, 77, 0.25); }
+  .acciones .meta { font-size: 12px; color: var(--humo); }
 
-  /* Portada Low Elo: azul hextech con glow dorado */
-  .cover--lowelo { background: #010A13; background-image: radial-gradient(120% 85% at 50% 0%, rgba(200,155,60,0.3) 0%, rgba(0,0,0,0) 60%); flex-direction: column; gap: 10px; }
-  .cover--lowelo img { height: 44%; width: auto; filter: drop-shadow(0 0 24px rgba(200,155,60,0.45)); }
-  .cover--lowelo .t { font-size: 21px; font-weight: 800; font-style: italic; text-transform: uppercase; letter-spacing: -0.3px; background: linear-gradient(#FFFFFF, rgba(255,255,255,0.55)); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
-  .cover--lowelo .s { font-size: 15px; font-weight: 800; font-style: italic; color: #C89B3C; text-shadow: 0 0 18px rgba(200,155,60,0.5); }
+  .progreso { margin-top: 34px; display: flex; gap: 7px; }
+  .progreso span { width: 22px; height: 3px; background: #3A332A; transition: width 350ms ease, background 350ms ease; }
+  .progreso span.activa { width: 44px; background: var(--deck-acento); }
 
+  /* ── El índice ──────────────────────────────────────────────────── */
+  .indice { display: flex; flex-direction: column; padding: 34px 44px 24px; min-height: 100vh; }
+  .cabecera { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; padding-bottom: 14px; border-bottom: 1px solid var(--linea); }
+  .cabecera .marca { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; }
+  .cabecera h2 { margin: 0; font-family: 'Bricolage Grotesque', sans-serif; font-weight: 800; font-size: 26px; color: var(--papel); }
+  .cabecera .sub { font-size: 10px; letter-spacing: 1.5px; color: var(--humo); }
+  .cabecera .cuenta { font-size: 11px; color: var(--humo); white-space: nowrap; }
 
-  /* Portada Estancia: teal cálido con acento coral */
-  .cover--estancia { background: #5B2168; background-image: radial-gradient(90% 80% at 80% 15%, rgba(233,75,133,0.35) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 12px; }
-  .cover--estancia .mark { width: 72px; height: 72px; border-radius: 20px; background: #FFFFFF url('estancia/assets/logo-casita-feliz.png') center/78% no-repeat; box-shadow: 0 4px 14px rgba(91,33,104,0.3); }
-  .cover--estancia .t { font-size: 21px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px; }
-  .cover--estancia .s { font-size: 13px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #FFC510; }
+  .filas { flex: 1; display: flex; flex-direction: column; }
+  .fila {
+    display: flex; flex-direction: column; gap: 3px; padding: 10px 8px;
+    border-bottom: 1px solid var(--linea); border-radius: 3px; cursor: pointer;
+    transition: background 250ms ease;
+  }
+  .fila .linea1 { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+  .fila .titulo { font-family: 'Bricolage Grotesque', sans-serif; font-weight: 600; font-size: 19px; color: var(--papel); transition: color 250ms ease; }
+  .fila .extra { font-size: 10px; color: var(--lampara); white-space: nowrap; }
+  .fila .datos { font-size: 10px; letter-spacing: 1px; color: var(--humo); text-transform: uppercase; }
+  .fila .en-pantalla { display: none; font-size: 10px; white-space: nowrap; }
+  .fila.activa { background: rgba(var(--deck-glow), 0.09); border-bottom-color: var(--deck-acento); }
+  .fila.activa .titulo { color: var(--deck-acento); font-weight: 800; }
+  .fila.activa .datos { color: var(--papel); }
+  .fila.activa .en-pantalla { display: inline; color: var(--deck-acento); }
+  .fila:hover:not(.activa) { background: rgba(237, 232, 221, 0.04); }
 
+  .pie { padding-top: 12px; display: flex; align-items: baseline; justify-content: space-between; gap: 14px; border-top: 1px solid var(--linea); margin-top: 8px; }
+  .pie .invita { font-size: 12.5px; color: var(--humo); }
+  .pie .cta { font-size: 11px; color: var(--lampara); white-space: nowrap; }
+  .pie .cta:hover { color: var(--papel); }
 
-  /* Portada Ornn: forja, hierro y lava */
-  .cover--ornn { background: #0B0605; background-image: radial-gradient(120% 85% at 50% 30%, rgba(255,107,26,0.32) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 8px; }
-  .cover--ornn img { height: 46%; width: auto; border-radius: 8px; filter: drop-shadow(0 0 24px rgba(255,107,26,0.4)); }
-  .cover--ornn .t { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; letter-spacing: 1.5px; color: #F5E9DE; }
-  .cover--ornn .s { font-size: 13px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #FF6B1A; }
-
-
-  /* Portada Urgot: acero de Zaun con verde acido */
-  .cover--urgot { background: #070A09; background-image: radial-gradient(120% 85% at 50% 30%, rgba(150,227,46,0.28) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 8px; }
-  .cover--urgot img { height: 46%; width: auto; border-radius: 8px; filter: drop-shadow(0 0 24px rgba(150,227,46,0.4)); }
-  .cover--urgot .t { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; letter-spacing: 1.5px; color: #EAF1E6; }
-  .cover--urgot .s { font-size: 13px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #96E32E; }
-
-
-  /* Portada Talon: noche azul acero con filo cian */
-  .cover--talon { background: #07080F; background-image: radial-gradient(120% 85% at 50% 30%, rgba(111,199,240,0.26) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 8px; }
-  .cover--talon img { height: 46%; width: auto; border-radius: 8px; filter: drop-shadow(0 0 24px rgba(111,199,240,0.4)); }
-  .cover--talon .t { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; letter-spacing: 1.5px; color: #E9EEF5; }
-  .cover--talon .s { font-size: 13px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #6FC7F0; }
-
-  /* Portada Semana 34: azul Jira sobre blanco */
-  .cover--semana34 { background: #0052CC; background-image: radial-gradient(90% 80% at 82% 12%, rgba(38,132,255,0.55) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 12px; }
-  .cover--semana34 .mark { width: 64px; height: 64px; border-radius: 16px; background: #FFFFFF; color: #0052CC; display: flex; align-items: center; justify-content: center; font-size: 25px; font-weight: 800; }
-  .cover--semana34 .t { font-size: 21px; font-weight: 700; color: #FFFFFF; letter-spacing: -0.3px; }
-  .cover--semana34 .s { font-size: 13px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: #DEEBFF; }
-
-
-  /* Portada Skins: violeta tienda con oro */
-  .cover--skins { background: #0B0714; background-image: radial-gradient(120% 85% at 50% 30%, rgba(231,95,180,0.28) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 8px; }
-  .cover--skins .icons { display: flex; gap: 8px; }
-  .cover--skins .icons img { width: 54px; height: 54px; border-radius: 12px; border: 1px solid rgba(244,239,249,0.35); filter: drop-shadow(0 0 16px rgba(231,95,180,0.35)); }
-  .cover--skins .t { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; letter-spacing: 1.5px; color: #F4EFF9; }
-  .cover--skins .s { font-size: 13px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F5C042; }
-
-
-  /* Portada Caras: violeta con oro y rojo del tarjetazo */
-  .cover--caras { background: #0B0714; background-image: radial-gradient(120% 85% at 50% 30%, rgba(245,192,66,0.26) 0%, rgba(0,0,0,0) 62%); flex-direction: column; gap: 6px; }
-  .cover--caras .n { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 64px; line-height: 0.9; color: #E0475B; text-shadow: 0 0 24px rgba(224,71,91,0.5); }
-  .cover--caras .t { font-family: 'Bebas Neue', Impact, sans-serif; font-size: 30px; letter-spacing: 1.5px; color: #F4EFF9; }
-  .cover--caras .s { font-size: 13px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #F5C042; }
-
-  .cover .badge {
-    position: absolute; top: 14px; right: 14px; font-size: 11.5px; font-weight: 700;
-    letter-spacing: 1.5px; text-transform: uppercase; border-radius: 999px; padding: 6px 13px;
+  /* ── Entrada ────────────────────────────────────────────────────── */
+  @media (prefers-reduced-motion: no-preference) {
+    .fila { opacity: 0; transform: translateY(10px); animation: llega 500ms cubic-bezier(0.22, 0.61, 0.36, 1) forwards; }
+    .pantalla .contenido { animation: llega 700ms cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    @keyframes llega { to { opacity: 1; transform: none; } }
   }
 
-  .body { padding: 22px 24px 24px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
-  .body h2 { margin: 0; font-size: 23px; font-weight: 750; letter-spacing: -0.3px; color: #FFFFFF; }
-  .body p { margin: 0; font-size: 15.5px; font-weight: 500; color: #9BA3AF; line-height: 1.5; flex: 1; }
-  .meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
-  .meta span {
-    font-size: 12px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase;
-    color: #B9C0CA; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1);
-    border-radius: 999px; padding: 5px 12px;
+  /* ── Móvil ──────────────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .escenario { grid-template-columns: 1fr; min-height: 0; }
+    .pantalla { min-height: 0; height: 480px; margin: 12px; border-radius: 14px; padding: 20px; }
+    .senal { top: 16px; left: 20px; }
+    .navegacion { top: 12px; right: 14px; }
+    .pantalla h1 { font-size: clamp(36px, 10vw, 52px); }
+    .pantalla .descripcion { font-size: 14px; }
+    .indice { min-height: 0; padding: 18px 20px 20px; }
+    .fila .titulo { font-size: 16px; }
   }
-  .cta { margin-top: 16px; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 700; color: #FFFFFF; }
-  .cta .arrow { transition: transform 160ms ease; }
-  .card:hover .cta .arrow { transform: translateX(5px); }
-
-
-  /* Card con dos accesos (deck + video): el contenedor es div, no <a>,
-     para no anidar enlaces. */
-  .card-main { display: flex; flex-direction: column; text-decoration: none; color: inherit; flex: 1; }
-  .ctas { display: flex; border-top: 1px solid rgba(255,255,255,0.1); }
-  .ctas a {
-    flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px;
-    padding: 15px 10px; font-size: 14.5px; font-weight: 700; color: #FFFFFF; text-decoration: none;
-    transition: background 150ms ease;
-  }
-  .ctas a:hover { background: rgba(255,255,255,0.07); }
-  .ctas a + a { border-left: 1px solid rgba(255,255,255,0.1); }
-
-  footer { margin-top: 72px; text-align: center; font-size: 14px; font-weight: 500; color: #6B7280; line-height: 1.7; }
-  footer strong { color: #9BA3AF; }
 </style>
 </head>
 <body>
-<div class="wrap">
 
-  <header class="hero">
-    <span class="eyebrow">Portafolio</span>
-    <h1>Presentaciones<br>hechas con IA</h1>
-    <p>Decks web interactivos: se navegan con teclado o táctil, tienen modo presentación a pantalla completa, se exportan a PDF y se comparten con un simple enlace. Cada proyecto vive en su propia ruta.</p>
-  </header>
+<div class="escenario">
 
-  <main class="grid">
+  <section class="pantalla" aria-label="En cartelera">
+    <div class="fondo" id="fondo-a"></div>
+    <div class="fondo" id="fondo-b"></div>
+    <div class="velo"></div>
+    <div class="brillo"></div>
 
-    <!-- ── Tabletas Rugged · /tabletas/ ─────────────────────────────── -->
-    <a class="card" href="tabletas/">
-      <div class="cover cover--dymmsa">
-        <img src="tabletas/assets/logo-dymmsa.png" alt="DYMMSA">
-        <span class="bar"></span>
-        <span class="t">Tabletas Rugged Empresariales</span>
-        <span class="s">Comparativo técnico y de costos</span>
-        <span class="badge" style="background: #C31722; color: #FFFFFF;">Horizontal 16:9</span>
-      </div>
-      <div class="body">
-        <h2>Comparativo de Tabletas Rugged</h2>
-        <p>14 modelos en tres rangos de precio: ficha técnica por equipo, tablas comparativas con puntuaciones para público no técnico y recomendación final por rango.</p>
-        <div class="meta"><span>22 diapositivas</span><span>B2B · Producto</span><span>DYMMSA</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!-- ── SoloQ Challenge · /soloq/ ────────────────────────────────── -->
-    <a class="card" href="soloq/">
-      <div class="cover cover--soloq">
-        <img src="soloq/assets/soloq-logo.webp" alt="SoloQ Challenge">
-        <span class="t">SoloQ Challenge 2026</span>
-        <span class="s">125 000 € en premios</span>
-        <span class="badge" style="background: #E9FF1F; color: #000000;">Vertical 9:16</span>
-      </div>
-      <div class="body">
-        <h2>SoloQ Challenge · Premios vs Salario Mínimo</h2>
-        <p>El ranking completo de ganadores con sus fotos y premios, y cuántos días de salario mínimo tomaría ganar cada cifra en México, Chile, Colombia y Argentina.</p>
-        <div class="meta"><span>28 diapositivas</span><span>Esports · Data</span><span>Vertical</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!-- ── Low Elo vs High Elo · /lowelo/ ───────────────────────────── -->
-    <a class="card" href="lowelo/">
-      <div class="cover cover--lowelo">
-        <img src="lowelo/assets/emblems/master.png" alt="Master">
-        <span class="t">Low Elo vs High Elo</span>
-        <span class="s">El corte por LP, no por gente</span>
-        <span class="badge" style="background: #C89B3C; color: #010A13;">Vertical 9:16</span>
-      </div>
-      <div class="body">
-        <h2>Low Elo vs High Elo · El corte por LP</h2>
-        <p>La distribución de rangos como campana y como edificio, el camino Hierro→Challenger a escala real por servidor, y por qué llegar a Master es apenas la mitad del viaje.</p>
-        <div class="meta"><span>7 diapositivas</span><span>Esports · Data</span><span>Vertical</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!-- ── Propuesta Estancia Infantil · /estancia/ ─────────────────── -->
-    <div class="card">
-      <a class="card-main" href="estancia/">
-        <div class="cover cover--estancia">
-          <span class="mark"></span>
-          <span class="t">La Casita Feliz · Web y administración</span>
-          <span class="s">Propuesta por fases</span>
-          <span class="badge" style="background: #E94B85; color: #FFFFFF;">Horizontal 16:9</span>
-        </div>
-        <div class="body">
-          <h2>Propuesta · Estancia Infantil</h2>
-          <p>Propuesta de primer contacto en cuatro etapas: web con blog y posicionamiento, administración y cobranza centralizada con asistente de IA, y control de entrada y salida.</p>
-          <div class="meta"><span>8 diapositivas</span><span>Propuesta · B2B</span><span>Video narrado con IA</span></div>
-        </div>
-      </a>
-      <div class="ctas">
-        <a href="estancia/">Ver presentación <span class="arrow">→</span></a>
-        <a href="estancia/video.mp4">▶ Ver video · 1:21</a>
-      </div>
+    <div class="senal"><span class="punto"></span><span class="txt mono">EN CARTELERA</span></div>
+    <div class="navegacion">
+      <span class="contador mono" id="contador">01 / 10</span>
+      <button type="button" id="anterior" aria-label="Anterior">‹</button>
+      <button type="button" id="siguiente" aria-label="Siguiente">›</button>
     </div>
 
-    <!-- ── Ornn cumple 9 años · /ornn/ ──────────────────────────────── -->
-    <a class="card" href="ornn/">
-      <div class="cover cover--ornn">
-        <img src="ornn/assets/Ornn_0.jpg" alt="Ornn">
-        <span class="t">ORNN · 9 AÑOS</span>
-        <span class="s">Aniversario del herrero</span>
-        <span class="badge" style="background: #FF6B1A; color: #0B0605;">Vertical 9:16</span>
+    <div class="contenido">
+      <span class="chip-serie mono" id="chip-serie">SERIE</span>
+      <div class="barra-acento"></div>
+      <h1 id="titulo-pantalla">—</h1>
+      <p class="descripcion" id="descripcion-pantalla"></p>
+      <div class="acciones">
+        <a class="abrir" id="abrir-pantalla" href="#">ABRIR PRESENTACIÓN →</a>
+        <span class="meta mono" id="meta-pantalla"></span>
       </div>
-      <div class="body">
-        <h2>Ornn cumple 9 años</h2>
-        <p>El one trick coreano con 7 millones de puntos, la sequía de skins, el malentendido con Anivia y la skin que nació como burla en Reddit. Diseñada para usarse como apoyo visual en video vertical.</p>
-        <div class="meta"><span>8 diapositivas</span><span>Gaming · Data</span><span>TikTok</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
+      <div class="progreso" id="progreso" aria-hidden="true"></div>
+    </div>
+  </section>
 
-    <!-- ── Urgot cumple 16 años · /urgot/ ───────────────────────────── -->
-    <a class="card" href="urgot/">
-      <div class="cover cover--urgot">
-        <img src="urgot/assets/urgot-icon.png" alt="Urgot">
-        <span class="t">URGOT · 16 AÑOS</span>
-        <span class="s">Cumplelolero</span>
-        <span class="badge" style="background: #96E32E; color: #070A09;">Vertical 9:16</span>
+  <section class="indice" aria-label="El programa">
+    <header class="cabecera">
+      <div class="marca">
+        <h2>El programa</h2>
+        <span class="sub mono">PRESENTACIONES HECHAS CON IA</span>
       </div>
-      <div class="body">
-        <h2>Urgot cumple 16 años</h2>
-        <p>El OTP con 13.7 millones de puntos atorado en Plata, el rework que lo salvó, la sequía de 6 años y medio sin skins, y el verdugo que acabó del lado del condenado.</p>
-        <div class="meta"><span>5 diapositivas</span><span>Gaming · Data</span><span>TikTok</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
+      <span class="cuenta mono">10 · 2 SERIES · 1 VIDEO</span>
+    </header>
 
-    <!-- ── Talon cumple 15 años · /talon/ ───────────────────────────── -->
-    <a class="card" href="talon/">
-      <div class="cover cover--talon">
-        <img src="talon/assets/talon-icon.png" alt="Talon">
-        <span class="t">TALON · 15 AÑOS</span>
-        <span class="s">Cumplelolero</span>
-        <span class="badge" style="background: #6FC7F0; color: #07080F;">Vertical 9:16</span>
-      </div>
-      <div class="body">
-        <h2>Talon cumple 15 años</h2>
-        <p>El OTP Diamante con 12.4 millones de puntos, el top 15 mundial lleno de latinos, el rework que le dio el salto de paredes y la sequía de 5 años que terminó justo con él.</p>
-        <div class="meta"><span>7 diapositivas</span><span>Gaming · Data</span><span>TikTok</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
+    <div class="filas" id="filas"></div>
 
-    <!-- ── Semana 34 · Reporte semanal Jira · /semana34/ ────────────── -->
-    <a class="card" href="semana34/">
-      <div class="cover cover--semana34">
-        <span class="mark">S34</span>
-        <span class="t">Semana 34 · Reporte semanal</span>
-        <span class="s">Jira · UrVenue Web Services</span>
-        <span class="badge" style="background: #FFFFFF; color: #0052CC;">Horizontal 16:9</span>
-      </div>
-      <div class="body">
-        <h2>Reporte semanal · Semana 34</h2>
-        <p>19 h 45 m en 15 issues del 18 al 24 de agosto de 2026, directo de los worklogs de Jira: la localización de Zouk Tokio al japonés, siete issues finalizadas y ocho clientes atendidos.</p>
-        <div class="meta"><span>8 diapositivas</span><span>Reporte · Trabajo</span><span>Jira</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!-- ── Los campeones con más skins · /skins/ ────────────────────── -->
-    <a class="card" href="skins/">
-      <div class="cover cover--skins">
-        <div class="icons">
-          <img src="skins/assets/Lux-icon.png" alt="Lux">
-          <img src="skins/assets/Ahri-icon.png" alt="Ahri">
-          <img src="skins/assets/MissFortune-icon.png" alt="Miss Fortune">
-        </div>
-        <span class="t">¿QUIÉN TIENE MÁS SKINS?</span>
-        <span class="s">Datos curiosos</span>
-        <span class="badge" style="background: #F5C042; color: #0B0714;">Vertical 9:16</span>
-      </div>
-      <div class="body">
-        <h2>Los campeones con más skins</h2>
-        <p>El triple empate que se rompe al descontar bóveda y prestigio, los collages completos de Lux, Ahri y Miss Fortune, y el tarjetazo: una sola skin de Ahri que cuesta casi el triple que las 16 de Lux juntas.</p>
-        <div class="meta"><span>4 diapositivas</span><span>Gaming · Data</span><span>TikTok</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!-- ── Las skins más caras · /caras/ ────────────────────────────── -->
-    <a class="card" href="caras/">
-      <div class="cover cover--caras">
-        <span class="n">450 USD</span>
-        <span class="t">LAS SKINS MÁS CARAS</span>
-        <span class="s">Datos curiosos</span>
-        <span class="badge" style="background: #E0475B; color: #F4EFF9;">Vertical 9:16</span>
-      </div>
-      <div class="body">
-        <h2>Las skins más caras del LoL</h2>
-        <p>De 25 a 450 dólares en un solo año: la escalera de precios, las cinco exaltadas que se rifan en el Sanctum, las trascendentes de Faker, Uzi y Caps, y el contraste con Lux entera.</p>
-        <div class="meta"><span>5 diapositivas</span><span>Gaming · Data</span><span>TikTok</span></div>
-        <div class="cta">Ver presentación <span class="arrow">→</span></div>
-      </div>
-    </a>
-
-    <!--
-      Para agregar una presentación nueva:
-      1. Crea la carpeta /nombre con su index.html y assets propios (rutas relativas).
-      2. Copia un bloque <a class="card"> y ajusta cover, textos y href="nombre/".
-    -->
-
-  </main>
-
-  <footer>
-    Presentaciones web generadas con IA · diseño, datos y desarrollo asistidos por Claude.<br>
-    <strong>¿Quieres una para tu marca?</strong> Cada deck se entrega como enlace listo para compartir.
-  </footer>
+    <footer class="pie">
+      <span class="invita">¿Quieres una para tu marca? Cada deck se entrega como enlace listo para compartir.</span>
+      <a class="cta mono" href="https://github.com/AxlGuillen/presentations" rel="noopener">VER EL MAKING-OF →</a>
+    </footer>
+  </section>
 
 </div>
+
+<script>
+// ── El programa: datos reales de cada deck ─────────────────────────
+// acento/glow: la paleta del deck tiñe la página cuando está en pantalla.
+const DECKS = [
+  { ruta: 'tabletas/', titulo: 'Comparativo Tabletas Rugged', serie: 'COMERCIAL · DYMMSA', datos: 'COMERCIAL · 16:9 · 22 DIAP · JUL 26', meta: '16:9 · 22 DIAPOSITIVAS · JUL 2026',
+    desc: '14 tabletas rugged en tres rangos de precio, con puntuaciones para público no técnico y recomendación final.', acento: '#E05A64', glow: '195, 23, 34' },
+  { ruta: 'estancia/', titulo: 'Propuesta · La Casita Feliz', serie: 'COMERCIAL · CAI', datos: 'COMERCIAL · 16:9 · 8 DIAP · AGO 26', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
+    desc: 'Web, administración y cobranza para una estancia infantil — propuesta de desarrollo en cuatro etapas.', acento: '#E94B85', glow: '233, 75, 133', video: '▸ VIDEO 1:21' },
+  { ruta: 'soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
+    desc: '125 000 € en premios traducidos a días de salario mínimo en México, Chile, Colombia y Argentina.', acento: '#53FC18', glow: '83, 252, 24' },
+  { ruta: 'lowelo/', titulo: 'Low Elo vs High Elo · El corte por LP', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    desc: 'La distribución de rangos como campana y como edificio, y el camino Hierro→Challenger a escala real.', acento: '#C89B3C', glow: '200, 155, 60' },
+  { ruta: 'ornn/', titulo: 'Ornn cumple 9 años', serie: 'CUMPLELOLERO · 01', datos: 'CUMPLELOLERO 01 · 9:16 · 8 DIAP · AGO 26', meta: '9:16 · 8 DIAPOSITIVAS · AGO 2026',
+    desc: 'El one trick de 7 millones de puntos, la sequía de skins y la forja de Hefesto — apoyo visual para video vertical.', acento: '#FF6B1A', glow: '255, 107, 26' },
+  { ruta: 'urgot/', titulo: 'Urgot cumple 16 años', serie: 'CUMPLELOLERO · 02', datos: 'CUMPLELOLERO 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    desc: 'El rework que lo salvó, la sequía de seis años y medio sin skins y el verdugo que acabó del lado del condenado.', acento: '#96E32E', glow: '150, 227, 46' },
+  { ruta: 'talon/', titulo: 'Talon cumple 15 años', serie: 'CUMPLELOLERO · 03', datos: 'CUMPLELOLERO 03 · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    desc: 'El top mundial lleno de latinos y el salto de paredes que lo define desde 2017.', acento: '#6FC7F0', glow: '111, 199, 240' },
+  { ruta: 'semana34/', titulo: 'Semana 34 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 8 DIAP · GSAP', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
+    desc: 'El reporte semanal del equipo con animación GSAP renderizable cuadro a cuadro.', acento: '#4C9AFF', glow: '76, 154, 255' },
+  { ruta: 'skins/', titulo: 'Los campeones con más skins', serie: 'DATOS CURIOSOS · 01', datos: 'DATOS CURIOSOS 01 · 9:16 · 4 DIAP · AGO 26', meta: '9:16 · 4 DIAPOSITIVAS · AGO 2026',
+    desc: 'El triple empate que se rompe al descontar bóveda y prestigio, con los collages completos de Lux, Ahri y MF.', acento: '#E75FB4', glow: '231, 95, 180' },
+  { ruta: 'caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    desc: 'De 25 a 450 dólares en un solo año: exaltadas, trascendentes y el tarjetazo del Hall of Legends.', acento: '#F5C042', glow: '245, 192, 66' },
+];
+
+const portada = d => 'portadas/' + d.ruta.replace('/', '') + '.jpg';
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+// precarga suave de portadas
+DECKS.forEach(d => { const im = new Image(); im.src = portada(d); });
+
+// ── construir el índice ────────────────────────────────────────────
+const filas = document.getElementById('filas');
+DECKS.forEach((d, i) => {
+  const a = document.createElement('a');
+  a.className = 'fila';
+  a.href = d.ruta;
+  a.style.animationDelay = (i * 45) + 'ms';
+  a.innerHTML =
+    '<span class="linea1"><span class="titulo">' + d.titulo + '</span>' +
+    (d.video ? '<span class="extra mono">' + d.video + '</span>' : '<span class="en-pantalla mono">EN PANTALLA ◄</span>') +
+    '</span>' +
+    '<span class="datos mono">' + d.datos + '</span>';
+  a.addEventListener('mouseenter', () => proyectar(i, true));
+  a.addEventListener('focus', () => proyectar(i, true));
+  filas.appendChild(a);
+});
+
+const progreso = document.getElementById('progreso');
+DECKS.forEach(() => progreso.appendChild(document.createElement('span')));
+
+// ── la proyección ──────────────────────────────────────────────────
+const fondos = [document.getElementById('fondo-a'), document.getElementById('fondo-b')];
+let fondoVisible = 0;
+let actual = -1;
+let temporizador = null;
+
+function proyectar(i, manual) {
+  if (i === actual) { if (manual) reiniciarRotacion(); return; }
+  actual = i;
+  const d = DECKS[i];
+
+  // crossfade de portada entre dos capas
+  const entra = fondos[1 - fondoVisible], sale = fondos[fondoVisible];
+  entra.style.backgroundImage = 'url("' + portada(d) + '")';
+  entra.classList.add('activa');
+  sale.classList.remove('activa');
+  fondoVisible = 1 - fondoVisible;
+
+  // tinte de página
+  document.documentElement.style.setProperty('--deck-acento', d.acento);
+  document.documentElement.style.setProperty('--deck-glow', d.glow);
+
+  document.getElementById('chip-serie').textContent = 'SERIE ' + d.serie;
+  document.getElementById('titulo-pantalla').textContent = d.titulo;
+  document.getElementById('descripcion-pantalla').textContent = d.desc;
+  document.getElementById('abrir-pantalla').href = d.ruta;
+  document.getElementById('meta-pantalla').textContent = d.meta;
+  document.getElementById('contador').textContent = String(i + 1).padStart(2, '0') + ' / ' + DECKS.length;
+
+  [...progreso.children].forEach((s, j) => s.classList.toggle('activa', j === i));
+  [...filas.children].forEach((f, j) => f.classList.toggle('activa', j === i));
+
+  if (manual) reiniciarRotacion();
+}
+
+function siguiente(paso) { proyectar((actual + paso + DECKS.length) % DECKS.length, false); }
+document.getElementById('siguiente').addEventListener('click', () => { siguiente(1); reiniciarRotacion(); });
+document.getElementById('anterior').addEventListener('click', () => { siguiente(-1); reiniciarRotacion(); });
+
+function reiniciarRotacion() {
+  if (temporizador) clearInterval(temporizador);
+  if (reduceMotion) return; // sin rotación automática
+  temporizador = setInterval(() => siguiente(1), 7000);
+}
+
+proyectar(0, false);
+reiniciarRotacion();
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden) { if (temporizador) clearInterval(temporizador); }
+  else reiniciarRotacion();
+});
+</script>
 </body>
 </html>

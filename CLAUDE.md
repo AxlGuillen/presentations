@@ -71,14 +71,15 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **semana34** — reporte semanal de trabajo, paleta Jira/Atlassian: azul `#0052CC` sobre blanco, tinta navy `#172B4D`, lavado `#DEEBFF`, tipografía Figtree. Textura de puntitos y sombras en capas vía `tools/kit.cjs`. Semánticos aparte del acento: verde `#00875A` (hecho), ámbar `#974F0C` (espera), rojo `#DE350B` (regresó de QA).
 - **skins** — serie «Datos curiosos» #1, formato TikTok (banda 300/350, Bebas Neue). Violeta `#0B0714`, oro `#F5C042` para el dinero, magenta `#E75FB4`, rojo `#E0475B` para lo bloqueado (tiles en escala de grises).
 - **caras** — serie «Datos curiosos» #2, misma identidad que skins (violeta `#0B0714`, oro `#F5C042`, magenta `#E75FB4`) + rojo `#E0475B` para lo escandaloso. Formato TikTok (banda 300/350, Bebas Neue).
-- **galería y 404** — fondo `#0D0E12`, Barlow, cards con la portada de cada deck.
+- **galería** — «La cartelera» (línea en `docs/linea-diseno-galeria.md`, diseño en `docs/diseno-galeria/`): carbón cálido `#16130E`, hueso `#EDE8DD`, ámbar `#E8B54D` solo en chrome; Bricolage Grotesque + Archivo + Spline Sans Mono. Pantalla de proyección que rota (portadas JPG reales en `/portadas/`, se regeneran con `node tools/portadas.mjs`) y cada deck tiñe la página con su acento vía `--deck-acento`/`--deck-glow`. Los datos de las filas están en el array `DECKS` del propio index.html: al agregar un deck, añade su entrada ahí y corre portadas.mjs.
+- **404** — aún con la identidad vieja (fondo `#0D0E12`, Barlow); pendiente de migrar a La cartelera.
 
 ## Agregar una presentación
 
 Usa el skill `nuevo-deck`, que encapsula el flujo completo. En corto:
 
 1. `nuevo/` con `index.html` + `assets/` (rutas relativas) + copia de `deck-stage.js`.
-2. Card en el `index.html` raíz — hay un bloque comentado de plantilla.
+2. Entrada en el array `DECKS` del `index.html` raíz + `node tools/portadas.mjs <carpeta>` para su portada.
 3. Actualiza la tabla de estructura del README.
 
 ## Skills del proyecto (.claude/skills/)

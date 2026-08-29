@@ -7,7 +7,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 ## Estructura
 
 ```
-/                    galería con las cards          index.html
+/                    galería «La cartelera»        index.html + portadas/
 /tabletas/           Comparativo Tabletas Rugged DYMMSA   · 16:9 · 22 slides
 /soloq/              SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
