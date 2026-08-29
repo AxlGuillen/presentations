@@ -1,0 +1,21 @@
+{
+  "pages": [
+    { "id": "page-1", "name": "La cartelera" },
+    { "id": "page-2", "name": "Exploración" }
+  ],
+  "artboards": [
+    { "file": "Main.dc.html", "x": 0, "y": 0, "w": 1440, "h": 900, "title": "La cartelera · Desktop", "page": "page-1" },
+    { "file": "Movil.dc.html", "x": 1560, "y": 0, "w": 390, "h": 844, "title": "La cartelera · Móvil", "page": "page-1" },
+    { "file": "Indice.dc.html", "x": 0, "y": 0, "w": 1440, "h": 900, "title": "A · El índice (descartada)", "page": "page-2" },
+    { "file": "Cartelera.dc.html", "x": 1560, "y": 0, "w": 1440, "h": 900, "title": "B · Boceto original", "page": "page-2" },
+    { "file": "Ficha.dc.html", "x": 3120, "y": 0, "w": 1440, "h": 900, "title": "C · La ficha (descartada)", "page": "page-2" }
+  ],
+  "annotations": [
+    { "id": "nota-desarrollo", "x": 0, "y": -190, "w": 460, "page": "page-1", "text": "LA CARTELERA · desarrollo de la propuesta B elegida\nCambios sobre el boceto: cada fila del índice recupera sus metadatos completos en segunda línea (el tradeoff que le criticamos a B), chip de serie y barra de progreso en la pantalla, indicador «EN PANTALLA ◄» en la fila activa, chip ▸ VIDEO en los decks con video, y CTA principal en ámbar.\nEn la página real: la pantalla rota entre decks y cada fila al hover toma el control de la proyección y tiñe la página con su paleta." },
+    { "id": "nota-movil", "x": 1560, "y": -190, "w": 380, "page": "page-1", "text": "MÓVIL 390\nSin hover: la pantalla de cartelera queda arriba (rotación automática con la barra de progreso) y el índice abajo, scrolleable. Tocar una fila la proyecta; segundo toque abre." },
+    { "id": "nota-indice", "x": 0, "y": -170, "w": 420, "page": "page-2", "text": "A · EL ÍNDICE (descartada)\nLa lista tipográfica manda y el panel de proyección muestra la portada en su proporción real; la página se tiñe con la paleta del deck señalado (aquí, SoloQ en verde).\nTradeoff: el panel fijo le quita ancho al índice en pantallas chicas." },
+    { "id": "nota-cartelera", "x": 1560, "y": -170, "w": 420, "page": "page-2", "text": "B · LA CARTELERA (boceto original, elegida)\nMitad pantalla de proyección, mitad índice compacto: más cine, más espectáculo por deck (aquí, Ornn en brasa).\nTradeoff: menos metadatos visibles — resuelto en el desarrollo de la página 1." },
+    { "id": "nota-ficha", "x": 3120, "y": -170, "w": 420, "page": "page-2", "text": "C · LA FICHA (descartada)\nCatálogo de archivo denso: código, serie, formato, extras — el estudio serio que documenta todo.\nTradeoff: menos espectáculo; el tinte por deck se siente menos." }
+  ],
+  "launch": { "view": "canvas", "page": "page-1" }
+}
