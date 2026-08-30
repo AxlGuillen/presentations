@@ -13,6 +13,8 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="/favicon.ico" sizes="48x48">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Archivo:wght@400;500;600&family=Spline+Sans+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -61,6 +63,11 @@
     background: radial-gradient(115% 75% at 45% 32%, rgba(var(--deck-glow), 0.22) 0%, rgba(0, 0, 0, 0) 65%);
   }
   .pantalla .contenido { position: relative; z-index: 2; }
+  .marca-4xl {
+    position: absolute; right: -36px; bottom: -26px; width: 320px; height: auto;
+    color: var(--papel); opacity: 0.045; z-index: 1; pointer-events: none;
+    transition: color 500ms ease;
+  }
 
   .senal { position: absolute; top: 38px; left: 56px; z-index: 3; display: flex; align-items: center; gap: 12px; }
   .senal .punto { width: 8px; height: 8px; border-radius: 50%; background: var(--lampara); box-shadow: 0 0 12px rgba(232, 181, 77, 0.8); }
@@ -145,6 +152,7 @@
     .senal { top: 16px; left: 20px; }
     .navegacion { top: 12px; right: 14px; }
     .pantalla h1 { font-size: clamp(36px, 10vw, 52px); }
+    .marca-4xl { width: 180px; right: -24px; bottom: -18px; }
     .pantalla .descripcion { font-size: 14px; }
     .indice { min-height: 0; padding: 18px 20px 20px; }
     .fila .titulo { font-size: 16px; }
@@ -160,6 +168,10 @@
     <div class="fondo" id="fondo-b"></div>
     <div class="velo"></div>
     <div class="brillo"></div>
+    <svg class="marca-4xl" viewBox="0 0 104 92" fill="currentColor" aria-hidden="true">
+      <path d="M0 52 H104 V66 H0 Z"></path>
+      <path d="M66 0 H80 V78 H104 V92 H66 V20 L26 60 H6 Z"></path>
+    </svg>
 
     <div class="senal"><span class="punto"></span><span class="txt mono">EN CARTELERA</span></div>
     <div class="navegacion">
