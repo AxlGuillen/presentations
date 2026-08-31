@@ -13,6 +13,7 @@ estancia/   index.html + gen.js + deck-stage.js + assets/ (solo og.png)
 ornn/       index.html + gen.js + deck-stage.js + assets/
 urgot/      index.html + gen.js + deck-stage.js + assets/
 talon/      index.html + gen.js + deck-stage.js + assets/
+blitzcrank/ index.html + gen.js + deck-stage.js + assets/
 skins/      index.html + gen.js + deck-stage.js + assets/
 caras/      index.html + gen.js + deck-stage.js + assets/
 semana34/   index.html + gen.js + deck-stage.js + gsap.min.js + assets/ (solo og.png)
@@ -32,6 +33,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | `ornn/index.html` | **GENERADO** por `ornn/gen.js`. Los splash arts vienen de Data Dragon; el cuadro de Hefesto es *La fragua de Vulcano* de Velázquez (dominio público, Wikimedia). |
 | `urgot/index.html` | **GENERADO** por `urgot/gen.js`. Serie Cumplelolero, mismo formato que ornn. Splashes de Data Dragon; el splash pre-rework viene de la wiki de LoL (`urgot-viejo.jpg`). |
 | `talon/index.html` | **GENERADO** por `talon/gen.js`. Serie Cumplelolero #3. Splashes de Data Dragon; paleta muestreada del splash original (noche azul + filo cian `#6FC7F0`). |
+| `blitzcrank/index.html` | **GENERADO** por `blitzcrank/gen.js`. Serie Cumplelolero #4. Splashes de Data Dragon. Sigue el guion del video, que es **doble con Malphite** — de ahí la lámina de cierre. Dos datos de la investigación quedaron fuera **a propósito**, porque el guion no los narra: la trilogía Oxidado/Oxidadote/Oxidadísimo y que nunca tuvo sequía de skins. |
 | `skins/index.html` | **GENERADO** por `skins/gen.js`. Serie «Datos curiosos», mismo formato TikTok que Cumplelolero. Los collages usan tiles de pantalla de carga de Data Dragon; los mapas nombre→num están hardcodeados en gen.js. |
 | `caras/index.html` | **GENERADO** por `caras/gen.js`. Serie «Datos curiosos» #2 — las skins más caras. Splashes de Data Dragon; la skin de Caps (Tristana) está marcada como filtración a propósito. |
 | `semana34/index.html` | **GENERADO** por `semana34/gen.js`. Reporte semanal de Jira (18–24 ago 2026); los datos vienen de los worklogs y están fijos en el generador. Usa `tools/kit.cjs` en build-time. |
@@ -69,6 +71,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **urgot** — serie Cumplelolero, mismo formato TikTok que ornn (banda central 300/350). Acero de Zaun `#070A09`, verde ácido `#96E32E`, rojo `#D8342C` para traición/sequía, Bebas Neue. Mantener Bebas Neue y la banda segura en toda la serie Cumplelolero para que los videos se vean de la misma familia.
 - **talon** — serie Cumplelolero #3, mismo formato TikTok (banda 300/350, Bebas Neue). Noche `#07080F`, filo cian `#6FC7F0`, azul `#2E5F94`, carmesí Noxus `#C43048` para la sequía, dorado `#E8B84B` para logros y el bloque de latinos.
 - **semana34** — reporte semanal de trabajo, paleta Jira/Atlassian: azul `#0052CC` sobre blanco, tinta navy `#172B4D`, lavado `#DEEBFF`, tipografía Figtree. Textura de puntitos y sombras en capas vía `tools/kit.cjs`. Semánticos aparte del acento: verde `#00875A` (hecho), ámbar `#974F0C` (espera), rojo `#DE350B` (regresó de QA).
+- **blitzcrank** — serie Cumplelolero #4, mismo formato TikTok (banda 300/350, Bebas Neue). Paleta muestreada del splash: noche de Zaun `#0A0A18`, violeta eléctrico `#8F6DFF` (los arcos que le dan el nombre), latón `#D9913C` para dinero y logros, verde químico `#3FC38A` solo en el lore.
 - **skins** — serie «Datos curiosos» #1, formato TikTok (banda 300/350, Bebas Neue). Violeta `#0B0714`, oro `#F5C042` para el dinero, magenta `#E75FB4`, rojo `#E0475B` para lo bloqueado (tiles en escala de grises).
 - **caras** — serie «Datos curiosos» #2, misma identidad que skins (violeta `#0B0714`, oro `#F5C042`, magenta `#E75FB4`) + rojo `#E0475B` para lo escandaloso. Formato TikTok (banda 300/350, Bebas Neue).
 - **galería** — «La cartelera» (línea en `docs/linea-diseno-galeria.md`, diseño en `docs/diseno-galeria/`): carbón cálido `#16130E`, hueso `#EDE8DD`, ámbar `#E8B54D` solo en chrome; Bricolage Grotesque + Archivo + Spline Sans Mono. Pantalla de proyección que rota (portadas JPG reales en `/portadas/`, se regeneran con `node tools/portadas.mjs`) y cada deck tiñe la página con su acento vía `--deck-acento`/`--deck-glow`. Las filas se agrupan por el campo `grupo` («Profesional» y «Creador de contenido»), en el orden del array. Los datos están en el array `DECKS` del propio index.html: al agregar un deck, añade su entrada ahí y corre portadas.mjs. La marca **4XL** vive en `marca/` (fuente SVG) y `favicon.svg`/`favicon.ico` en la raíz — el `.ico` cubre todos los decks sin tocarlos; el monograma va como marca de agua al 4.5% en la esquina de la pantalla de proyección.
