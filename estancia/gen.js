@@ -3,6 +3,7 @@
 //
 // Alcance acordado (1er contacto, 8 diapositivas):
 //   Fase 1 · Web con blog de eventos + SEO asistido con IA
+//   Redes  · Servicio mensual continuo (Andrea) — arranca junto con la web
 //   Fase 2 · Administración y cobranza  ← el corazón de esta propuesta
 //   Fase 3 · Entrada y salida con QR
 //   Fase 4 · Comunicación avanzada
@@ -25,6 +26,12 @@ const LINE = '#EFE3E9';
 
 const ESCUELA_TITULO = 'La Casita Feliz';
 const ESCUELA_SUB = 'CAI · Centro de Atención Infantil';
+
+// El equipo: se presenta como un solo servicio integral, dos especialistas.
+const EQUIPO = [
+  ['Andrea Hasly Guillen Luna', 'Manejo de redes sociales y contenido'],
+  ['Axl Guillén', 'Desarrollo web y sistemas'],
+];
 
 const FONT = `'Poppins', ui-sans-serif, system-ui, sans-serif`;
 const CARD = `background: #FFFFFF; border: 1px solid ${LINE}; box-shadow: 0 10px 28px rgba(91,33,104,0.07);`;
@@ -82,7 +89,7 @@ const slides = [];
 
 // ── 1 · Portada ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Primer contacto. La propuesta son dos cosas: una web que atrae familias y un sistema que ordena la administracion." style="background: ${PLUM}; background-image: radial-gradient(90% 70% at 85% 15%, rgba(233,75,133,0.32) 0%, rgba(0,0,0,0) 60%); font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Primer contacto. Servicio integral de dos especialistas: hacia afuera web y redes para atraer familias; hacia adentro el sistema que ordena la administracion." style="background: ${PLUM}; background-image: radial-gradient(90% 70% at 85% 15%, rgba(233,75,133,0.32) 0%, rgba(0,0,0,0) 60%); font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     ${marca(0.07, 640, 'top: 90px; right: -80px;')}
     <div data-a="ghost" style="position: absolute; right: -60px; bottom: -120px; width: 620px; height: 620px; border-radius: 50%; background: rgba(255,255,255,0.05);"></div>
     <div data-a="ghost" style="position: absolute; right: 190px; top: -90px; width: 300px; height: 300px; border-radius: 50%; background: rgba(255,197,16,0.14);"></div>
@@ -93,12 +100,20 @@ slides.push(`
         <span style="font-size: 20px; font-weight: 500; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.65);">${ESCUELA_SUB}</span>
       </div>
     </div>
-    <h1 data-a="up2" style="margin: 46px 0 0; font-size: 100px; font-weight: 700; letter-spacing: -3.4px; line-height: 1.03; max-width: 1380px;">Una web que atrae familias<br>y un sistema que ordena<br>la administración</h1>
-    <p data-a="up3" style="margin: 36px 0 0; font-size: 29px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 1060px;">Propuesta de desarrollo por etapas, empezando por lo que hoy cuesta más tiempo y más dinero.</p>
+    <h1 data-a="up2" style="margin: 44px 0 0; font-size: 100px; font-weight: 700; letter-spacing: -3.4px; line-height: 1.03; max-width: 1380px;">Atraer familias por fuera,<br>ordenar la escuela<br>por dentro</h1>
+    <p data-a="up3" style="margin: 32px 0 0; font-size: 29px; font-weight: 400; color: rgba(255,255,255,0.8); line-height: 1.5; max-width: 1120px;">Sitio web, redes sociales y sistema de administración — un solo servicio, por etapas, empezando por lo que más rápido se nota.</p>
     <div data-a="up3" style="margin-top: 52px; display: flex; gap: 14px;">
       ${pill('Sitio web y blog', 'rgba(255,255,255,0.14)')}
+      ${pill('Redes sociales', 'rgba(255,255,255,0.14)')}
       ${pill('Administración y cobranza', 'rgba(255,255,255,0.14)')}
       ${pill('Entrada y salida', 'rgba(255,255,255,0.14)')}
+    </div>
+    <div data-a="up3" style="margin-top: 30px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap;">
+      ${EQUIPO.map(([nombre, rol]) => `
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 21px; font-weight: 600; color: #FFFFFF;">${nombre}</span>
+        <span style="font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.6);">${rol}</span>
+      </div>`).join('<span style="width: 1px; height: 34px; background: rgba(255,255,255,0.22);"></span>')}
     </div>
   </section>`);
 
@@ -144,6 +159,79 @@ slides.push(`
       ${tarjeta('◎', 'Posicionamiento con IA', 'Optimizamos textos y estructura para que la escuela aparezca al buscar guardería en la zona — en Google y también cuando le preguntan a un asistente de IA.', PURPLE)}
     </div>
     ${nota('Cada evento que se publica es una razón más para que la escuela aparezca en las búsquedas. <strong style="font-weight: 600; color: ' + PLUM + ';">El blog no es decoración: es lo que mantiene viva la página</strong> ante Google.', PINK)}
+  </section>`);
+
+// ── Redes A · El paquete mensual ─────────────────────────────────────────
+// Calendario de muestra: 2 publicaciones por semana en días variados.
+// 'v' = contenido audiovisual (2 al mes), 'g' = contenido gráfico (6 al mes).
+const DIAS = ['L', 'M', 'M', 'J', 'V', 'S', 'D'];
+const CALENDARIO = [
+  [{ d: 1, tipo: 'g' }, { d: 4, tipo: 'v' }],
+  [{ d: 2, tipo: 'g' }, { d: 5, tipo: 'g' }],
+  [{ d: 0, tipo: 'g' }, { d: 3, tipo: 'v' }],
+  [{ d: 1, tipo: 'g' }, { d: 4, tipo: 'g' }],
+];
+
+const celdaCal = (post) => {
+  if (!post) return `<div style="height: 54px; border-radius: 10px; background: ${LINE}; opacity: 0.55;"></div>`;
+  const color = post.tipo === 'v' ? PURPLE : PINK;
+  return `<div style="height: 54px; border-radius: 10px; background: ${color}; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 0.5px; color: #FFFFFF;">${post.tipo === 'v' ? 'VIDEO' : 'GRÁFICO'}</span>
+          </div>`;
+};
+
+slides.push(`
+  <section data-label="Redes · El paquete" data-screen-label="Redes · El paquete" data-speaker-notes="Ocho publicaciones al mes, dos por semana, en Facebook e Instagram. De esas ocho: dos son video y seis graficos. Ademas una cobertura de evento al mes y dos disenos extraordinarios." style="${seccion()}">
+    ${marca()}
+    ${header('Redes sociales', pill('Servicio mensual continuo', GREEN))}
+    ${h2('8 publicaciones al mes,<br>todos los meses')}
+    ${bajada('Dos por semana en Facebook e Instagram, en días y horarios que se eligen según el comportamiento real de su audiencia.')}
+    <div data-a="up3" style="margin-top: 38px; display: grid; grid-template-columns: 1.15fr 1fr; gap: 40px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <div style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 8px;">
+          ${DIAS.map(d => `<span style="text-align: center; font-size: 17px; font-weight: 700; letter-spacing: 1px; color: ${MUTED};">${d}</span>`).join('')}
+          ${CALENDARIO.map(semana => DIAS.map((_, i) => celdaCal(semana.find(x => x.d === i))).join('')).join('')}
+        </div>
+        <div style="display: flex; align-items: center; gap: 26px; margin-top: 6px;">
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 19px; color: ${MUTED};"><span style="width: 16px; height: 16px; border-radius: 5px; background: ${PURPLE};"></span> Contenido audiovisual</span>
+          <span style="display: inline-flex; align-items: center; gap: 9px; font-size: 19px; color: ${MUTED};"><span style="width: 16px; height: 16px; border-radius: 5px; background: ${PINK};"></span> Contenido gráfico</span>
+        </div>
+        <span style="font-size: 19px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">Los días de este calendario son un ejemplo: la programación se ajusta cada mes según lo que mejor funcione.</span>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        ${[
+          ['2', 'Videos al mes', 'Planeación del tema, grabación y edición.', PURPLE],
+          ['6', 'Contenidos gráficos', 'Flyers, infografías y piezas informativas o comerciales.', PINK],
+          ['1', 'Cobertura de evento', 'Hasta 5 horas: fotografía y producción de 1 reel.', YELLOW],
+          ['2', 'Diseños extraordinarios', 'Impresos, lonas, diplomas — fuera del calendario.', GREEN],
+        ].map(([num, titulo, texto, color]) => `
+        <div style="${CARD} border-radius: 20px; padding: 20px 26px; display: flex; align-items: center; gap: 22px;">
+          <span style="flex: none; width: 60px; font-size: 46px; font-weight: 700; color: ${color}; letter-spacing: -1px; line-height: 1;">${num}</span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.3px;">${titulo}</span>
+            <span style="font-size: 19px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">${texto}</span>
+          </div>
+        </div>`).join('')}
+      </div>
+    </div>
+    ${nota('El contenido audiovisual puede <strong style="font-weight: 600; color: ' + PLUM + ';">replicarse en YouTube</strong> cuando convenga a la estrategia, sin costo adicional.', PURPLE)}
+  </section>`);
+
+// ── Redes B · El método y los límites ────────────────────────────────────
+slides.push(`
+  <section data-label="Redes · Cómo se trabaja" data-screen-label="Redes · El método" data-speaker-notes="No es publicar por publicar: hay planeacion mensual, copys, linea discursiva y horarios que se ajustan con estadisticas. Dejar claro lo que NO incluye para evitar el pensé que tambien entraba." style="${seccion()}">
+    ${marca()}
+    ${header('Redes sociales', pill('Alcances', PURPLE))}
+    ${h2('No es publicar por publicar')}
+    ${bajada('Cada publicación responde a un objetivo: informar, posicionar, vender o provocar una acción concreta de las familias.')}
+    <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; flex: 1;">
+      ${tarjeta('◷', 'Planeación mensual', 'Antes de que empiece el mes ya está definido qué se publica, cuándo y para qué.', PURPLE)}
+      ${tarjeta('✎', 'Copys y línea discursiva', 'Los textos y el tono se mantienen coherentes con la voz de la escuela en todo lo que se publica.', PINK)}
+      ${tarjeta('◔', 'Horarios que se ajustan', 'Los días y horas se mueven durante el mes según las estadísticas y el comportamiento de la audiencia.', YELLOW)}
+      ${tarjeta('◉', 'Cobertura de eventos', 'Se agenda con 2 días de anticipación, sujeta a disponibilidad. Ideal para festivales y actos institucionales.', GREEN)}
+    </div>
+    ${nota('<strong style="font-weight: 600; color: ' + PLUM + ';">Lo que no incluye este paquete:</strong> gestión y producción para TikTok (requiere una frecuencia de video mucho mayor), boletines, gestión de noticias y relación con medios. Publicaciones, coberturas o diseños adicionales se cotizan aparte — así el paquete se mantiene en un precio predecible.')}
   </section>`);
 
 // ── 4 · Fase 2 · Administración y cobranza ───────────────────────────────
@@ -222,28 +310,35 @@ slides.push(`
 
 // ── 7 · Cómo trabajamos ──────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Cómo trabajamos" data-screen-label="Modelo de trabajo" data-speaker-notes="Fase 1 cerrada. Fases 2 a 4 con bloque de horas mensuales: se prioriza juntos y hay demo cada mes." style="${seccion()}">
+  <section data-label="Cómo trabajamos" data-screen-label="Modelo de trabajo" data-speaker-notes="Un solo servicio con dos formas de cobro: la web es proyecto cerrado; redes y sistema son la mensualidad. Presentar al equipo: Andrea en redes, Axl en desarrollo." style="${seccion()}">
     ${marca()}
     ${header('Modelo de trabajo')}
-    ${h2('Cómo trabajamos')}
-    <div data-a="up3" style="margin-top: 42px; display: grid; grid-template-columns: 1fr 1.3fr; gap: 30px; flex: 1;">
-      <div style="${CARD} border-radius: 28px; padding: 42px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid ${PINK};">
-        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: ${PINK};">Fase 1 · La web</span>
-        <span style="font-size: 36px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.8px; line-height: 1.2;">Proyecto cerrado</span>
-        <span style="font-size: 21px; font-weight: 400; color: ${MUTED}; line-height: 1.55;">Es un alcance claro y acotado, así que se cotiza cerrado: precio y fecha de entrega definidos desde el inicio.</span>
+    ${h2('Un solo servicio,<br>dos especialistas')}
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: 1fr 1.35fr; gap: 28px;">
+      <div style="${CARD} border-radius: 28px; padding: 36px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid ${PINK};">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: ${PINK};">Al inicio · La web</span>
+        <span style="font-size: 34px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.8px; line-height: 1.2;">Proyecto cerrado</span>
+        <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">Alcance acotado, así que se cotiza cerrado: precio y fecha de entrega definidos desde el inicio.</span>
       </div>
-      <div style="${CARD} border-radius: 28px; padding: 42px 38px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid ${PURPLE};">
-        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: ${PURPLE};">Fases 2 a 4 · El sistema</span>
-        <span style="font-size: 36px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.8px; line-height: 1.2;">Horas de desarrollo al mes</span>
-        <span style="font-size: 21px; font-weight: 400; color: ${MUTED}; line-height: 1.55;">Un bloque de horas dedicadas al sistema cada mes. Priorizamos juntos qué módulo sigue, se entrega funcionando y se revisa en una demo.</span>
-        <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
-          ${bullet('Usted decide el orden de lo que se construye', PURPLE, 21)}
-          ${bullet('Ve avance real cada mes, no promesas', PURPLE, 21)}
-          ${bullet('Se puede cambiar el rumbo sin renegociar nada', PURPLE, 21)}
+      <div style="${CARD} border-radius: 28px; padding: 36px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid ${PURPLE};">
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: ${PURPLE};">Cada mes · Redes y sistema</span>
+        <span style="font-size: 34px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.8px; line-height: 1.2;">Una sola mensualidad</span>
+        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 2px;">
+          ${bullet('<strong style="color: ' + PLUM + '; font-weight: 600;">Redes:</strong> el paquete fijo de 8 publicaciones, cobertura y diseños', PURPLE, 20)}
+          ${bullet('<strong style="color: ' + PLUM + '; font-weight: 600;">Sistema:</strong> un bloque de horas de desarrollo que ustedes priorizan', PURPLE, 20)}
+          ${bullet('Cada mes hay entrega y una demo de lo que avanzó', PURPLE, 20)}
         </div>
       </div>
     </div>
-    ${nota('<strong style="font-weight: 600; color: ' + PLUM + ';">¿Por qué no cotizar todo el sistema de una vez?</strong> Porque nadie puede estimar con precisión un sistema así antes de empezar, y alguien termina perdiendo: o se infla el precio para cubrir lo desconocido, o se recorta el alcance a la mitad del camino. Cuando el sistema esté terminado, esas mismas horas se convierten en soporte y mejoras.')}
+    <div data-a="up3" style="margin-top: 26px; display: flex; gap: 24px;">
+      ${EQUIPO.map(([nombre, rol]) => `
+      <div style="flex: 1; ${CARD} border-radius: 20px; padding: 22px 28px; display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 24px; font-weight: 600; color: ${PLUM}; letter-spacing: -0.3px;">${nombre}</span>
+        <span style="font-size: 20px; font-weight: 400; color: ${MUTED};">${rol}</span>
+      </div>`).join('')}
+    </div>
+    <div style="flex: 1;"></div>
+    ${nota('<strong style="font-weight: 600; color: ' + PLUM + ';">¿Por qué el sistema no se cotiza completo de una vez?</strong> Porque nadie puede estimar con precisión un sistema así antes de empezar, y alguien termina perdiendo: o se infla el precio para cubrir lo desconocido, o se recorta el alcance a la mitad del camino. Cuando el sistema esté terminado, esas mismas horas se convierten en soporte y mejoras.')}
   </section>`);
 
 // ── 8 · Cierre ───────────────────────────────────────────────────────────

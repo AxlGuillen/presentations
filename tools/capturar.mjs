@@ -64,7 +64,7 @@ await pagina.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
 // Modo presentación: quita miniaturas y pie de navegación
 await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
 // Fuera cualquier interfaz que no sea la diapositiva (botón «Presentar», overlays)
-await pagina.addStyleTag({ content: '#modo-presentacion{display:none!important}' });
+await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video{display:none!important}' });
 await pagina.evaluate(() => document.fonts.ready);
 
 const rutas = [];

@@ -11,7 +11,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /tabletas/           Comparativo Tabletas Rugged DYMMSA   · 16:9 · 22 slides
 /soloq/              SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
-/estancia/           Propuesta: web + administración para estancia infantil · 16:9 · 8 slides
+/estancia/           Propuesta: web, redes y administración para estancia infantil · 16:9 · 10 slides
 /ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
 /urgot/              Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
 /talon/              Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
