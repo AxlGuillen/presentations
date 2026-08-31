@@ -52,7 +52,7 @@ npx serve .
 
 ## Roadmap
 
-- [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. Primer video publicado: `/estancia/video.mp4`.
+- [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. El módulo queda listo para cuando se quiera publicar un video en una card.
 
 ## Deploy
 

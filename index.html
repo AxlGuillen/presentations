@@ -117,6 +117,14 @@
   .cabecera .cuenta { font-size: 11px; color: var(--humo); white-space: nowrap; }
 
   .filas { flex: 1; display: flex; flex-direction: column; }
+  .grupo {
+    display: flex; align-items: baseline; gap: 12px; padding: 16px 8px 7px;
+    border-bottom: 1px solid var(--linea);
+  }
+  .grupo:first-child { padding-top: 8px; }
+  .grupo .nombre { font-size: 11px; letter-spacing: 2.5px; color: var(--lampara); }
+  .grupo .regla { flex: 1; height: 1px; background: var(--linea); }
+  .grupo .n { font-size: 11px; color: var(--humo); }
   .fila {
     display: flex; flex-direction: column; gap: 3px; padding: 10px 8px;
     border-bottom: 1px solid var(--linea); border-radius: 3px; cursor: pointer;
@@ -199,7 +207,7 @@
         <h2>El programa</h2>
         <span class="sub mono">PRESENTACIONES HECHAS CON IA</span>
       </div>
-      <span class="cuenta mono">10 · 2 SERIES · 1 VIDEO</span>
+      <span class="cuenta mono" id="cuenta">10 PRESENTACIONES</span>
     </header>
 
     <div class="filas" id="filas"></div>
@@ -216,25 +224,25 @@
 // ── El programa: datos reales de cada deck ─────────────────────────
 // acento/glow: la paleta del deck tiñe la página cuando está en pantalla.
 const DECKS = [
-  { ruta: 'tabletas/', titulo: 'Comparativo Tabletas Rugged', serie: 'COMERCIAL · DYMMSA', datos: 'COMERCIAL · 16:9 · 22 DIAP · JUL 26', meta: '16:9 · 22 DIAPOSITIVAS · JUL 2026',
+  { grupo: 'Profesional', ruta: 'tabletas/', titulo: 'Comparativo Tabletas Rugged', serie: 'COMERCIAL · DYMMSA', datos: 'COMERCIAL · 16:9 · 22 DIAP · JUL 26', meta: '16:9 · 22 DIAPOSITIVAS · JUL 2026',
     desc: '14 tabletas rugged en tres rangos de precio, con puntuaciones para público no técnico y recomendación final.', acento: '#E05A64', glow: '195, 23, 34' },
-  { ruta: 'estancia/', titulo: 'Propuesta · La Casita Feliz', serie: 'COMERCIAL · CAI', datos: 'COMERCIAL · 16:9 · 10 DIAP · AGO 26', meta: '16:9 · 10 DIAPOSITIVAS · AGO 2026',
-    desc: 'Web, redes sociales y sistema de administración para una estancia infantil — propuesta integral de dos especialistas.', acento: '#E94B85', glow: '233, 75, 133', video: '▸ VIDEO 1:21' },
-  { ruta: 'soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
-    desc: '125 000 € en premios traducidos a días de salario mínimo en México, Chile, Colombia y Argentina.', acento: '#53FC18', glow: '83, 252, 24' },
-  { ruta: 'lowelo/', titulo: 'Low Elo vs High Elo · El corte por LP', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
-    desc: 'La distribución de rangos como campana y como edificio, y el camino Hierro→Challenger a escala real.', acento: '#C89B3C', glow: '200, 155, 60' },
-  { ruta: 'ornn/', titulo: 'Ornn cumple 9 años', serie: 'CUMPLELOLERO · 01', datos: 'CUMPLELOLERO 01 · 9:16 · 8 DIAP · AGO 26', meta: '9:16 · 8 DIAPOSITIVAS · AGO 2026',
-    desc: 'El one trick de 7 millones de puntos, la sequía de skins y la forja de Hefesto — apoyo visual para video vertical.', acento: '#FF6B1A', glow: '255, 107, 26' },
-  { ruta: 'urgot/', titulo: 'Urgot cumple 16 años', serie: 'CUMPLELOLERO · 02', datos: 'CUMPLELOLERO 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
-    desc: 'El rework que lo salvó, la sequía de seis años y medio sin skins y el verdugo que acabó del lado del condenado.', acento: '#96E32E', glow: '150, 227, 46' },
-  { ruta: 'talon/', titulo: 'Talon cumple 15 años', serie: 'CUMPLELOLERO · 03', datos: 'CUMPLELOLERO 03 · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
-    desc: 'El top mundial lleno de latinos y el salto de paredes que lo define desde 2017.', acento: '#6FC7F0', glow: '111, 199, 240' },
-  { ruta: 'semana34/', titulo: 'Semana 34 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 8 DIAP · GSAP', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
+    { grupo: 'Profesional', ruta: 'estancia/', titulo: 'Propuesta · La Casita Feliz', serie: 'COMERCIAL · CAI', datos: 'COMERCIAL · 16:9 · 10 DIAP · AGO 26', meta: '16:9 · 10 DIAPOSITIVAS · AGO 2026',
+    desc: 'Web, redes sociales y sistema de administración para una estancia infantil — propuesta integral de dos especialistas.', acento: '#E94B85', glow: '233, 75, 133' },
+    { grupo: 'Profesional', ruta: 'semana34/', titulo: 'Semana 34 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 8 DIAP · GSAP', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
     desc: 'El reporte semanal del equipo con animación GSAP renderizable cuadro a cuadro.', acento: '#4C9AFF', glow: '76, 154, 255' },
-  { ruta: 'skins/', titulo: 'Los campeones con más skins', serie: 'DATOS CURIOSOS · 01', datos: 'DATOS CURIOSOS 01 · 9:16 · 4 DIAP · AGO 26', meta: '9:16 · 4 DIAPOSITIVAS · AGO 2026',
+    { grupo: 'Creador de contenido', ruta: 'soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
+    desc: '125 000 € en premios traducidos a días de salario mínimo en México, Chile, Colombia y Argentina.', acento: '#53FC18', glow: '83, 252, 24' },
+    { grupo: 'Creador de contenido', ruta: 'lowelo/', titulo: 'Low Elo vs High Elo · El corte por LP', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    desc: 'La distribución de rangos como campana y como edificio, y el camino Hierro→Challenger a escala real.', acento: '#C89B3C', glow: '200, 155, 60' },
+    { grupo: 'Creador de contenido', ruta: 'ornn/', titulo: 'Ornn cumple 9 años', serie: 'CUMPLELOLERO · 01', datos: 'CUMPLELOLERO 01 · 9:16 · 8 DIAP · AGO 26', meta: '9:16 · 8 DIAPOSITIVAS · AGO 2026',
+    desc: 'El one trick de 7 millones de puntos, la sequía de skins y la forja de Hefesto — apoyo visual para video vertical.', acento: '#FF6B1A', glow: '255, 107, 26' },
+    { grupo: 'Creador de contenido', ruta: 'urgot/', titulo: 'Urgot cumple 16 años', serie: 'CUMPLELOLERO · 02', datos: 'CUMPLELOLERO 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    desc: 'El rework que lo salvó, la sequía de seis años y medio sin skins y el verdugo que acabó del lado del condenado.', acento: '#96E32E', glow: '150, 227, 46' },
+    { grupo: 'Creador de contenido', ruta: 'talon/', titulo: 'Talon cumple 15 años', serie: 'CUMPLELOLERO · 03', datos: 'CUMPLELOLERO 03 · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    desc: 'El top mundial lleno de latinos y el salto de paredes que lo define desde 2017.', acento: '#6FC7F0', glow: '111, 199, 240' },
+    { grupo: 'Creador de contenido', ruta: 'skins/', titulo: 'Los campeones con más skins', serie: 'DATOS CURIOSOS · 01', datos: 'DATOS CURIOSOS 01 · 9:16 · 4 DIAP · AGO 26', meta: '9:16 · 4 DIAPOSITIVAS · AGO 2026',
     desc: 'El triple empate que se rompe al descontar bóveda y prestigio, con los collages completos de Lux, Ahri y MF.', acento: '#E75FB4', glow: '231, 95, 180' },
-  { ruta: 'caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    { grupo: 'Creador de contenido', ruta: 'caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
     desc: 'De 25 a 450 dólares en un solo año: exaltadas, trascendentes y el tarjetazo del Hall of Legends.', acento: '#F5C042', glow: '245, 192, 66' },
 ];
 
@@ -246,7 +254,17 @@ DECKS.forEach(d => { const im = new Image(); im.src = portada(d); });
 
 // ── construir el índice ────────────────────────────────────────────
 const filas = document.getElementById('filas');
+const filasDeck = [];   // solo las filas de deck: los encabezados de grupo NO cuentan
+let grupoActual = null;
 DECKS.forEach((d, i) => {
+  if (d.grupo !== grupoActual) {
+    grupoActual = d.grupo;
+    const n = DECKS.filter(x => x.grupo === d.grupo).length;
+    const h = document.createElement('div');
+    h.className = 'grupo mono';
+    h.innerHTML = '<span class="nombre">' + d.grupo.toUpperCase() + '</span><span class="regla"></span><span class="n">' + n + '</span>';
+    filas.appendChild(h);
+  }
   const a = document.createElement('a');
   a.className = 'fila';
   a.href = d.ruta;
@@ -259,7 +277,12 @@ DECKS.forEach((d, i) => {
   a.addEventListener('mouseenter', () => proyectar(i, true));
   a.addEventListener('focus', () => proyectar(i, true));
   filas.appendChild(a);
+  filasDeck.push(a);
 });
+
+document.getElementById('cuenta').textContent =
+  DECKS.filter(d => d.grupo === 'Profesional').length + ' PROFESIONAL · ' +
+  DECKS.filter(d => d.grupo === 'Creador de contenido').length + ' CONTENIDO';
 
 const progreso = document.getElementById('progreso');
 DECKS.forEach(() => progreso.appendChild(document.createElement('span')));
@@ -294,7 +317,7 @@ function proyectar(i, manual) {
   document.getElementById('contador').textContent = String(i + 1).padStart(2, '0') + ' / ' + DECKS.length;
 
   [...progreso.children].forEach((s, j) => s.classList.toggle('activa', j === i));
-  [...filas.children].forEach((f, j) => f.classList.toggle('activa', j === i));
+  filasDeck.forEach((f, j) => f.classList.toggle('activa', j === i));
 
   if (manual) reiniciarRotacion();
 }
