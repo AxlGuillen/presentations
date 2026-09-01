@@ -18,7 +18,7 @@ Las diapositivas tienen altura fija: lo que desborda se corta al presentar o exp
   .filter(x => x.over > 2)
 ```
 
-Debe devolver `[]`. Si algo desborda, ajusta padding/márgenes **solo en esa diapositiva** (en el `gen.js` si el deck es generado) y regenera. Ojo: los elementos decorativos absolutos que sangran fuera de la slide inflan `scrollHeight` — envuélvelos en un contenedor `position:absolute; inset:0; overflow:hidden`.
+Debe devolver `[]`. Lo mismo, sin navegador a mano y de forma repetible: `node tools/qa-deck.mjs <carpeta>` — levanta su propio server, abre Chrome real y reporta desborde, imágenes rotas y errores de consola (sale con código 1 si algo falla). Si algo desborda, ajusta padding/márgenes **solo en esa diapositiva** (en el `gen.js` si el deck es generado) y regenera. Ojo: los elementos decorativos absolutos que sangran fuera de la slide inflan `scrollHeight` — envuélvelos en un contenedor `position:absolute; inset:0; overflow:hidden`.
 
 3. **Revisión visual**: recorre las slides (clic en las miniaturas del rail) y toma screenshots de las que cambiaron. En decks 9:16 revisa que todo siga dentro de la banda segura de TikTok.
 4. **Si el deck usa GSAP**: el Browser pane embebido NO corre `requestAnimationFrame`, así que ahí las timelines no avanzan — no es un bug del deck. La verificación real de animaciones es `node tools/capturar.mjs <carpeta>` (Chrome de verdad, espera 2 s) y revisar los PNG de `<carpeta>/video-out/slides/`: deben mostrar los **estados finales** (barras llenas, contadores completos). Para ver un estado intermedio, seekea a mano: `section.__tl.time(t)`.
