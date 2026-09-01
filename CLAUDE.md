@@ -18,6 +18,7 @@ malphite/   index.html + gen.js + deck-stage.js + assets/
 skins/      index.html + gen.js + deck-stage.js + assets/
 caras/      index.html + gen.js + deck-stage.js + assets/
 semana34/   index.html + gen.js + deck-stage.js + gsap.min.js + assets/ (solo og.png)
+semana35/   index.html + gen.js + deck-stage.js + gsap.min.js + assets/ (solo og.png)
 index.html  galería raíz con las cards
 ```
 
@@ -39,6 +40,7 @@ Todas las rutas dentro de un deck son **relativas** (`assets/foo.png`, nunca `/a
 | `skins/index.html` | **GENERADO** por `skins/gen.js`. Serie «Datos curiosos», mismo formato TikTok que Cumplelolero. Los collages usan tiles de pantalla de carga de Data Dragon; los mapas nombre→num están hardcodeados en gen.js. |
 | `caras/index.html` | **GENERADO** por `caras/gen.js`. Serie «Datos curiosos» #2 — las skins más caras. Splashes de Data Dragon; la skin de Caps (Tristana) está marcada como filtración a propósito. |
 | `semana34/index.html` | **GENERADO** por `semana34/gen.js`. Reporte semanal de Jira (18–24 ago 2026); los datos vienen de los worklogs y están fijos en el generador. Usa `tools/kit.cjs` en build-time. |
+| `semana35/index.html` | **GENERADO** por `semana35/gen.js`. Reporte semanal de Jira (25–31 ago 2026), **v2.0 de la coreografía**. Los datos están fijos arriba del generador; tres worklogs de UWS-9283 se recuperaron del changelog de `timespent` porque la API de búsqueda corta en 20 worklogs por issue. |
 | `tabletas/index.html` | Escrito a mano (exportado de Claude Design). No tiene generador; se edita directo. |
 | `index.html` raíz, `404.html` | A mano. |
 
@@ -72,6 +74,7 @@ Debe devolver vacío. Si algo desborda, ajusta padding/margen **solo en esa diap
 - **ornn** — apoyo visual para video vertical de TikTok, no deck de lectura. Negro forja `#0B0605`, carmesí `#C0272D`, brasa `#FF6B1A`, oro `#FFA23A`, Bebas Neue para cifras y titulares. El contenido va en una banda central (`padding: 300px 84px 350px`) para que la interfaz de TikTok no tape nada: **si tocas esos márgenes, revisa que todo siga dentro de la zona segura**.
 - **urgot** — serie Cumplelolero, mismo formato TikTok que ornn (banda central 300/350). Acero de Zaun `#070A09`, verde ácido `#96E32E`, rojo `#D8342C` para traición/sequía, Bebas Neue. Mantener Bebas Neue y la banda segura en toda la serie Cumplelolero para que los videos se vean de la misma familia.
 - **talon** — serie Cumplelolero #3, mismo formato TikTok (banda 300/350, Bebas Neue). Noche `#07080F`, filo cian `#6FC7F0`, azul `#2E5F94`, carmesí Noxus `#C43048` para la sequía, dorado `#E8B84B` para logros y el bloque de latinos.
+- **semana35** — misma paleta y tipografía que semana34 **a propósito**: son una serie, lo que cambia es la coreografía (v2.0). Añade gris `#B3BAC5` para la semana anterior en la comparativa y una escala de azules para los arcos de la dona.
 - **semana34** — reporte semanal de trabajo, paleta Jira/Atlassian: azul `#0052CC` sobre blanco, tinta navy `#172B4D`, lavado `#DEEBFF`, tipografía Figtree. Textura de puntitos y sombras en capas vía `tools/kit.cjs`. Semánticos aparte del acento: verde `#00875A` (hecho), ámbar `#974F0C` (espera), rojo `#DE350B` (regresó de QA).
 - **blitzcrank** — serie Cumplelolero #4, mismo formato TikTok (banda 300/350, Bebas Neue). Paleta muestreada del splash: noche de Zaun `#0A0A18`, violeta eléctrico `#8F6DFF` (los arcos que le dan el nombre), latón `#D9913C` para dinero y logros, verde químico `#3FC38A` solo en el lore.
 - **malphite** — serie Cumplelolero #5, mismo formato TikTok (banda 300/350, Bebas Neue). Paleta muestreada del splash: basalto `#120D12`, terracota de arenisca `#E08A72` (su cuerpo), verde `#B5CE45` (lo único vivo de la lámina: su mirada) para lore y remates, arena `#EBC27C` para dinero y óxido `#C4564E` para el elo del one trick — aquí el color de alerta marca el rango bajo, al revés que el dorado de logro en talon y blitzcrank.

@@ -8,14 +8,22 @@ import { execFileSync } from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const TODOS = ['tabletas', 'estancia', 'soloq', 'lowelo', 'ornn', 'urgot', 'talon', 'semana34', 'skins', 'caras'];
+const TODOS = ['tabletas', 'estancia', 'soloq', 'lowelo', 'ornn', 'urgot', 'talon', 'blitzcrank', 'malphite', 'skins', 'caras', 'semana34', 'semana35'];
 const decks = process.argv.slice(2).length ? process.argv.slice(2) : TODOS;
 
 const CHROME = [
+  // macOS
+  '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+  '/Applications/Microsoft Edge.app/Contents/MacOS/Microsoft Edge',
+  // Windows
   'C:/Program Files/Google/Chrome/Application/chrome.exe',
   'C:/Program Files (x86)/Google/Chrome/Application/chrome.exe',
+  'C:/Program Files (x86)/Microsoft/Edge/Application/msedge.exe',
 ].find(p => fs.existsSync(p));
 if (!CHROME) { console.error('Sin Chrome.'); process.exit(1); }
+
+// En Windows el intérprete es `python`; en macOS/Linux es `python3`.
+const PY = process.platform === 'win32' ? 'python' : 'python3';
 
 const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8',
   '.css': 'text/css', '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg',
@@ -52,7 +60,7 @@ for (const deck of decks) {
   await pagina.close();
   // reescalar a ancho máx 900 y comprimir a JPG con Pillow
   const destino = path.join(raiz, 'portadas', `${deck}.jpg`);
-  execFileSync('python', ['-c', `
+  execFileSync(PY, ['-c', `
 from PIL import Image
 im = Image.open(r'''${tmp}''').convert('RGB')
 im.thumbnail((900, 900), Image.LANCZOS)
