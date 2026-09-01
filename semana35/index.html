@@ -1,0 +1,907 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Semana 35 · Reporte semanal Jira</title>
+<meta name="description" content="15 h 10 m en 12 issues del 25 al 31 de agosto: tracking v2 en dos propiedades, tres arreglos al itinerario de GPM y la cola de QA de la semana anterior cerrada por completo.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Semana 35 · Reporte semanal Jira">
+<meta property="og:description" content="15 h 10 m en 12 issues del 25 al 31 de agosto: tracking v2 en dos propiedades, tres arreglos al itinerario de GPM y la cola de QA de la semana anterior cerrada por completo.">
+<meta property="og:url" content="https://presentations-three-phi.vercel.app/semana35/">
+<meta property="og:image" content="https://presentations-three-phi.vercel.app/semana35/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0052CC; }
+  /* Las entradas las orquesta GSAP (coreografía v2.0 al final del documento).
+     Cero estados iniciales ocultos en CSS a propósito: sin JS el deck se ve
+     completo y estático, y la impresión a PDF sigue funcionando. */
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
+    background: rgba(23,43,77,0.85); color: #FFFFFF; cursor: pointer;
+    font: 600 13px/1 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Semana del 25 al 31 de agosto. 15 horas 10 minutos, 12 issues, y la cola de QA de la semana pasada quedo limpia." style="background: #0052CC; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(85% 75% at 88% 10%, rgba(38,132,255,0.55) 0%, rgba(38,132,255,0) 62%), radial-gradient(70% 60% at 8% 95%, rgba(23,43,77,0.35) 0%, rgba(23,43,77,0) 55%); background-size: 30px 30px, 100% 100%, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <div data-orbe style="position: absolute; right: -110px; bottom: -170px; width: 640px; height: 640px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
+      <div data-orbe style="position: absolute; right: 240px; top: -120px; width: 330px; height: 330px; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
+      <div data-orbe style="position: absolute; left: -180px; top: 30%; width: 420px; height: 420px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.10);"></div>
+    </div>
+    <div data-a="up" style="display: flex; align-items: center; gap: 16px;">
+      <span data-sello style="width: 74px; height: 74px; border-radius: 18px; background: #FFFFFF; color: #0052CC; display: inline-flex; align-items: center; justify-content: center; font-size: 33px; font-weight: 800;">S35</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.3px;">Reporte semanal</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.7);">Jira · UrVenue Web Services</span>
+      </div>
+    </div>
+    <h1 data-split style="margin: 38px 0 0; font-size: 96px; font-weight: 800; letter-spacing: -3.4px; line-height: 1.04; max-width: 1580px;">Semana 35: la semana<br>en que se vació la cola</h1>
+    <p data-a="up3" style="margin: 28px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.82); line-height: 1.5; max-width: 1120px;">Martes 25 – lunes 31 de agosto de 2026 · Axl Guillen · con base en los worklogs de Jira.</p>
+    <div data-a="up3" style="margin-top: 40px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">15 h 10 m registradas</span>
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">12 issues</span>
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">25 worklogs</span>
+      <span style="background: #FFFFFF; color: #0052CC; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">9 finalizadas</span>
+    </div>
+  </section>
+
+  <section data-label="La semana en números" data-screen-label="Números" data-speaker-notes="Menos horas que la semana 34 pero mas cierres: 9 finalizadas contra 7. El foco estuvo en cerrar, no en abrir frentes." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Números</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Menos horas, más cierres</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">Cinco días con 15 h 10 m repartidas en 12 issues. Contra la semana anterior bajó el tiempo registrado, pero subieron las tareas terminadas.</p>
+    <div data-a="up3" style="margin-top: 30px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 32px 30px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #0052CC;">
+          <span style="font-size: 60px; font-weight: 800; color: #0052CC; letter-spacing: -2.2px; line-height: 1; font-variant-numeric: tabular-nums;">15 h 10 m</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D; line-height: 1.25;">Tiempo registrado</span>
+          <span style="font-size: 18px; font-weight: 400; color: #5E6C84; line-height: 1.4;">54 600 s en 25 worklogs</span>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 32px 30px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="12" style="font-size: 60px; font-weight: 800; color: #0052CC; letter-spacing: -2.2px; line-height: 1; font-variant-numeric: tabular-nums;">12</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D; line-height: 1.25;">Issues trabajadas</span>
+          <span style="font-size: 18px; font-weight: 400; color: #5E6C84; line-height: 1.4;">Todas en el proyecto UWS</span>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 32px 30px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #0052CC;">
+          <span data-cuenta="9" style="font-size: 60px; font-weight: 800; color: #0052CC; letter-spacing: -2.2px; line-height: 1; font-variant-numeric: tabular-nums;">9</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D; line-height: 1.25;">Finalizadas</span>
+          <span style="font-size: 18px; font-weight: 400; color: #5E6C84; line-height: 1.4;">75 % de lo que se tocó</span>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 20px; padding: 32px 30px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #0052CC;">
+          <span style="font-size: 60px; font-weight: 800; color: #0052CC; letter-spacing: -2.2px; line-height: 1; font-variant-numeric: tabular-nums;">3 h 02 m</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D; line-height: 1.25;">Promedio por día</span>
+          <span style="font-size: 18px; font-weight: 400; color: #5E6C84; line-height: 1.4;">El miércoles fue el pico</span>
+        </div>
+    </div>
+    <div data-comparativa style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); margin-top: 26px; border-radius: 22px; padding: 24px 34px 22px; display: flex; flex-direction: column; justify-content: space-between; gap: 12px; flex: 1;">
+      <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Semana 34 → semana 35</span>
+      
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 21px; font-weight: 700; color: #172B4D;">Tiempo registrado</span>
+              <span style="font-size: 19px; font-weight: 700; color: #5E6C84; font-variant-numeric: tabular-nums;">−4 h 35 m</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 700; color: #5E6C84; width: 52px; letter-spacing: 1px;">S34</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra34 style="width: 100%; height: 100%; border-radius: 5px; background: #B3BAC5;"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 600; color: #5E6C84; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">19 h 45 m</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 800; color: #0052CC; width: 52px; letter-spacing: 1px;">S35</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra35 style="width: 77%; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 800; color: #0052CC; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">15 h 10 m</span>
+            </div>
+          </div>
+      
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 21px; font-weight: 700; color: #172B4D;">Issues finalizadas</span>
+              <span style="font-size: 19px; font-weight: 700; color: #00875A; font-variant-numeric: tabular-nums;">+2</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 700; color: #5E6C84; width: 52px; letter-spacing: 1px;">S34</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra34 style="width: 58%; height: 100%; border-radius: 5px; background: #B3BAC5;"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 600; color: #5E6C84; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">7</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 800; color: #0052CC; width: 52px; letter-spacing: 1px;">S35</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra35 style="width: 75%; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 800; color: #0052CC; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">9</span>
+            </div>
+          </div>
+      
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <div style="display: flex; justify-content: space-between; align-items: baseline;">
+              <span style="font-size: 21px; font-weight: 700; color: #172B4D;">Worklogs registrados</span>
+              <span style="font-size: 19px; font-weight: 700; color: #5E6C84; font-variant-numeric: tabular-nums;">−6</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 700; color: #5E6C84; width: 52px; letter-spacing: 1px;">S34</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra34 style="width: 100%; height: 100%; border-radius: 5px; background: #B3BAC5;"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 600; color: #5E6C84; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">31</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <span style="font-size: 15px; font-weight: 800; color: #0052CC; width: 52px; letter-spacing: 1px;">S35</span>
+              <div style="flex: 1; background: #F5F7FA; border-radius: 5px; height: 13px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(23,43,77,0.13);">
+                <div data-barra35 style="width: 81%; height: 100%; border-radius: 5px; background: linear-gradient(90deg, #0052CC, #2684FF); box-shadow: 0 1px 4px rgba(0,82,204,0.35);"></div>
+              </div>
+              <span style="font-size: 18px; font-weight: 800; color: #0052CC; width: 108px; text-align: right; font-variant-numeric: tabular-nums;">25</span>
+            </div>
+          </div>
+      <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">Menos registros y menos horas, pero cada uno más resolutivo: la semana 34 abrió frentes, la 35 los cerró.</span>
+    </div>
+  </section>
+
+  <section data-label="Dónde se fue el tiempo" data-screen-label="Tiempo por tema" data-speaker-notes="Dos tercios de la semana fueron tracking v2 y GPM. Tracking en dos propiedades distintas: RWLV y Voltaire." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Tiempo por tema</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Dos tercios en tracking y GPM</h2>
+    <div data-a="up2" style="margin-top: 30px; display: grid; grid-template-columns: 420px 1fr; gap: 44px; flex: 1; align-items: center;">
+      <div style="position: relative; display: flex; align-items: center; justify-content: center;">
+        <svg data-dona viewBox="0 0 340 340" style="width: 380px; height: 380px; overflow: visible;">
+          <circle cx="170" cy="170" r="132" fill="none" stroke="#F5F7FA" stroke-width="40"></circle>
+          <circle data-arco data-largo="269.78" cx="170" cy="170" r="132" fill="none" stroke="#0052CC" stroke-width="40" stroke-dasharray="0 829.38" stroke-linecap="butt" transform="rotate(-90 170 170)"></circle>
+        <circle data-arco data-largo="250.64" cx="170" cy="170" r="132" fill="none" stroke="#2684FF" stroke-width="40" stroke-dasharray="0 829.38" stroke-linecap="butt" transform="rotate(27.1 170 170)"></circle>
+        <circle data-arco data-largo="177.72" cx="170" cy="170" r="132" fill="none" stroke="#5E9BE8" stroke-width="40" stroke-dasharray="0 829.38" stroke-linecap="butt" transform="rotate(135.89 170 170)"></circle>
+        <circle data-arco data-largo="78.38" cx="170" cy="170" r="132" fill="none" stroke="#8FBCEF" stroke-width="40" stroke-dasharray="0 829.38" stroke-linecap="butt" transform="rotate(213.03 170 170)"></circle>
+        <circle data-arco data-largo="52.86" cx="170" cy="170" r="132" fill="none" stroke="#B3BAC5" stroke-width="40" stroke-dasharray="0 829.38" stroke-linecap="butt" transform="rotate(247.05 170 170)"></circle>
+        </svg>
+        <div style="position: absolute; display: flex; flex-direction: column; align-items: center; gap: 2px;">
+          <span data-total style="font-size: 46px; font-weight: 800; color: #172B4D; letter-spacing: -1.6px; font-variant-numeric: tabular-nums;">15 h 10 m</span>
+          <span style="font-size: 17px; font-weight: 600; letter-spacing: 1.6px; text-transform: uppercase; color: #5E6C84;">registradas</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 17px;">
+        
+        <div data-tema style="display: flex; gap: 16px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 7px; width: 16px; height: 16px; border-radius: 5px; background: #0052CC;"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 25px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Tracking v2 en dos propiedades</span>
+              <span style="font-size: 21px; font-weight: 700; color: #0052CC; white-space: nowrap; font-variant-numeric: tabular-nums;">4 h 56 m · 33%</span>
+            </div>
+            <span style="font-size: 18.5px; font-weight: 400; color: #5E6C84; line-height: 1.4; max-width: 900px;">UWS-9493 y UWS-9608 — RWLV a LIVE con V1 conviviendo en la pestaña nueva, y Voltaire integrado desde cero.</span>
+          </div>
+        </div>
+        <div data-tema style="display: flex; gap: 16px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 7px; width: 16px; height: 16px; border-radius: 5px; background: #2684FF;"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 25px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">GPM · experiencia del huésped</span>
+              <span style="font-size: 21px; font-weight: 700; color: #2684FF; white-space: nowrap; font-variant-numeric: tabular-nums;">4 h 35 m · 30%</span>
+            </div>
+            <span style="font-size: 18.5px; font-weight: 400; color: #5E6C84; line-height: 1.4; max-width: 900px;">UWS-9584, UWS-9544 y UWS-9583 — agregar experiencias desde el día abierto, riel de fechas en móvil y aviso de traslapes.</span>
+          </div>
+        </div>
+        <div data-tema style="display: flex; gap: 16px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 7px; width: 16px; height: 16px; border-radius: 5px; background: #5E9BE8;"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 25px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Micrositios de cliente</span>
+              <span style="font-size: 21px; font-weight: 700; color: #5E9BE8; white-space: nowrap; font-variant-numeric: tabular-nums;">3 h 15 m · 21%</span>
+            </div>
+            <span style="font-size: 18.5px; font-weight: 400; color: #5E6C84; line-height: 1.4; max-width: 900px;">Parton’s Nashville, Boiler, ZoukLV y la autodetección de idioma de Zouk Tokio.</span>
+          </div>
+        </div>
+        <div data-tema style="display: flex; gap: 16px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 7px; width: 16px; height: 16px; border-radius: 5px; background: #8FBCEF;"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 25px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">Studio · tags fantasma</span>
+              <span style="font-size: 21px; font-weight: 700; color: #8FBCEF; white-space: nowrap; font-variant-numeric: tabular-nums;">1 h 26 m · 9%</span>
+            </div>
+            <span style="font-size: 18.5px; font-weight: 400; color: #5E6C84; line-height: 1.4; max-width: 900px;">UWS-9513 — el preview del wizard mostraba tags que no existen en el catálogo real.</span>
+          </div>
+        </div>
+        <div data-tema style="display: flex; gap: 16px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 7px; width: 16px; height: 16px; border-radius: 5px; background: #B3BAC5;"></span>
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <div style="display: flex; align-items: baseline; gap: 12px;">
+              <span style="font-size: 25px; font-weight: 700; color: #172B4D; letter-spacing: -0.4px;">AEO y reunión semanal</span>
+              <span style="font-size: 21px; font-weight: 700; color: #5E6C84; white-space: nowrap; font-variant-numeric: tabular-nums;">0 h 58 m · 6%</span>
+            </div>
+            <span style="font-size: 18.5px; font-weight: 400; color: #5E6C84; line-height: 1.4; max-width: 900px;">Diagnóstico del reverse proxy para el AEO de Turning Stone y la weekly del equipo.</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Siete propiedades de cliente y dos productos internos —GPM y Studio— en la misma semana. <strong style="font-weight: 700;">Ningún frente se llevó más de un tercio</strong>: el tiempo se repartió entre migrar tracking y pulir el itinerario del huésped.</div>
+  </section>
+
+  <section data-label="Tracking v2" data-screen-label="Tracking v2" data-speaker-notes="La historia central: el tracking v2 se llevo un tercio de la semana en dos propiedades. RWLV fue migracion con convivencia V1, Voltaire fue de cero. RWLV sigue en curso." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Historia central</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Tracking v2, dos propiedades<br>y una migración con red</h2>
+    <div data-a="up2" style="margin-top: 36px; display: grid; grid-template-columns: 0.82fr 1.3fr; gap: 32px; flex: 1;">
+      <div data-panel style="background: #0052CC; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(90% 70% at 85% 8%, rgba(38,132,255,0.6) 0%, rgba(38,132,255,0) 60%); background-size: 26px 26px, 100% 100%; border-radius: 26px; padding: 42px 38px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(23,43,77,0.14), 0 18px 40px rgba(0,82,204,0.28);">
+        <span data-cuenta="33" data-sufijo="%" style="font-size: 122px; font-weight: 800; letter-spacing: -5px; line-height: 1; font-variant-numeric: tabular-nums;">33%</span>
+        <span style="font-size: 25px; font-weight: 600; margin-top: 8px; line-height: 1.3;">de la semana — 4 h 56 m en 7 worklogs</span>
+        <div style="flex: 1;"></div>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #FFFFFF; background: rgba(255,255,255,0.14); border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9493</span><span style="font-size: 18px; color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums;">RWLV · 3 h 15 m</span></div>
+          <div style="display: flex; align-items: center; gap: 12px;"><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #FFFFFF; background: rgba(255,255,255,0.14); border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9608</span><span style="font-size: 18px; color: rgba(255,255,255,0.85); font-variant-numeric: tabular-nums;">Voltaire · 1 h 41 m</span></div>
+          <span style="margin-top: 6px; align-self: flex-start; background: #FFFFFF; color: #0052CC; font-size: 17px; font-weight: 700; border-radius: 999px; padding: 8px 18px;">Voltaire cerrado · RWLV en curso</span>
+        </div>
+      </div>
+      <div data-detalle style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 26px; padding: 40px 38px; display: flex; flex-direction: column; gap: 18px;">
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Qué implicó</span>
+        
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 4px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #172B4D; line-height: 1.42;"><strong style="font-weight: 700;">RWLV:</strong> integración en STG, migración de los códigos V1 a V2 y pase a LIVE con validación.</span>
+          </div>
+        
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 4px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #172B4D; line-height: 1.42;">Reordenar el panel: se eliminó la pestaña vieja y <strong style="font-weight: 700;">V1 quedó dentro de la pestaña nueva</strong>, para no perder el histórico durante la transición.</span>
+          </div>
+        
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 4px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #172B4D; line-height: 1.42;">Un campo adicional agregado el lunes, publicado y probado en LIVE.</span>
+          </div>
+        
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 4px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #172B4D; line-height: 1.42;"><strong style="font-weight: 700;">Voltaire:</strong> gestión de accesos, tracking v2 desde cero, prueba en STG y códigos cargados en LIVE — cerrado en dos días.</span>
+          </div>
+        
+          <div data-logro style="display: flex; align-items: flex-start; gap: 15px;">
+            <span data-check style="flex: none; margin-top: 4px; width: 26px; height: 26px; border-radius: 50%; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #172B4D; line-height: 1.42;">Ambas cuelgan del mismo épico: el tablero de GTM, GA y Meta para los sitios de UWS.</span>
+          </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="GPM" data-screen-label="GPM" data-speaker-notes="Tres mejoras al itinerario del huesped, 4 horas 35. Las dos primeras cerradas; el aviso de traslapes regreso de QA el domingo." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">GPM</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Tres arreglos al itinerario<br>del huésped</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">4 h 35 m en el flujo donde el huésped arma su estancia: descubrir fechas, agregar experiencias y no chocar consigo mismo.</p>
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; flex: 1;">
+      
+        <div data-gpm style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #00875A;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span data-gpm-num style="font-size: 15px; font-weight: 800; letter-spacing: 2px; color: #00875A;">AGREGAR</span>
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9584</span>
+          </div>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Reservar desde el día que está viendo</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">El itinerario no ofrecía forma de sumar una experiencia al día abierto. Ahora el catálogo llega acotado a esa fecha, verificado con datos reales.</span>
+          <div style="flex: 1;"></div>
+          <span style="align-self: flex-start; font-size: 16px; font-weight: 700; padding: 5px 14px; border-radius: 999px; background: #00875A1A; color: #00875A;">Finalizada · 2 h 48 m</span>
+        </div>
+      
+        <div data-gpm style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #00875A;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span data-gpm-num style="font-size: 15px; font-weight: 800; letter-spacing: 2px; color: #00875A;">NAVEGAR</span>
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9544</span>
+          </div>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Ver todas las fechas en móvil</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">Antes solo se avanzaba semana por semana. Se añadió un riel de fechas con encabezados de calendario fijos.</span>
+          <div style="flex: 1;"></div>
+          <span style="align-self: flex-start; font-size: 16px; font-weight: 700; padding: 5px 14px; border-radius: 999px; background: #00875A1A; color: #00875A;">Finalizada · 58 m</span>
+        </div>
+      
+        <div data-gpm style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
+            <span data-gpm-num style="font-size: 15px; font-weight: 800; letter-spacing: 2px; color: #DE350B;">AVISAR</span>
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9583</span>
+          </div>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Advertir si la reserva se traslapa</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">Aviso previo cuando la nueva reserva choca con otra que el huésped ya tiene, evaluado por acompañante.</span>
+          <div style="flex: 1;"></div>
+          <span style="align-self: flex-start; font-size: 16px; font-weight: 700; padding: 5px 14px; border-radius: 999px; background: #DE350B1A; color: #DE350B;">Regresó de QA · 49 m</span>
+        </div>
+    </div>
+    
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Las tres nacen del mismo hallazgo: <strong style="font-weight: 700;">el huésped no puede planear lo que no alcanza a ver</strong>. Dos ya están en producción; el aviso de traslapes volvió de QA el domingo y abre la semana 36.</div>
+  </section>
+
+  <section data-label="Día por día" data-screen-label="Día por día" data-speaker-notes="El miercoles concentro 5 horas 47: cuatro frentes distintos en un dia. Viernes fue el mas ligero. El lunes cerro Parton's y publico el campo del tracking." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Día por día</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">El miércoles cargó la semana</h2>
+    <div data-a="up2" style="margin-top: 26px; position: relative;">
+      <svg viewBox="0 0 1560 288" style="width: 100%; height: 288px; overflow: visible;">
+        <defs>
+          <linearGradient id="relleno" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#2684FF" stop-opacity="0.28"></stop>
+            <stop offset="100%" stop-color="#2684FF" stop-opacity="0"></stop>
+          </linearGradient>
+        </defs>
+        <line x1="40" y1="262" x2="1520" y2="262" stroke="#DFE1E6" stroke-width="2"></line>
+        <polygon data-area points="40,262 40,113.6 410,40 780,198 1150,214 1520,162.2 1520,262" fill="url(#relleno)"></polygon>
+        <polyline data-linea points="40,113.6 410,40 780,198 1150,214 1520,162.2" fill="none" stroke="#0052CC" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="1523.5" stroke-dashoffset="0"></polyline>
+        
+        <g data-punto>
+          <circle cx="40" cy="113.6" r="9" fill="#FFFFFF" stroke="#2684FF" stroke-width="4"></circle>
+          <text x="40" y="87.6" text-anchor="middle" style="font: 800 22px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; fill: #172B4D; font-variant-numeric: tabular-nums;">3 h 52</text>
+        </g>
+        <g data-punto>
+          <circle cx="410" cy="40" r="13" fill="#FFFFFF" stroke="#0052CC" stroke-width="6"></circle>
+          <text x="410" y="14" text-anchor="middle" style="font: 800 26px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; fill: #0052CC; font-variant-numeric: tabular-nums;">5 h 47</text>
+        </g>
+        <g data-punto>
+          <circle cx="780" cy="198" r="9" fill="#FFFFFF" stroke="#2684FF" stroke-width="4"></circle>
+          <text x="780" y="172" text-anchor="middle" style="font: 800 22px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; fill: #172B4D; font-variant-numeric: tabular-nums;">1 h 40</text>
+        </g>
+        <g data-punto>
+          <circle cx="1150" cy="214" r="9" fill="#FFFFFF" stroke="#2684FF" stroke-width="4"></circle>
+          <text x="1150" y="188" text-anchor="middle" style="font: 800 22px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; fill: #172B4D; font-variant-numeric: tabular-nums;">1 h 15</text>
+        </g>
+        <g data-punto>
+          <circle cx="1520" cy="162.2" r="9" fill="#FFFFFF" stroke="#2684FF" stroke-width="4"></circle>
+          <text x="1520" y="136.2" text-anchor="middle" style="font: 800 22px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; fill: #172B4D; font-variant-numeric: tabular-nums;">2 h 36</text>
+        </g>
+        <text data-etiqueta x="40" y="284" text-anchor="middle" style="font: 700 19px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.5px; fill: #5E6C84;">MAR 25</text><text data-etiqueta x="410" y="284" text-anchor="middle" style="font: 700 19px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.5px; fill: #0052CC;">MIÉ 26</text><text data-etiqueta x="780" y="284" text-anchor="middle" style="font: 700 19px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.5px; fill: #5E6C84;">JUE 27</text><text data-etiqueta x="1150" y="284" text-anchor="middle" style="font: 700 19px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.5px; fill: #5E6C84;">VIE 28</text><text data-etiqueta x="1520" y="284" text-anchor="middle" style="font: 700 19px 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 1.5px; fill: #5E6C84;">LUN 31</text>
+      </svg>
+    </div>
+    <div data-a="up3" style="margin-top: 22px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 18px; flex: 1; align-content: start;">
+      
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #5E6C84;">7 worklogs</span>
+          <div style="height: 1px; background: #DFE1E6;"></div>
+          <span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Bug de tags fantasma: rama con el fix y merge a UAT</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Riel de fechas móvil + encabezados fijos del calendario</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Tracking de RWLV a LIVE</span>
+        </div>
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border: 2px solid #0052CC; border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #0052CC;">7 worklogs</span>
+          <div style="height: 1px; background: #DFE1E6;"></div>
+          <span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Agregar experiencia desde el día del itinerario</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Voltaire: acceso, tracking v2 y prueba en STG</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Autodetección de idioma en Zouk Tokio</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Fix del micrositio de Boiler</span>
+        </div>
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #5E6C84;">4 worklogs</span>
+          <div style="height: 1px; background: #DFE1E6;"></div>
+          <span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Reordenar pestañas del tracking y pasar a LIVE</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Voltaire y ZoukLV a LIVE con reporte</span>
+        </div>
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #5E6C84;">2 worklogs</span>
+          <div style="height: 1px; background: #DFE1E6;"></div>
+          <span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Estilos de Parton’s</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Reverse proxy del AEO de Turning Stone</span>
+        </div>
+        <div data-dia style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07);  border-radius: 18px; padding: 22px 20px; display: flex; flex-direction: column; gap: 10px;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #5E6C84;">5 worklogs</span>
+          <div style="height: 1px; background: #DFE1E6;"></div>
+          <span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Tracking: campo nuevo, a LIVE y probado</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Traslapes: conflictos resueltos</span><span style="font-size: 17px; font-weight: 400; color: #5E6C84; line-height: 1.35;"><span style="color: #0052CC; font-weight: 700;">·</span> Cierre de Parton’s</span>
+        </div>
+    </div>
+    
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">El miércoles concentró <strong style="font-weight: 700;">cuatro frentes distintos en un solo día</strong> —GPM, Voltaire, Zouk Tokio y Boiler—; jueves y viernes fueron de publicar y reportar lo abierto el miércoles.</div>
+  </section>
+
+  <section data-label="La cola de QA" data-screen-label="Cola de QA" data-speaker-notes="La lamina de continuidad. Las seis que la semana 34 dejo en QA o por hacer cerraron esta semana. Se revela una por una con las flechas." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #E3FCEF; color: #00875A; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">6 de 6</span>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Continuidad</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Todo lo que la semana 34<br>dejó pendiente, cerrado</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">El reporte anterior terminó con cuatro issues en control de calidad, dos sin empezar y una que había regresado de QA. Así quedaron.</p>
+    <div data-a="up3" style="margin-top: 30px; display: flex; flex-direction: column; gap: 12px; flex: 1;">
+      
+        <div data-fila data-step="1" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9511</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">ZoukLV · landing del 16 de septiembre</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #FFEBE6; color: #DE350B;">Regresó de QA</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+        <div data-fila data-step="2" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9369</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">Zouk Tokio · checkout en japonés</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #DEEBFF; color: #0052CC;">En QA</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+        <div data-fila data-step="3" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9213</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">Zouk Tokio · estilos de la integración</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #DEEBFF; color: #0052CC;">En QA</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+        <div data-fila data-step="4" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9262</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">Plugin WP · integraciones no configurables</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #DEEBFF; color: #0052CC;">En QA</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+        <div data-fila data-step="5" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9544</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">GPM · itinerario en móvil</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #F5F7FA; color: #5E6C84;">Por hacer</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+        <div data-fila data-step="6" style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 16px; padding: 18px 26px; display: grid; grid-template-columns: 118px 1fr 176px 34px 132px; gap: 20px; align-items: center;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0052CC; background: #DEEBFF; border-radius: 6px; padding: 3px 10px; white-space: nowrap;">UWS-9513</span>
+          <span style="font-size: 22px; font-weight: 600; color: #172B4D;">Studio · tags fantasma del wizard</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #F5F7FA; color: #5E6C84;">Por hacer</span>
+          <span data-flecha style="font-size: 24px; font-weight: 800; color: #5E6C84; text-align: center;">→</span>
+          <span style="font-size: 17px; font-weight: 700; text-align: center; padding: 5px 12px; border-radius: 999px; background: #E3FCEF; color: #00875A;">Finalizada</span>
+        </div>
+    </div>
+    
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Solo una excepción: <strong style="font-weight: 700;">el tracking de RWLV volvió a desarrollo</strong> en lugar de cerrar — de ahí las 3 h 15 m que se le dedicaron esta semana.</div>
+  </section>
+
+  <section data-label="Estado del tablero" data-screen-label="Estado" data-speaker-notes="Como quedo el tablero al martes 1 de septiembre. Nueve finalizadas, dos en curso y una que regreso de QA." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Estado</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">Cómo quedó el tablero</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #5E6C84; line-height: 1.5; max-width: 1380px;">Estado en Jira al martes 1 de septiembre por la mañana. De las 12 issues trabajadas, 9 quedaron cerradas.</p>
+    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 22px; flex: 1; align-content: start;">
+      
+        <div data-col style="background: #E3FCEF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+            <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #00875A;">Finalizadas</span>
+            <span data-cuenta="9" style="font-size: 40px; font-weight: 800; color: #00875A; letter-spacing: -1px; font-variant-numeric: tabular-nums;">9</span>
+          </div>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 9px;">
+            
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9584</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">GPM · agregar desde el día</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9544</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">GPM · itinerario en móvil</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9608</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Voltaire · Tracking v2</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9513</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Studio · tags fantasma</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9283</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Parton’s · branding</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9633</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Boiler · fecha del micrositio</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9511</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">ZoukLV · landing</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-9369</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Zouk Tokio · checkout JA</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #00875A; letter-spacing: 0.3px;">UWS-8619</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">AEO · nightlife de Turning Stone</span>
+            </div>
+          </div>
+        </div>
+      
+        <div data-col style="background: #DEEBFF; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+            <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #0052CC;">En curso</span>
+            <span data-cuenta="2" style="font-size: 40px; font-weight: 800; color: #0052CC; letter-spacing: -1px; font-variant-numeric: tabular-nums;">2</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-9493</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">RWLV · Tracking v2</span>
+            </div>
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #0052CC; letter-spacing: 0.3px;">UWS-8489</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">Gestión de integraciones</span>
+            </div>
+          </div>
+        </div>
+      
+        <div data-col style="background: #FFEBE6; border-radius: 20px; padding: 26px 24px; display: flex; flex-direction: column; gap: 14px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.65), 0 10px 26px rgba(23,43,77,0.09);">
+          <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 10px;">
+            <span style="font-size: 18px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #DE350B;">Regresó de QA</span>
+            <span data-cuenta="1" style="font-size: 40px; font-weight: 800; color: #DE350B; letter-spacing: -1px; font-variant-numeric: tabular-nums;">1</span>
+          </div>
+          <div style="display: flex; flex-direction: column; gap: 9px;">
+            
+            <div data-issue style="background: #FFFFFF; border: 1px solid rgba(23,43,77,0.08); border-radius: 10px; padding: 10px 13px; display: flex; flex-direction: column; gap: 2px; box-shadow: 0 2px 6px rgba(23,43,77,0.07);">
+              <span style="font-size: 15px; font-weight: 700; color: #DE350B; letter-spacing: 0.3px;">UWS-9583</span>
+              <span style="font-size: 15.5px; font-weight: 400; color: #172B4D; line-height: 1.3;">GPM · aviso de traslapes</span>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section data-label="Lo que viene" data-screen-label="Lo que viene" data-speaker-notes="Semana 36 abre con el aviso de traslapes que regreso de QA y con cerrar el tracking de RWLV. Wynn sigue esperando y Turning Stone volvio a por hacer." style="background: #FFFFFF; background-image: radial-gradient(rgba(0,82,204,0.14) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(222,235,255,0.6) 0%, rgba(222,235,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #172B4D; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DFE1E6; background: rgba(255,255,255,0.72);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 40px; height: 40px; border-radius: 10px; background: #0052CC; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">S35</span>
+        <span style="font-size: 20px; font-weight: 600; color: #172B4D; letter-spacing: -0.2px;">Reporte semanal · Jira UWS</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #0052CC;">Lo que viene</span>
+      </div>
+    </header>
+    <h2 data-a="up" data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #172B4D; letter-spacing: -1.8px; line-height: 1.06;">La semana 36 abre con<br>una devolución y un cierre</h2>
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 22px; flex: 1; align-content: start;">
+      
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #DE350B;">Primero</span>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Traslapes de GPM</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">UWS-9583 regresó de QA el domingo. Ya hay conflictos resueltos del lunes, así que arranca con contexto fresco.</span>
+        </div>
+      
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #0052CC;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #0052CC;">Cerrar</span>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Tracking de RWLV</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">UWS-9493 es lo único que sigue en curso después de 3 h 15 m. Es la última pieza del tablero de GTM, GA y Meta.</span>
+        </div>
+      
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #974F0C;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #974F0C;">Esperando</span>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Wynn y Turning Stone</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">La guest list de Wynn sigue en «Waiting on Status Update» y la página de Game Day volvió a «por hacer»: ninguna depende de mí.</span>
+        </div>
+      
+        <div data-sig style="background: linear-gradient(180deg, #FFFFFF 0%, #FBFCFE 100%); border: 1px solid #DFE1E6; box-shadow: 0 1px 2px rgba(23,43,77,0.07), 0 10px 24px rgba(23,43,77,0.08), 0 26px 52px rgba(0,82,204,0.07); border-radius: 22px; padding: 32px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #5E6C84;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #5E6C84;">En pausa</span>
+          <span style="font-size: 26px; font-weight: 700; color: #172B4D; letter-spacing: -0.5px; line-height: 1.2;">Tutoriales del portal</span>
+          <span style="font-size: 19px; font-weight: 400; color: #5E6C84; line-height: 1.45;">UWS-9293 sigue On Hold desde la semana 34. Sin movimiento y sin bloquear nada.</span>
+        </div>
+    </div>
+    
+    <div data-a="up3" data-nota style="background: #DEEBFF; border-left: 5px solid #0052CC; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #172B4D; line-height: 1.5; box-shadow: 0 8px 20px rgba(23,43,77,0.08);">Sin frentes nuevos abiertos: la semana 36 empieza con <strong style="font-weight: 700;">dos issues vivas y ambas ya arrancadas</strong>.</div>
+  </section>
+
+  <section data-label="Cierre" data-screen-label="Cierre" data-speaker-notes="En una frase: menos horas, mas cierres, la cola limpia. 9 de 12 finalizadas." style="background: #0052CC; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(80% 70% at 15% 90%, rgba(38,132,255,0.5) 0%, rgba(38,132,255,0) 60%); background-size: 30px 30px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <div data-orbe style="position: absolute; right: -90px; top: -90px; width: 540px; height: 540px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
+      <div data-orbe style="position: absolute; left: 40%; bottom: -260px; width: 520px; height: 520px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.09);"></div>
+    </div>
+    <span data-a="up" style="font-size: 21px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.75);">En una frase</span>
+    <h2 data-split style="margin: 26px 0 0; font-size: 86px; font-weight: 800; letter-spacing: -3px; line-height: 1.04; max-width: 1500px;">Menos horas, más cierres<br>y la cola de QA vacía</h2>
+    <p data-a="up3" style="margin: 32px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.82); line-height: 1.55; max-width: 1140px;">15 h 10 m para terminar 9 de 12 issues y dejar limpio todo lo que la semana 34 había dejado esperando. Quedan dos vivas, las dos ya arrancadas.</p>
+    <div data-a="up3" style="margin-top: 44px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Semana 35 · 25–31 ago 2026</span>
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Fuente: worklogs de Jira · proyecto UWS</span>
+    </div>
+  </section>
+</deck-stage>
+<script src="./gsap.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) lanzar(activa);
+  }
+  // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
+  // elementos recién visibles entran animados; ocultar o revelar de golpe
+  // (llegar en reversa) no anima nada.
+  document.addEventListener('stepchange', function (e) {
+    var d = e.detail;
+    if (reducido || !d || d.step !== d.previousStep + 1) return;
+    var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
+    if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script>
+// ── Coreografía v2.0 ─────────────────────────────────────────────────────
+// Más rica que la de semana34: titulares partidos en palabras con entrada 3D,
+// dona SVG que se traza, curva de la semana que se dibuja, barras comparativas
+// y contadores de tiempo formateados. Todo con GSAP core (sin plugins de club)
+// y con tl.from(), para que sin JS el deck se vea completo.
+(function () {
+  if (!window.animar || !window.gsap) return;
+
+  // Parte un titular en palabras envueltas en <span>, respetando los <br>.
+  // Idempotente: se hace una sola vez por elemento (las timelines se
+  // reconstruyen cada vez que la slide se reactiva).
+  function partir(el) {
+    if (!el || el.dataset.partido) return [];
+    var salida = [];
+    var nodos = Array.prototype.slice.call(el.childNodes);
+    nodos.forEach(function (n) {
+      if (n.nodeType !== 3) return;                       // <br> y demás, intactos
+      var frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(function (parte) {
+        if (!parte) return;
+        if (/^\s+$/.test(parte)) { frag.appendChild(document.createTextNode(parte)); return; }
+        var s = document.createElement('span');
+        s.textContent = parte;
+        s.style.display = 'inline-block';
+        s.style.willChange = 'transform, opacity';
+        frag.appendChild(s);
+        salida.push(s);
+      });
+      el.replaceChild(frag, n);
+    });
+    el.dataset.partido = '1';
+    return salida;
+  }
+  function palabras(el) {
+    if (!el) return [];
+    if (el.dataset.partido) return el.querySelectorAll('span');
+    return partir(el);
+  }
+  // Entrada de titular: palabras que suben y rotan en 3D, escalonadas.
+  function titular(tl, el, pos) {
+    var ps = palabras(el);
+    if (!ps.length) return;
+    tl.from(ps, { y: 40, opacity: 0, rotationX: -55, transformPerspective: 900,
+                  transformOrigin: '50% 100%', duration: 0.7, stagger: 0.045,
+                  ease: 'power3.out' }, pos || 0);
+  }
+  // Contador de tiempo con formato "N h MM m".
+  function cuentaHM(tl, el, seg, pos) {
+    if (!el) return;
+    var o = { v: 0 };
+    tl.to(o, { v: seg, duration: 1.05, ease: 'power2.out', onUpdate: function () {
+      var h = Math.floor(o.v / 3600), m = Math.round(o.v % 3600 / 60);
+      el.textContent = h + ' h ' + (m < 10 ? '0' + m : m) + ' m';
+    } }, pos || 0);
+  }
+  var Q = function (s, sel) { return s.querySelectorAll(sel); };
+  var q = function (s, sel) { return s.querySelector(sel); };
+
+  animar('Portada', function (tl, s) {
+    tl.from(Q(s, '[data-orbe]'), { scale: 0.8, opacity: 0, duration: 1.2, stagger: 0.12, ease: 'power2.out' }, 0)
+      .from(q(s, '[data-sello]'), { scale: 0, rotation: -90, duration: 0.7, ease: 'back.out(1.7)' }, 0.1)
+      .from(q(s, '[data-a="up"] div'), { x: -22, opacity: 0, duration: 0.55 }, 0.25);
+    titular(tl, q(s, 'h1'), 0.3);
+    tl.from(q(s, 'p'), { y: 22, opacity: 0, duration: 0.55 }, 0.75)
+      .from(Q(s, 'div[data-a="up3"] span'), { y: 18, opacity: 0, scale: 0.94, duration: 0.5, stagger: 0.06 }, 0.85);
+  });
+
+  animar('La semana en números', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-stat]'), { y: 40, opacity: 0, rotationX: -28, transformPerspective: 1200,
+                                   transformOrigin: '50% 0%', duration: 0.65, stagger: 0.07 }, 0.3)
+      .from(q(s, '[data-comparativa]'), { y: 30, opacity: 0, duration: 0.6 }, 0.6)
+      .from(Q(s, '[data-barra34]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.6, ease: 'power2.inOut', stagger: 0.07 }, 0.62)
+      .from(Q(s, '[data-barra35]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.75, ease: 'power3.out', stagger: 0.07 }, 0.75);
+    Q(s, '[data-cuenta]').forEach(function (el) { cuenta(tl, el, 0.45); });
+  });
+
+  animar('Dónde se fue el tiempo', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    // la dona gira un poco al aparecer y cada arco se traza en secuencia
+    tl.from(q(s, '[data-dona]'), { rotation: -22, scale: 0.9, opacity: 0, duration: 0.8,
+                                   transformOrigin: '50% 50%', ease: 'power3.out' }, 0.15);
+    Q(s, '[data-arco]').forEach(function (arco, i) {
+      tl.to(arco, { attr: { 'stroke-dasharray': arco.dataset.largo + ' 829.38' },
+                    duration: 0.5, ease: 'power2.out' }, 0.35 + i * 0.11);
+    });
+    cuentaHM(tl, q(s, '[data-total]'), 54600, 0.4);
+    tl.from(Q(s, '[data-tema]'), { x: 34, opacity: 0, duration: 0.5, stagger: 0.09 }, 0.45);
+  });
+
+  animar('Tracking v2', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-panel]'), { x: -50, opacity: 0, rotationY: 14, transformPerspective: 1100,
+                                    transformOrigin: '0% 50%', duration: 0.8 }, 0.2)
+      .from(q(s, '[data-detalle]'), { x: 50, opacity: 0, duration: 0.75 }, 0.3)
+      .from(Q(s, '[data-logro]'), { y: 18, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.6)
+      .from(Q(s, '[data-check]'), { scale: 0, duration: 0.45, ease: 'back.out(2.6)', stagger: 0.1 }, 0.65);
+    cuenta(tl, q(s, '[data-cuenta]'), 0.4);
+  });
+
+  animar('GPM', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-gpm]'), { y: 46, opacity: 0, rotationX: -22, transformPerspective: 1200,
+                                  transformOrigin: '50% 0%', duration: 0.7, stagger: 0.12 }, 0.3)
+      .from(Q(s, '[data-gpm-num]'), { opacity: 0, x: -14, duration: 0.4, stagger: 0.12 }, 0.6)
+      .from(q(s, '[data-nota]'), { y: 22, opacity: 0, duration: 0.6 }, 0.9);
+  });
+
+  animar('Día por día', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    var linea = q(s, '[data-linea]');
+    // la polilínea se dibuja: el offset arranca en su largo total (build-time)
+    if (linea) tl.from(linea, { attr: { 'stroke-dashoffset': 1523.5 }, duration: 1.1, ease: 'power1.inOut' }, 0.25);
+    tl.from(q(s, '[data-area]'), { opacity: 0, duration: 0.9 }, 0.5)
+      .from(Q(s, '[data-punto]'), { scale: 0, opacity: 0, transformOrigin: '50% 50%',
+                                    duration: 0.45, ease: 'back.out(2.2)', stagger: 0.11 }, 0.55)
+      .from(Q(s, '[data-etiqueta]'), { opacity: 0, y: 10, duration: 0.4, stagger: 0.11 }, 0.6)
+      .from(Q(s, '[data-dia]'), { y: 26, opacity: 0, duration: 0.5, stagger: 0.08 }, 0.75);
+  });
+
+  animar('La cola de QA', function (tl, s) {
+    // Las filas llevan data-step: las revela la navegación (el pegamento las
+    // anima al aparecer). Aquí solo entra el encabezado y la nota.
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.55 }, 0.2)
+      .from(q(s, '[data-nota]'), { y: 22, opacity: 0, duration: 0.6 }, 0.35);
+  });
+
+  animar('Estado del tablero', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-col]'), { y: 36, opacity: 0, duration: 0.6, stagger: 0.13 }, 0.3)
+      .from(Q(s, '[data-issue]'), { y: 14, opacity: 0, duration: 0.4, stagger: 0.035 }, 0.55);
+    Q(s, '[data-cuenta]').forEach(function (el) { cuenta(tl, el, 0.5); });
+  });
+
+  animar('Lo que viene', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-sig]'), { y: 40, opacity: 0, rotationX: -20, transformPerspective: 1200,
+                                  transformOrigin: '50% 0%', duration: 0.65, stagger: 0.1 }, 0.25)
+      .from(q(s, '[data-nota]'), { y: 22, opacity: 0, duration: 0.6 }, 0.75);
+  });
+
+  animar('Cierre', function (tl, s) {
+    tl.from(Q(s, '[data-orbe]'), { scale: 0.82, opacity: 0, duration: 1.2, stagger: 0.14, ease: 'power2.out' }, 0)
+      .from(q(s, '[data-a="up"]'), { y: 20, opacity: 0, duration: 0.5 }, 0.1);
+    titular(tl, q(s, 'h2'), 0.2);
+    tl.from(q(s, 'p'), { y: 22, opacity: 0, duration: 0.6 }, 0.7)
+      .from(Q(s, 'div[data-a="up3"] span'), { y: 16, opacity: 0, duration: 0.5, stagger: 0.08 }, 0.85);
+  });
+})();
+</script>
+<script>
+(function () {
+  var presenting = false;
+  var btn = document.createElement('button');
+  btn.id = 'modo-presentacion';
+  btn.type = 'button';
+  function render() {
+    btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
+    if (presenting) btn.setAttribute('data-on', '');
+    else btn.removeAttribute('data-on');
+  }
+  function setPresenting(on) {
+    if (on === presenting) return;
+    presenting = on;
+    window.postMessage({ __omelette_presenting: on }, '*');
+    if (on) {
+      if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+    } else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    render();
+  }
+  btn.addEventListener('click', function () { setPresenting(!presenting); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { setPresenting(!presenting); e.preventDefault(); }
+    else if (e.key === 'Escape' && presenting && !document.fullscreenElement) setPresenting(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
+  render();
+  document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>

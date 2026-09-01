@@ -20,6 +20,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
 /caras/              Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
 /semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides
+/semana35/           Reporte semanal Jira: semana 35 (25–31 ago 2026) · 16:9 · 10 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
