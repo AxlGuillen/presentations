@@ -17,6 +17,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /talon/              Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
 /blitzcrank/         Blitzcrank cumple 17 años (apoyo visual para TikTok) · 9:16 · 9 slides
 /malphite/           Malphite cumple 17 años (apoyo visual para TikTok) · 9:16 · 8 slides
+/mundo/              Dr. Mundo cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
 /caras/              Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
 /semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides

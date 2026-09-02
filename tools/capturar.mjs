@@ -78,7 +78,7 @@ for (let i = 0; i < n; i++) {
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   }, i);
   // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
-  await new Promise(r => setTimeout(r, 2000));
+  await new Promise(r => setTimeout(r, 2600)); // margen para las timelines GSAP (la más larga hoy: ~1,8 s)
   const archivo = path.join(salida, `slide-${String(i + 1).padStart(2, '0')}.png`);
   await pagina.screenshot({ path: archivo });
   rutas.push(archivo);
