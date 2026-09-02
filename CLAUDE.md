@@ -84,6 +84,26 @@ Coste hasta ver la primera lámina, medido con `node tools/qa-peso.mjs <carpeta�
 | ornn | 3 091 KB | **1 070 KB** |
 | skins | 4 074 KB | **1 600 KB** |
 
+### Peso de los assets
+
+El otro lado del problema: los splash de Data Dragon vienen a **1215×717** y la rejilla de skins los pinta a **228×134**. Son 28 veces el área que se ve. El peso no estaba en la compresión, estaba en píxeles que nadie mira.
+
+`node tools/optimizar-imagenes.mjs <carpeta…> [--aplicar] [--holgura=2]` mide en Chrome a qué tamaño se muestra realmente cada archivo y lo reescala a eso. Reglas:
+
+- El objetivo sale del **uso más grande** del archivo en el deck: un mismo splash puede ser miniatura en una lámina y fondo a sangre en otra.
+- Con `cover` la imagen se recorta, así que manda el lado que exige más escala.
+- **Nunca amplía.** Si el objetivo sale mayor que el original, el archivo se queda igual.
+- La **holgura de 2×** cubre pantallas hi-DPI, donde deck-stage escala el lienzo por encima de su tamaño de diseño. Para exportar a TikTok bastaría 1× (capturar.mjs usa el tamaño de diseño con deviceScaleFactor 1).
+- Si el reencode no ahorra al menos un 8%, se deja el original intacto.
+- El reencode JPEG es **q88 con croma 4:4:4 a propósito**. Se midió contra 4:2:0 a q88/q92/q95 y el 4:4:4 da el PSNR más alto de todas las opciones (53,5 dB contra 51,2 en la portada de Janna): el ahorro tiene que venir de los píxeles que sobran, no del croma.
+- La clave de cada archivo es su ruta **relativa a `assets/`**, no el nombre suelto — hay decks con subcarpetas (`soloq/assets/avatars`, `*/assets/emblems`) que con solo el basename se quedaban fuera.
+
+Resultado: **29 MB → 23 MB** de assets, 96 archivos reescritos y 142 dejados intactos.
+
+**Cómo se comprueba que no se perdió calidad.** No basta con mirar: se capturan las láminas antes y después con `capturar.mjs` y se compara el PNG renderizado píxel a píxel. Tras la optimización el peor caso es la rejilla de skins de janna con **41,6 dB de PSNR**, y soloq y tabletas salen **idénticas**. Por encima de ~35 dB la diferencia no es visible; a 2× sin interpolación las miniaturas son indistinguibles.
+
+**Lo que queda fuera.** Los avatares de soloq (23 PNG opacos, 2,5 MB) y las fotos de tabletas (12 PNG opacos, 3,0 MB) son fotografías guardadas como PNG: pasarlas a JPEG ahorraría un 75% pero es convertir de un formato sin pérdida a uno con pérdida, y además obliga a renombrar las referencias. Los PNG con transparencia real (7 avatares, 4 imágenes de tabletas) tienen que seguir siendo PNG.
+
 ### La cortina de carga
 
 `deck-stage.js` monta un overlay en su shadow DOM con el monograma **4XL** inline (nada que pedir a la red, el deck sigue autocontenido) sobre el carbón de La cartelera `#16130E`, con una barra de progreso ámbar `#E8B54D`. Espera a **todo lo que pinta la primera diapositiva** — sus `<img>` y también el `url()` del `background-image`, porque media serie Cumplelolero tiene la portada como fondo de la `<section>`. Techo duro de 3 s para que una imagen colgada no deje el deck tapado, y se suprime en **modo presentación**, que es lo que activan las cuatro herramientas de `tools/` antes de capturar: por eso nunca sale en un PNG.
