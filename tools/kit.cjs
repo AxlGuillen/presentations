@@ -193,4 +193,52 @@ const animador = () => `<script>
 })();
 </${'script'}>`;
 
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, og, PROD };
+
+/** Difiere los assets de un deck para que el navegador solo descargue de
+ *  entrada lo que se ve.
+ *
+ *  Deja intactas las primeras `eager` diapositivas (por defecto 1: la portada,
+ *  que además es lo que capturan portadas.mjs y og.mjs) y en el resto convierte
+ *  `src="assets/…"` en `data-src` y el `background-image` en línea de la
+ *  <section> en un atributo `data-bg`. deck-stage.js los hidrata al activar la
+ *  diapositiva y sus vecinas, al materializar su miniatura en el rail, y todos
+ *  de golpe al imprimir o vía `cargarTodo()`.
+ *
+ *  Va en build-time a propósito: el preload scanner del navegador dispara las
+ *  peticiones de <img src> antes de que corra cualquier JS, así que interceptar
+ *  en runtime no evita la descarga — hay que no emitir el src.
+ *
+ *  Uso al final del gen.js:  fs.writeFileSync(dest, kit.diferir(html), 'utf8')
+ */
+const diferir = (html, { eager = 1 } = {}) => {
+  // Se delimita por las propias <section> y no por el contenedor: los decks
+  // generados usan <deck-stage>, pero tabletas viene de Claude Design y las
+  // envuelve en <x-import>. Ninguna slide anida <section>, así que partir por
+  // la etiqueta de apertura da exactamente una diapositiva por trozo.
+  const abre = html.indexOf('<section');
+  const fin = html.lastIndexOf('</section>');
+  if (abre < 0 || fin < 0) return html;
+  const cierra = fin + '</section>'.length;
+
+  const trozos = html.slice(abre, cierra).split(/(?=<section)/);
+  const diferidos = trozos.map((trozo, i) => {
+    if (i < eager) return trozo;
+
+    // El background-image vive dentro del style= de la <section>: se saca del
+    // estilo y se guarda entero (degradado incluido) en data-bg.
+    const corte = trozo.indexOf('>') + 1;
+    let tag = trozo.slice(0, corte);
+    const resto = trozo.slice(corte);
+    const m = tag.match(/background-image:\s*([^;]+);\s*/);
+    if (m && m[1].includes('assets/')) {
+      tag = tag.replace(m[0], '').replace(/^<section/, `<section data-bg="${m[1].trim().replace(/"/g, '&quot;')}"`);
+    }
+    // El espacio previo es obligatorio para no volver a marcar un data-src
+    // si el generador se corre dos veces sobre el mismo HTML.
+    return (tag + resto).replace(/(\s)src="(assets\/[^"]+)"/g, '$1data-src="$2"');
+  });
+
+  return html.slice(0, abre) + diferidos.join('') + html.slice(cierra);
+};
+
+module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, diferir, og, PROD };

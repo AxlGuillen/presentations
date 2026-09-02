@@ -364,5 +364,7 @@ ${slides}
 </html>
 `;
 
-fs.writeFileSync(__dirname + '/index.html', html, 'utf8');
+// kit.diferir: todo lo que no sea la portada sale con data-src/data-bg, para
+// que al entrar el navegador solo descargue los assets de la primera lámina.
+fs.writeFileSync(__dirname + '/index.html', kit.diferir(html), 'utf8');
 console.log(`index.html generado: ${2 + grupos.length + 2} slides (${grupos.length} puestos, ${JUGADORES.length} jugadores)`);

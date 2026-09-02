@@ -7,6 +7,7 @@
 // que es el criterio honesto para hablar de precios. Fuente: wiki de LoL,
 // investigación del 26/08/2026.
 const fs = require('fs');
+const kit = require('../tools/kit.cjs'); // kit.diferir para la carga diferida
 
 // ── Paleta «tienda de RP»: violeta profundo + oro + magenta ──────────────
 const BG = '#0B0714';
@@ -225,5 +226,7 @@ ${slides.join('\n')}
 </html>
 `;
 
-fs.writeFileSync(__dirname + '/index.html', html, 'utf8');
+// kit.diferir: todo lo que no sea la portada sale con data-src/data-bg, para
+// que al entrar el navegador solo descargue los assets de la primera lámina.
+fs.writeFileSync(__dirname + '/index.html', kit.diferir(html), 'utf8');
 console.log(`index.html generado: ${slides.length} diapositivas`);

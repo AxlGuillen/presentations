@@ -42,6 +42,14 @@ await new Promise(r => setTimeout(r, 1200));
 const alto = Number(process.argv[3]) || await pagina.evaluate(() =>
   Number(document.querySelector('deck-stage')?.getAttribute('height')) || 1080);
 
+// Los assets van diferidos (kit.diferir): sin hidratar, toda imagen sin src se
+// contaría como rota. Se fuerza la carga completa y se espera a que aterrice.
+await pagina.evaluate(async () => {
+  const ds = document.querySelector('deck-stage');
+  if (ds && ds.cargarTodo) await ds.cargarTodo();
+});
+await new Promise(r => setTimeout(r, 900));
+
 const r = await pagina.evaluate((ALTO) => {
   const secs = [...document.querySelectorAll('deck-stage section')];
   return {

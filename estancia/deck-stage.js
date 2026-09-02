@@ -196,6 +196,54 @@
       visibility: visible;
     }
 
+    /* ── Cortina de carga ────────────────────────────────────────────────
+       Tapa el arranque mientras entran los assets de la primera diapositiva
+       (el resto van diferidos con data-src/data-bg y se hidratan al navegar).
+       Se suprime en modo presentación, que es lo que activan todas las
+       herramientas de tools/ antes de capturar, así que nunca sale en un PNG. */
+    .cortina {
+      position: absolute;
+      inset: 0;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      background: #16130E;
+      transition: opacity 420ms ease, visibility 0s linear 420ms;
+    }
+    .cortina[data-listo] { opacity: 0; visibility: hidden; pointer-events: none; }
+    .cortina .marca {
+      width: 76px;
+      height: auto;
+      color: #EDE8DD;
+      animation: deckLatido 1.9s ease-in-out infinite;
+    }
+    @keyframes deckLatido {
+      0%, 100% { opacity: 0.34; transform: translateY(0); }
+      50%      { opacity: 1;    transform: translateY(-5px); }
+    }
+    .cortina .barra {
+      width: 128px;
+      height: 2px;
+      border-radius: 2px;
+      background: rgba(237, 232, 221, 0.16);
+      overflow: hidden;
+    }
+    .cortina .barra i {
+      display: block;
+      height: 100%;
+      width: 0%;
+      border-radius: 2px;
+      background: #E8B54D;
+      transition: width 240ms ease;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cortina .marca { animation: none; opacity: 1; }
+    }
+    @media print { .cortina { display: none !important; } }
+
     .overlay {
       position: fixed;
       left: 50%;
@@ -641,6 +689,8 @@
       // attribute-keyed transition fires at 0s (changing transition-
       // duration after a transition has started doesn't affect it).
       this._onBeforePrint = () => {
+        // Cada diapositiva es una página: todas necesitan sus assets.
+        this.cargarTodo();
         this._syncPrintPageRule();
         if (this._freezeStyle) this._freezeStyle.remove();
         this._freezeStyle = document.createElement('style');
@@ -1046,7 +1096,22 @@
         this._deleteSlide(i);
       });
 
-      this._root.append(style, rail, resize, stage, overlay, menu, confirm);
+      // Cortina de carga: el monograma 4XL de la galería va inline para que
+      // el deck siga siendo autocontenido (nada que pedir a la red).
+      const cortina = document.createElement('div');
+      cortina.className = 'cortina export-hidden';
+      cortina.setAttribute('data-omelette-chrome', '');
+      cortina.setAttribute('aria-hidden', 'true');
+      cortina.innerHTML = `
+        <svg class="marca" viewBox="0 0 104 92" fill="currentColor" role="img" aria-label="4XL">
+          <path d="M0 52 H104 V66 H0 Z"/>
+          <path d="M66 0 H80 V78 H104 V92 H66 V20 L26 60 H6 Z"/>
+        </svg>
+        <div class="barra"><i></i></div>
+      `;
+
+      this._root.append(style, rail, resize, stage, overlay, menu, confirm, cortina);
+      this._cortina = cortina;
       this._canvas = canvas;
       this._stage = stage;
       this._slot = slot;
@@ -1066,6 +1131,127 @@
       } catch (err) {}
       this._setRailWidth(rw);
       this._syncRailHidden();
+    }
+
+    // ── Carga diferida de assets ──────────────────────────────────────────
+    //
+    // Los generadores (kit.diferir) emiten data-src / data-bg en todas las
+    // diapositivas menos la primera, así que al entrar el navegador solo baja
+    // lo que se ve. Aquí se hidratan: al activarse la diapositiva y sus
+    // vecinas, al materializarse su miniatura en el rail, y todas de golpe al
+    // imprimir o vía cargarTodo().
+
+    /** Devuelve las promesas de las imágenes que quedaron cargando. */
+    _hidratar(slide) {
+      if (!slide || slide.__hidratada) return [];
+      slide.__hidratada = true;
+      if (slide.dataset && slide.dataset.bg) {
+        slide.style.backgroundImage = slide.dataset.bg;
+        delete slide.dataset.bg;
+      }
+      slide.querySelectorAll('[data-bg]').forEach((el) => {
+        el.style.backgroundImage = el.dataset.bg;
+        delete el.dataset.bg;
+      });
+      const pendientes = [];
+      slide.querySelectorAll('img[data-src]').forEach((img) => {
+        img.src = img.dataset.src;
+        delete img.dataset.src;
+        if (img.complete) return;
+        pendientes.push(new Promise((r) => {
+          img.addEventListener('load', r, { once: true });
+          img.addEventListener('error', r, { once: true });
+        }));
+      });
+      return pendientes;
+    }
+
+    /** La diapositiva i y sus vecinas, para que avanzar no espere a la red. */
+    _hidratarCerca(i) {
+      const p = [];
+      for (let j = i - 1; j <= i + 1; j++) {
+        if (this._slides[j]) p.push.apply(p, this._hidratar(this._slides[j]));
+      }
+      return p;
+    }
+
+    /** Fuerza la carga de todo. La usan la impresión a PDF y las herramientas
+     *  de captura; también es la salida de emergencia si algo quedara sin
+     *  hidratar. */
+    cargarTodo() {
+      const p = [];
+      this._slides.forEach((s) => p.push.apply(p, this._hidratar(s)));
+      return Promise.all(p);
+    }
+
+    /** Las miniaturas se hidratan después de la cortina y en tiempo ocioso:
+     *  primero se ve la diapositiva, luego se llena el rail. */
+    _encolarThumb(clone) {
+      if (this.__cortinaCerrada) return this._hidratarOcioso(clone);
+      (this._colaThumbs || (this._colaThumbs = [])).push(clone);
+    }
+
+    _hidratarOcioso(el) {
+      const ocioso = window.requestIdleCallback || ((fn) => setTimeout(fn, 200));
+      ocioso(() => this._hidratar(el));
+    }
+
+    _vaciarColaThumbs() {
+      const cola = this._colaThumbs;
+      this._colaThumbs = null;
+      if (cola) cola.forEach((c) => this._hidratarOcioso(c));
+    }
+
+    /** Cortina de carga: se va cuando la primera diapositiva tiene sus
+     *  imágenes. Si el deck no tiene ninguna, se va de inmediato; y hay un
+     *  techo duro para que una imagen colgada no deje el deck tapado. */
+    _iniciarCortina() {
+      if (this.__cortinaIniciada) return;
+      this.__cortinaIniciada = true;
+      const cortina = this._cortina;
+      if (!cortina) return;
+      const cerrar = () => {
+        if (this.__cortinaCerrada) return;
+        this.__cortinaCerrada = true;
+        cortina.setAttribute('data-listo', '');
+        this._vaciarColaThumbs();
+      };
+      this.__cerrarCortina = cerrar;
+      if (this._presenting || this._previewMode) return cerrar();
+      setTimeout(cerrar, 3000);
+
+      // Se espera por TODO lo que pinta la primera diapositiva, no solo por sus
+      // <img>: media serie tiene la portada como background-image de la
+      // <section>, y sin esto la cortina se levantaba sobre un fondo vacío.
+      const primera = this._slides[0];
+      const urls = [];
+      if (primera) {
+        primera.querySelectorAll('img').forEach((i) => {
+          const u = i.currentSrc || i.getAttribute('src') || (i.dataset && i.dataset.src);
+          if (u) urls.push(u);
+        });
+        const fondo = primera.style.backgroundImage || (primera.dataset && primera.dataset.bg) || '';
+        (fondo.match(/url\([^)]+\)/g) || []).forEach((trozo) => {
+          const u = trozo.slice(4, -1).replace(/^['"]|['"]$/g, '').trim();
+          if (u && u.slice(0, 5) !== 'data:') urls.push(u);
+        });
+      }
+      const barra = cortina.querySelector('.barra i');
+      // Sin nada que esperar la cortina sería un parpadeo gratuito.
+      if (!urls.length) return setTimeout(cerrar, 240);
+      let listas = 0;
+      const avanzar = () => {
+        listas++;
+        if (barra) barra.style.width = Math.round((listas / urls.length) * 100) + '%';
+        if (listas >= urls.length) setTimeout(cerrar, 200);
+      };
+      // Se pide por Image() y no por el nodo: el navegador ya tiene la petición
+      // en vuelo, así que esto se cuelga de la misma y no genera otra.
+      urls.forEach((u) => {
+        const im = new Image();
+        im.onload = im.onerror = avanzar;
+        im.src = u;
+      });
     }
 
     _setRailWidth(px) {
@@ -1229,6 +1415,10 @@
         if (i === curr) s.setAttribute('data-deck-active', '');
         else s.removeAttribute('data-deck-active');
       });
+      // Assets diferidos: la actual y sus vecinas, para que la siguiente ya
+      // esté lista cuando se pulse →.
+      this._hidratarCerca(curr);
+      if (reason === 'init') this._iniciarCortina();
       // Pasos: al entrar avanzando la slide arranca sin pasos revelados; al
       // regresar desde una posterior llega con todos (como reveal.js).
       if (prev !== curr) {
@@ -1343,6 +1533,7 @@
       const d = e.data;
       if (d && typeof d.__omelette_presenting === 'boolean') {
         this._presenting = d.__omelette_presenting;
+        if (this._presenting && this.__cerrarCortina) this.__cerrarCortina();
         if (this._presenting && this._overlay) {
           this._overlay.removeAttribute('data-visible');
           if (this._hideTimer) clearTimeout(this._hideTimer);
@@ -1718,6 +1909,12 @@
       if (entry.host) return;
       const dw = this.designWidth, dh = this.designHeight;
       let clone = entry.slide.cloneNode(true);
+      // El clon hereda los data-src/data-bg de la diapositiva. No se hidrata
+      // aquí: se encola hasta que la cortina se levante, para que el rail no
+      // compita por la red con la diapositiva que el usuario está esperando.
+      // La slide real sigue diferida hasta que se navegue a ella (y para
+      // entonces su imagen ya está en la caché del navegador).
+      this._encolarThumb(clone);
       // Las miniaturas muestran la slide completa, sin pasos ocultos.
       clone.removeAttribute('data-step-active');
       clone.querySelectorAll('[data-step-hidden]').forEach((el) => el.removeAttribute('data-step-hidden'));

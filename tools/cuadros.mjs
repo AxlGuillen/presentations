@@ -91,6 +91,14 @@ for (let i = 0; i < n; i++) {
     // el video muestra la slide completa: todos los pasos revelados
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
     for (let esperas = 0; esperas < 20 && !s.__tl; esperas++) await new Promise(r => setTimeout(r, 25));
+    // Assets diferidos: la slide se hidrata al activarse; sin esto el primer
+    // cuadro saldría sin imágenes.
+    await new Promise(r => {
+      const listo = () => [...s.querySelectorAll('img')].every(i => i.complete);
+      if (listo()) return r();
+      const t = setInterval(() => { if (listo()) { clearInterval(t); r(); } }, 50);
+      setTimeout(() => { clearInterval(t); r(); }, 15000);
+    });
     if (!s.__tl) return 0;
     s.__tl.pause(0);           // desde aquí solo avanzamos con seeks explícitos
     return s.__tl.duration();

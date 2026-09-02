@@ -56,6 +56,38 @@ Cada deck añade un botón "Presentar · P" que hace `postMessage({__omelette_pr
 
 Tamaños de diseño: **tabletas 1920×1080**, **soloq 1080×1920**.
 
+## Carga de assets
+
+Los decks pesan megabytes en imágenes y todas las diapositivas viven en el DOM a la vez (las inactivas se ocultan con `visibility: hidden` **a propósito**, para no perder estado de videos/iframes). Sin más, el navegador descargaba **todo** al entrar: soloq 3,8 MB, tabletas 4,2 MB.
+
+**El diferido se hace en build-time, no en runtime.** El preload scanner del navegador dispara las peticiones de `<img src>` antes de que corra una sola línea de JS, así que interceptar desde `deck-stage.js` no evita la descarga: hay que no emitir el `src`. De eso se encarga `kit.diferir(html)`, que se aplica al final de cada `gen.js`:
+
+```js
+fs.writeFileSync(__dirname + '/index.html', kit.diferir(html), 'utf8');
+```
+
+Deja intacta la **primera** diapositiva (que además es lo que capturan `portadas.mjs` y `og.mjs`) y en el resto convierte `src="assets/…"` en `data-src` y el `background-image` en línea de la `<section>` en un atributo `data-bg`. Es idempotente y delimita por las propias `<section>`, no por el contenedor, porque `tabletas` las envuelve en `<x-import>` en vez de `<deck-stage>`. `tabletas/index.html` está escrito a mano: se le aplicó una vez y hay que mantener los `data-src` al editarlo.
+
+`deck-stage.js` los hidrata en tres momentos: al activarse una diapositiva **y sus vecinas** (para que → no espere red), al materializarse su miniatura en el rail, y todas de golpe en `beforeprint` o vía `ds.cargarTodo()`.
+
+**El rail va detrás de la cortina.** Las miniaturas son clones y hidratarlas al vuelo devolvía todo el peso al primer paint; ahora se encolan y se vacían en tiempo ocioso una vez levantada la cortina. Sin esa cola el diferido casi no se nota en decks cortos, donde todos los thumbs caben en pantalla.
+
+Coste hasta ver la primera lámina, medido con `node tools/qa-peso.mjs <carpeta…>`:
+
+| Deck | Antes | Después |
+|---|---|---|
+| tabletas | 4 203 KB | **380 KB** |
+| soloq | 3 792 KB | **365 KB** |
+| blitzcrank | 3 163 KB | **477 KB** |
+| ornn | 3 091 KB | **1 070 KB** |
+| skins | 4 074 KB | **1 600 KB** |
+
+### La cortina de carga
+
+`deck-stage.js` monta un overlay en su shadow DOM con el monograma **4XL** inline (nada que pedir a la red, el deck sigue autocontenido) sobre el carbón de La cartelera `#16130E`, con una barra de progreso ámbar `#E8B54D`. Espera a **todo lo que pinta la primera diapositiva** — sus `<img>` y también el `url()` del `background-image`, porque media serie Cumplelolero tiene la portada como fondo de la `<section>`. Techo duro de 3 s para que una imagen colgada no deje el deck tapado, y se suprime en **modo presentación**, que es lo que activan las cuatro herramientas de `tools/` antes de capturar: por eso nunca sale en un PNG.
+
+Si un deck nuevo no emite `data-src`, no se rompe nada — simplemente carga como antes.
+
 ## Verificar que nada desborda
 
 Las diapositivas tienen altura fija; si el contenido crece, se corta al exportar o presentar. Tras cualquier cambio de contenido, con el deck abierto en el navegador:
@@ -103,7 +135,7 @@ Usa el skill `nuevo-deck`, que encapsula el flujo completo. En corto:
 
 ## Kit de diseño (tools/kit.cjs)
 
-Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente), sombras en capas y diagramas — `kit.diagrama(codigoMermaid, config)` renderiza Mermaid a **SVG inline** vía `tools/diagrama.mjs` (Chrome del sistema + `tools/vendor/mermaid.min.js`); pásale la paleta del deck en `config.themeVariables` para que el diagrama no salga con el tema default. Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
+Helpers de **build-time** para los `gen.js`: texturas (puntitos, grano `feTurbulence` como data-URI, lavados y mallas de gradiente), sombras en capas y diagramas — `kit.diagrama(codigoMermaid, config)` renderiza Mermaid a **SVG inline** vía `tools/diagrama.mjs` (Chrome del sistema + `tools/vendor/mermaid.min.js`); pásale la paleta del deck en `config.themeVariables` para que el diagrama no salga con el tema default. También expone `kit.diferir(html)` (ver «Carga de assets»). Se importa con `require('../tools/kit.cjs')` y devuelve strings de CSS que se incrustan en el HTML generado — **el deck sigue autocontenido, cero dependencias en runtime**. Es `.cjs` a propósito: `tools/package.json` declara `"type": "module"` y los `gen.js` son CommonJS. La sofisticación visual nueva entra por aquí (o por librerías vendorizadas por carpeta, como `deck-stage.js`), nunca por CDN ni npm en runtime.
 
 ## Animación (GSAP, opcional por deck)
 

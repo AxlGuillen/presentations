@@ -77,6 +77,12 @@ for (let i = 0; i < n; i++) {
     const s = ds.querySelectorAll('section')[idx];
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   }, i);
+  // Los assets van diferidos: la slide se hidrata al activarse, así que hay que
+  // esperar a que sus imágenes aterricen antes de contar el tiempo de animación.
+  await pagina.waitForFunction(idx => {
+    const s = document.querySelectorAll('deck-stage section')[idx];
+    return s && [...s.querySelectorAll('img')].every(i => i.complete);
+  }, { timeout: 20000 }, i).catch(() => {});
   // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
   await new Promise(r => setTimeout(r, 2600)); // margen para las timelines GSAP (la más larga hoy: ~1,8 s)
   const archivo = path.join(salida, `slide-${String(i + 1).padStart(2, '0')}.png`);
