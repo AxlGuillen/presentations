@@ -49,6 +49,18 @@ const eyebrow = (txt, color = FUEGO) =>
 const titulo = (txt, size = 100) =>
   `<h2 data-a="up2" style="margin: 0; font-family: ${DISPLAY}; font-size: ${size}px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">${txt}</h2>`;
 
+// Los splash son apaisados (1215×717) y el lienzo es vertical (1080×1920): con
+// background cover hay que ampliarlos 2,7× y se recorta casi todo. Esta portada
+// pone la imagen ENTERA (contain) sobre una copia borrosa que rellena el marco,
+// que es el mismo recurso que usa tools/og.mjs para los decks verticales.
+// El background-repeat va explícito en las dos capas.
+const portada = (src, alt, posNitida = 'center 22%') => `
+    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: -60px; background-image: url('assets/${src}'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(46px) saturate(0.8) brightness(0.4); transform: scale(1.08);" role="img" aria-label="${alt}"></div>
+    <div data-fondo-nitido style="position: absolute; left: 0; right: 0; top: 0; height: 760px; background-image: url('assets/${src}'); background-size: cover; background-position: ${posNitida}; background-repeat: no-repeat; -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,19,22,0.18) 0%, rgba(7,19,22,0.42) 34%, rgba(7,19,22,0.92) 66%, rgba(7,19,22,0.99) 100%);"></div>
+    </div>`;
+
 const arte = (src, alt, alto, pos = 'center 25%', extra = '') => `
       <div data-a="img" style="position: relative; width: 100%; height: ${alto}px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(232,85,46,0.26); box-shadow: 0 30px 70px rgba(0,0,0,0.6); ${extra}">
         <img src="assets/${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: cover; object-position: ${pos};">
@@ -71,7 +83,8 @@ const slides = [];
 
 // ── 1 · Portada ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Miss Fortune, que lleva dieciseis anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="${seccion()} background-image: linear-gradient(180deg, rgba(7,19,22,0.25) 0%, rgba(7,19,22,0.95) 78%), url('assets/MissFortune_0.jpg'); background-size: cover; background-position: center 20%;">
+  <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Miss Fortune, que lleva dieciseis anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="${seccion()}">
+    ${portada('MissFortune_0.jpg', 'Miss Fortune')}
     ${glow(FUEGO, '50% 30%', '120% 45%')}
     <div style="position: relative; margin-top: auto;">
       ${eyebrow('Cumplelolero · 8 sep 2010 — 2026')}
@@ -89,7 +102,6 @@ slides.push(`
       ${eyebrow('Su lore es de venganza pura')}
       ${titulo('En realidad se llama<br><span style="color: ' + FUEGO + ';">Sarah Fortune</span>', 92)}
 
-      ${arte('Gangplank_0.jpg', 'Gangplank', 320, 'center 22%', 'margin-top: 34px;')}
 
       ${pasos([
         'Su madre, <strong style="color:' + BONE + ';">Abigale Fortune</strong>, era una fabricante de armas famosa en Bilgewater',
@@ -129,8 +141,7 @@ slides.push(`
     ${glow(FUEGO, '50% 30%', '110% 46%')}
     <div style="position: relative;">
       ${eyebrow('Pero sobrevivió')}
-      ${arte('MissFortune_0.jpg', 'Miss Fortune', 320, 'center 20%')}
-      <h2 data-a="up2" style="margin: 32px 0 0; font-family: ${DISPLAY}; font-size: 88px; line-height: 0.94; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">Salió del incendio<br><span style="color: ${FUEGO};">con las armas de su madre</span></h2>
+      <h2 data-a="up2" style="margin: 0; font-family: ${DISPLAY}; font-size: 88px; line-height: 0.94; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">Salió del incendio<br><span style="color: ${FUEGO};">con las armas de su madre</span></h2>
       ${pasos([
         'Su cuerpo se recuperó, pero le quedaron <strong style="color:' + BONE + ';">terrores nocturnos y estrés postraumático</strong>',
         'De adolescente, con las armas reparadas, <strong style="color:' + BONE + ';">se metió al mundo del crimen</strong>',
@@ -306,12 +317,6 @@ const skins = [
   ['MissFortune_50.jpg', 'Porcelana'], ['MissFortune_60.jpg', 'Reina Guerrera'],
 ];
 
-const precios = [
-  ['Miss Fortune', '8,9', 89, true],
-  ['Blitzcrank', '6,3', 63, false],
-  ['Janna', '5,2', 52, false],
-];
-
 slides.push(`
   <section data-label="Las skins" data-screen-label="09 · Las skins" data-speaker-notes="De skins nomas rapidito, porque de esto ya les hable en el video de Lux. Miss Fortune tiene veintidos skins en total y catorce que puedes comprar, y esas catorce te saldrian en unos ciento cuarenta y tres dolares, que son casi dos semanas de salario minimo. Es la mas cara de vestir de todos los cumpleaneros que llevamos. Y tiene una definitiva, la Gun Goddess, que vale ella sola dos mil setecientos setenta y cinco." style="${seccion()}">
     ${glow(ORO, '50% 38%', '115% 58%')}
@@ -319,11 +324,11 @@ slides.push(`
       ${eyebrow('Nomás rapidito', ORO)}
       ${titulo('22 skins, y <span style="color: ' + ORO + ';">14 a la venta</span>', 88)}
 
-      <div style="margin-top: 28px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;">
+      <div style="margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
         ${skins.map(([img, nombre]) => `
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img src="assets/${img}" alt="${nombre}" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: ${MUTED}; line-height: 1.15;">${nombre}</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img src="assets/${img}" alt="${nombre}" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: ${MUTED}; line-height: 1.15;">${nombre}</span>
           </div>`).join('')}
       </div>
 
@@ -342,25 +347,21 @@ slides.push(`
         </div>
       </div>
 
-      <div style="margin-top: 26px; display: flex; flex-direction: column; gap: 11px;">
-        <span style="font-size: 22px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: ${MUTED};">Días de salario mínimo (México)</span>
-        ${precios.map(([quien, dias, pct, top]) => `
-        <div data-precio-fila style="display: flex; align-items: center; gap: 18px;">
-          <span style="flex: none; width: 180px; font-size: 24px; font-weight: ${top ? 700 : 500}; color: ${top ? BONE : MUTED};">${quien}</span>
-          <div style="flex: 1; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden;">
-            <div data-precio-barra style="width: ${pct}%; height: 100%; background: ${top ? ORO : 'rgba(255,255,255,0.16)'}; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; box-sizing: border-box;">
-              <span style="font-family: ${DISPLAY}; font-size: 24px; color: ${top ? BG : BONE};">${dias}</span>
-            </div>
-          </div>
-        </div>`).join('')}
-        <span style="margin-top: 2px; font-size: 24px; font-weight: 500; color: ${BONE};">Casi <strong style="color: ${ORO};">dos semanas de salario</strong>. La más cara de la serie.</span>
+      <div data-precio-nota style="margin-top: 24px; display: flex; align-items: center; gap: 26px;">
+        <div style="flex: none;">
+          <div style="font-family: ${DISPLAY}; font-size: 78px; line-height: 0.9; color: ${ORO};">8,9 días</div>
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: ${MUTED};">de salario mínimo</div>
+        </div>
+        <div style="width: 2px; height: 72px; background: ${ORO}4D;"></div>
+        <div style="flex: 1; font-size: 25px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">Casi <strong style="color: ${ORO};">dos semanas de salario</strong>. <strong style="color: ${BONE};">La más cara de toda la serie</strong> — el segundo es Blitzcrank con 6,3.</div>
       </div>
     </div>
   </section>`);
 
 // ── 10 · Cierre ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Cierre" data-screen-label="10 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="${seccion('align-items: center; text-align: center;')} background-image: linear-gradient(180deg, rgba(7,19,22,0.62) 0%, rgba(7,19,22,0.9) 60%, rgba(7,19,22,0.97) 100%), url('assets/MissFortune_16.jpg'); background-size: cover; background-position: center 24%;">
+  <section data-label="Cierre" data-screen-label="10 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="${seccion('align-items: center; text-align: center;')}">
+    ${portada('MissFortune_16.jpg', 'Miss Fortune Gatillera Galactica', 'center 16%')}
     ${glow(FUEGO, '50% 42%', '120% 55%')}
     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
       ${eyebrow('Dieciséis años de la Reina')}
@@ -394,7 +395,8 @@ const coreografias = `<script>
   }
 
   animar('Portada', function (tl, s) {
-    tl.from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.1 }, 0)
+    tl.from(s.querySelector('[data-fondo-nitido]'), { scale: 1.05, opacity: 0, duration: 1.1 }, 0)
+      .from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 28, opacity: 0, duration: 0.55 }, 0.05)
       .from(q(s, '[data-linea]'), { y: 54, opacity: 0, duration: 0.8, stagger: 0.13 }, 0.18)
       .from(q(s, '[data-sub]'), { y: 22, opacity: 0, duration: 0.55, stagger: 0.09 }, 0.62);
@@ -404,9 +406,8 @@ const coreografias = `<script>
     tl.from(s.querySelector('[data-a="ghost"]'), { scale: 0.9, opacity: 0, duration: 1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.05)
       .from(s.querySelector('[data-a="up2"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.14)
-      .from(s.querySelector('[data-a="img"]'), { scale: 1.05, opacity: 0, duration: 0.85 }, 0.3)
-      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.56)
-      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.1, ease: 'back.out(2.2)' }, 0.59);
+      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.11 }, 0.36)
+      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.11, ease: 'back.out(2.2)' }, 0.39);
   });
 
   // La traición: el bloque del disparo entra de golpe y las tres víctimas caen
@@ -422,10 +423,9 @@ const coreografias = `<script>
   animar('Sobrevivió', function (tl, s) {
     tl.from(s.querySelector('[data-a="ghost"]'), { scale: 0.9, opacity: 0, duration: 1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.05)
-      .from(s.querySelector('[data-a="img"]'), { scale: 1.05, opacity: 0, duration: 0.85 }, 0.15)
-      .from(s.querySelector('h2'), { y: 30, opacity: 0, duration: 0.6 }, 0.34)
-      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.5)
-      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.1, ease: 'back.out(2.2)' }, 0.53);
+      .from(s.querySelector('h2'), { y: 30, opacity: 0, duration: 0.6 }, 0.16)
+      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.11 }, 0.38)
+      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.11, ease: 'back.out(2.2)' }, 0.41);
   });
 
   animar('La reina de Bilgewater', function (tl, s) {
@@ -478,8 +478,7 @@ const coreografias = `<script>
       .from(q(s, '[data-skin]'), { y: 24, opacity: 0, scale: 0.94, duration: 0.45, stagger: 0.035 }, 0.26)
       .from(s.querySelector('[data-definitiva]'), { x: 30, opacity: 0, duration: 0.55 }, 0.78)
       .from(s.querySelector('[data-precio]'), { y: 26, opacity: 0, duration: 0.55 }, 0.98)
-      .from(q(s, '[data-precio-fila]'), { x: -20, opacity: 0, duration: 0.4, stagger: 0.07 }, 1.1)
-      .from(q(s, '[data-precio-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.55, ease: 'power2.inOut', stagger: 0.07 }, 1.08);
+      .from(s.querySelector('[data-precio-nota]'), { y: 22, opacity: 0, duration: 0.5 }, 1.14);
     cuentaMil(tl, s.querySelector('[data-cuenta]'), 0.98, 0.7);
   });
 

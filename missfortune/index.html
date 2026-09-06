@@ -34,7 +34,13 @@
 <body>
 <deck-stage width="1080" height="1920">
 
-  <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Miss Fortune, que lleva dieciseis anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="background: #071316; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F2ECE6; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden;  background-image: linear-gradient(180deg, rgba(7,19,22,0.25) 0%, rgba(7,19,22,0.95) 78%), url('assets/MissFortune_0.jpg'); background-size: cover; background-position: center 20%;">
+  <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Miss Fortune, que lleva dieciseis anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="background: #071316; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F2ECE6; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; ">
+    
+    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: -60px; background-image: url('assets/MissFortune_0.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(46px) saturate(0.8) brightness(0.4); transform: scale(1.08);" role="img" aria-label="Miss Fortune"></div>
+    <div data-fondo-nitido style="position: absolute; left: 0; right: 0; top: 0; height: 760px; background-image: url('assets/MissFortune_0.jpg'); background-size: cover; background-position: center 22%; background-repeat: no-repeat; -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,19,22,0.18) 0%, rgba(7,19,22,0.42) 34%, rgba(7,19,22,0.92) 66%, rgba(7,19,22,0.99) 100%);"></div>
+    </div>
     <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 45% at 50% 30%, #E8552E29 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
     <div style="position: relative; margin-top: auto;">
       <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
@@ -56,11 +62,6 @@
     </div>
       <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 92px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #F2ECE6;">En realidad se llama<br><span style="color: #E8552E;">Sarah Fortune</span></h2>
 
-      
-      <div data-a="img" style="position: relative; width: 100%; height: 320px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(232,85,46,0.26); box-shadow: 0 30px 70px rgba(0,0,0,0.6); margin-top: 34px;">
-        <img data-src="assets/Gangplank_0.jpg" alt="Gangplank" style="width: 100%; height: 100%; object-fit: cover; object-position: center 22%;">
-        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,19,22,0) 40%, rgba(7,19,22,0.85) 100%);"></div>
-      </div>
 
       
       <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 17px;">
@@ -123,12 +124,7 @@
       <span style="width: 54px; height: 5px; background: #E8552E;"></span>
       <span style="font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: #E8552E;">Pero sobrevivió</span>
     </div>
-      
-      <div data-a="img" style="position: relative; width: 100%; height: 320px; border-radius: 20px; overflow: hidden; border: 1px solid rgba(232,85,46,0.26); box-shadow: 0 30px 70px rgba(0,0,0,0.6); ">
-        <img data-src="assets/MissFortune_0.jpg" alt="Miss Fortune" style="width: 100%; height: 100%; object-fit: cover; object-position: center 20%;">
-        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,19,22,0) 40%, rgba(7,19,22,0.85) 100%);"></div>
-      </div>
-      <h2 data-a="up2" style="margin: 32px 0 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 88px; line-height: 0.94; letter-spacing: 1px; text-transform: uppercase; color: #F2ECE6;">Salió del incendio<br><span style="color: #E8552E;">con las armas de su madre</span></h2>
+      <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 88px; line-height: 0.94; letter-spacing: 1px; text-transform: uppercase; color: #F2ECE6;">Salió del incendio<br><span style="color: #E8552E;">con las armas de su madre</span></h2>
       
       <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 17px;">
         
@@ -359,63 +355,63 @@
     </div>
       <h2 data-a="up2" style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 88px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: #F2ECE6;">22 skins, y <span style="color: #EFC45A;">14 a la venta</span></h2>
 
-      <div style="margin-top: 28px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 10px;">
+      <div style="margin-top: 28px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px;">
         
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_1.jpg" alt="Vaquera" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Vaquera</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_1.jpg" alt="Vaquera" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Vaquera</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_2.jpg" alt="Waterloo" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Waterloo</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_2.jpg" alt="Waterloo" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Waterloo</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_6.jpg" alt="Ciudad del Crimen" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Ciudad del Crimen</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_6.jpg" alt="Ciudad del Crimen" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Ciudad del Crimen</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_7.jpg" alt="Arcadia" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Arcadia</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_7.jpg" alt="Arcadia" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Arcadia</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_8.jpg" alt="Capitana" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Capitana</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_8.jpg" alt="Capitana" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Capitana</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_9.jpg" alt="Veraniega" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Veraniega</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_9.jpg" alt="Veraniega" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Veraniega</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_15.jpg" alt="Guardiana Estelar" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Guardiana Estelar</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_15.jpg" alt="Guardiana Estelar" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Guardiana Estelar</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_16.jpg" alt="Gatillera Galáctica" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Gatillera Galáctica</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_16.jpg" alt="Gatillera Galáctica" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Gatillera Galáctica</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_17.jpg" alt="Pijama Estelar" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Pijama Estelar</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_17.jpg" alt="Pijama Estelar" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Pijama Estelar</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_21.jpg" alt="Arruinada" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Arruinada</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_21.jpg" alt="Arruinada" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Arruinada</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_31.jpg" alt="Conejita Guerrera" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Conejita Guerrera</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_31.jpg" alt="Conejita Guerrera" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Conejita Guerrera</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_40.jpg" alt="Pacto Quebrantado" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Pacto Quebrantado</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_40.jpg" alt="Pacto Quebrantado" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Pacto Quebrantado</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_50.jpg" alt="Porcelana" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Porcelana</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_50.jpg" alt="Porcelana" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Porcelana</span>
           </div>
-          <div data-skin style="display: flex; flex-direction: column; gap: 5px;">
-            <img data-src="assets/MissFortune_60.jpg" alt="Reina Guerrera" style="width: 100%; height: 76px; object-fit: cover; object-position: center 22%; border-radius: 8px; border: 1px solid rgba(239,196,90,0.24);">
-            <span style="font-size: 14px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Reina Guerrera</span>
+          <div data-skin style="display: flex; flex-direction: column; gap: 6px;">
+            <img data-src="assets/MissFortune_60.jpg" alt="Reina Guerrera" style="width: 100%; height: 128px; object-fit: cover; object-position: center 22%; border-radius: 10px; border: 1px solid rgba(239,196,90,0.24);">
+            <span style="font-size: 18px; font-weight: 600; color: #8FA0A2; line-height: 1.15;">Reina Guerrera</span>
           </div>
       </div>
 
@@ -434,39 +430,24 @@
         </div>
       </div>
 
-      <div style="margin-top: 26px; display: flex; flex-direction: column; gap: 11px;">
-        <span style="font-size: 22px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #8FA0A2;">Días de salario mínimo (México)</span>
-        
-        <div data-precio-fila style="display: flex; align-items: center; gap: 18px;">
-          <span style="flex: none; width: 180px; font-size: 24px; font-weight: 700; color: #F2ECE6;">Miss Fortune</span>
-          <div style="flex: 1; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden;">
-            <div data-precio-barra style="width: 89%; height: 100%; background: #EFC45A; display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; box-sizing: border-box;">
-              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 24px; color: #071316;">8,9</span>
-            </div>
-          </div>
+      <div data-precio-nota style="margin-top: 24px; display: flex; align-items: center; gap: 26px;">
+        <div style="flex: none;">
+          <div style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 78px; line-height: 0.9; color: #EFC45A;">8,9 días</div>
+          <div style="font-size: 20px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; color: #8FA0A2;">de salario mínimo</div>
         </div>
-        <div data-precio-fila style="display: flex; align-items: center; gap: 18px;">
-          <span style="flex: none; width: 180px; font-size: 24px; font-weight: 500; color: #8FA0A2;">Blitzcrank</span>
-          <div style="flex: 1; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden;">
-            <div data-precio-barra style="width: 63%; height: 100%; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; box-sizing: border-box;">
-              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 24px; color: #F2ECE6;">6,3</span>
-            </div>
-          </div>
-        </div>
-        <div data-precio-fila style="display: flex; align-items: center; gap: 18px;">
-          <span style="flex: none; width: 180px; font-size: 24px; font-weight: 500; color: #8FA0A2;">Janna</span>
-          <div style="flex: 1; height: 34px; border-radius: 8px; background: rgba(255,255,255,0.06); overflow: hidden;">
-            <div data-precio-barra style="width: 52%; height: 100%; background: rgba(255,255,255,0.16); display: flex; align-items: center; justify-content: flex-end; padding-right: 12px; box-sizing: border-box;">
-              <span style="font-family: 'Bebas Neue', Impact, sans-serif; font-size: 24px; color: #F2ECE6;">5,2</span>
-            </div>
-          </div>
-        </div>
-        <span style="margin-top: 2px; font-size: 24px; font-weight: 500; color: #F2ECE6;">Casi <strong style="color: #EFC45A;">dos semanas de salario</strong>. La más cara de la serie.</span>
+        <div style="width: 2px; height: 72px; background: #EFC45A4D;"></div>
+        <div style="flex: 1; font-size: 25px; font-weight: 400; color: #8FA0A2; line-height: 1.4;">Casi <strong style="color: #EFC45A;">dos semanas de salario</strong>. <strong style="color: #F2ECE6;">La más cara de toda la serie</strong> — el segundo es Blitzcrank con 6,3.</div>
       </div>
     </div>
   </section>
 
-  <section data-bg="linear-gradient(180deg, rgba(7,19,22,0.62) 0%, rgba(7,19,22,0.9) 60%, rgba(7,19,22,0.97) 100%), url('assets/MissFortune_16.jpg')" data-label="Cierre" data-screen-label="10 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="background: #071316; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F2ECE6; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center; background-size: cover; background-position: center 24%;">
+  <section data-label="Cierre" data-screen-label="10 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="background: #071316; font-family: 'Barlow', ui-sans-serif, system-ui, sans-serif; color: #F2ECE6; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    
+    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: -60px; background-image: url('assets/MissFortune_16.jpg'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(46px) saturate(0.8) brightness(0.4); transform: scale(1.08);" role="img" aria-label="Miss Fortune Gatillera Galactica"></div>
+    <div data-fondo-nitido style="position: absolute; left: 0; right: 0; top: 0; height: 760px; background-image: url('assets/MissFortune_16.jpg'); background-size: cover; background-position: center 16%; background-repeat: no-repeat; -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 58%, rgba(0,0,0,0) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(7,19,22,0.18) 0%, rgba(7,19,22,0.42) 34%, rgba(7,19,22,0.92) 66%, rgba(7,19,22,0.99) 100%);"></div>
+    </div>
     <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 55% at 50% 42%, #E8552E29 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
       <div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
@@ -558,7 +539,8 @@
   }
 
   animar('Portada', function (tl, s) {
-    tl.from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.1 }, 0)
+    tl.from(s.querySelector('[data-fondo-nitido]'), { scale: 1.05, opacity: 0, duration: 1.1 }, 0)
+      .from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 28, opacity: 0, duration: 0.55 }, 0.05)
       .from(q(s, '[data-linea]'), { y: 54, opacity: 0, duration: 0.8, stagger: 0.13 }, 0.18)
       .from(q(s, '[data-sub]'), { y: 22, opacity: 0, duration: 0.55, stagger: 0.09 }, 0.62);
@@ -568,9 +550,8 @@
     tl.from(s.querySelector('[data-a="ghost"]'), { scale: 0.9, opacity: 0, duration: 1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.05)
       .from(s.querySelector('[data-a="up2"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.14)
-      .from(s.querySelector('[data-a="img"]'), { scale: 1.05, opacity: 0, duration: 0.85 }, 0.3)
-      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.56)
-      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.1, ease: 'back.out(2.2)' }, 0.59);
+      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.11 }, 0.36)
+      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.11, ease: 'back.out(2.2)' }, 0.39);
   });
 
   // La traición: el bloque del disparo entra de golpe y las tres víctimas caen
@@ -586,10 +567,9 @@
   animar('Sobrevivió', function (tl, s) {
     tl.from(s.querySelector('[data-a="ghost"]'), { scale: 0.9, opacity: 0, duration: 1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.05)
-      .from(s.querySelector('[data-a="img"]'), { scale: 1.05, opacity: 0, duration: 0.85 }, 0.15)
-      .from(s.querySelector('h2'), { y: 30, opacity: 0, duration: 0.6 }, 0.34)
-      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.5)
-      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.1, ease: 'back.out(2.2)' }, 0.53);
+      .from(s.querySelector('h2'), { y: 30, opacity: 0, duration: 0.6 }, 0.16)
+      .from(q(s, '[data-paso]'), { x: 26, opacity: 0, duration: 0.45, stagger: 0.11 }, 0.38)
+      .from(q(s, '[data-paso-num]'), { scale: 0.4, opacity: 0, duration: 0.4, stagger: 0.11, ease: 'back.out(2.2)' }, 0.41);
   });
 
   animar('La reina de Bilgewater', function (tl, s) {
@@ -642,8 +622,7 @@
       .from(q(s, '[data-skin]'), { y: 24, opacity: 0, scale: 0.94, duration: 0.45, stagger: 0.035 }, 0.26)
       .from(s.querySelector('[data-definitiva]'), { x: 30, opacity: 0, duration: 0.55 }, 0.78)
       .from(s.querySelector('[data-precio]'), { y: 26, opacity: 0, duration: 0.55 }, 0.98)
-      .from(q(s, '[data-precio-fila]'), { x: -20, opacity: 0, duration: 0.4, stagger: 0.07 }, 1.1)
-      .from(q(s, '[data-precio-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.55, ease: 'power2.inOut', stagger: 0.07 }, 1.08);
+      .from(s.querySelector('[data-precio-nota]'), { y: 22, opacity: 0, duration: 0.5 }, 1.14);
     cuentaMil(tl, s.querySelector('[data-cuenta]'), 0.98, 0.7);
   });
 
