@@ -92,7 +92,7 @@ slides.push(`
   <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Syndra, que lleva catorce anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="${seccion()}">
     ${portada('Syndra_0.jpg', 'Syndra, la Soberana Oscura')}
     ${glow(ORBE, '50% 30%', '120% 45%')}
-    <div style="position: relative; margin-top: auto;">
+    <div style="position: relative;">
       ${eyebrow('Cumplelolero · 9 sep 2012 — 2026')}
       <h1 style="margin: 0; font-family: ${DISPLAY}; font-size: 196px; font-weight: 400; line-height: 0.82; letter-spacing: 2px; color: ${BONE}; text-shadow: 0 0 90px rgba(201,167,255,0.45);"><span data-linea style="display: block;">SYNDRA</span><span data-linea style="display: block; color: ${ORBE};">14 AÑOS</span></h1>
       <p data-sub style="margin: 34px 0 0; font-size: 38px; font-weight: 500; color: ${ORBE}; line-height: 1.3;">La Soberana Oscura</p>
@@ -242,12 +242,12 @@ slides.push(`
 
 // ── 8 · El one trick más dominante de la serie ───────────────────────────
 const rangos = [
-  ['S2026', 'Master · 130 LP', true],
-  ['S2025', 'Esmeralda 1', false],
-  ['S2024 S3', 'Diamante 4', false],
-  ['S2024 S2', 'Esmeralda 2', false],
-  ['S2024 S1', 'Diamante 3', false],
-  ['S2023 S2', 'Master', true],
+  ['S2026', 'Master · 130 LP', 'master.png', true],
+  ['S2025', 'Esmeralda 1', 'emerald.png', false],
+  ['S2024 S3', 'Diamante 4', 'diamond.png', false],
+  ['S2024 S2', 'Esmeralda 2', 'emerald.png', false],
+  ['S2024 S1', 'Diamante 3', 'diamond.png', false],
+  ['S2023 S2', 'Master', 'master.png', true],
 ];
 
 slides.push(`
@@ -259,7 +259,7 @@ slides.push(`
         <span style="font-family: ${DISPLAY}; font-size: 88px; line-height: 0.95; color: ${BONE};">HUGH AKSTON</span>
         <span style="font-family: ${DISPLAY}; font-size: 88px; line-height: 0.95; color: ${ORBE};">#NA1</span>
       </div>
-      <p data-nombre style="margin: 12px 0 0; font-size: 27px; font-weight: 500; color: ${MUTED};">Norteamérica · Master 130 LP · top 0,58% del servidor · 85% mid</p>
+      <p data-nombre style="margin: 12px 0 0; font-size: 27px; font-weight: 500; color: ${MUTED};">Norteamérica · nivel de invocador 1 386 · 85% mid · 98% maga</p>
 
       <div style="margin-top: 34px; display: flex; gap: 20px;">
         <div data-panel style="flex: 1; min-width: 0; padding: 30px 26px; border-radius: 18px; background: ${PANEL}D9; border: 1px solid rgba(201,167,255,0.28);">
@@ -283,7 +283,35 @@ slides.push(`
         <div style="flex: 1; font-size: 26px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">Es <strong style="color: ${BONE};">el dominio más aplastante</strong> de su propio ranking en toda la serie.</div>
       </div>
 
-      <div data-latam style="margin-top: 30px; display: flex; align-items: center; gap: 22px; padding: 24px 28px; border-radius: 18px; background: ${SOBERANA}1F; border: 1px solid ${SOBERANA}80;">
+    </div>
+  </section>`);
+
+// ── 9 · Y este sí es bueno: el historial de rangos ───────────────────────
+slides.push(`
+  <section data-label="Y este sí es bueno" data-screen-label="09 · El rango" data-speaker-notes="Y este si es bueno, esta en Master y es top cero punto cinco por ciento de su servidor. Y el dato que nos toca, porque el cuarto mejor Syndra del mundo es del servidor del sur." style="${seccion()}">
+    ${glow(ORBE, '50% 40%', '115% 55%')}
+    <div style="position: relative;">
+      ${eyebrow('Y este sí es bueno')}
+      ${titulo('Master, y <span style="color: ' + ORBE + ';">top 0,58%</span><br>de su servidor', 88)}
+
+      <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 12px;">
+        ${rangos.map(([temp, nombre, emblema, top]) => `
+        <div data-rango style="display: flex; align-items: center; gap: 16px; padding: 12px 18px; border-radius: 14px; ${top ? `background: ${ORBE}1A; border: 1px solid ${ORBE}66;` : 'border: 1px solid rgba(255,255,255,0.06);'}">
+          <img src="assets/emblems/${emblema}" alt="${nombre}" style="width: 62px; height: 62px; object-fit: contain; flex: none;">
+          <span style="flex: none; width: 118px; font-size: 24px; font-weight: 600; color: ${MUTED};">${temp}</span>
+          <span style="flex: 1; font-size: 29px; font-weight: ${top ? '700' : '500'}; color: ${top ? ORBE : BONE};">${nombre}${top ? '  ◄' : ''}</span>
+        </div>`).join('')}
+      </div>
+
+      <div data-racha style="margin-top: 30px; display: flex; gap: 16px;">
+        ${[['8 V — 2 D', 'la última semana'], ['70 %', 'en sus últimas 20'], ['122×', 'más que su 2º campeón']].map(([cifra, pie]) => `
+        <div style="flex: 1; padding: 20px 14px; border-radius: 14px; background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.08); text-align: center;">
+          <div style="font-family: ${DISPLAY}; font-size: 50px; line-height: 1; color: ${ORBE};">${cifra}</div>
+          <div style="margin-top: 4px; font-size: 19px; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; color: ${MUTED};">${pie}</div>
+        </div>`).join('')}
+      </div>
+
+      <div data-latam style="margin-top: 28px; display: flex; align-items: center; gap: 22px; padding: 24px 28px; border-radius: 18px; background: ${SOBERANA}1F; border: 1px solid ${SOBERANA}80;">
         <span style="flex: none; font-family: ${DISPLAY}; font-size: 54px; line-height: 1; color: ${ORBE};">#4</span>
         <span style="flex: none; background: ${ORBE}; color: ${BG}; font-size: 21px; font-weight: 800; border-radius: 8px; padding: 5px 14px; letter-spacing: 1px;">LAS</span>
         <span style="flex: 1; font-size: 27px; font-weight: 400; color: ${MUTED}; line-height: 1.35;">Y el dato que nos toca: <strong style="color: ${BONE};">el cuarto mejor Syndra del mundo</strong> es del servidor del sur.</span>
@@ -301,7 +329,7 @@ const skins = [
 ];
 
 slides.push(`
-  <section data-label="Las skins" data-screen-label="09 · Las skins" data-speaker-notes="De skins tiene trece en total y nueve que puedes comprar, que te saldrian en unos ochenta y tres dolares. Pero la buena esta en la boveda, porque Syndra tiene skin de campeon del mundo. Cuando SKT gano el mundial de dos mil dieciseis, Faker la eligio para su coleccion." style="${seccion()}">
+  <section data-label="Las skins" data-screen-label="10 · Las skins" data-speaker-notes="De skins tiene trece en total y nueve que puedes comprar, que te saldrian en unos ochenta y tres dolares. Pero la buena esta en la boveda, porque Syndra tiene skin de campeon del mundo. Cuando SKT gano el mundial de dos mil dieciseis, Faker la eligio para su coleccion." style="${seccion()}">
     ${glow(ORBE, '50% 38%', '115% 58%')}
     <div style="position: relative;">
       ${eyebrow('Las skins')}
@@ -334,7 +362,7 @@ slides.push(`
 
 // ── 10 · Cierre ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Cierre" data-screen-label="10 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="${seccion('align-items: center; text-align: center;')}">
+  <section data-label="Cierre" data-screen-label="11 · Cierre" data-speaker-notes="Ni pedo, solo queda decir gigi easy, tirenme un follow o les voy a meter la cuarta, chao." style="${seccion('align-items: center; text-align: center;')}">
     ${portada('Syndra_44.jpg', 'Syndra Flor Espiritual', 'center 18%')}
     ${glow(ORBE, '50% 42%', '120% 55%')}
     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
@@ -447,9 +475,18 @@ const coreografias = `<script>
     tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
       .from(q(s, '[data-nombre]'), { y: 26, opacity: 0, duration: 0.55, stagger: 0.08 }, 0.08)
       .from(q(s, '[data-panel]'), { y: 30, opacity: 0, duration: 0.6, stagger: 0.14 }, 0.28)
-      .from(s.querySelector('[data-ventaja]'), { y: 26, opacity: 0, duration: 0.6 }, 0.86)
-      .from(s.querySelector('[data-latam]'), { x: -30, opacity: 0, duration: 0.6 }, 1.12);
+      .from(s.querySelector('[data-ventaja]'), { y: 26, opacity: 0, duration: 0.6 }, 0.9);
     cuentaMil(tl, s.querySelector('[data-cuenta]'), 0.42, 0.9);
+  });
+
+  // El historial: las temporadas caen en cascada y la racha y el bloque LATAM
+  // llegan después, para que primero se lea que nunca bajó de Diamante.
+  animar('Y este sí es bueno', function (tl, s) {
+    tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
+      .from(s.querySelector('[data-a="up2"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.1)
+      .from(q(s, '[data-rango]'), { x: 28, opacity: 0, duration: 0.42, stagger: 0.09 }, 0.32)
+      .from(s.querySelector('[data-racha]'), { y: 24, opacity: 0, duration: 0.5 }, 0.92)
+      .from(s.querySelector('[data-latam]'), { x: -30, opacity: 0, duration: 0.55 }, 1.12);
   });
 
   animar('Las skins', function (tl, s) {

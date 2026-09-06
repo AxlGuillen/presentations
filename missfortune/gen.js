@@ -86,7 +86,7 @@ slides.push(`
   <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy es cumpleanos de Miss Fortune, que lleva dieciseis anos desde que llego a la Grieta del Invocador, y toca darle sus tres minutos de atencion." style="${seccion()}">
     ${portada('MissFortune_0.jpg', 'Miss Fortune')}
     ${glow(FUEGO, '50% 30%', '120% 45%')}
-    <div style="position: relative; margin-top: auto;">
+    <div style="position: relative;">
       ${eyebrow('Cumplelolero · 8 sep 2010 — 2026')}
       <h1 style="margin: 0; font-family: ${DISPLAY}; font-size: 172px; font-weight: 400; line-height: 0.82; letter-spacing: 2px; color: ${BONE}; text-shadow: 0 0 90px rgba(232,85,46,0.42);"><span data-linea style="display: block;">MISS FORTUNE</span><span data-linea style="display: block; color: ${FUEGO};">16 AÑOS</span></h1>
       <p data-sub style="margin: 34px 0 0; font-size: 38px; font-weight: 500; color: ${FUEGO}; line-height: 1.3;">Sarah Fortune · la Reina de Bilgewater</p>
