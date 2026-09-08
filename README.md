@@ -22,6 +22,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /ivern/              Ivern cumple 10 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /missfortune/        Miss Fortune cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /syndra/             Syndra cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
+/riven/              Riven cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
 /caras/              Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
 /semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides

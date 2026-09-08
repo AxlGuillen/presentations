@@ -1230,10 +1230,18 @@
           const u = i.currentSrc || i.getAttribute('src') || (i.dataset && i.dataset.src);
           if (u) urls.push(u);
         });
-        const fondo = primera.style.backgroundImage || (primera.dataset && primera.dataset.bg) || '';
-        (fondo.match(/url\([^)]+\)/g) || []).forEach((trozo) => {
-          const u = trozo.slice(4, -1).replace(/^['"]|['"]$/g, '').trim();
-          if (u && u.slice(0, 5) !== 'data:') urls.push(u);
+        // El fondo puede estar en la propia <section> o en un <div> interno:
+        // el helper portada() de la serie Cumplelolero pinta el splash en dos
+        // capas (una borrosa y una nítida) dentro de la diapositiva.
+        const capas = [primera].concat(Array.prototype.slice.call(primera.querySelectorAll('*')));
+        capas.forEach((el) => {
+          const fondo = el.style.backgroundImage || (el.dataset && el.dataset.bg) || '';
+          (fondo.match(/url\([^)]+\)/g) || []).forEach((trozo) => {
+            const u = trozo.slice(4, -1).replace(/^['"]|['"]$/g, '').trim();
+            // Las dos capas usan el mismo archivo: contarlo dos veces solo
+            // desajustaría la barra de progreso.
+            if (u && u.slice(0, 5) !== 'data:' && urls.indexOf(u) < 0) urls.push(u);
+          });
         });
       }
       const barra = cortina.querySelector('.barra i');

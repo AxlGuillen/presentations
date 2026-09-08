@@ -58,7 +58,11 @@ const r = await pagina.evaluate((ALTO) => {
     alto: ALTO,
     desborde: secs.map((s, i) => ({ i: i + 1, label: s.dataset.label, over: s.scrollHeight - ALTO }))
                   .filter(x => x.over > 2),
-    imagenesRotas: [...document.images].filter(i => !i.complete || i.naturalWidth === 0)
+    // Las miniaturas del rail se hidratan en tiempo ocioso, así que alguna
+    // puede seguir con data-src cuando se mide: sin src no hay fuente rota que
+    // reportar, y contarla daba un falso positivo intermitente.
+    imagenesRotas: [...document.images].filter(i => !i.dataset.src && i.getAttribute('src'))
+                                       .filter(i => !i.complete || i.naturalWidth === 0)
                                        .map(i => i.getAttribute('src')),
     sinLabel: secs.filter(s => !s.dataset.label || !s.dataset.speakerNotes).length,
   };

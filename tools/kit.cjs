@@ -233,9 +233,18 @@ const diferir = (html, { eager = 1 } = {}) => {
     if (m && m[1].includes('assets/')) {
       tag = tag.replace(m[0], '').replace(/^<section/, `<section data-bg="${m[1].trim().replace(/"/g, '&quot;')}"`);
     }
+    // Y los fondos ANIDADOS: el helper portada() de la serie Cumplelolero pinta
+    // el splash en dos <div> dentro de la <section>, no en la <section> misma.
+    // Sin esto la portada del cierre se bajaba al entrar y el diferido perdía
+    // justo la imagen más pesada del deck.
+    const conFondos = resto.replace(/<([a-zA-Z][\w-]*)([^>]*)>/g, (todo, nombre, attrs) => {
+      const b = attrs.match(/background-image:\s*(url\((?:'[^']*'|"[^"]*"|[^)]*)\))\s*;?\s*/);
+      if (!b || !b[1].includes('assets/')) return todo;
+      return `<${nombre} data-bg="${b[1].replace(/"/g, '&quot;')}"${attrs.replace(b[0], '')}>`;
+    });
     // El espacio previo es obligatorio para no volver a marcar un data-src
     // si el generador se corre dos veces sobre el mismo HTML.
-    return (tag + resto).replace(/(\s)src="(assets\/[^"]+)"/g, '$1data-src="$2"');
+    return (tag + conFondos).replace(/(\s)src="(assets\/[^"]+)"/g, '$1data-src="$2"');
   });
 
   return html.slice(0, abre) + diferidos.join('') + html.slice(cierra);

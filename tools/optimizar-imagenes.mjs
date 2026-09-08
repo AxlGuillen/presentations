@@ -82,14 +82,21 @@ for (const carpeta of carpetas) {
       const sx = img.offsetWidth / img.naturalWidth, sy = img.offsetHeight / img.naturalHeight;
       anota(img.currentSrc || img.src, ajuste === 'cover' ? Math.max(sx, sy) : Math.min(1, Math.max(sx, sy)));
     });
-    // Fondos de <section>: son cover sobre la diapositiva completa, así que
-    // hay que medirlos contra el tamaño natural de la propia imagen.
-    const secciones = [...document.querySelectorAll('deck-stage > section')];
-    for (const s of secciones) {
+    // Fondos: son cover sobre la caja que los pinta, así que hay que medirlos
+    // contra el tamaño natural de la propia imagen. Se miran también los <div>
+    // internos: el helper portada() de la serie Cumplelolero pinta el splash en
+    // dos capas dentro de la <section>, y mirando solo la <section> el archivo
+    // se planificaba con la escala de su miniatura — que es cómo salieron
+    // borrosos los cierres de missfortune y syndra.
+    const capas = [...document.querySelectorAll('deck-stage section, deck-stage section *')];
+    for (const s of capas) {
       const bg = s.style.backgroundImage || '';
       for (const t of (bg.match(/url\([^)]+\)/g) || [])) {
-        const u = t.slice(4, -1).replace(/^['"]|['"]$/g, '').trim();
-        if (!u || u.slice(0, 5) === 'data:') continue;
+        const crudo = t.slice(4, -1).replace(/^['"]|['"]$/g, '').trim();
+        if (!crudo || crudo.slice(0, 5) === 'data:') continue;
+        // style.backgroundImage devuelve la url TAL CUAL se escribió, y en los
+        // decks es relativa ('assets/…'). Sin resolverla no casa con la clave.
+        const u = new URL(crudo, location.href).href;
         const dims = await new Promise((r) => {
           const im = new Image();
           im.onload = () => r([im.naturalWidth, im.naturalHeight]);
