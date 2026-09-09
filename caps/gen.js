@@ -11,13 +11,17 @@
 // cosas en pantalla en vez de escribiéndolas.
 //
 // Piezas de diseño:
-//  · El motivo es **la copa** (`copa()`): un SVG de trofeo que se repite. Los
-//    números grandes del deck no se escriben, se cuentan — 18 copas contra 10
-//    en la comparativa con Faker, y 11 encendidas de 17 en la de los MVP.
-//  · El Hall of Legends se cuenta con **las tres skins**: Ahri Leyenda
-//    Inmortalizada es la de Faker y Kai'Sa la de Uzi. La de Caps es Tristana y
-//    **sale el 10 de septiembre**, así que su tarjeta va en gris con la fecha:
-//    el hueco es el dato.
+//  · El motivo es **el trofeo de la LEC** (`copaLEC()`): sus dos hojas curvas
+//    y la gema ovalada en medio, dibujadas. Los números grandes del deck no se
+//    escriben, se cuentan — 18 copas contra 10 en la comparativa con Faker, y
+//    11 encendidas de 17 en la de los MVP. **Está dibujado y no recortado de
+//    una foto a propósito**: las únicas fotos libres del trofeo lo tienen con
+//    manos y caras encima y a resolución de captura de video, así que un
+//    recorte limpio no daba; y dibujado escala a cualquier tamaño.
+//  · Las **fotos son reales y de licencia libre** (Wikimedia Commons, ver
+//    `CREDITOS.md`). Las CC BY obligan a dar crédito: si el video se publica,
+//    la línea lista para la descripción está en ese archivo.
+//  · El Hall of Legends se cuenta con **los tres retratos**: Faker, Uzi y Caps.
 //  · Los dos subcampeonatos de Worlds van en plata fría, el único bloque del
 //    deck que no toca ni el escarlata ni el oro. El video vive de esa tensión.
 //
@@ -59,38 +63,60 @@ const glow = (color = G2, pos = '50% 50%', size = '110% 55%') =>
 const eyebrow = (txt, color = G2) =>
   `<div data-a="up" style="display: flex; align-items: center; gap: 18px; margin-bottom: 26px;">
       <span style="width: 54px; height: 5px; background: ${color};"></span>
-      <span style="font-family: ${BODY}; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: ${color};">${txt}</span>
+      <span style="font-family: ${BODY}; font-size: 27px; font-weight: 700; letter-spacing: 5px; text-transform: uppercase; color: ${color}; text-shadow: 0 2px 12px rgba(10,7,9,0.9);">${txt}</span>
     </div>`;
 
 const titulo = (txt, size = 100) =>
   `<h2 data-a="up2" style="margin: 0; font-family: ${DISPLAY}; font-size: ${size}px; font-weight: 400; line-height: 0.92; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">${txt}</h2>`;
 
-// ── La copa: el motivo del deck ──────────────────────────────────────────
+// ── El trofeo de la LEC: el motivo del deck ──────────────────────────────
 // Los números del video son conteos de trofeos, así que en vez de escribirlos
-// se dibujan. `lleno = false` deja la copa en contorno: sirve para pintar lo
-// que NO pasó (los 6 títulos en los que no fue MVP) sin cambiar la forma.
-const copa = (alto = 64, color = ORO, lleno = true, fluido = false) => {
+// se dibujan. La silueta es la del trofeo de la LEC: dos hojas curvas que
+// abren hacia arriba y una gema ovalada saliendo entre ellas.
+// `lleno = false` deja la copa en contorno: sirve para pintar lo que NO pasó
+// (los 6 títulos en los que no fue MVP) sin cambiar la forma.
+const copaLEC = (alto = 64, color = ORO, lleno = true, fluido = false) => {
   const w = Math.round(alto * (44 / 52));
   const relleno = lleno ? color : 'none';
   const trazo = lleno ? 'none' : color;
   const medida = fluido ? 'width: 100%; height: auto;' : `width: ${w}px; height: ${alto}px;`;
-  return `<svg data-copa viewBox="0 0 44 52" style="flex: none; display: block; ${medida} ${lleno ? `filter: drop-shadow(0 0 ${Math.round(alto * 0.28)}px ${color}59);` : 'opacity: 0.5;'}" aria-hidden="true">
-      <path d="M12 4 H32 V16 C32 23.7 27.5 28 22 28 C16.5 28 12 23.7 12 16 Z" fill="${relleno}" stroke="${trazo}" stroke-width="2.4"/>
-      <path d="M12 8 H7.5 C5.4 8 4 9.6 4 12.2 C4 17 7.6 20.6 12 21.2" fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round" ${lleno ? '' : 'opacity="1"'}/>
-      <path d="M32 8 H36.5 C38.6 8 40 9.6 40 12.2 C40 17 36.4 20.6 32 21.2" fill="none" stroke="${color}" stroke-width="2.6" stroke-linecap="round"/>
-      <path d="M19.6 28 H24.4 V36 H19.6 Z" fill="${lleno ? color : 'none'}" stroke="${trazo}" stroke-width="2.4"/>
-      <rect x="13" y="36" width="18" height="4.6" rx="1.4" fill="${relleno}" stroke="${trazo}" stroke-width="2.4"/>
-      <rect x="9.5" y="42.4" width="25" height="5.6" rx="1.8" fill="${relleno}" stroke="${trazo}" stroke-width="2.4"/>
+  return `<svg data-copa viewBox="0 0 44 52" style="flex: none; display: block; ${medida} ${lleno ? `filter: drop-shadow(0 0 ${Math.round(alto * 0.28)}px ${color}59);` : 'opacity: 0.55;'}" aria-hidden="true">
+      <ellipse cx="22" cy="15.5" rx="6" ry="11.5" transform="rotate(-5 22 15.5)" fill="${lleno ? color : 'none'}" fill-opacity="${lleno ? 0.5 : 1}" stroke="${lleno ? color : color}" stroke-width="${lleno ? 1.6 : 2.2}"/>
+      <path d="M3.5 7 C6.5 20 12.5 29.5 21 34.5 C17 25 12 14 3.5 7 Z" fill="${relleno}" stroke="${trazo}" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M40.5 7 C37.5 20 31.5 29.5 23 34.5 C27 25 32 14 40.5 7 Z" fill="${relleno}" stroke="${trazo}" stroke-width="2.2" stroke-linejoin="round"/>
+      <path d="M19.8 32 H24.2 V41 H19.8 Z" fill="${relleno}" stroke="${trazo}" stroke-width="2.2"/>
+      <rect x="13" y="40.6" width="18" height="4.4" rx="1.3" fill="${relleno}" stroke="${trazo}" stroke-width="2.2"/>
+      <rect x="9.5" y="46" width="25" height="5" rx="1.6" fill="${relleno}" stroke="${trazo}" stroke-width="2.2"/>
     </svg>`;
 };
 
 // Una hilera de copas que se cuentan solas. `encendidas` permite pintar las
-// primeras N llenas y el resto en contorno.
+// primeras N llenas y el resto en contorno. El SVG llena su celda a propósito:
+// con ancho fijo la novena de la fila se salía del marco y, como la <section>
+// lleva overflow:hidden, se cortaba en silencio.
 const copas = (total, { color = ORO, encendidas = null, gap = 10, porFila = 9, ancho = 84 } = {}) => `
       <div data-copas style="display: grid; grid-template-columns: repeat(${porFila}, minmax(0, ${ancho}px)); justify-content: start; gap: ${gap}px;">
         ${Array.from({ length: total }, (_, i) =>
-          `<span data-copa-slot style="display: block; min-width: 0;">${copa(Math.round(ancho * 52 / 44), color, encendidas === null || i < encendidas, true)}</span>`).join('')}
+          `<span data-copa-slot style="display: block; min-width: 0;">${copaLEC(Math.round(ancho * 52 / 44), color, encendidas === null || i < encendidas, true)}</span>`).join('')}
       </div>`;
+
+// Banda de foto con desvanecido hacia abajo, para que el texto siempre caiga
+// sobre fondo sólido sin tener que oscurecer la imagen entera.
+const banda = (src, alto, alt, pos = 'center 30%', gris = false) => `
+      <div data-banda style="position: relative; height: ${alto}px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.10);">
+        <img src="assets/${src}" alt="${alt}" style="width: 100%; height: 100%; object-fit: cover; object-position: ${pos}; display: block;${gris ? ' filter: grayscale(0.85) brightness(0.8);' : ''}">
+        <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,7,9,0) 45%, rgba(10,7,9,0.78) 100%);"></div>
+      </div>`;
+
+// Portada a sangre: banda superior con recorte suave sobre una copia borrosa de
+// la misma foto. La capa borrosa sangra fuera del marco, de ahí el contenedor
+// con overflow oculto — si no, infla scrollHeight y el QA marca un desborde.
+const portadaFoto = (src, alt, pos = 'center 26%') => `
+    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: -60px; background-image: url('assets/${src}'); background-size: cover; background-position: center; background-repeat: no-repeat; filter: blur(48px) saturate(0.8) brightness(0.38); transform: scale(1.08);" role="img" aria-label="${alt}"></div>
+    <div data-fondo-nitido style="position: absolute; left: 0; right: 0; top: 0; height: 820px; background-image: url('assets/${src}'); background-size: cover; background-position: ${pos}; background-repeat: no-repeat; -webkit-mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0) 100%); mask-image: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(0,0,0,1) 56%, rgba(0,0,0,0) 100%);"></div>
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,7,9,0.20) 0%, rgba(10,7,9,0.42) 34%, rgba(10,7,9,0.93) 64%, rgba(10,7,9,0.99) 100%);"></div>
+    </div>`;
 
 const remate = (html, color = G2) => `
       <div data-remate style="margin-top: 30px; padding: 26px 32px; border-radius: 16px; background: ${color}1F; border: 1px solid ${color}73; font-size: 29px; font-weight: 500; color: ${BONE}; line-height: 1.35;">${html}</div>`;
@@ -98,44 +124,40 @@ const remate = (html, color = G2) => `
 const slides = [];
 
 // ── 1 · Portada ──────────────────────────────────────────────────────────
-// Sin foto del jugador (no hay asset libre), así que el ancla visual es el
-// muro de 18 copas detrás del titular: el dato del video es la portada.
 slides.push(`
   <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Que rollo cabrones. Hoy les voy a hablar del jugador con mas campeonatos de liga de todo el planeta. Y no es coreano, es un danes de veintiseis anos." style="${seccion()}">
-    <div data-muro style="position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; opacity: 0.17; pointer-events: none;">
-      <div style="display: grid; grid-template-columns: repeat(6, 1fr); justify-items: center; gap: 30px; width: 880px;">
-        ${Array.from({ length: 18 }, () => `<span style="display: block; width: 100%;">${copa(150, ORO, true, true)}</span>`).join('')}
-      </div>
-    </div>
-    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(10,7,9,0.72) 0%, rgba(10,7,9,0.35) 40%, rgba(10,7,9,0.92) 100%); pointer-events: none;"></div>
-    ${glow(G2, '50% 42%', '120% 50%')}
+    ${portadaFoto('foto-caps-2023.jpg', 'Caps, mid laner de G2 Esports', 'center 6%')}
+    ${glow(G2, '50% 44%', '120% 48%')}
     <div style="position: relative;">
       ${eyebrow('Hall of Legends · 18 ago 2026')}
-      <h1 style="margin: 0; font-family: ${DISPLAY}; font-size: 232px; font-weight: 400; line-height: 0.8; letter-spacing: 2px; color: ${BONE}; text-shadow: 0 0 90px rgba(255,45,85,0.35);"><span data-linea style="display: block;">CAPS</span><span data-linea style="display: block; color: ${ORO}; font-size: 168px;">18 TÍTULOS</span></h1>
-      <p data-sub style="margin: 34px 0 0; font-size: 40px; font-weight: 600; color: ${G2}; line-height: 1.25;">El jugador con más campeonatos<br>de liga del planeta</p>
+      <h1 style="margin: 0; font-family: ${DISPLAY}; font-size: 208px; text-shadow: 0 2px 24px rgba(10,7,9,0.9), 0 0 90px rgba(255,45,85,0.35); font-weight: 400; line-height: 0.8; letter-spacing: 2px; color: ${BONE};"><span data-linea style="display: block;">CAPS</span><span data-linea style="display: block; color: ${ORO}; font-size: 152px;">18 TÍTULOS</span></h1>
+      <p data-sub style="margin: 30px 0 0; font-size: 40px; font-weight: 600; color: ${G2}; line-height: 1.25;">El jugador con más campeonatos<br>de liga del planeta</p>
       <p data-sub style="margin: 14px 0 0; font-size: 30px; font-weight: 400; color: ${MUTED};">Y no es coreano. Es danés.</p>
+      <div data-sub style="margin-top: 34px;">${copas(6, { ancho: 74, color: ORO, gap: 16, porFila: 6 })}</div>
     </div>
   </section>`);
 
 // ── 2 · Quién es ─────────────────────────────────────────────────────────
 slides.push(`
   <section data-label="Quién es" data-screen-label="02 · Quién es" data-speaker-notes="Se llama Rasmus Winther pero ustedes lo conocen como Caps." style="${seccion()}">
-    ${glow(G2, '50% 38%', '115% 52%')}
+    ${glow(G2, '50% 34%', '115% 50%')}
     <div style="position: relative;">
       ${eyebrow('Se llama Rasmus Winther')}
-      ${titulo('Ustedes lo conocen<br>como <span style="color: ' + G2 + ';">Caps</span>', 100)}
+      ${titulo('Ustedes lo conocen<br>como <span style="color: ' + G2 + ';">Caps</span>', 96)}
 
-      <div style="margin-top: 44px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+      <div style="margin-top: 30px;">${banda('foto-caps-g2.jpg', 300, 'Caps con la camiseta de G2 Esports', 'center 12%')}</div>
+
+      <div style="margin-top: 24px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px;">
         ${[
           ['26', 'años', 'nacido el 17 nov 1999', ORO],
           ['DK', 'Dinamarca', 'danés, no coreano', G2],
           ['MID', 'mid laner', '76 campeones jugados', BONE],
           ['G2', 'desde 2019', 'contrato hasta 2027', BONE],
         ].map(([cifra, pie, nota, color]) => `
-        <div data-ficha style="padding: 26px 28px; border-radius: 18px; background: ${PANEL}D9; border: 1px solid rgba(255,255,255,0.09);">
-          <div style="font-family: ${DISPLAY}; font-size: 86px; line-height: 0.9; color: ${color};">${cifra}</div>
-          <div style="margin-top: 4px; font-size: 25px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">${pie}</div>
-          <div style="margin-top: 2px; font-size: 22px; font-weight: 400; color: ${MUTED};">${nota}</div>
+        <div data-ficha style="padding: 22px 26px; border-radius: 18px; background: ${PANEL}D9; border: 1px solid rgba(255,255,255,0.09);">
+          <div style="font-family: ${DISPLAY}; font-size: 76px; line-height: 0.9; color: ${color};">${cifra}</div>
+          <div style="margin-top: 4px; font-size: 24px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${BONE};">${pie}</div>
+          <div style="margin-top: 2px; font-size: 21px; font-weight: 400; color: ${MUTED};">${nota}</div>
         </div>`).join('')}
       </div>
 
@@ -144,13 +166,12 @@ slides.push(`
   </section>`);
 
 // ── 3 · El Hall of Legends: tres, y el tercero es él ─────────────────────
-// Se cuenta con las skins porque son el único retrato que existe de los tres.
-// La de Caps todavía no sale, así que su tarjeta va en gris con la fecha: el
-// hueco dice «apenas está pasando» mejor que cualquier frase.
+// Con retratos reales en vez de las skins: son tres personas. Los dos primeros
+// van en gris y Caps a color, que es la jerarquía de la lámina.
 const leyendas = [
-  ['Ahri_86.jpg', 'FAKER', 'Corea · 2024', 'Ahri Leyenda Inmortalizada', 'center 18%', false],
-  ['Kaisa_71.jpg', 'UZI', 'China · 2025', "Kai'Sa Leyenda Inmortalizada", 'center 20%', false],
-  ['Tristana_0.jpg', 'CAPS', 'Europa · 2026', 'Tristana · sale el 10 de sep', 'center 26%', true],
+  ['foto-faker.jpg', 'FAKER', 'Corea · 2024', 'T1 · el primero', 'center 18%', false],
+  ['foto-uzi.jpg', 'UZI', 'China · 2025', 'RNG · el segundo', 'center 26%', false],
+  ['foto-caps-2025.jpg', 'CAPS', 'Europa · 2026', 'G2 · primer occidental', 'center 20%', true],
 ];
 
 slides.push(`
@@ -161,17 +182,16 @@ slides.push(`
       ${titulo('Han entrado <span style="color: ' + ORO + ';">tres</span><br>en toda la historia', 92)}
 
       <div style="margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px;">
-        ${leyendas.map(([img, quien, donde, skin, pos, esCaps], i) => `
+        ${leyendas.map(([img, quien, donde, nota, pos, esCaps], i) => `
         <div data-leyenda style="display: flex; flex-direction: column; border-radius: 16px; overflow: hidden; border: 1px solid ${esCaps ? ORO + 'CC' : 'rgba(255,255,255,0.10)'}; background: ${PANEL}D9;">
-          <div style="position: relative; height: 300px;">
-            <img src="assets/${img}" alt="${skin}" style="width: 100%; height: 100%; object-fit: cover; object-position: ${pos}; display: block; ${esCaps ? 'filter: grayscale(1) brightness(0.55);' : ''}">
-            <span style="position: absolute; top: 10px; left: 10px; font-family: ${DISPLAY}; font-size: 34px; line-height: 1; color: ${esCaps ? ORO : 'rgba(255,255,255,0.55)'};">0${i + 1}</span>
-            ${esCaps ? `<span style="position: absolute; bottom: 10px; left: 10px; right: 10px; text-align: center; background: ${ORO}; color: ${BG}; font-size: 19px; font-weight: 800; letter-spacing: 1px; border-radius: 6px; padding: 5px 0;">10 SEP</span>` : ''}
+          <div style="position: relative; height: 320px;">
+            <img src="assets/${img}" alt="${quien}" style="width: 100%; height: 100%; object-fit: cover; object-position: ${pos}; display: block; ${esCaps ? '' : 'filter: grayscale(0.7) brightness(0.85);'}">
+            <span style="position: absolute; top: 10px; left: 12px; font-family: ${DISPLAY}; font-size: 38px; line-height: 1; color: ${esCaps ? ORO : 'rgba(255,255,255,0.7)'}; text-shadow: 0 2px 10px rgba(0,0,0,0.8);">0${i + 1}</span>
           </div>
           <div style="padding: 14px 16px 18px;">
             <div style="font-family: ${DISPLAY}; font-size: 52px; line-height: 0.95; color: ${esCaps ? ORO : BONE};">${quien}</div>
             <div style="margin-top: 2px; font-size: 20px; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: ${MUTED};">${donde}</div>
-            <div style="margin-top: 6px; font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.25;">${skin}</div>
+            <div style="margin-top: 6px; font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.25;">${nota}</div>
           </div>
         </div>`).join('')}
       </div>
@@ -189,21 +209,26 @@ slides.push(`
       ${eyebrow('Récord mundial, en cualquier región', ORO)}
 
       <div data-bloque style="margin-top: 8px;">
-        <div style="display: flex; align-items: baseline; gap: 18px;">
-          <span style="font-family: ${DISPLAY}; font-size: 120px; line-height: 0.9; color: ${ORO};">18</span>
-          <span style="font-family: ${DISPLAY}; font-size: 62px; line-height: 1; color: ${BONE};">CAPS</span>
-          <span style="font-size: 24px; font-weight: 600; color: ${MUTED};">17 de la LEC + 1 de la liga turca</span>
+        <div style="display: flex; align-items: flex-end; gap: 26px;">
+          <div style="flex: 1; min-width: 0;">
+            <div style="display: flex; align-items: baseline; gap: 18px;">
+              <span style="font-family: ${DISPLAY}; font-size: 132px; line-height: 0.9; color: ${ORO};">18</span>
+              <span style="font-family: ${DISPLAY}; font-size: 66px; line-height: 1; color: ${BONE};">CAPS</span>
+            </div>
+            <div style="margin-top: 6px; font-size: 25px; font-weight: 600; color: ${MUTED};">17 de la LEC + 1 de la liga turca</div>
+          </div>
+          <div style="flex: none; width: 320px;">${banda('foto-copa-eulcs.jpg', 224, 'G2 levantando el trofeo de la EU LCS de verano de 2016', 'center 40%')}</div>
         </div>
-        <div style="margin-top: 14px;">${copas(18, { ancho: 84, color: ORO, gap: 14 })}</div>
+        <div style="margin-top: 14px;">${copas(18, { ancho: 80, color: ORO, gap: 13 })}</div>
       </div>
 
-      <div data-bloque style="margin-top: 44px; padding-top: 36px; border-top: 1px solid rgba(255,255,255,0.10);">
+      <div data-bloque style="margin-top: 34px; padding-top: 28px; border-top: 1px solid rgba(255,255,255,0.10);">
         <div style="display: flex; align-items: baseline; gap: 18px;">
           <span style="font-family: ${DISPLAY}; font-size: 120px; line-height: 0.9; color: ${MUTED};">10</span>
           <span style="font-family: ${DISPLAY}; font-size: 62px; line-height: 1; color: ${MUTED};">FAKER</span>
           <span style="font-size: 24px; font-weight: 600; color: ${MUTED};">títulos de la LCK</span>
         </div>
-        <div style="margin-top: 14px;">${copas(10, { ancho: 84, color: MUTED, gap: 14 })}</div>
+        <div style="margin-top: 14px;">${copas(10, { ancho: 80, color: MUTED, gap: 13 })}</div>
       </div>
     </div>
   </section>`);
@@ -289,7 +314,7 @@ slides.push(`
           <span style="flex: none; width: 118px; font-family: ${DISPLAY}; font-size: 52px; line-height: 1; color: ${color};">${anio}</span>
           <span style="flex: none; width: 18px; height: 18px; border-radius: 50%; background: ${fuerte ? color : 'transparent'}; border: 3px solid ${color}; box-sizing: border-box;"></span>
           <span style="flex: 1; font-size: ${fuerte ? 30 : 26}px; font-weight: ${fuerte ? 700 : 400}; color: ${fuerte ? BONE : MUTED}; line-height: 1.25;">${que}</span>
-          ${tono === 'oro' ? copa(46, ORO, true) : ''}
+          ${tono === 'oro' ? copaLEC(46, ORO, true) : ''}
         </div>${i < camino.length - 1 ? `<div style="width: 3px; height: 18px; background: rgba(255,255,255,0.14); margin-left: 149px;"></div>` : ''}`;
         }).join('')}
       </div>
@@ -311,9 +336,11 @@ slides.push(`
     ${glow(PLATA, '50% 40%', '118% 55%')}
     <div style="position: relative;">
       ${eyebrow('Y aquí está el pero', PLATA)}
-      ${titulo('Nunca ha ganado<br><span style="color: ' + PLATA + ';">un mundial</span>', 104)}
+      ${titulo('Nunca ha ganado<br><span style="color: ' + PLATA + ';">un mundial</span>', 100)}
 
-      <div style="margin-top: 42px; display: flex; flex-direction: column; gap: 20px;">
+      <div style="margin-top: 30px;">${banda('foto-worlds-2018.jpg', 210, 'El estadio de la final del Mundial de 2018', 'center 52%', true)}</div>
+
+      <div style="margin-top: 24px; display: flex; flex-direction: column; gap: 18px;">
         ${finales.map(([anio, equipo, rival, corto]) => `
         <div data-final style="display: flex; align-items: center; gap: 28px; padding: 34px 34px; border-radius: 20px; background: rgba(147,176,184,0.07); border: 1px solid ${PLATA}4D;">
           <div style="flex: none; text-align: center;">
@@ -340,15 +367,15 @@ slides.push(`
     <div style="position: relative;">
       ${eyebrow('Lo que sí ganó', ORO)}
 
-      <div data-msi style="display: flex; align-items: center; gap: 34px;">
-        ${copa(230, ORO, true)}
+      <div data-msi style="display: flex; align-items: center; gap: 28px;">
+        <div style="flex: none; width: 384px;">${banda('foto-msi-2019.jpg', 350, 'G2 Esports levantando el trofeo del MSI de 2019', 'center 10%')}</div>
         <div style="flex: 1; min-width: 0;">
-          <div style="font-family: ${DISPLAY}; font-size: 118px; line-height: 0.86; color: ${BONE};">MSI<br><span style="color: ${ORO};">2019</span></div>
-          <div style="margin-top: 10px; font-size: 28px; font-weight: 500; color: ${MUTED}; line-height: 1.3;">Y fue <strong style="color: ${BONE};">MVP de la final</strong>.</div>
+          <div style="font-family: ${DISPLAY}; font-size: 112px; line-height: 0.86; color: ${BONE};">MSI<br><span style="color: ${ORO};">2019</span></div>
+          <div style="margin-top: 10px; font-size: 27px; font-weight: 500; color: ${MUTED}; line-height: 1.3;">Y fue <strong style="color: ${BONE};">MVP de la final</strong>.</div>
         </div>
       </div>
 
-      <div style="margin-top: 38px; display: flex; flex-direction: column; gap: 16px;">
+      <div style="margin-top: 30px; display: flex; flex-direction: column; gap: 16px;">
         ${[
           ['SEMIFINAL', 'Le ganó al equipo de <strong style="color: ' + BONE + ';">Faker</strong>', 'SKT'],
           ['FINAL', 'Barrió a Team Liquid', '3–0'],
@@ -436,7 +463,8 @@ slides.push(`
     <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
       ${eyebrow('Primer occidental en el Hall of Legends', ORO)}
       <h2 data-a="up2" style="margin: 0; font-family: ${DISPLAY}; font-size: 150px; font-weight: 400; line-height: 0.88; letter-spacing: 2px; text-transform: uppercase; color: ${BONE};">18 títulos,<br><span style="color: ${PLATA};">cero mundiales</span></h2>
-      <div style="margin-top: 44px;">${copas(6, { ancho: 92, color: ORO, gap: 18, porFila: 6 })}</div>
+      <div style="margin-top: 34px; width: 100%;">${banda('foto-g2-2025.jpg', 260, 'G2 Esports en el escenario del MSI 2025', 'center 40%')}</div>
+      <div style="margin-top: 30px;">${copas(6, { ancho: 82, color: ORO, gap: 18, porFila: 6 })}</div>
       <div data-gigi style="margin-top: 52px; font-family: ${DISPLAY}; font-size: 110px; line-height: 1.0; color: ${G2};">GIGI EASY</div>
       <div data-gigi style="margin-top: 8px; font-size: 30px; font-weight: 500; color: ${MUTED}; line-height: 1.4;">Tírenme un follow o les voy a meter la cuarta. Chao.</div>
     </div>
@@ -464,18 +492,20 @@ const coreografias = `<script>
   }
 
   animar('Portada', function (tl, s) {
-    tl.from(s.querySelector('[data-muro]'), { scale: 0.9, opacity: 0, duration: 1.2 }, 0)
+    tl.from(s.querySelector('[data-fondo-nitido]'), { scale: 1.05, opacity: 0, duration: 1.15 }, 0)
       .from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 28, opacity: 0, duration: 0.55 }, 0.1)
       .from(q(s, '[data-linea]'), { y: 56, opacity: 0, duration: 0.8, stagger: 0.14 }, 0.24)
       .from(q(s, '[data-sub]'), { y: 22, opacity: 0, duration: 0.55, stagger: 0.1 }, 0.72);
+    trofeos(tl, s, 1.02);
   });
 
   animar('Quién es', function (tl, s) {
     tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
       .from(s.querySelector('[data-a="up2"]'), { y: 30, opacity: 0, duration: 0.6 }, 0.1)
-      .from(q(s, '[data-ficha]'), { y: 28, scale: 0.95, opacity: 0, duration: 0.5, stagger: 0.1 }, 0.32)
-      .from(s.querySelector('[data-remate]'), { y: 24, opacity: 0, duration: 0.55 }, 0.92);
+      .from(s.querySelector('[data-banda]'), { y: 26, opacity: 0, duration: 0.6 }, 0.28)
+      .from(q(s, '[data-ficha]'), { y: 28, scale: 0.95, opacity: 0, duration: 0.5, stagger: 0.1 }, 0.5)
+      .from(s.querySelector('[data-remate]'), { y: 24, opacity: 0, duration: 0.55 }, 1.1);
   });
 
   // Las tres tarjetas entran en orden: Faker, Uzi y al final Caps, que es el
@@ -495,6 +525,7 @@ const coreografias = `<script>
     var b = q(s, '[data-bloque]');
     tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
       .from(b[0], { y: 24, opacity: 0, duration: 0.45 }, 0.1)
+      .from(s.querySelector('[data-banda]'), { scale: 0.92, opacity: 0, duration: 0.6, ease: 'back.out(1.4)' }, 0.2)
       .from(b[1], { y: 24, opacity: 0, duration: 0.45 }, 0.92);
     trofeos(tl, b[0], 0.24);
     trofeos(tl, b[1], 1.02);
@@ -530,14 +561,15 @@ const coreografias = `<script>
   animar('Nunca ganó un mundial', function (tl, s) {
     tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
       .from(s.querySelector('[data-a="up2"]'), { y: 32, opacity: 0, duration: 0.65 }, 0.1)
-      .from(q(s, '[data-final]'), { x: -34, opacity: 0, duration: 0.55, stagger: 0.28 }, 0.42)
-      .from(s.querySelector('[data-remate]'), { y: 24, opacity: 0, duration: 0.5 }, 1.28);
+      .from(s.querySelector('[data-banda]'), { y: 24, opacity: 0, duration: 0.55 }, 0.3)
+      .from(q(s, '[data-final]'), { x: -34, opacity: 0, duration: 0.52, stagger: 0.24 }, 0.56)
+      .from(s.querySelector('[data-remate]'), { y: 24, opacity: 0, duration: 0.5 }, 1.26);
   });
 
   animar('El MSI de 2019', function (tl, s) {
     tl.from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0)
       .from(s.querySelector('[data-msi]'), { y: 30, opacity: 0, duration: 0.6 }, 0.12)
-      .from(s.querySelector('[data-msi] svg'), { scale: 0.5, rotation: -12, opacity: 0, duration: 0.7, ease: 'back.out(2)' }, 0.16)
+      .from(s.querySelector('[data-msi] [data-banda]'), { scale: 0.9, opacity: 0, duration: 0.7, ease: 'back.out(1.5)' }, 0.16)
       .from(q(s, '[data-ronda]'), { x: 30, opacity: 0, duration: 0.5, stagger: 0.14 }, 0.66)
       .from(s.querySelector('[data-papa]'), { y: 24, opacity: 0, duration: 0.55 }, 1.12);
   });
@@ -561,8 +593,9 @@ const coreografias = `<script>
     tl.from(s.querySelector('[data-a="ghost"]'), { scale: 0.88, opacity: 0, duration: 1.1 }, 0)
       .from(s.querySelector('[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.08)
       .from(s.querySelector('h2'), { y: 40, opacity: 0, duration: 0.75 }, 0.22);
-    trofeos(tl, s, 0.72);
-    tl.from(q(s, '[data-gigi]'), { y: 26, opacity: 0, duration: 0.55, stagger: 0.1 }, 1.12);
+    tl.from(s.querySelector('[data-banda]'), { y: 26, opacity: 0, duration: 0.6 }, 0.6);
+    trofeos(tl, s, 0.94);
+    tl.from(q(s, '[data-gigi]'), { y: 26, opacity: 0, duration: 0.55, stagger: 0.1 }, 1.1);
   });
 })();
 </script>`;
