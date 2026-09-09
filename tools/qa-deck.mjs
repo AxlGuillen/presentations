@@ -64,6 +64,33 @@ const r = await pagina.evaluate((ALTO) => {
     imagenesRotas: [...document.images].filter(i => !i.dataset.src && i.getAttribute('src'))
                                        .filter(i => !i.complete || i.naturalWidth === 0)
                                        .map(i => i.getAttribute('src')),
+    // Desborde a lo ANCHO. No se puede medir con scrollWidth porque la
+    // <section> lleva overflow:hidden: lo que sobra se corta en silencio (así
+    // se coló una fila de trofeos recortada en caps). Se compara la caja de
+    // cada elemento del contenido contra la banda segura; lo posicionado en
+    // absoluto se salta, que es como se pintan fondos y halos a sangre.
+    desbordeAncho: secs.map((s, i) => {
+      const caja = s.getBoundingClientRect();
+      const pad = getComputedStyle(s);
+      // deck-stage escala el lienzo con transform, así que getBoundingClientRect
+      // devuelve píxeles de pantalla y el padding calculado viene sin escalar:
+      // hay que normalizar o todas las láminas «desbordan» lo mismo.
+      const escala = caja.width / s.offsetWidth || 1;
+      const izq = caja.left + parseFloat(pad.paddingLeft) * escala;
+      const der = caja.right - parseFloat(pad.paddingRight) * escala;
+      let peor = 0;
+      const mirar = (el) => {
+        for (const h of el.children) {
+          const pos = getComputedStyle(h).position;
+          if (pos === 'absolute' || pos === 'fixed') continue;
+          const r = h.getBoundingClientRect();
+          if (r.width) peor = Math.max(peor, (izq - r.left) / escala, (r.right - der) / escala);
+          mirar(h);
+        }
+      };
+      mirar(s);
+      return { i: i + 1, label: s.dataset.label, over: Math.round(peor) };
+    }).filter(x => x.over > 2),
     sinLabel: secs.filter(s => !s.dataset.label || !s.dataset.speakerNotes).length,
   };
 }, alto);
@@ -71,4 +98,7 @@ const r = await pagina.evaluate((ALTO) => {
 console.log(JSON.stringify({ ...r, erroresConsola: fallos }, null, 1));
 await navegador.close();
 servidor.close();
+// El ancho NO tumba el exit code: mide contra la banda segura, y entrar unos
+// píxeles en el margen es cosmético (una sombra girada, un glow). Lo que sí
+// importa —contenido cortado por el marco— sale con decenas de píxeles.
 process.exit(r.desborde.length || r.imagenesRotas.length || fallos.length ? 1 : 0);
