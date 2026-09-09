@@ -23,6 +23,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /missfortune/        Miss Fortune cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /syndra/             Syndra cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
 /riven/              Riven cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
+/kindred/            Kindred cumple 11 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
                      · fotos de Wikimedia Commons con licencia libre — créditos en caps/CREDITOS.md
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
