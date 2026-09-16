@@ -202,7 +202,49 @@ En `.claude/skills/` están los skills oficiales de GreenSock (MIT, instalados c
 
 ## Módulo de video (tools/)
 
-`node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema vía puppeteer-core, con rutas para macOS y Windows), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. **Si el deck usa GSAP** (existe `<carpeta>/gsap.min.js`), `tools/cuadros.mjs` renderiza además las timelines **cuadro a cuadro** — seeks exactos con `section.__tl.time(t)` a 30 fps, determinista, sin frames perdidos — en clips `video-out/anim/anim-NN.mp4`, y cada slide entra animada al video congelando su último cuadro el resto de su narración (las slides sin timeline siguen con PNG estático). Se puede correr suelto: `node tools/cuadros.mjs <carpeta> [fps]`. La narración acepta **etiquetas de expresión entre corchetes** en el texto del guion (`[excited]`, `[break]`, `[whispering]`…, no salen en los subtítulos) y `guion.json` admite `voz` (reference_id, buscar con `tools/fish-voces.mjs`), `velocidad`, `temperatura`, y `"subtitulos": "karaoke"` — **subtítulos estilo TikTok**: líneas de 3 palabras centradas donde la palabra hablada se pinta con `"acento"` (#RRGGBB del deck) usando los timestamps reales, vía ASS/libass. El detalle vive en el skill `guion-video`. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck y se enlaza desde su card (hoy ningún deck publica video).
+`node tools/video.mjs <carpeta>` convierte un deck en `video-out/video.mp4` narrado con subtítulos: lee `<carpeta>/guion.json` (textos por slide + `voz` de Fish Audio), captura las diapositivas con `tools/capturar.mjs` (Chrome del sistema vía puppeteer-core, con rutas para macOS y Windows), pide la voz a Fish Audio (`s2.1-pro-free`, **gratis**; el modelo `s1` cobra) con timestamps palabra a palabra, y monta con ffmpeg. **Si el deck usa GSAP** (existe `<carpeta>/gsap.min.js`), `tools/cuadros.mjs` renderiza además las timelines **cuadro a cuadro** — seeks exactos con `section.__tl.time(t)` a 30 fps, determinista, sin frames perdidos — en clips `video-out/anim/anim-NN.mp4`, y cada slide entra animada al video congelando su último cuadro el resto de su narración (las slides sin timeline siguen con PNG estático). Se puede correr suelto: `node tools/cuadros.mjs <carpeta> [fps]`. La narración acepta **etiquetas de expresión entre corchetes** en el texto del guion (`[excited]`, `[break]`, `[whispering]`…, no salen en los subtítulos) y `guion.json` admite `voz` (reference_id, ver «Elegir la voz» abajo), `velocidad`, `temperatura`, y `"subtitulos": "karaoke"` — **subtítulos estilo TikTok**: líneas de 3 palabras centradas donde la palabra hablada se pinta con `"acento"` (#RRGGBB del deck) usando los timestamps reales, vía ASS/libass. El detalle vive en el skill `guion-video`. Requiere `FISH_API_KEY` en `.env` (nunca al repo) y `npm install` dentro de `tools/`. Las salidas `video-out/` están ignoradas; para publicar un video se copia a mano a la carpeta del deck y se enlaza desde su card (hoy ningún deck publica video).
+
+### Elegir la voz
+
+`node tools/fish-voces.mjs` tiene tres modos:
+
+```
+node tools/fish-voces.mjs                      # las voces ya guardadas, con su id
+node tools/fish-voces.mjs buscar narrador --es # busca en el catálogo, ordenado por ♥
+node tools/fish-voces.mjs probar narrador-v2   # genera una muestra mp3 para oírla
+```
+
+El `_id` que imprime va en el campo `voz` de `guion.json`. Las muestras caen en
+`video-out/voces/`, que está ignorado.
+
+**Las voces del catálogo funcionan con el modelo gratuito y con timestamps** —
+comprobado contra `/v1/tts/stream/with-timestamp`, que es el que usa `video.mjs`:
+devuelve los segmentos con su tiempo, así que **los subtítulos karaoke salen
+igual con una voz del catálogo que con una propia**. No hace falta clonar nada
+ni pagar para tener narración con subtítulos.
+
+⚠️ **Las favoritas de la cuenta NO se pueden listar por API.** Se probaron
+`/model?self=true` (devuelve 0 porque solo lista modelos propios), `/model/bookmark`
+y `/bookmark`: no existen. Por eso `fish-voces.mjs` lleva un **registro a mano**
+en la constante `GUARDADAS` — se busca la voz una vez y se apunta su id ahí.
+Hoy tiene `narrador-v2` (`35199d5438854f5d9157c500479ab684`, 4 818 ♥) para la
+serie de lore, que **no sirve para Cumplelolero**: es voz de narrador serio y
+ese guion es de albur.
+
+### Lo que la API de Fish Audio sí y no da (probado el 16/09/2026)
+
+| | Estado |
+|---|---|
+| TTS con `s2.1-pro-free` + timestamps | ✅ **gratis**, es lo que usa `video.mjs` |
+| Voces del catálogo por `reference_id` | ✅ gratis, con timestamps |
+| **ASR / voz a texto** (`POST /v1/asr`) | ❌ **cobra**: devuelve `402 Insufficient API credit` y el saldo está en `$0.000000` |
+| Clonar voz con *reference audio* en la llamada | ❓ probablemente gratis: devolvió `400 Reference Audio is not valid` con una muestra falsa, **no 402**. Falta probarlo con una grabación real |
+| **Imágenes y video** | ❌ **no hay API**. El «Imagen y video» de la barra lateral de fish.audio es solo de la app web; el esquema REST solo expone voz |
+
+El ASR sería lo que permitiría **grabar su propia voz y sacar los subtítulos
+karaoke solos** —hoy los timestamps solo existen si el audio lo generó el TTS—,
+pero hace falta meter crédito. El CRUD de modelos está en `/model`, no en
+`/v1/models` como dice la doc (ese devuelve 404).
 
 ## Cards al compartir (Open Graph)
 
