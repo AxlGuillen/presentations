@@ -25,6 +25,8 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /riven/              Riven cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
 /kindred/            Kindred cumple 11 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /briar/              Briar cumple 3 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
+                     · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
                      · fotos de Wikimedia Commons con licencia libre — créditos en caps/CREDITOS.md
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
