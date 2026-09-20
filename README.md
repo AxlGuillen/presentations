@@ -26,6 +26,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /kindred/            Kindred cumple 11 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /briar/              Briar cumple 3 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
 /azir/               Azir cumple 12 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
+/katarina/           Katarina cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 6 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
