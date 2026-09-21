@@ -28,6 +28,8 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /azir/               Azir cumple 12 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
 /katarina/           Katarina cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 6 slides
 /corki/              Corki cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/samira/             Samira cumple 6 años (apoyo visual para TikTok, animado) · 9:16 · 7 slides
+                     · el bloque de lore usa arte de Legends of Runeterra, no splashes
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
