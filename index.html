@@ -103,6 +103,12 @@
   }
   .abrir:hover { transform: translateY(-2px); box-shadow: 0 10px 30px rgba(232, 181, 77, 0.25); }
   .acciones .meta { font-size: 12px; color: var(--humo); }
+  .ver-video {
+    display: inline-block; font-size: 12px; letter-spacing: 1px; font-weight: 500;
+    color: var(--deck-acento); border: 1px solid var(--deck-acento); border-radius: 999px;
+    padding: 12px 22px; transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+  }
+  .ver-video:hover { background: var(--deck-acento); color: var(--tinta); transform: translateY(-2px); }
 
   .progreso { margin-top: 34px; display: flex; gap: 7px; }
   .progreso span { width: 22px; height: 3px; background: #3A332A; transition: width 350ms ease, background 350ms ease; }
@@ -195,6 +201,7 @@
       <p class="descripcion" id="descripcion-pantalla"></p>
       <div class="acciones">
         <a class="abrir" id="abrir-pantalla" href="#">ABRIR PRESENTACIÓN →</a>
+        <a class="ver-video mono" id="ver-video" href="#" hidden>▶ VER VIDEO</a>
         <span class="meta mono" id="meta-pantalla"></span>
       </div>
       <div class="progreso" id="progreso" aria-hidden="true"></div>
@@ -235,7 +242,8 @@ const DECKS = [
     { grupo: 'Reportes semanales', ruta: 'semana36/', titulo: 'Semana 36 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
     desc: 'El techo de la serie: 20 h 48 m, con una página construida de cero y el tracking hecho rutina.', acento: '#0065FF', glow: '0, 101, 255' },
     { grupo: 'Reportes semanales', ruta: 'semana38/', titulo: 'Semana 38 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
-    desc: 'Menos horas que nunca y más cierres que nunca: 14 de 16 issues en tres días.', acento: '#00875A', glow: '0, 135, 90' },
+    desc: 'Menos horas que nunca y más cierres que nunca: 14 de 16 issues en tres días.', acento: '#00875A', glow: '0, 135, 90',
+    video: 'VIDEO 1:50', videoSrc: 'semana38/video.mp4' },
     { grupo: 'Creador de contenido', ruta: 'guerras/', titulo: 'Guerras Rúnicas · assets del episodio', serie: 'LORE · 01', datos: 'LORE 01 · 9:16 · 18 DIAP · GSAP', meta: '9:16 · 18 DIAPOSITIVAS · SEP 2026',
     desc: 'Material gráfico del episodio: una lámina por bloque del guion, con el arte oficial que sí existe y los huecos declarados donde no lo hay.', acento: '#41C4E8', glow: '65, 196, 232' },
     { grupo: 'Creador de contenido', ruta: 'soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
@@ -357,6 +365,9 @@ function proyectar(i, manual) {
   document.getElementById('titulo-pantalla').textContent = d.titulo;
   document.getElementById('descripcion-pantalla').textContent = d.desc;
   document.getElementById('abrir-pantalla').href = d.ruta;
+  const btnVideo = document.getElementById('ver-video');
+  btnVideo.hidden = !d.videoSrc;
+  if (d.videoSrc) btnVideo.href = d.videoSrc;
   document.getElementById('meta-pantalla').textContent = d.meta;
   document.getElementById('contador').textContent = String(i + 1).padStart(2, '0') + ' / ' + DECKS.length;
 
