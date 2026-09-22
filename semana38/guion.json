@@ -1,0 +1,17 @@
+{
+  "subtitulos": "ninguno",
+  "temperatura": 0.5,
+  "slides": [
+    { "slide": 1, "texto": "[confident] Este es el reporte de la semana treinta y ocho, del quince al veintiuno de septiembre. [break] Once horas con cuarenta y nueve minutos repartidas en dieciséis tareas. [excited] Y algo poco común: catorce de ellas quedaron cerradas." },
+    { "slide": 2, "texto": "[confident] Es la semana con menos horas registradas de toda la serie, y al mismo tiempo la que más cerró. [break] Catorce, contra las nueve del récord anterior. [calm] Las dos curvas se cruzan: la semana treinta y seis fue de construir una página entera y cerró cinco; esta fue de barrer pendientes." },
+    { "slide": 3, "texto": "[calm] El tiempo se repartió parejo entre cinco frentes, del veintiséis al once por ciento. [break] Ninguno se comió la semana, que es justo como se ve una semana de mantenimiento." },
+    { "slide": 4, "texto": "[excited] La historia central: ocho sitios con el módulo de AEO. [break] Siete se resolvieron con treinta y seis minutos sumados, porque el módulo ya estaba puesto y solo faltaba configurarlo. [confident] El octavo, Zouk Group LV, se llevó dos horas y media porque había que migrarlo desde cero. Los ocho quedaron cerrados." },
+    { "slide": 5, "texto": "[confident] Dos cambios no fueron para un cliente, sino para la plataforma. [break] La hora de apertura de puertas se añadió a la plantilla del pop-up, así que cualquier venue la hereda sin tocar nada. [calm] Y el Guest Portal, que no tenía capa de traducción, ya tiene su lista de idiomas y un prototipo en español." },
+    { "slide": 6, "texto": "[calm] El resto de la semana fue publicar: cuatro micrositios, todos cerrados el mismo día en que se tocaron. [break] Las dos piezas de medición, el tracking y el sitemap, son las únicas que quedaron esperando control de calidad." },
+    { "slide": 7, "texto": "[calm] Solo hubo tres días con registro, y los tres con horas muy parecidas. [break] El jueves fueron quince registros cortos, el barrido; el viernes, solo cuatro, pero de trabajo de fondo." },
+    { "slide": 8, "texto": "[confident] De las seis tareas que la semana treinta y seis dejó esperando, cinco ya cerraron. [excited] Incluido el aviso de traslapes, que era la deuda más vieja del tablero. [calm] La sexta, la página de Game Day, sigue del lado del cliente." },
+    { "slide": 9, "texto": "[calm] Así quedó el tablero: catorce finalizadas, dos en control de calidad y tres esperando a alguien más. [break] Es la primera vez que la columna verde necesita dos columnas para caber." },
+    { "slide": 10, "texto": "[confident] La semana treinta y nueve arranca con el tablero casi limpio. [break] Solo dos tareas esperando veredicto y, por primera vez, ninguna devuelta de control de calidad." },
+    { "slide": 11, "texto": "[excited] En una frase: la semana de menos horas y más cierres. [long-break] [confident] Once horas con cuarenta y nueve minutos, catorce tareas terminadas y ninguna deuda arrastrada." }
+  ]
+}
