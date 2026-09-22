@@ -66,7 +66,7 @@ for (const deck of objetivos) {
   });
   await pagina.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video{display:none!important}' });
+  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
   await pagina.evaluate(() => {
     const s = document.querySelector('deck-stage section');
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));

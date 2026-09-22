@@ -57,6 +57,7 @@ Cada carpeta de presentación es autocontenida: su `index.html`, el runtime del 
 | Navegar | `←` `→`, espacio, `Inicio`/`Fin`, o número de diapositiva |
 | Modo presentación | tecla **P** (pantalla completa, oculta miniaturas); `Esc` para salir |
 | Exportar a PDF | `Ctrl+P` → Guardar como PDF (una diapositiva por página) |
+| Ver el video | tecla **V** — solo en los decks que traen `video.mp4`; se abre sobre el propio deck y `Esc` lo cierra |
 | Móvil | toca la mitad izquierda/derecha para retroceder/avanzar |
 
 ## Agregar una presentación

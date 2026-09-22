@@ -51,7 +51,7 @@ for (const deck of decks) {
   });
   await pagina.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video{display:none!important}' });
+  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
   await pagina.evaluate(() => document.fonts.ready);
   // GSAP y animaciones de entrada: esperar al estado final (ver CLAUDE.md)
   await new Promise(r => setTimeout(r, 2200));

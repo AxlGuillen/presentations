@@ -520,6 +520,7 @@ ${slides.join('\n')}
 </deck-stage>
 <script src="./gsap.min.js"></script>
 ${kit.animador()}
+${kit.reproductor({ src: 'video.mp4', etiqueta: 'Reproducir', tecla: 'v', acento: BLUE })}
 <script>
 // ── Coreografía ──────────────────────────────────────────────────────────
 // La misma familia que semana35 y semana36 (es una serie): titulares partidos

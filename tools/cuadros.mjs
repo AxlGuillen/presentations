@@ -73,7 +73,7 @@ console.log(`${deck}: ${n} diapositivas a ${w}×${h} · ${FPS} fps`);
 
 await pagina.setViewport({ width: w, height: h, deviceScaleFactor: 1 });
 await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-await pagina.addStyleTag({ content: '#modo-presentacion{display:none!important}' });
+await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
 await pagina.evaluate(() => document.fonts.ready);
 
 const ff = args => execFileSync('ffmpeg', ['-y', '-v', 'error', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
