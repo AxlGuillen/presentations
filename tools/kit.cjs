@@ -166,7 +166,7 @@ const reproductor = ({ src = 'video.mp4', etiqueta = 'Reproducir', tecla = 'v',
     cerrar.textContent = '✕ Cerrar · Esc';
     cerrar.style.cssText = 'position:absolute;top:18px;right:18px;padding:9px 18px;' +
       'border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(0,0,0,.45);' +
-      'color:#FFF;cursor:pointer;font:600 13px/1 inherit;letter-spacing:.6px';
+      'color:#FFF;cursor:pointer;font:600 13px/1 inherit;letter-spacing:.6px;z-index:2';
     cerrar.addEventListener('click', function (e) { e.stopPropagation(); alternar(false); });
     capa.addEventListener('click', function (e) { if (e.target === capa) alternar(false); });
     capa.appendChild(video);
@@ -180,8 +180,22 @@ const reproductor = ({ src = 'video.mp4', etiqueta = 'Reproducir', tecla = 'v',
     capa.hidden = !abierto;
     btn.style.opacity = abierto ? '1' : '.85';
     if (abierto) video.play().catch(function () {});   // si el navegador lo bloquea, quedan los controles
-    else video.pause();
+    else {
+      video.pause();
+      if (document.fullscreenElement) document.exitFullscreen().catch(function () {});
+    }
   }
+
+  // El botón nativo de pantalla completa pone en fullscreen el <video>, y
+  // entonces el navegador solo pinta ese elemento: el botón «Cerrar», que vive
+  // en la capa, desaparece y el video se queda sin salida. Se reconduce el
+  // fullscreen a la capa, que sí lo lleva dentro.
+  document.addEventListener('fullscreenchange', function () {
+    if (!video || document.fullscreenElement !== video) return;
+    document.exitFullscreen()
+      .then(function () { return capa.requestFullscreen(); })
+      .catch(function () {});
+  });
 
   // Con la capa abierta, el teclado es del video: se corta antes de deck-stage.
   window.addEventListener('keydown', function (e) {
