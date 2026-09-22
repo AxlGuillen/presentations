@@ -77,6 +77,7 @@ npx serve .
 ## Roadmap
 
 - [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. El módulo queda listo para cuando se quiera publicar un video en una card.
+- [**Capa de audio y tours guiados**](docs/audio-y-tours.md): **propuesta**. Música de fondo con ducking y efectos puntuales enganchados a las animaciones (los tiempos ya los da `tiempos.json` + `anim.json`), y más adelante videos de QA o tours de producto sobre la app real en vez de un deck.
 
 ## Deploy
 

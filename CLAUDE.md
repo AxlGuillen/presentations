@@ -282,4 +282,6 @@ Cada deck (y la galería raíz) lleva metas OG/Twitter en el `<head>` para que e
 
 ## Roadmap
 
-`docs/video-narrado.md` — convertir decks en MP4 narrado con subtítulos vía ElevenLabs con timestamps. Propuesta cerrada, sin implementar.
+`docs/video-narrado.md` — convertir decks en MP4 narrado. **Ya implementado** con Fish Audio (ver «Módulo de video»); el documento queda como registro de la propuesta original, que hablaba de ElevenLabs.
+
+`docs/audio-y-tours.md` — **propuesta, sin implementar**: música de fondo con ducking (`sidechaincompress`) y efectos puntuales sincronizados con las animaciones, más la idea de videos de QA y tours de producto grabando la app real. El primer video (`semana38`) salió solo con voz.
