@@ -25,7 +25,7 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 
 **Elegir voz** (la palanca de calidad más grande): `node tools/fish-voces.mjs` lista voces del marketplace de Fish por idioma/título con su `reference_id`; prueba candidatas con un clip corto antes de generar todo el video, y guarda el id elegido en `"voz"`. Sin `voz` usa la default, que suena genérica.
 
-Para **subtítulos estilo TikTok** agrega `"subtitulos": "karaoke"` y `"acento": "#RRGGBB"` (el acento del deck): líneas de 3 palabras grandes y centradas donde la palabra hablada se resalta con el acento, sincronizada con los timestamps reales. Sin esos campos, subtítulos clásicos de dos líneas.
+Para un video **solo con voz y animación** (sin nada quemado) pon `"subtitulos": "ninguno"` — es lo que piden los reportes semanales, donde la lámina ya trae el texto. Para **subtítulos estilo TikTok** agrega `"subtitulos": "karaoke"` y `"acento": "#RRGGBB"` (el acento del deck): líneas de 3 palabras grandes y centradas donde la palabra hablada se resalta con el acento, sincronizada con los timestamps reales. Sin esos campos, subtítulos clásicos de dos líneas.
 
 ## Escribir el guion
 
@@ -44,7 +44,7 @@ El modelo `s2.1-pro-free` (familia S2) honra etiquetas **entre corchetes** dentr
 - **Pausas**: `[break]` (corta), `[long-break]` (~1 s) — mejores que las comas para el ritmo dramático.
 - **Efectos** (con moderación): `[sighing]`, `[chuckling]`.
 
-Reglas de la doc de Fish: **una emoción primaria por oración** (al inicio), máximo 3 etiquetas por oración, espaciar los cambios emocionales, y no saturar textos cortos. Un guion bien etiquetado usa 1–2 por slide: la emoción de arranque y quizá un `[long-break]` antes del remate. El modelo S1 legacy usa paréntesis `(tag)` pero **cobra** — no usarlo.
+Reglas de la doc de Fish: **una emoción primaria por oración** (al inicio), máximo 3 etiquetas por oración, espaciar los cambios emocionales, y no saturar textos cortos. Un guion bien etiquetado usa 1–2 por slide: la emoción de arranque y quizá un `[long-break]` antes del remate. El modelo S1 legacy usa paréntesis `(tag)` pero **cobra** — no usarlo. **`s2-pro` también cobra**: con esta cuenta responde `402 Insufficient API credit`, así que el pipeline se queda en `s2.1-pro-free`.
 
 ## Generar
 

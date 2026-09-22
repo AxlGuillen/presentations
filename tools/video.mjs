@@ -122,6 +122,7 @@ const srtT = t => {
 // pinta con el color de acento del deck ("acento": "#RRGGBB", opcional).
 // Usa los timestamps palabra a palabra de Fish, así que la sincronía es real.
 const esKaraoke = guion.subtitulos === 'karaoke';
+const sinSubtitulos = guion.subtitulos === 'ninguno' || guion.subtitulos === false;
 const assLineas = [];
 let assHeader = '';
 if (esKaraoke) {
@@ -242,15 +243,22 @@ fs.writeFileSync(rutaLista, lista.join('\n'));
 const sinSubs = path.join(out, 'video-sin-subs.mp4');
 ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', sinSubs]);
 
-// ── 4 · Quemar subtítulos ────────────────────────────────────────────────
+// ── 4 · Quemar subtítulos (salvo que el guion los desactive) ─────────────
+// "subtitulos": "ninguno" (o false) deja el video solo con voz y animación:
+// el SRT y el ASS se siguen escribiendo aparte por si se quieren después.
 const final = path.join(out, 'video.mp4');
-const estilo = 'FontName=Segoe UI,FontSize=13,Bold=1,PrimaryColour=&H00FFFFFF,OutlineColour=&H0030224A,Outline=1.4,Shadow=0.6,MarginV=46';
-// el filtro subtitles es quisquilloso con rutas de Windows → cwd relativo
 const rel = p => path.relative(out, p).replace(/\\/g, '/');
-execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', rel(sinSubs),
-  '-vf', esKaraoke ? `ass=${rel(rutaAss)}` : `subtitles=${rel(rutaSrt)}:force_style='${estilo}'`,
-  '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
-  '-c:a', 'copy', rel(final)], { cwd: out, stdio: ['ignore', 'inherit', 'inherit'] });
+if (sinSubtitulos) {
+  fs.copyFileSync(sinSubs, final);
+  console.log('\nSin subtítulos quemados (guion.json: "subtitulos": "ninguno").');
+} else {
+  const estilo = 'FontName=Segoe UI,FontSize=13,Bold=1,PrimaryColour=&H00FFFFFF,OutlineColour=&H0030224A,Outline=1.4,Shadow=0.6,MarginV=46';
+  // el filtro subtitles es quisquilloso con rutas de Windows → cwd relativo
+  execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', rel(sinSubs),
+    '-vf', esKaraoke ? `ass=${rel(rutaAss)}` : `subtitles=${rel(rutaSrt)}:force_style='${estilo}'`,
+    '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
+    '-c:a', 'copy', rel(final)], { cwd: out, stdio: ['ignore', 'inherit', 'inherit'] });
+}
 
 const st = fs.statSync(final);
 const durTotal = tiempos.reduce((a, t) => a + t.dur, 0);
