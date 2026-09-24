@@ -31,6 +31,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /samira/             Samira cumple 6 años (apoyo visual para TikTok, animado) · 9:16 · 7 slides
                      · el bloque de lore usa arte de Legends of Runeterra, no splashes
 /sona/               Sona cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/vex/                Vex cumple 5 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
