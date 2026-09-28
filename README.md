@@ -32,6 +32,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
                      · el bloque de lore usa arte de Legends of Runeterra, no splashes
 /sona/               Sona cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
 /vex/                Vex cumple 5 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/khazix/             Kha'Zix cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /helia/              La Ruina de Helia · paquete de assets del episodio 2 de lore · 9:16 · 18 slides
