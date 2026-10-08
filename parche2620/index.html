@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Parche 26.20</title>
+<meta name="description" content="El parche de Worlds en recortes de las notas oficiales: buff a Smolder, Mordekaiser y, no se sabe por qué, Lucian. Apoyo visual para TikTok.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Parche 26.20">
+<meta property="og:description" content="El parche de Worlds en recortes de las notas oficiales: buff a Smolder, Mordekaiser y, no se sabe por qué, Lucian. Apoyo visual para TikTok.">
+<meta property="og:url" content="https://presentations-three-phi.vercel.app/parche2620/">
+<meta property="og:image" content="https://presentations-three-phi.vercel.app/parche2620/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #060C1A; }
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(255,214,64,0.45); border-radius: 999px;
+    background: rgba(6,12,26,0.85); color: #FFD640; cursor: pointer;
+    font: 600 13px/1 'Barlow', system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1080" height="1920">
+
+  <section data-label="Portada" data-screen-label="01 · Portada" data-speaker-notes="Hoy tenemos nuevo parche en el juegito de mierda, el veintiseis punto veinte, y este es mi parche porque le metieron buff a dos de los campeones que mas juego. Lo que no entiendo es por que putas buffearon a Lucian." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 50% at 50% 30%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Notas oficiales · 6 oct 2026</span>
+    </div>
+      <h1 style="margin: 0; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 190px; font-weight: 400; line-height: 0.84; letter-spacing: 2px; color: #EEF2F8;"><span data-linea style="display: block;">PARCHE</span><span data-linea style="display: block; color: #FFD640;">26.20</span></h1>
+      <div data-infografia style="margin-top: 40px; width: 100%; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55);">
+        <img src="assets/breve.jpg" alt="Infografía oficial de la versión 26.20: nerfs, mejoras, sistemas y aspectos nuevos" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-sub style="margin: 36px 0 0; font-size: 38px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Buff a dos de mis mains.<br><span style="color: #FF5468;">Y a Lucian. ¿Por qué?</span></p>
+    </div>
+  </section>
+
+  <section data-label="Worlds" data-screen-label="02 · El parche del mundial" data-speaker-notes="Y antes que nada, este si es el parche del mundial. Todo Worlds se va a jugar aqui, asi que lo que vean en el torneo sale de estas notas." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 45%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Antes que nada</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 150px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">El parche<br><span style="color: #FFD640;">del mundial</span></h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/worlds.png" alt="Introducción de las notas: es la versión de Worlds" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Lo que vean en el torneo<br>sale de estas notas</p>
+    </div>
+  </section>
+
+  <section data-label="Smolder" data-screen-label="03 · Buff · Smolder" data-speaker-notes="Ahora si lo mio. Buffearon a Smolder, le subieron el dano de la pasiva y la curacion de la ulti, que en nivel tres pasa de ciento setenta a doscientos cincuenta. Y Riot dice textual que perdio poder en los ultimos parches. Gracias, porque el viernes les dije que iba dos y siete con el." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Smolder</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/smolder-cita.png" alt="Smolder: Riot dice que ha perdido bastante poder en las últimas versiones" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/smolder-r.png" alt="Smolder R: autocuración 100/135/170 a 100/175/250" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">La ulti cura <span style="color: #FFD640;">170 → 250</span> en nivel 3.<br>Y más daño en la pasiva.</p>
+    </div>
+  </section>
+
+  <section data-label="Mordekaiser" data-screen-label="04 · Buff · Mordekaiser" data-speaker-notes="Y buffearon a Mordekaiser. La ulti baja de ciento cuarenta a ciento veinte segundos de enfriamiento en nivel uno y la Q pega mas en late. Y que cachorrito me pone este buffeo porque yo ya le compre los eternos, aunque como en todo hay partidas buenas y malas. Luego les enseno como me violento un Fizz top con ignite y extenuar, pero esos traumas son para otro video." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Mordekaiser</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/morde.png" alt="Mordekaiser: la razón de Riot" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/morde-r.png" alt="Mordekaiser R: enfriamiento 140/120/100 a 120/110/100" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/morde-q.png" alt="Mordekaiser Q: progresión del nivel 10 al 20 de +5 a +7" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Ulti: <span style="color: #FFD640;">140 → 120 s</span> en nivel 1</p>
+    </div>
+  </section>
+
+  <section data-label="Lucian" data-screen-label="05 · Buff · Lucian, mi queja" data-speaker-notes="Pero ahora mi queja. Buffearon a Lucian, que es de los que mas me revientan. Y la razon esta en el overview pasado. Les conte que le quitaron la pasiva y se la pasaron a la Q para equilibrar el de mid con el de bot. Pues Riot ahora admite que ese cambio le salio como nerf al Lucian de bot, asi que le suben el dano por nivel para compensarlo. O sea que lo arreglaron y lo descompusieron en dos parches." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 120px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">¿Por qué <span style="color: #FF5468;">Lucian</span>?</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/lucian.png" alt="Lucian: el ajuste de la versión pasada terminó debilitando el carril inferior; daño de ataque por nivel de 2.5 a 2.9" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Lo arreglaron y lo descompusieron<br><span style="color: #FFD640;">en dos parches</span></p>
+    </div>
+  </section>
+
+  <section data-label="Vayne" data-screen-label="06 · Buff · Vayne" data-speaker-notes="Y de pilon buffearon a Vayne, la otra psicopata que se hace invisible y carrea sola en late. Le dejaron la Q en treinta de mana fijo y le dieron mas regeneracion para que aguante en linea." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Vayne</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/vayne.png" alt="Vayne: la razón de Riot" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/vayne-base.png" alt="Vayne: vida cada 5 de 4 + 0.5 a 5.5 + 0.4 por nivel" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/vayne-q.png" alt="Vayne Q: costo de maná fijo en 30" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">La Q, <span style="color: #FFD640;">30 de maná fijo</span></p>
+    </div>
+  </section>
+
+  <section data-label="Swain" data-screen-label="07 · Buff · Swain" data-speaker-notes="Y a Swain, que le hice el cumpleanos el sabado, le llego buff tres dias despues. Le subieron el dano de la W y le bajaron el enfriamiento." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Swain</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/swain.png" alt="Swain: la razón de Riot" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/swain-w.png" alt="Swain W: más daño y menos enfriamiento" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Le hice el cumpleaños el sábado.<br><span style="color: #FFD640;">Buff tres días después.</span></p>
+    </div>
+  </section>
+
+  <section data-label="Rapidito 1" data-screen-label="08 · Buffs rápidos · Diana, Kennen, Kindred" data-speaker-notes="Y rapidito los demas buffeos. A Diana le subieron el escudo de la W para que la build de bruiser sirva. A Kennen mas velocidad de ataque en la E. A Kindred mas dano contra monstruos y la ralentizacion de la E dura mas." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 110px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Rapidito</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Diana</div>
+        <img data-recorte data-src="assets/recortes/diana.png" alt="Diana W: escudo de 11% a 14%" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Kennen</div>
+        <img data-recorte data-src="assets/recortes/kennen.png" alt="Kennen E: más velocidad de ataque" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Kindred</div>
+        <img data-recorte data-src="assets/recortes/kindred.png" alt="Kindred: más daño contra monstruos y ralentización de 1 a 1.5 s" style="width: 100%; height: auto; display: block;">
+      </div>
+      
+    </div>
+  </section>
+
+  <section data-label="Rapidito 2" data-screen-label="09 · Buffs rápidos · Lillia, Neeko, Tahm Kench" data-speaker-notes="A Lillia la ulti dura mas en niveles altos. A Neeko le subieron el dano y el enraizamiento de la E. Y a Tahm Kench le duplicaron la curacion de la Q." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #3FD68A1F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #3FD68A1F; border: 1px solid #3FD68A99;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68A;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #3FD68A;">Buff</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 110px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Rapidito</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Lillia</div>
+        <img data-recorte data-src="assets/recortes/lillia.png" alt="Lillia R: dura más en niveles altos" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Neeko</div>
+        <img data-recorte data-src="assets/recortes/neeko.png" alt="Neeko E: más daño y enraizamiento" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #3FD68A;">Tahm Kench</div>
+        <img data-recorte data-src="assets/recortes/tahm.png" alt="Tahm Kench Q: curación de 25 a 50 al máximo" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">A Tahm Kench, <span style="color: #FFD640;">la curación al doble</span></p>
+    </div>
+  </section>
+
+  <section data-label="Nerfs" data-screen-label="10 · Nerfs · pensando en el profesional" data-speaker-notes="De nerfeos, casi todo es pensando en el profesional. A Ambessa le bajaron el dano de la pasiva. A Ashe el dano por nivel. A Cassiopeia vida y mana base para que no domine tanto en linea. A K'Sante le subieron el costo de la W y le bajaron la reduccion de dano." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #FF54681F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FF54681F; border: 1px solid #FF546899;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FF5468;">Nerf</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 84px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Pensando en el pro</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #FF5468;">Ambessa</div>
+        <img data-recorte data-src="assets/recortes/ambessa.png" alt="Ambessa pasiva: menos daño" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #FF5468;">Ashe</div>
+        <img data-recorte data-src="assets/recortes/ashe.png" alt="Ashe: daño de ataque por nivel de 3.5 a 3" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #FF5468;">Cassiopeia</div>
+        <img data-recorte data-src="assets/recortes/cassio.png" alt="Cassiopeia: menos vida y maná base" style="width: 100%; height: auto; display: block;">
+        <div data-etiqueta style="padding: 8px 26px 0; text-align: left; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 40px; line-height: 1; color: #FF5468;">K'Sante</div>
+        <img data-recorte data-src="assets/recortes/ksante.png" alt="K'Sante W: más costo y menos reducción de daño" style="width: 100%; height: auto; display: block;">
+      </div>
+      
+    </div>
+  </section>
+
+  <section data-label="Yunara" data-screen-label="11 · Nerf · Yunara" data-speaker-notes="Y a Yunara le bajaron el dano de la Q y la ralentizacion de la W ya no se acumula con otras. Y lo de Yunara esta buenisimo, porque Riot escribio que era la principal candidata a hyperscaler que no hace nada. Asi, con esas palabras." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #FF54681F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FF54681F; border: 1px solid #FF546899;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FF5468;">Nerf</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Yunara</h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/yunara-cita.png" alt="Yunara: la principal candidata para el hiperescalado sin hacer nada" style="width: 100%; height: auto; display: block;">
+        
+        <img data-recorte data-src="assets/recortes/yunara-cambios.png" alt="Yunara: menos daño en la Q y la ralentización de la W ya no se acumula" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Riot, textual: <span style="color: #FFD640;">«hiperescalado<br>sin hacer nada»</span></p>
+    </div>
+  </section>
+
+  <section data-label="Objetos" data-screen-label="12 · Objetos · Cinturón Cohete" data-speaker-notes="En objetos el cambio fuerte es el Rocketbelt. Le quitaron la mitad de la celeridad pero ahora el activo pega mas. Riot dice que la gente lo usaba para huir y lo quiere para entrar. Y tambien nerfearon el Hexplate en los de rango y el Huracan de Runaan." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 40%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Objetos</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 120px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Para entrar,<br><span style="color: #FFD640;">no para huir</span></h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/cinturon.png" alt="Cinturón Cohete Hextech: aceleración de habilidad de 20 a 10 y más daño de activa" style="width: 100%; height: auto; display: block;">
+      </div>
+      <div data-tambien style="margin-top: 26px; width: 100%;">
+        <div style="font-size: 23px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #FF5468; margin-bottom: 14px;">Y también nerf a</div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+          <div data-item style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid #FF546859;"><img data-src="assets/recortes/placa-h.png" alt="Placa Hexperimental" style="width: 100%; height: auto; display: block;"></div>
+          <div data-item style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid #FF546859;"><img data-src="assets/recortes/runaan-h.png" alt="Huracán de Runaan" style="width: 100%; height: auto; display: block;"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Repeticiones" data-screen-label="13 · Repeticiones privadas" data-speaker-notes="Y aqui viene el cambio mas grande que nadie esta viendo. Desde este parche solo vas a poder ver las repeticiones de tus propias partidas. Nadie mas puede bajar las tuyas y las paginas externas se quedan sin acceso. Riot dice que es para frenar a los que hacian programas de trampas con esos datos." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 45%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Lo que nadie está viendo</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 150px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Repeticiones<br><span style="color: #FFD640;">privadas</span></h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/repeticiones.png" alt="Repeticiones privadas: solo podrán acceder a las repeticiones de las partidas que hayan jugado" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Para frenar a los que hacían trampas<br>con esos datos</p>
+    </div>
+  </section>
+
+  <section data-label="Marcador" data-screen-label="14 · El marcador" data-speaker-notes="Ah y ya no vas a ver en el marcador los numeros de casi ningun objeto, nomas los de las lagrimas y el Mejai." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 45%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Ah, y</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 120px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Adiós a los números<br><span style="color: #FFD640;">del marcador</span></h2>
+      
+      <div data-marco style="width: 100%; border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14); box-shadow: 0 30px 80px rgba(0,0,0,0.55); text-align: left;">
+        <div style="display: flex; align-items: center; gap: 10px; padding: 14px 20px; background: rgba(255,255,255,0.05); border-bottom: 1px solid rgba(255,255,255,0.08);">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FF5468B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640B3;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #3FD68AB3;"></span>
+          <span style="margin-left: 10px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 19px; color: #8090A8;">leagueoflegends.com · notas 26.20</span>
+        </div>
+        
+        
+        <img data-recorte data-src="assets/recortes/marcador.png" alt="Limpieza del tablero de puntuaciones: se ocultan los números de casi todos los objetos" style="width: 100%; height: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Nomás quedan las lágrimas y el Mejai</p>
+    </div>
+  </section>
+
+  <section data-label="HEARTSTEEL" data-screen-label="15 · Skins HEARTSTEEL" data-speaker-notes="Y salen skins manana, la linea HEARTSTEEL con Sett, Ezreal, Kayn, Aphelios, Yone y K'Sante." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 45%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Salen el 7 de octubre</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 140px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">HEARTSTEEL</h2>
+      <div data-rejilla style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-sett.jpg" alt="Sett HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-ezreal.jpg" alt="Ezreal HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-kayn.jpg" alt="Kayn HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-aphelios.jpg" alt="Aphelios HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-yone.jpg" alt="Yone HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+        <div data-skin style="border-radius: 14px; overflow: hidden; background: #0A1428; border: 1px solid rgba(255,255,255,0.14);"><img data-src="assets/recortes/hs-ksante.jpg" alt="K'Sante HEARTSTEEL Live My Life" style="width: 100%; height: auto; display: block;"></div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Lee Sin" data-screen-label="16 · Chromas de Lee Sin SKT T1" data-speaker-notes="Pero lo que a mi me gusto es otra cosa. Sacaron cromas de la skin de SKT T1 de Lee Sin, y justo ayer les hable de Josedeodo y de su Lee Sin. El universo me esta dando la razon." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(110% 55% at 50% 42%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-a="up" style="display: inline-flex; align-items: center; gap: 12px; margin-bottom: 18px; padding: 10px 22px; border-radius: 999px; background: #FFD6401F; border: 1px solid #FFD64099;">
+      <span style="width: 12px; height: 12px; border-radius: 50%; background: #FFD640;"></span>
+      <span style="font-size: 25px; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: #FFD640;">Lo que a mí me gustó</span>
+    </div>
+      <h2 data-titulo style="margin: 0 0 28px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 130px; font-weight: 400; line-height: 0.9; letter-spacing: 1px; text-transform: uppercase; color: #EEF2F8;">Cromas de<br><span style="color: #FFD640;">Lee Sin SKT T1</span></h2>
+      <div data-marco style="border-radius: 18px; overflow: hidden; background: #0A1428; border: 1px solid #FFD64080; box-shadow: 0 0 90px #FFD64026;">
+        <img data-src="assets/leesin-skt.png" alt="Chroma Élite de Lee Sin SKT T1" style="height: 640px; width: auto; display: block;">
+      </div>
+      <p data-remate style="margin: 30px 0 0; font-size: 34px; font-weight: 600; color: #EEF2F8; line-height: 1.3;">Y ayer les hablé de Josedeodo.<br><span style="color: #FFD640;">El universo me da la razón.</span></p>
+    </div>
+  </section>
+
+  <section data-label="Cierre" data-screen-label="17 · Cierre" data-speaker-notes="Y quien este buffeando a mis counters que vaya y chingue a su puta madre. Ni pedo solo queda decir gigi easy tirenme un follow o les voy a meter la cuarta chao." style="background: #060C1A; font-family: 'Barlow', system-ui, sans-serif; color: #EEF2F8; display: flex; flex-direction: column; justify-content: center; padding: 300px 84px 350px; box-sizing: border-box; overflow: hidden; align-items: center; text-align: center;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: radial-gradient(120% 55% at 50% 45%, #FFD6401F 0%, rgba(0,0,0,0) 65%); pointer-events: none;"></div>
+    <div style="position: relative; display: flex; flex-direction: column; align-items: center; width: 100%;">
+      <div data-mains style="width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 16px;">
+        <img data-src="assets/Smolder_0.jpg" alt="Smolder" style="width: 100%; height: 520px; object-fit: cover; object-position: 50% 30%; border-radius: 18px; border: 2px solid #3FD68A99; box-sizing: border-box; display: block;">
+        <img data-src="assets/Mordekaiser_0.jpg" alt="Mordekaiser" style="width: 100%; height: 520px; object-fit: cover; object-position: 62% 30%; border-radius: 18px; border: 2px solid #3FD68A99; box-sizing: border-box; display: block;">
+      </div>
+      <p data-sub style="margin: 30px 0 0; font-size: 32px; font-weight: 600; color: #8090A8; line-height: 1.3;">Mis mains, buffeados.<br>Mis counters, también.</p>
+      <div data-gigi style="margin-top: 40px; font-family: 'Bebas Neue', Impact, sans-serif; font-size: 150px; line-height: 0.9; color: #FFD640;">GIGI EASY</div>
+      <div data-gigi style="margin-top: 12px; font-size: 30px; font-weight: 500; color: #8090A8; line-height: 1.4;">Tírenme un follow o les voy a meter la cuarta. Chao.</div>
+    </div>
+  </section>
+</deck-stage>
+<script src="./gsap.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) lanzar(activa);
+  }
+  // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
+  // elementos recién visibles entran animados; ocultar o revelar de golpe
+  // (llegar en reversa) no anima nada.
+  document.addEventListener('stepchange', function (e) {
+    var d = e.detail;
+    if (reducido || !d || d.step !== d.previousStep + 1) return;
+    var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
+    if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script>
+(function () {
+  if (!window.animar) return;
+  var q = function (s, sel) { return s.querySelectorAll(sel); };
+  var uno = function (s, sel) { return s.querySelector(sel); };
+
+  animar('Portada', function (tl, s) {
+    tl.from(q(s, '[data-a="ghost"]'), { scale: 0.86, opacity: 0, duration: 1.0 }, 0)
+      .from(uno(s, '[data-a="up"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.05)
+      .from(q(s, '[data-linea]'), { y: 52, opacity: 0, duration: 0.7, stagger: 0.12 }, 0.18)
+      .from(uno(s, '[data-infografia]'), { y: 40, opacity: 0, duration: 0.7 }, 0.62)
+      .from(uno(s, '[data-sub]'), { y: 22, opacity: 0, duration: 0.5 }, 1.1);
+  });
+
+  function cambio(tl, s) {
+    tl.from(uno(s, '[data-a="up"]'), { y: 24, opacity: 0, duration: 0.45 }, 0)
+      .from(uno(s, '[data-titulo]'), { y: 30, opacity: 0, duration: 0.55 }, 0.1)
+      .from(uno(s, '[data-marco]'), { y: 40, opacity: 0, duration: 0.6 }, 0.34);
+    var piezas = q(s, '[data-marco] [data-recorte], [data-marco] [data-etiqueta]');
+    if (piezas.length > 1) tl.from(piezas, { y: 18, opacity: 0, duration: 0.4, stagger: 0.12 }, 0.6);
+    if (uno(s, '[data-tambien]')) tl.from(q(s, '[data-item]'), { y: 20, opacity: 0, duration: 0.4, stagger: 0.12 }, 1.0);
+    if (uno(s, '[data-remate]')) tl.from(uno(s, '[data-remate]'), { y: 20, opacity: 0, duration: 0.45 }, 1.2);
+  }
+  ['Worlds', 'Smolder', 'Mordekaiser', 'Lucian', 'Vayne', 'Swain', 'Rapidito 1', 'Rapidito 2', 'Nerfs', 'Yunara', 'Objetos', 'Repeticiones', 'Marcador', 'Lee Sin'].forEach(function (l) { animar(l, cambio); });
+
+  animar('HEARTSTEEL', function (tl, s) {
+    tl.from(uno(s, '[data-a="up"]'), { y: 24, opacity: 0, duration: 0.45 }, 0)
+      .from(uno(s, '[data-titulo]'), { y: 30, opacity: 0, duration: 0.55 }, 0.1)
+      .from(q(s, '[data-skin]'), { y: 26, scale: 0.95, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.34);
+  });
+
+  animar('Cierre', function (tl, s) {
+    tl.from(q(s, '[data-mains] img'), { y: 40, opacity: 0, duration: 0.6, stagger: 0.14 }, 0)
+      .from(uno(s, '[data-sub]'), { y: 20, opacity: 0, duration: 0.45 }, 0.6)
+      .from(q(s, '[data-gigi]'), { y: 26, opacity: 0, duration: 0.5, stagger: 0.12 }, 0.9);
+  });
+})();
+</script>
+<script>
+(function () {
+  var presenting = false;
+  var btn = document.createElement('button');
+  btn.id = 'modo-presentacion';
+  btn.type = 'button';
+  function render() {
+    btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
+    if (presenting) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on');
+  }
+  function setPresenting(on) {
+    if (on === presenting) return;
+    presenting = on;
+    window.postMessage({ __omelette_presenting: on }, '*');
+    if (on) {
+      if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+    } else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    render();
+  }
+  btn.addEventListener('click', function () { setPresenting(!presenting); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { setPresenting(!presenting); e.preventDefault(); }
+    else if (e.key === 'Escape' && presenting && !document.fullscreenElement) setPresenting(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
+  render();
+  document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>

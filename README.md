@@ -36,6 +36,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /nasus/              Nasus cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 12 slides
 /swain/              Swain cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 14 slides
 /xerath/             Xerath cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 17 slides
+/parche2620/         Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /helia/              La Ruina de Helia · paquete de assets del episodio 2 de lore · 9:16 · 18 slides
