@@ -1,0 +1,25 @@
+{
+  "voz": "9cf64f16ef2b48a5ac2975c00859cd84",
+  "velocidad": 1,
+  "temperatura": 0.4,
+  "subtitulos": "ninguno",
+  "recortar": true,
+  "aire": [0.08, 0.15],
+  "slides": [
+    { "slide": 1, "texto": "Les quiero contar cómo construí una aplicación completa dirigiendo agentes en lugar de escribir el código yo. Lo hice con Claude Code en ultracode: seis horas y veintiséis minutos hasta el primer entregable, ciento cincuenta y seis subagentes, y cerca del cincuenta y cinco por ciento de mi límite semanal." },
+    { "slide": 2, "texto": "La diferencia no es que Claude escriba más rápido. En una sesión normal hay un solo agente que lee, edita y prueba, una cosa a la vez. En ultracode, Claude deja de hacer la tarea y pasa a dirigirla: arma un plan, lanza agentes en paralelo, y cada hallazgo pasa por un verificador que intenta tumbarlo." },
+    { "slide": 3, "texto": "Puesto lado a lado, lo que más cambia es quién verifica. En una sesión directa, la revisión la haces tú al leer la respuesta. Con workflows, de setenta y cuatro hallazgos se confirmaron setenta y uno. El otro cambio es el costo: casi veintinueve millones de tokens contra menos de uno. Por eso no todo merece un workflow." },
+    { "slide": 4, "texto": "El caso fue Minuto Dulce, una app para llevar el negocio de una repostería bajo pedido. La persona que la usa está de pie en la cocina, así que todo se diseñó para el celular. Guarda sus recetas, anota pedidos, marca entregas y ve todo conectado. Fue mi primer proyecto delegado por completo a agentes." },
+    { "slide": 5, "texto": "De esa experiencia salió mi primer plan de orquestación. Un kickoff una sola vez, y luego un ciclo de ocho etapas por fase: estándares, construcción, gate, revisión adversarial, correcciones, revisión humana, entrega y retro. La revisión humana es una etapa con dueño, y ese dueño soy yo." },
+    { "slide": 6, "texto": "Para que muchos agentes no se pisen hacen falta roles claros: humano, orquestador, supervisor, constructores, revisores, verificadores y correctores. Y seis reglas, como que cada agente es dueño de sus carpetas y solo el supervisor hace commits. Con eso trabajaron ciento veintitrés agentes en el mismo repositorio sin un solo conflicto." },
+    { "slide": 7, "texto": "Así se vio el primer día. Cada punto es un commit real. Arranqué a las cinco y veinticinco de la tarde, a las dos horas ya había un primer demo, y el primer entregable, la versión cero punto dos, llegó a las seis horas y veintiséis minutos, con casi dos horas de pausa en medio." },
+    { "slide": 8, "texto": "Y a esas seis horas no había un prototipo, había la fase uno completa: doscientos cincuenta y ocho archivos, dieciséis pantallas y treinta y nueve archivos de prueba, con diez roles trabajando en paralelo. En la segunda versión ya tenía pruebas de punta a punta y pude revisarla en el navegador." },
+    { "slide": 9, "texto": "En los dos días siguientes llegaron la seguridad, el perfil y los tutoriales. Hoy el proyecto tiene dieciocho pantallas, más de mil pruebas unitarias en verde y ninguna falla alta de seguridad. Quedó encaminado y en producción." },
+    { "slide": 10, "texto": "Con el entregable revisado, lo siguiente fue enseñarle a usarla. Siete tutoriales en video, de casi ocho minutos en total, grabados sobre la app real, narrados con Fish Audio y metidos dentro de la propia app." },
+    { "slide": 11, "texto": "Esto es lo que compra el esfuerzo grande: una revisión que encuentra bugs de verdad, como una redirección abierta o abonos que se sobrescribían. Aun así, yo en el navegador encontré tres bugs de interfaz que ningún agente vio. Por eso la revisión humana no se delega." },
+    { "slide": 12, "texto": "Y no es teoría: esta misma presentación la investigó un workflow. Cinco frentes en paralelo, cada uno con su verificador. Revisó ciento noventa y cuatro cifras y corrigió doce, varias de ellas en mis propias notas." },
+    { "slide": 13, "texto": "Ahora, el precio. Unos veintinueve millones de tokens de subagentes en cinco workflows, sin contar la sesión principal. En mi plan Max personal, eso fue más o menos el cincuenta y cinco por ciento del límite de la semana. Y mis estimaciones se quedaron cortas: en la última versión calculé una hora y fueron dos y cuarto." },
+    { "slide": 14, "texto": "Orquestar también trae sus propios errores: arrancar sin una cuenta de pruebas, no decidir el idioma del código desde el inicio, o construir más de lo necesario. Los anoté todos, y cada uno se volvió una regla de mi playbook." },
+    { "slide": 15, "texto": "Lo que me llevo es esto: ultracode rinde cuando el humano pone el alcance, el presupuesto y la revisión final. El siguiente paso es convertir el playbook en skills después de un segundo proyecto. Gracias." }
+  ]
+}
