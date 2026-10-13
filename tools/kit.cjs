@@ -51,7 +51,11 @@ const grano = ({ opacidad = 0.05, frecuencia = 0.8, tam = 280 } = {}) => {
     `<filter id='g'><feTurbulence type='fractalNoise' baseFrequency='${frecuencia}' numOctaves='2' stitchTiles='stitch'/>` +
     `<feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 ${opacidad} 0'/></filter>` +
     `<rect width='100%' height='100%' filter='url(%23g)'/></svg>`;
-  return capa(`url("data:image/svg+xml,${svg.replace(/#/g, '%23').replace(/'/g, '%27')}")`, `${tam}px ${tam}px`);
+  // Comillas SIMPLES a propósito: los gen.js pintan esto dentro de style="…",
+  // y unas dobles cerraban el atributo antes de tiempo (se perdía todo el
+  // estilo de la sección y el CSS salía como texto). Las simples del SVG ya
+  // van codificadas como %27, así que no chocan.
+  return capa(`url('data:image/svg+xml,${svg.replace(/#/g, '%23').replace(/'/g, '%27')}')`, `${tam}px ${tam}px`);
 };
 
 /** Malla de gradientes: un resplandor por color, en posiciones fijas y

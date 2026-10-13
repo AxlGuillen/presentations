@@ -50,8 +50,32 @@ if (fs.existsSync(path.join(dirDeck, 'gsap.min.js')) && !fs.existsSync(path.join
 }
 
 // ── 1 · Voz por diapositiva, con alineamiento ────────────────────────────
-const LEAD = 0.35;  // aire antes de que empiece a hablar en cada slide
-const TAIL = 0.65;  // aire después
+// Aire antes y después de la voz en cada slide. "aire": [antes, después] en
+// guion.json lo cambia; un video «sin silencios» usa algo como [0.08, 0.12]
+// junto con "recortar": true (abajo).
+const [LEAD, TAIL] = Array.isArray(guion.aire) ? guion.aire : [0.35, 0.65];
+
+// "recortar": true quita el silencio que Fish deja en las orillas de cada
+// clip (al final suele traer ~0,5 s). Se detecta con silencedetect, se corta
+// con atrim y las palabras se recorren lo mismo que se cortó al inicio, así
+// el SRT y el karaoke siguen alineados.
+function recortarOrillas(wav, palabras) {
+  const log = spawnSync('ffmpeg', ['-v', 'info', '-i', wav, '-af', 'silencedetect=noise=-42dB:d=0.06', '-f', 'null', '-'], { encoding: 'utf8' }).stderr;
+  const durTotal = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
+  const ini = [...log.matchAll(/silence_start: (-?[\d.]+)/g)].map(m => +m[1]);
+  const fin = [...log.matchAll(/silence_end: ([\d.]+)/g)].map(m => +m[1]);
+  let desde = 0, hasta = durTotal;
+  if (ini.length && ini[0] < 0.02 && fin[0]) desde = Math.max(0, fin[0] - 0.03);
+  // el último silencio llega hasta el final si no trae silence_end o termina en la orilla
+  const ultimo = ini.at(-1);
+  if (ultimo != null && ultimo > desde && (fin.length < ini.length || fin.at(-1) >= durTotal - 0.02)) hasta = Math.min(durTotal, ultimo + 0.06);
+  if (desde === 0 && hasta === durTotal) return { palabras, dur: durTotal };
+  const tmp = wav.replace(/\.wav$/, '.tmp.wav');
+  execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', wav, '-af', `atrim=start=${desde.toFixed(3)}:end=${hasta.toFixed(3)},asetpts=PTS-STARTPTS`, tmp]);
+  fs.renameSync(tmp, wav);
+  const dur = hasta - desde;
+  return { palabras: palabras.map(p => ({ ...p, ini: Math.max(0, p.ini - desde), fin: Math.min(dur, Math.max(0, p.fin - desde)) })), dur };
+}
 
 async function tts(texto, extra = {}) {
   const res = await fetch('https://api.fish.audio/v1/tts/stream/with-timestamp', {
@@ -103,6 +127,13 @@ for (const s of guion.slides) {
   const { audio, palabras, dur } = await tts(s.texto, extra);
   fs.writeFileSync(wav, audio);
   // duración real medida por ffprobe (más fiable que el reporte del API)
+  if (guion.recortar) {
+    const antes = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
+    const r = recortarOrillas(wav, palabras);
+    clips.push({ ...s, wav, palabras: r.palabras, dur: r.dur });
+    console.log(`${r.dur.toFixed(2)}s (recortado de ${antes.toFixed(2)}s) · ${palabras.length} palabras`);
+    continue;
+  }
   const real = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
   clips.push({ ...s, wav, palabras, dur: real || dur });
   console.log(`${(real || dur).toFixed(2)}s · ${palabras.length} palabras`);
