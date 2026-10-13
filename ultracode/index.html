@@ -1,0 +1,1484 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ultracode en la práctica · Minuto Dulce</title>
+<meta name="description" content="Cómo construí una app completa dirigiendo agentes con Claude Code: 6 h 26 min al primer entregable, 156 subagentes en 5 workflows, el plan de orquestación que salió de ahí y lo que costó.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Ultracode en la práctica">
+<meta property="og:description" content="Cómo construí una app completa dirigiendo agentes con Claude Code: 6 h 26 min al primer entregable, 156 subagentes en 5 workflows, el plan de orquestación que salió de ahí y lo que costó.">
+<meta property="og:url" content="https://presentations-three-phi.vercel.app/ultracode/">
+<meta property="og:image" content="https://presentations-three-phi.vercel.app/ultracode/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght,SOFT@0,9..144,400..700,0..100;1,9..144,400..700,0..100&family=DM+Sans:opsz,wght@9..40,400..700&family=DM+Mono:wght@400;500&family=Caveat:wght@500;700&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #140D08; }
+  code { background: #271B11; border-radius: 6px; padding: 1px 7px; font-size: 0.9em; }
+  /* Las entradas las orquesta GSAP; nada se oculta en CSS a propósito:
+     sin JS el deck se ve completo y la impresión a PDF funciona. */
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(247,183,186,0.5); border-radius: 999px;
+    background: rgba(20,13,8,0.88); color: #FAEEE6; cursor: pointer;
+    font: 500 13px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 0.6px; opacity: 0.55; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Les quiero contar como fue construir una app completa dirigiendo agentes en vez de escribir codigo, con Claude Code en ultracode. Que salio, que costo y que aprendi." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: grid; grid-template-columns: 1fr 600px; align-items: center; padding: 0 96px 0 120px; box-sizing: border-box; overflow: hidden;">
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <div style="position: absolute; right: -40px; top: 140px;"><svg viewBox="0 0 640 800" style="width: 640px; height: 800px; overflow: visible;"><line data-trazo data-largo="470" x1="120" y1="400" x2="340.7" y2="-15" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="401.9" y2="23.9" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470.1" x1="120" y1="400" x2="456.5" y2="71.8" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470.1" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="503" y2="127.5" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="540.4" y2="189.8" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="567.7" y2="257" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="584.4" y2="327.6" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="590" y2="400" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="584.4" y2="472.4" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="567.7" y2="543" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="540.4" y2="610.2" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="503" y2="672.5" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470.1" x1="120" y1="400" x2="456.5" y2="728.2" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470.1" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="401.9" y2="776.1" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><line data-trazo data-largo="470" x1="120" y1="400" x2="340.7" y2="815" stroke="rgba(247,183,186,0.45)" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="470" stroke-dashoffset="0"></line><circle data-punto cx="340.7" cy="-15" r="11" fill="#F7B7BA" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="401.9" cy="23.9" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="456.5" cy="71.8" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="503" cy="127.5" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="540.4" cy="189.8" r="11" fill="#F7B7BA" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="567.7" cy="257" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="584.4" cy="327.6" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="590" cy="400" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="584.4" cy="472.4" r="11" fill="#F7B7BA" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="567.7" cy="543" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="540.4" cy="610.2" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="503" cy="672.5" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="456.5" cy="728.2" r="11" fill="#F7B7BA" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="401.9" cy="776.1" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="340.7" cy="815" r="8" fill="#271B11" stroke="#F7B7BA" stroke-width="2"></circle><circle data-punto cx="120" cy="400" r="34" fill="#F7B7BA"></circle>
+        <text x="120" y="409" text-anchor="middle" style="font: 600 26px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #140D08;">❯</text></svg></div>
+      <span data-chispa style="position: absolute; left: 1290px; top: 120px; width: 26px; height: 9px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(30deg);"></span><span data-chispa style="position: absolute; left: 1480px; top: 86px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(-40deg);"></span><span data-chispa style="position: absolute; left: 1700px; top: 150px; width: 20px; height: 7px; border-radius: 99px; background: #FAEEE6; opacity: 0.85; transform: rotate(65deg);"></span><span data-chispa style="position: absolute; left: 1820px; top: 330px; width: 26px; height: 9px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(-15deg);"></span><span data-chispa style="position: absolute; left: 1250px; top: 960px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(50deg);"></span><span data-chispa style="position: absolute; left: 1560px; top: 1000px; width: 22px; height: 7px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(-60deg);"></span><span data-chispa style="position: absolute; left: 1800px; top: 920px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(20deg);"></span><span data-chispa style="position: absolute; left: 1130px; top: 70px; width: 18px; height: 6px; border-radius: 99px; background: #FAEEE6; opacity: 0.85; transform: rotate(-70deg);"></span>
+    </div>
+    <div style="position: relative; display: flex; flex-direction: column;">
+      <div data-a="up" style="display: flex; align-items: center; gap: 14px; font: 500 20px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span><span style="color: #FAEEE6;">claude --ultracode</span><span data-cursor style="display: inline-block; width: 11px; height: 22px; background: #F7B7BA;"></span>
+      </div>
+      <h1 data-split style="margin: 34px 0 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 108px; font-weight: 600; letter-spacing: -3px; line-height: 0.98;">Ultracode<br><em style="font-style: italic; font-weight: 500; color: #F7B7BA;">en la práctica</em></h1>
+      <p data-a="up2" style="margin: 30px 0 0; font-size: 28px; color: #BCA48C; line-height: 1.45; max-width: 980px;">Cómo construí una app completa <span style="color: #FAEEE6;">dirigiendo agentes en vez de escribir código</span> — lo que salió, lo que costó y el plan que me dejó.</p>
+      <div data-a="up3" style="margin-top: 56px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; max-width: 1180px;">
+        
+        <div data-contador style="position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 2px solid rgba(247,183,186,0.6);">
+          
+          <span  style="font: 600 44px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; white-space: nowrap; font-variant-numeric: tabular-nums;">6 h 26 min</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">del repo vacío al primer entregable</span>
+        </div>
+        
+        <div data-contador style="position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 2px solid rgba(247,183,186,0.6);">
+          
+          <span data-cuenta="156"  style="font: 600 44px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; white-space: nowrap; font-variant-numeric: tabular-nums;">156</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">subagentes en 5 workflows</span>
+        </div>
+        
+        <div data-contador style="position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 2px solid rgba(188,151,99,0.6);">
+          
+          <span data-cuenta="7"  style="font: 600 44px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #BC9763; letter-spacing: -1.5px; white-space: nowrap; font-variant-numeric: tabular-nums;">7</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">tutoriales en video, después</span>
+        </div>
+        
+        <div data-contador style="position: relative; display: flex; flex-direction: column; gap: 8px; padding-top: 18px; border-top: 2px solid rgba(217,242,74,0.6);">
+          <span data-mano style="position: absolute; right: -6px; top: -50px; font: 700 30px/1 'Caveat', cursive; color: #D9F24A; transform: rotate(-5deg); white-space: nowrap;">lo medí yo ↓</span>
+          <span  style="font: 600 44px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #D9F24A; letter-spacing: -1.5px; white-space: nowrap; font-variant-numeric: tabular-nums;">~55 %</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">de mi límite semanal de Max · dato propio</span>
+        </div>
+      </div>
+      <span data-a="up3" style="margin-top: 48px; font: 400 17px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">Axl Guillen · octubre 2026 · caso: Minuto Dulce</span>
+    </div>
+  </section>
+
+  <section data-label="Qué es ultracode" data-screen-label="Qué es" data-speaker-notes="La diferencia no es que Claude escriba mas rapido. Es que deja de hacer la tarea y pasa a dirigirla: escribe un plan, lanza agentes, y cada hallazgo pasa por alguien que intenta tumbarlo." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Qué es</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Con ultracode, Claude deja de hacer la tarea<br>y pasa a dirigirla</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 520px 1fr; gap: 40px; flex: 1;">
+      <div data-panel style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 10px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BC9763;">Sesión normal</span><span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">un agente · en serie</span></div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;"><svg viewBox="0 0 460 430" style="width: 460px; height: 430px; overflow: visible;"><line data-trazo data-largo="30" x1="230" y1="54" x2="230" y2="84" stroke="#BC9763" stroke-width="2" stroke-linecap="round" stroke-dasharray="30" stroke-dashoffset="0"></line><line data-trazo data-largo="44" x1="230" y1="124" x2="230" y2="168" stroke="#BC9763" stroke-width="2" stroke-linecap="round" stroke-dasharray="44" stroke-dashoffset="0"></line><line data-trazo data-largo="28" x1="230" y1="208" x2="230" y2="236" stroke="#BC9763" stroke-width="2" stroke-linecap="round" stroke-dasharray="28" stroke-dashoffset="0"></line><line data-trazo data-largo="28" x1="230" y1="276" x2="230" y2="304" stroke="#BC9763" stroke-width="2" stroke-linecap="round" stroke-dasharray="28" stroke-dashoffset="0"></line><line data-trazo data-largo="28" x1="230" y1="344" x2="230" y2="372" stroke="#BC9763" stroke-width="2" stroke-linecap="round" stroke-dasharray="28" stroke-dashoffset="0"></line>
+        <g data-nodo>
+          <rect x="155" y="14" width="150" height="40" rx="20" fill="#271B11" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="39.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">tú</text>
+        </g>
+        <g data-nodo>
+          <rect x="155" y="84" width="150" height="40" rx="20" fill="#BC9763" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="109.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #140D08;">Claude</text>
+        </g>
+        <g data-nodo>
+          <rect x="165" y="168" width="130" height="40" rx="20" fill="#271B11" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="193.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">lee</text>
+        </g>
+        <g data-nodo>
+          <rect x="165" y="236" width="130" height="40" rx="20" fill="#271B11" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="261.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">edita</text>
+        </g>
+        <g data-nodo>
+          <rect x="165" y="304" width="130" height="40" rx="20" fill="#271B11" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="329.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">prueba</text>
+        </g>
+        <g data-nodo>
+          <rect x="165" y="372" width="130" height="40" rx="20" fill="#271B11" stroke="#BC9763" stroke-width="1.5"></rect>
+          <text x="230" y="397.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">reporta</text>
+        </g></svg></div>
+      </div>
+      <div data-panel style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 10px; border-color: rgba(247,183,186,0.4);">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Ultracode</span><span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">orquestador + subagentes · en paralelo</span></div>
+        <div style="flex: 1; display: flex; align-items: center; justify-content: center;"><svg viewBox="0 0 800 430" style="width: 800px; height: 430px; overflow: visible;"><line data-trazo data-largo="28" x1="400" y1="54" x2="400" y2="82" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="28" stroke-dashoffset="0"></line><line data-trazo data-largo="317.4" x1="400" y1="128" x2="90" y2="196" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="317.4" stroke-dashoffset="0"></line><line data-trazo data-largo="38" x1="90" y1="238" x2="90" y2="276" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="38" stroke-dashoffset="0"></line><line data-trazo data-largo="46" x1="90" y1="316" x2="90" y2="362" stroke="#F7B7BA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="0"></line><line data-trazo data-largo="169.3" x1="400" y1="128" x2="245" y2="196" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="169.3" stroke-dashoffset="0"></line><line data-trazo data-largo="38" x1="245" y1="238" x2="245" y2="276" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="38" stroke-dashoffset="0"></line><line data-trazo data-largo="46" x1="245" y1="316" x2="245" y2="362" stroke="#F7B7BA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="0"></line><line data-trazo data-largo="68" x1="400" y1="128" x2="400" y2="196" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="68" stroke-dashoffset="0"></line><line data-trazo data-largo="38" x1="400" y1="238" x2="400" y2="276" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="38" stroke-dashoffset="0"></line><line data-trazo data-largo="46" x1="400" y1="316" x2="400" y2="362" stroke="#F7B7BA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="0"></line><line data-trazo data-largo="169.3" x1="400" y1="128" x2="555" y2="196" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="169.3" stroke-dashoffset="0"></line><line data-trazo data-largo="38" x1="555" y1="238" x2="555" y2="276" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="38" stroke-dashoffset="0"></line><line data-trazo data-largo="46" x1="555" y1="316" x2="555" y2="362" stroke="#F7B7BA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="0"></line><line data-trazo data-largo="317.4" x1="400" y1="128" x2="710" y2="196" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="317.4" stroke-dashoffset="0"></line><line data-trazo data-largo="38" x1="710" y1="238" x2="710" y2="276" stroke="#F7B7BA" stroke-width="2" stroke-linecap="round" stroke-dasharray="38" stroke-dashoffset="0"></line><line data-trazo data-largo="46" x1="710" y1="316" x2="710" y2="362" stroke="#F7B7BA" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="46" stroke-dashoffset="0"></line>
+        <g data-nodo>
+          <rect x="345" y="14" width="110" height="40" rx="20" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="400" y="39.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">tú</text>
+        </g>
+        <g data-nodo>
+          <rect x="280" y="82" width="240" height="46" rx="23" fill="#F7B7BA" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="400" y="110.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #140D08;">orquestador</text>
+        </g>
+        <g data-nodo>
+          <rect x="26" y="196" width="128" height="42" rx="21" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="90" y="222.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">base</text>
+        </g>
+        <g data-nodo>
+          <rect x="181" y="196" width="128" height="42" rx="21" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="245" y="222.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">motor</text>
+        </g>
+        <g data-nodo>
+          <rect x="336" y="196" width="128" height="42" rx="21" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="400" y="222.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">recetas</text>
+        </g>
+        <g data-nodo>
+          <rect x="491" y="196" width="128" height="42" rx="21" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="555" y="222.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">ventas</text>
+        </g>
+        <g data-nodo>
+          <rect x="646" y="196" width="128" height="42" rx="21" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="710" y="222.95" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">testing</text>
+        </g>
+        <g data-nodo>
+          <rect x="32" y="277" width="116" height="38" rx="19" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="90" y="301.25" text-anchor="middle" style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">refuta</text>
+        </g>
+        <g data-nodo>
+          <rect x="187" y="277" width="116" height="38" rx="19" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="245" y="301.25" text-anchor="middle" style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">refuta</text>
+        </g>
+        <g data-nodo>
+          <rect x="342" y="277" width="116" height="38" rx="19" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="400" y="301.25" text-anchor="middle" style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">refuta</text>
+        </g>
+        <g data-nodo>
+          <rect x="497" y="277" width="116" height="38" rx="19" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="555" y="301.25" text-anchor="middle" style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">refuta</text>
+        </g>
+        <g data-nodo>
+          <rect x="652" y="277" width="116" height="38" rx="19" fill="#271B11" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="710" y="301.25" text-anchor="middle" style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">refuta</text>
+        </g><g data-nodo><rect x="40" y="364" width="720" height="44" rx="10" fill="rgba(247,183,186,0.14)" stroke="#F7B7BA" stroke-width="1.5"></rect>
+          <text x="400" y="392" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">gate · checks · commit del supervisor</text></g></svg></div>
+      </div>
+    </div>
+    <div data-a="up3" style="margin-top: 22px; display: flex; gap: 14px; flex-wrap: wrap;">
+      <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">se activa a propósito: «ultracode» en el pedido</span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">un workflow por cada tarea con sustancia</span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">cada hallazgo pasa por un verificador que intenta refutarlo</span>
+      <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #EA6B5D; background: rgba(234,107,93,0.12); border: 1px solid rgba(234,107,93,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">el costo en tokens deja de ser el límite</span>
+    </div>
+  </section>
+
+  <section data-label="Comparativo" data-screen-label="Comparativo" data-speaker-notes="Lado a lado. Lo que mas cambia no es la velocidad, es la verificacion. Y el costo: no todo merece un workflow, por eso existe la regla del cambio chico." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Comparativo</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Lo que cambia no es la velocidad:<br>es quién verifica y cuánto cuesta</h2>
+    <div data-a="up2" style="margin-top: 34px; background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; overflow: hidden; flex: 1; display: flex; flex-direction: column;">
+      <div style="display: grid; grid-template-columns: 300px 1fr 1fr; padding: 20px 34px; border-bottom: 1px solid #3B2A1B; background: #1D140C;">
+        <span></span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BC9763;">Sesión directa</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Ultracode · workflows</span>
+      </div>
+      
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Quién hace el trabajo</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">Un agente, dentro de tu conversación</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">Decenas de subagentes; la sesión principal orquesta y es la única que te habla</span>
+      </div>
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Paralelismo</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">Una cosa a la vez</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">Varios agentes a la vez, cada uno dueño de sus carpetas</span>
+      </div>
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Verificación</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">La haces tú al leer la respuesta</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">Revisores encuentran, verificadores escépticos intentan refutar</span>
+      </div>
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Qué atrapa</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">Lo que tú alcances a ver</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">~71 de ~74 hallazgos confirmados en Minuto Dulce v0.1–v0.3</span>
+      </div>
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Costo</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">Menos de 1 M tokens · horas</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">5–15 M por proyecto mediano · Minuto Dulce: ~28.8 M</span>
+      </div>
+      <div data-fila style="display: grid; grid-template-columns: 300px 1fr 1fr; gap: 0 36px; padding: 0 34px; align-items: center; flex: 1; ">
+        <span style="font: 500 16px/1.3 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 1px; text-transform: uppercase; color: #BCA48C;">Cuándo conviene</span>
+        <span data-izq style="font-size: 22px; color: #BC9763; line-height: 1.38;">Un cambio chico: una regla, un texto, un componente</span>
+        <span data-der style="font-size: 22px; color: #FAEEE6; line-height: 1.38; padding-left: 22px; border-left: 3px solid #F7B7BA;">Un proyecto o una fase entera, con el alcance decidido antes</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El caso" data-screen-label="El caso" data-speaker-notes="El caso de prueba fue real: una reposteria bajo pedido. Se usa de pie en la cocina, asi que todo se diseño a 375 px." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">El caso</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">El caso: una app para llevar el negocio<br>de una repostería bajo pedido</h2>
+    <div data-a="up2" style="margin-top: 36px; display: grid; grid-template-columns: 640px 1fr; gap: 44px; flex: 1; align-items: start;">
+      <div data-ticket style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 32px 36px; display: flex; flex-direction: column; gap: 16px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Lo que resuelve, de punta a punta</span>
+        
+          <div data-renglon style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px; ">
+            <span style="font-size: 20px; color: #BCA48C;">Guarda sus recetas una vez</span>
+            <span style="font: 500 22px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6; font-variant-numeric: tabular-nums;">03 · Recetas</span>
+          </div>
+        
+          <div data-renglon style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-top: 14px; border-top: 1px dashed #3B2A1B;">
+            <span style="font-size: 20px; color: #BCA48C;">Anota cada pedido que le llega</span>
+            <span style="font: 500 22px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6; font-variant-numeric: tabular-nums;">05 · Pedido</span>
+          </div>
+        
+          <div data-renglon style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-top: 14px; border-top: 1px dashed #3B2A1B;">
+            <span style="font-size: 20px; color: #BCA48C;">Marca lo que ya entregó</span>
+            <span style="font: 500 22px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6; font-variant-numeric: tabular-nums;">06 · Entrega</span>
+          </div>
+        
+          <div data-renglon style="display: flex; justify-content: space-between; align-items: baseline; gap: 20px; padding-top: 14px; border-top: 1px dashed #3B2A1B;">
+            <span style="font-size: 20px; color: #BCA48C;">Y lo ve todo conectado</span>
+            <span style="font: 500 22px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; font-variant-numeric: tabular-nums;">07 · Conectado</span>
+          </div>
+        <span style="font-size: 17px; color: #86705A; line-height: 1.45;">A la derecha, el tutorial en video que cubre cada paso dentro de la app.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 26px;">
+        <div data-dato style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Para quién</span>
+          <span style="font-size: 26px; line-height: 1.4;">Una persona que hornea y vende bajo pedido. La usa de pie en la cocina, así que <span style="color: #F7B7BA;">todo se diseña a 375 px</span>.</span>
+        </div>
+        <div data-dato style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">El principio</span>
+          <span style="font-size: 26px; line-height: 1.4;">El sistema sugiere y <span style="color: #F7B7BA;">ella decide</span>: la app propone, nunca le impone nada.</span>
+        </div>
+        <div data-dato style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Módulos</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">recetas</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">cotizar</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">pedidos y ventas</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">ajustes</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">perfil</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">tutoriales</span>
+          </div>
+        </div>
+        <div data-dato style="display: flex; flex-direction: column; gap: 8px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Stack</span>
+          <span style="font: 500 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">Next.js 16 · Supabase · Vercel</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 24px;">
+    <div data-nota style="border-left: 3px solid #F7B7BA; background: rgba(247,183,186,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;">Fue mi primer proyecto delegado por completo a agentes, y <strong style="font-weight: 600; color: #FAEEE6;">el código nunca contradijo el documento de negocio</strong>: cada prueba llevaba un ejemplo obligatorio.</div></div>
+  </section>
+
+  <section data-label="Mi plan" data-screen-label="Mi plan" data-speaker-notes="Este es el plan que salio de la experiencia: mi playbook. Un kickoff una sola vez y un ciclo de ocho etapas por fase. La pieza que mas me importa es la revision humana: es una etapa con dueño, no un extra." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">playbook v1.1 · 11 oct</span>
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Mi primer plan</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Mi primer plan de orquestación:<br>un ciclo por fase con la revisión humana dentro</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 250px 1fr; gap: 26px; flex: 1;">
+      <div data-kickoff style="border: 1px dashed rgba(247,183,186,0.6); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px; justify-content: center;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Una sola vez</span>
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.6px;">Kickoff</span>
+        <span style="font-size: 17px; color: #BCA48C; line-height: 1.45;">Alcance, nivel del proyecto, convenciones, cuenta de pruebas y presupuesto, antes de la primera línea.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(4, 1fr); grid-auto-rows: 1fr; gap: 18px;">
+        
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">01</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Estándares</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">El supervisor fija las reglas en CLAUDE.md</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">02</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Construcción</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">En paralelo, cada agente en sus carpetas y contra contratos</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">03</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Gate</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">Checks, build y commit del supervisor</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">04</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Revisión adversarial</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">Revisores encuentran, verificadores intentan refutar</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">05</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Correcciones</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">Por área y de vuelta al gate · 1 ronda, máximo 2</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; border-color: #D9F24A; background: linear-gradient(180deg, rgba(217,242,74,0.12) 0%, #1D140C 100%);">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #D9F24A; font-variant-numeric: tabular-nums;">06</span>
+            <span data-mano style="display: inline-block; font: 700 28px/1 'Caveat', cursive; color: #D9F24A; transform: rotate(-4deg);">aquí entro yo</span>
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Revisión humana</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">En el navegador, a 375 px, con sesión real</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">07</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Entrega</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">Con aprobación: push y deploy</span>
+        </div>
+        <div data-etapa style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; padding: 22px 22px 20px; display: flex; flex-direction: column; gap: 10px; ">
+          <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span style="font: 500 18px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; font-variant-numeric: tabular-nums;">08</span>
+            
+          </div>
+          <span style="font-size: 23px; font-weight: 600; letter-spacing: -0.3px;">Producción y retro</span>
+          <span style="font-size: 17px; color: #BCA48C; line-height: 1.42;">Se verifica en vivo y se escribe la retro</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 22px;">
+    <div data-nota style="border-left: 3px solid #F7B7BA; background: rgba(247,183,186,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;"><strong style="font-weight: 600; color: #FAEEE6;">Definición de terminado:</strong> se exige evidencia —el archivo y la línea, el comando con su salida real—. «Debería pasar» no cuenta.</div></div>
+  </section>
+
+  <section data-label="Roles" data-screen-label="Roles" data-speaker-notes="Para que muchos agentes no se pisen hacen falta roles claros y seis reglas. Con eso trabajaron 123 agentes en el mismo arbol sin un solo conflicto de edicion." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Roles y reglas</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Siete roles y seis reglas para que<br>los agentes no se pisen</h2>
+    <div data-a="up2" style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Roles</span>
+        
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #D9F24A;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #D9F24A;">Humano</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Decide el negocio, el gobierno y lo irreversible</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #F7B7BA;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">Orquestador</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">La sesión principal: diseña los workflows y es la única que te habla</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #BC9763;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763;">Supervisor</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">CLAUDE.md como contrato; checks, gate y commit</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #BC9763;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763;">Constructores</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Cada uno dueño de sus carpetas</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #BC9763;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763;">Revisores</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Buscan problemas, cada uno con su lente</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #BC9763;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763;">Verificadores</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Intentan refutar: solo se corrige lo que sobrevive</span>
+        </div>
+        <div data-rol style="display: grid; grid-template-columns: 190px 1fr; gap: 18px; align-items: center; padding: 12px 18px; border-radius: 12px; background: #1D140C; border-left: 3px solid #BC9763;">
+          <span style="font: 600 19px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763;">Correctores</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Arreglan por área y regresan al gate</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Mecanismos</span>
+        
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Propiedad de archivos</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Una tabla dice quién edita cada carpeta</span>
+        </div>
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Solicitudes</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Lo que un agente necesita de otro va en su reporte</span>
+        </div>
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Contratos</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Las firmas compartidas se escriben antes de construir</span>
+        </div>
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Exclusividad</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Solo el supervisor usa git y corre el build</span>
+        </div>
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Reporte estructurado</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Qué hizo, archivos y verificación con salida real</span>
+        </div>
+        <div data-mec style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 12px; padding: 14px 20px; display: flex; flex-direction: column; gap: 4px;">
+          <span style="font-size: 21px; font-weight: 600;">Biblioteca de workflows</span>
+          <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">Se parte de las plantillas, no de cero</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 20px;">
+    <div data-nota style="border-left: 3px solid #8CC79B; background: rgba(140,199,155,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;">Con eso trabajaron <strong style="font-weight: 600; color: #FAEEE6;">123 agentes en el mismo árbol, sin worktrees y sin un solo conflicto de edición</strong>.</div></div>
+  </section>
+
+  <section data-label="Las primeras 6 horas" data-screen-label="6 horas" data-speaker-notes="Cada punto es un commit real del 9 de octubre. Arranque a las 5:25 de la tarde, primer demo a las dos horas, y el primer entregable completo, la v0.2.0, a las 6 horas 26 minutos. Hubo casi dos horas de pausa en medio." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">El primer día</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Del repo vacío al primer entregable:<br>6 horas y 26 minutos</h2>
+    <div data-a="up2" style="margin-top: 30px; flex: 1; display: flex; align-items: center;"><svg viewBox="0 0 1728 460" style="width: 100%; height: 460px; overflow: visible;"><rect data-pausa x="579.3" y="100" width="423.3" height="190" rx="10" fill="rgba(188,151,99,0.1)" stroke="rgba(188,151,99,0.35)" stroke-dasharray="6 6"></rect>
+        <text data-pausa x="791.0" y="130" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #BC9763;">pausa · 112 min</text><line data-trazo data-largo="1648" x1="40" y1="250" x2="1688" y2="250" stroke="#3B2A1B" stroke-width="2" stroke-linecap="round" stroke-dasharray="1648" stroke-dashoffset="0"></line><g data-hora><line x1="40" y1="250" x2="40" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="40" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">17:00</text></g><g data-hora><line x1="264.7" y1="250" x2="264.7" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="264.7" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">18:00</text></g><g data-hora><line x1="489.5" y1="250" x2="489.5" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="489.5" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">19:00</text></g><g data-hora><line x1="714.2" y1="250" x2="714.2" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="714.2" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">20:00</text></g><g data-hora><line x1="938.9" y1="250" x2="938.9" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="938.9" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">21:00</text></g><g data-hora><line x1="1163.6" y1="250" x2="1163.6" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="1163.6" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">22:00</text></g><g data-hora><line x1="1388.4" y1="250" x2="1388.4" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="1388.4" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">23:00</text></g><g data-hora><line x1="1613.1" y1="250" x2="1613.1" y2="262" stroke="#86705A" stroke-width="2"></line>
+          <text x="1613.1" y="290" text-anchor="middle" style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #86705A;">00:00</text></g><circle data-commit cx="133.6" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="238.5" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="350.9" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="350.9" cy="223" r="6" fill="#F7B7BA"></circle><circle data-commit cx="350.9" cy="208" r="6" fill="#F7B7BA"></circle><circle data-commit cx="350.9" cy="193" r="6" fill="#F7B7BA"></circle><circle data-commit cx="350.9" cy="178" r="6" fill="#F7B7BA"></circle><circle data-commit cx="455.7" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="459.5" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="459.5" cy="223" r="6" fill="#F7B7BA"></circle><circle data-commit cx="459.5" cy="208" r="6" fill="#F7B7BA"></circle><circle data-commit cx="538.1" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="538.1" cy="223" r="6" fill="#F7B7BA"></circle><circle data-commit cx="538.1" cy="208" r="6" fill="#F7B7BA"></circle><circle data-commit cx="541.9" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="541.9" cy="223" r="6" fill="#F7B7BA"></circle><circle data-commit cx="541.9" cy="208" r="6" fill="#F7B7BA"></circle><circle data-commit cx="541.9" cy="193" r="6" fill="#F7B7BA"></circle><circle data-commit cx="541.9" cy="178" r="6" fill="#F7B7BA"></circle><circle data-commit cx="553.1" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="564.4" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="579.3" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1002.6" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1201.1" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1249.8" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1276" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1414.6" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1414.6" cy="223" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1500.7" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1519.5" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1541.9" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1579.4" cy="238" r="6" fill="#F7B7BA"></circle><circle data-commit cx="1631.8" cy="238" r="6" fill="#F7B7BA"></circle>
+        <g data-hito>
+          <line x1="133.6" y1="304" x2="133.6" y2="378" stroke="#F7B7BA" stroke-width="2"></line>
+          <text x="145.6" y="352" text-anchor="start" style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">17:25 · scaffold</text>
+          <text x="145.6" y="378" text-anchor="start" style="font: 400 18px 'DM Sans', ui-sans-serif, system-ui, sans-serif; fill: #BCA48C;">Next.js, shadcn y auth con Supabase</text>
+        </g>
+        <g data-hito>
+          <line x1="579.3" y1="304" x2="579.3" y2="446" stroke="#F7B7BA" stroke-width="2"></line>
+          <text x="591.3" y="420" text-anchor="start" style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">v0.1.0</text>
+          <text x="591.3" y="446" text-anchor="start" style="font: 400 18px 'DM Sans', ui-sans-serif, system-ui, sans-serif; fill: #BCA48C;">primer demo · 1 h 59 min · 22 commits</text>
+        </g>
+        <g data-hito>
+          <line x1="1579.4" y1="304" x2="1579.4" y2="378" stroke="#F7B7BA" stroke-width="2"></line>
+          <text x="1567.4" y="352" text-anchor="end" style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; fill: #FAEEE6;">v0.2.0</text>
+          <text x="1567.4" y="378" text-anchor="end" style="font: 400 18px 'DM Sans', ui-sans-serif, system-ui, sans-serif; fill: #BCA48C;">6 h 26 min · 32 commits</text>
+        </g></svg></div>
+    <div data-a="up3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+      
+      <div data-resumen style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 20px 24px; display: flex; align-items: baseline; gap: 16px;">
+        <span style="font: 600 34px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; white-space: nowrap; font-variant-numeric: tabular-nums;">1 h 59 min</span>
+        <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">hasta el primer demo funcional (v0.1.0)</span>
+      </div>
+      <div data-resumen style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 20px 24px; display: flex; align-items: baseline; gap: 16px;">
+        <span style="font: 600 34px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; white-space: nowrap; font-variant-numeric: tabular-nums;">6 h 26 min</span>
+        <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">hasta v0.2.0, el primer entregable revisable</span>
+      </div>
+      <div data-resumen style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 20px 24px; display: flex; align-items: baseline; gap: 16px;">
+        <span style="font: 600 34px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #BC9763; white-space: nowrap; font-variant-numeric: tabular-nums;">~4 h 48 min</span>
+        <span style="font-size: 18px; color: #BCA48C; line-height: 1.35;">con commits; el resto fue una pausa de casi 2 h</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Alcance" data-screen-label="Alcance" data-speaker-notes="Lo importante es lo que habia a esas horas: no un prototipo, sino la fase uno completa, con diez roles de agente trabajando en paralelo." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">El alcance</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">A las 6 horas no había un prototipo:<br>había la fase 1 completa</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 1.25fr 1fr; gap: 30px; flex: 1;">
+      <div data-version style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 30px 34px; display: flex; flex-direction: column; gap: 24px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.1.0</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">a las 1 h 59 min · 10 roles en paralelo</span>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px 20px;">
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span data-cuenta="258" style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">258</span>
+            <span style="font-size: 18px; color: #BCA48C;">archivos</span>
+          </div>
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span  style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">28 334</span>
+            <span style="font-size: 18px; color: #BCA48C;">líneas añadidas</span>
+          </div>
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span data-cuenta="16" style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">16</span>
+            <span style="font-size: 18px; color: #BCA48C;">pantallas</span>
+          </div>
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span data-cuenta="4" style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">4</span>
+            <span style="font-size: 18px; color: #BCA48C;">migraciones de BD</span>
+          </div>
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span data-cuenta="39" style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">39</span>
+            <span style="font-size: 18px; color: #BCA48C;">archivos de prueba</span>
+          </div>
+          
+          <div data-cifra style="display: flex; flex-direction: column; gap: 6px;">
+            <span data-cuenta="3" style="font: 600 52px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; letter-spacing: -1.5px; font-variant-numeric: tabular-nums;">3</span>
+            <span style="font-size: 18px; color: #BCA48C;">modos de cotizar</span>
+          </div>
+        </div>
+        <div data-roles style="display: flex; flex-direction: column; gap: 10px; margin-top: auto; padding-top: 18px; border-top: 1px solid #3B2A1B;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Los 10 roles que trabajaron a la vez</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+            <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">base</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">BD</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">diseño</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">motor</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">datos</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">insumos</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">recetas</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">cotizar</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">ventas</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">testing</span>
+          </div>
+        </div>
+      </div>
+      <div data-version style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 30px 34px; display: flex; flex-direction: column; gap: 20px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.2.0</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">a las 6 h 26 min</span>
+        </div>
+        
+        <div data-punto-v style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #F7B7BA;"></span>
+          <span style="font-size: 22px; line-height: 1.4;">Código, esquema y rutas pasados a inglés</span>
+        </div>
+        <div data-punto-v style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #F7B7BA;"></span>
+          <span style="font-size: 22px; line-height: 1.4;">Tipografía más cálida y animación sutil</span>
+        </div>
+        <div data-punto-v style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #F7B7BA;"></span>
+          <span style="font-size: 22px; line-height: 1.4;">Suite E2E con Playwright</span>
+        </div>
+        <div data-punto-v style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 10px; width: 8px; height: 8px; border-radius: 50%; background: #F7B7BA;"></span>
+          <span style="font-size: 22px; line-height: 1.4;">Revisión con verificadores y correcciones por área</span>
+        </div>
+        <span style="margin-top: auto; font-size: 17px; color: #86705A; line-height: 1.45;">32 commits ese día. Ahí pude revisar la app en el navegador por primera vez.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Encaminado" data-screen-label="Encaminado" data-speaker-notes="Con esa base, en los dos dias siguientes llegaron la seguridad, el perfil y los tutoriales. Asi quedo el proyecto: encaminado y en produccion." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Encaminado</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Tres días, cuatro versiones:<br>el proyecto quedó encaminado</h2>
+    <div data-a="up2" style="margin-top: 38px; position: relative; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px;">
+      <div data-riel style="position: absolute; left: 12px; right: 12px; top: 13px; height: 2px; background: #3B2A1B;"></div>
+      
+      <div data-ver style="position: relative; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #140D08; border: 3px solid #F7B7BA;"></span>
+        <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.1.0</span>
+        <span style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">9 oct · 19:24</span>
+        <span style="font-size: 20px; color: #BCA48C; line-height: 1.4;">Fase 1: recetas, cotización y ventas</span>
+      </div>
+      <div data-ver style="position: relative; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #140D08; border: 3px solid #F7B7BA;"></span>
+        <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.2.0</span>
+        <span style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">9 oct · 23:51</span>
+        <span style="font-size: 20px; color: #BCA48C; line-height: 1.4;">Inglés, diseño cálido y pruebas E2E</span>
+      </div>
+      <div data-ver style="position: relative; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #140D08; border: 3px solid #F7B7BA;"></span>
+        <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.3.0</span>
+        <span style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">10 oct · 05:32</span>
+        <span style="font-size: 20px; color: #BCA48C; line-height: 1.4;">Seguridad: CSP con nonce y cabeceras; Mi perfil con foto; límite de intentos de login</span>
+      </div>
+      <div data-ver style="position: relative; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 28px; height: 28px; border-radius: 50%; background: #140D08; border: 3px solid #F7B7BA;"></span>
+        <span style="font: 600 30px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">v0.4.0</span>
+        <span style="font: 500 17px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">11 oct · 19:08</span>
+        <span style="font-size: 20px; color: #BCA48C; line-height: 1.4;">Tutoriales en video dentro de la app</span>
+      </div>
+    </div>
+    <div style="flex: 1;"></div>
+    <div data-a="up3" style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 26px 34px; display: flex; flex-direction: column; gap: 18px;">
+      <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #8CC79B;">Cómo está hoy</span>
+      <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 20px;">
+        
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="311" style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">311</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">archivos en src</span>
+        </div>
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span  style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">29 459</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">líneas de código</span>
+        </div>
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="18" style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">18</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">pantallas</span>
+        </div>
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="9" style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">9</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">migraciones</span>
+        </div>
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="1008" style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">1008</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">pruebas unitarias en verde</span>
+        </div>
+        <div data-hoy style="display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="72" style="font: 600 42px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">72</span>
+          <span style="font-size: 16px; color: #BCA48C; line-height: 1.35;">E2E escritas · 49 en verde</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 18px;">
+    <div data-nota style="border-left: 3px solid #8CC79B; background: rgba(140,199,155,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;">Seguridad: <strong style="font-weight: 600; color: #FAEEE6;">ninguna falla alta en la app</strong> y quien no es miembro ve 0 filas (RLS más lista de permitidos).</div></div>
+  </section>
+
+  <section data-label="Tutoriales" data-screen-label="Tutoriales" data-speaker-notes="Con el primer entregable revisado, lo siguiente fue enseñar a usarla. Siete videos cortos grabando la app real, narrados con Fish Audio y metidos en la propia app." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">7 videos · 7:56</span>
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Después</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Después: siete tutoriales en video<br>para enseñarle a usarla</h2>
+    <div data-a="up2" style="margin-top: 30px; display: grid; grid-template-columns: repeat(7, 1fr); gap: 20px;">
+      
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/01-tu-app.jpg" alt="Portada del tutorial 1: Tu app" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Tu app</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:22</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/02-insumos.jpg" alt="Portada del tutorial 2: Insumos" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Insumos</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:01</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/03-recetas.jpg" alt="Portada del tutorial 3: Recetas" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Recetas</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:25</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/04-cotizar.jpg" alt="Portada del tutorial 4: Cotizar" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Cotizar</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:04</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/05-anotar-un-pedido.jpg" alt="Portada del tutorial 5: Anotar un pedido" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Anotar un pedido</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">0:54</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/06-cobrar-y-entregar.jpg" alt="Portada del tutorial 6: Cobrar y entregar" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Cobrar y entregar</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:05</span>
+        </div>
+      </div>
+      <div data-tut style="display: flex; flex-direction: column; gap: 10px;">
+        <div style="aspect-ratio: 9 / 16; border-radius: 16px; overflow: hidden; border: 1px solid #3B2A1B; box-shadow: 0 16px 34px rgba(0,0,0,0.45); background: #1D140C;">
+          <img data-src="assets/tutoriales/07-todo-conectado.jpg" alt="Portada del tutorial 7: Todo conectado" style="display: block; width: 100%; height: 100%; object-fit: cover;">
+        </div>
+        <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px;">
+          <span style="font-size: 17px; font-weight: 600; line-height: 1.25;">Todo conectado</span>
+          <span style="font: 500 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; font-variant-numeric: tabular-nums;">1:05</span>
+        </div>
+      </div>
+    </div>
+    <div style="flex: 1;"></div>
+    <div data-a="up3" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+      <span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">la app real</span></span><span data-paso style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">→</span><span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">Playwright graba</span></span><span data-paso style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">→</span><span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">Fish Audio narra</span></span><span data-paso style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">→</span><span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">ffmpeg compone</span></span><span data-paso style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">→</span><span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">YouTube</span></span><span data-paso style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">→</span><span data-paso><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">dentro de la app</span></span>
+    </div>
+    <div style="margin-top: 18px;">
+    <div data-nota style="border-left: 3px solid #BC9763; background: rgba(188,151,99,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;">7 tours escritos en YAML con 108 segmentos de narración. En la app: botón «¿Cómo funciona?» en 5 secciones y una pantalla con los 7. El reproductor carga una portada local de 15–20 KB y <strong style="font-weight: 600; color: #FAEEE6;">YouTube solo se descarga al tocar play</strong>.</div></div>
+  </section>
+
+  <section data-label="Impacto" data-screen-label="Impacto" data-speaker-notes="Lo que de verdad compra el esfuerzo grande es la revision. Los verificadores confirmaron casi todo lo que reportaron los revisores, y atraparon bugs reales. Pero ojo: el humano en el navegador encontro tres bugs que nadie vio." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Impacto</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Lo que compra el esfuerzo grande:<br>una revisión que encuentra bugs de verdad</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 40px; flex: 1;">
+      <div style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 30px 32px; display: flex; flex-direction: column; justify-content: center; gap: 34px;">
+        
+        <div data-embudo style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Revisión adversarial · v0.1–v0.3</span>
+          <div style="display: grid; grid-template-columns: 150px 1fr 70px; gap: 16px; align-items: center;">
+            <span style="font-size: 18px; color: #BCA48C;">reportados</span>
+            <div style="height: 22px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 100%; height: 100%; background: #BC9763; border-radius: 6px;"></div></div>
+            <span style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; text-align: right; font-variant-numeric: tabular-nums;">74</span>
+            <span style="font-size: 18px; color: #BCA48C;">confirmados</span>
+            <div style="height: 22px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 95.9%; height: 100%; background: #F7B7BA; border-radius: 6px;"></div></div>
+            <span style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; text-align: right; font-variant-numeric: tabular-nums;">71</span>
+          </div>
+        </div>
+        
+        <div data-embudo style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Revisión adversarial · v0.4.0</span>
+          <div style="display: grid; grid-template-columns: 150px 1fr 70px; gap: 16px; align-items: center;">
+            <span style="font-size: 18px; color: #BCA48C;">reportados</span>
+            <div style="height: 22px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 100%; height: 100%; background: #BC9763; border-radius: 6px;"></div></div>
+            <span style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; text-align: right; font-variant-numeric: tabular-nums;">12</span>
+            <span style="font-size: 18px; color: #BCA48C;">confirmados</span>
+            <div style="height: 22px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 75.0%; height: 100%; background: #F7B7BA; border-radius: 6px;"></div></div>
+            <span style="font: 600 24px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; text-align: right; font-variant-numeric: tabular-nums;">9</span>
+          </div>
+        </div>
+        <span style="font-size: 18px; color: #BCA48C; line-height: 1.45;">Casi ningún falso positivo: el verificador existe para tumbar lo que no se sostiene.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Bugs reales que los autores no vieron</span>
+        
+        <div data-bug style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 14px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;">
+          <span style="font-size: 21px; line-height: 1.4;">Un <code style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">?next=</code> que al normalizarse quedaba como <code style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">//otro-dominio</code></span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">redirección abierta</span>
+        </div>
+        <div data-bug style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 14px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;">
+          <span style="font-size: 21px; line-height: 1.4;">Abonos de dos sesiones que se sobrescribían</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">pérdida de datos</span>
+        </div>
+        <div data-bug style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 14px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;">
+          <span style="font-size: 21px; line-height: 1.4;">Un dato vacío que se mostraba como si fuera real</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">dato engañoso</span>
+        </div>
+        <div data-bug style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 14px; padding: 18px 22px; display: grid; grid-template-columns: 1fr auto; gap: 18px; align-items: center;">
+          <span style="font-size: 21px; line-height: 1.4;">Una URL firmada que podía servirse ya vencida desde la caché</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">caché</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 22px;">
+    <div data-nota style="border-left: 3px solid #D9F24A; background: rgba(217,242,74,0.08); border-radius: 0 12px 12px 0; padding: 20px 28px; font-size: 22px; line-height: 1.5; color: #FAEEE6;">Y aun así, <strong style="font-weight: 600; color: #FAEEE6;">el humano en el navegador encontró 3 bugs de UI que nadie vio</strong>: un scroll horizontal de 610 px en Cotizar, nombres cortados y «6 piezas» donde debía decir «6 galletas».</div></div>
+  </section>
+
+  <section data-label="Esta presentación" data-screen-label="Esta presentación" data-speaker-notes="Y para que vean que no es teoria: esta misma presentacion la investigo un workflow. Cinco frentes en paralelo, cada uno con un verificador esceptico. Encontro doce errores, varios en mis propias retros." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Esta presentación</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Esta misma presentación<br>se investigó con un workflow</h2>
+    <div data-a="up2" style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 40px;">
+      <div style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 10px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Cinco frentes en paralelo, cada uno con su verificador</span>
+        
+        <div data-frente style="display: grid; grid-template-columns: 1fr 30px 160px; gap: 14px; align-items: center;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">plan de orquestación</span><span style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: center;">→</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">refuta</span>
+        </div>
+        <div data-frente style="display: grid; grid-template-columns: 1fr 30px 160px; gap: 14px; align-items: center;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">línea de tiempo</span><span style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: center;">→</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">refuta</span>
+        </div>
+        <div data-frente style="display: grid; grid-template-columns: 1fr 30px 160px; gap: 14px; align-items: center;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">retros</span><span style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: center;">→</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">refuta</span>
+        </div>
+        <div data-frente style="display: grid; grid-template-columns: 1fr 30px 160px; gap: 14px; align-items: center;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">ultracode</span><span style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: center;">→</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">refuta</span>
+        </div>
+        <div data-frente style="display: grid; grid-template-columns: 1fr 30px 160px; gap: 14px; align-items: center;">
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; background: rgba(188,151,99,0.12); border: 1px solid rgba(188,151,99,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">tutoriales</span><span style="color: #86705A; font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: center;">→</span><span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA; background: rgba(247,183,186,0.12); border: 1px solid rgba(247,183,186,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">refuta</span>
+        </div>
+        <span style="font: 500 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A; margin-top: 6px;">→ guion de láminas, solo con datos que sobrevivieron</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; align-content: center;">
+        
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="11" style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; font-variant-numeric: tabular-nums;">11</span>
+          <span style="font-size: 16px; color: #BCA48C;">agentes</span>
+        </div>
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span  style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #F7B7BA; font-variant-numeric: tabular-nums;">~6 min</span>
+          <span style="font-size: 16px; color: #BCA48C;">de reloj</span>
+        </div>
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span  style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #BC9763; font-variant-numeric: tabular-nums;">1.37 M</span>
+          <span style="font-size: 16px; color: #BCA48C;">tokens de subagentes</span>
+        </div>
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="194" style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #FAEEE6; font-variant-numeric: tabular-nums;">194</span>
+          <span style="font-size: 16px; color: #BCA48C;">cifras verificadas una por una</span>
+        </div>
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="12" style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #EA6B5D; font-variant-numeric: tabular-nums;">12</span>
+          <span style="font-size: 16px; color: #BCA48C;">corregidas</span>
+        </div>
+        <div data-meta style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 16px; padding: 18px 22px; display: flex; flex-direction: column; gap: 6px;">
+          <span data-cuenta="0" style="font: 600 40px/1 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; color: #8CC79B; font-variant-numeric: tabular-nums;">0</span>
+          <span style="font-size: 16px; color: #BCA48C;">refutadas</span>
+        </div>
+      </div>
+    </div>
+    <div data-a="up3" style="margin-top: 24px; background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 18px; overflow: hidden;">
+      <div style="display: grid; grid-template-columns: 1.4fr 150px 150px 1.3fr; padding: 14px 28px; background: #1D140C; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Lo que decían mis notas</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Decía</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #8CC79B;">Era</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Por qué</span>
+      </div>
+      
+      <div data-corr style="display: grid; grid-template-columns: 1.4fr 150px 150px 1.3fr; padding: 12px 28px; align-items: center; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 19px;">Tokens de v0.1–v0.3</span>
+        <span style="font: 500 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; text-decoration: line-through; font-variant-numeric: tabular-nums;">22.4 M</span>
+        <span style="font: 600 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #8CC79B; font-variant-numeric: tabular-nums;">22.5 M</span>
+        <span style="font-size: 17px; color: #BCA48C;">la suma de la retro estaba mal</span>
+      </div>
+      <div data-corr style="display: grid; grid-template-columns: 1.4fr 150px 150px 1.3fr; padding: 12px 28px; align-items: center; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 19px;">Workflows sobre la guía de 15 agentes</span>
+        <span style="font: 500 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; text-decoration: line-through; font-variant-numeric: tabular-nums;">3 de 5</span>
+        <span style="font: 600 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #8CC79B; font-variant-numeric: tabular-nums;">4 de 5</span>
+        <span style="font-size: 17px; color: #BCA48C;">contó mal sus propias cifras</span>
+      </div>
+      <div data-corr style="display: grid; grid-template-columns: 1.4fr 150px 150px 1.3fr; padding: 12px 28px; align-items: center; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 19px;">Commits hasta el tag v0.3.0</span>
+        <span style="font: 500 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; text-decoration: line-through; font-variant-numeric: tabular-nums;">54</span>
+        <span style="font: 600 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #8CC79B; font-variant-numeric: tabular-nums;">49</span>
+        <span style="font-size: 17px; color: #BCA48C;">incluía 5 posteriores al tag</span>
+      </div>
+      <div data-corr style="display: grid; grid-template-columns: 1.4fr 150px 150px 1.3fr; padding: 12px 28px; align-items: center; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 19px;">Pruebas unitarias en v0.3.0</span>
+        <span style="font: 500 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C; text-decoration: line-through; font-variant-numeric: tabular-nums;">848</span>
+        <span style="font: 600 21px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #8CC79B; font-variant-numeric: tabular-nums;">846</span>
+        <span style="font-size: 17px; color: #BCA48C;">dos fuentes no coincidían</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Costo" data-screen-label="Costo" data-speaker-notes="El precio. Unos 29 millones de tokens de subagentes en cinco workflows, sin contar la sesion principal. En mi plan Max personal eso fue mas o menos el 55 por ciento del limite de la semana." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">El costo</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">El precio: ~28.8 M tokens de subagentes<br>y cerca del 55 % de mi semana</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 1.35fr 1fr; gap: 36px; flex: 1;">
+      <div style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 28px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Tokens por workflow</span>
+        
+        <div data-wf style="display: grid; grid-template-columns: 290px 1fr 90px; gap: 18px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 19px; font-weight: 600;"><span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">01</span> Construcción</span>
+            <span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">13 agentes · ~80 min</span>
+          </div>
+          <div style="height: 20px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 40.5%; height: 100%; border-radius: 6px; background: #F7B7BA;"></div></div>
+          <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: right; font-variant-numeric: tabular-nums;">3.2 M</span>
+        </div>
+        <div data-wf style="display: grid; grid-template-columns: 290px 1fr 90px; gap: 18px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 19px; font-weight: 600;"><span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">02</span> Calidad y entrega</span>
+            <span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">22 agentes · ~50 min</span>
+          </div>
+          <div style="height: 20px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 49.4%; height: 100%; border-radius: 6px; background: #F7B7BA;"></div></div>
+          <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: right; font-variant-numeric: tabular-nums;">3.9 M</span>
+        </div>
+        <div data-wf style="display: grid; grid-template-columns: 290px 1fr 90px; gap: 18px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 19px; font-weight: 600;"><span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">03</span> Refactor a inglés, diseño y E2E</span>
+            <span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">42 agentes · ~2.5 h</span>
+          </div>
+          <div style="height: 20px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 100.0%; height: 100%; border-radius: 6px; background: #EA6B5D;"></div></div>
+          <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: right; font-variant-numeric: tabular-nums;">7.9 M</span>
+        </div>
+        <div data-wf style="display: grid; grid-template-columns: 290px 1fr 90px; gap: 18px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 19px; font-weight: 600;"><span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">04</span> Seguridad y perfil</span>
+            <span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">46 agentes · ~3 h</span>
+          </div>
+          <div style="height: 20px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 94.9%; height: 100%; border-radius: 6px; background: #F7B7BA;"></div></div>
+          <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: right; font-variant-numeric: tabular-nums;">7.5 M</span>
+        </div>
+        <div data-wf style="display: grid; grid-template-columns: 290px 1fr 90px; gap: 18px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 19px; font-weight: 600;"><span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #86705A;">05</span> Tutoriales en la app</span>
+            <span style="font: 400 15px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">33 agentes · ~2 h 15 min</span>
+          </div>
+          <div style="height: 20px; background: #1D140C; border-radius: 6px; overflow: hidden;"><div data-barra style="width: 79.7%; height: 100%; border-radius: 6px; background: #F7B7BA;"></div></div>
+          <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; text-align: right; font-variant-numeric: tabular-nums;">6.3 M</span>
+        </div>
+        <span style="font-size: 16px; color: #86705A; line-height: 1.45;">En rojo, el workflow que incluyó el refactor a inglés a media obra. Sin contar la sesión principal, que no se midió.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 20px;">
+        <div data-gauge style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 24px 28px 22px; display: flex; flex-direction: column; align-items: center; gap: 8px;">
+          
+  <svg viewBox="0 0 360 200" style="width: 360px; height: 200px; overflow: visible;">
+    <path d="M 30 180 A 150 150 0 0 1 330 180" fill="none" stroke="#271B11" stroke-width="26" stroke-linecap="round"></path>
+    <path data-arco data-largo="471.2" d="M 30 180 A 150 150 0 0 1 330 180" fill="none" stroke="#D9F24A" stroke-width="26" stroke-linecap="round" stroke-dasharray="259.2 471.2"></path>
+    <text x="180" y="166" text-anchor="middle" style="font: 600 66px 'Fraunces', Georgia, serif; fill: #FAEEE6;">~55 %</text>
+  </svg>
+          <span style="font-size: 18px; color: #BCA48C; text-align: center;">del límite semanal del plan Claude Max personal</span>
+          <span style="display: inline-flex; align-items: center; gap: 8px; font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #D9F24A; background: rgba(217,242,74,0.12); border: 1px solid rgba(217,242,74,0.35); border-radius: 999px; padding: 8px 16px; white-space: nowrap; font-variant-numeric: tabular-nums;">dato propio · no lo registra ninguna fuente</span>
+        </div>
+        <div data-plan style="background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; padding: 22px 28px; display: flex; flex-direction: column; gap: 12px;">
+          <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">v0.4.0 · lo que estimé contra lo que pasó</span>
+          
+          <div style="display: grid; grid-template-columns: 100px 1fr 30px 1fr; align-items: baseline; gap: 10px;">
+            <span style="font: 400 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">agentes</span>
+            <span style="font: 500 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; font-variant-numeric: tabular-nums;">10–14</span>
+            <span style="color: #86705A;">→</span>
+            <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #EA6B5D; font-variant-numeric: tabular-nums;">33</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 100px 1fr 30px 1fr; align-items: baseline; gap: 10px;">
+            <span style="font: 400 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">tokens</span>
+            <span style="font: 500 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; font-variant-numeric: tabular-nums;">2–4 M</span>
+            <span style="color: #86705A;">→</span>
+            <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #EA6B5D; font-variant-numeric: tabular-nums;">6.3 M</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 100px 1fr 30px 1fr; align-items: baseline; gap: 10px;">
+            <span style="font: 400 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BCA48C;">tiempo</span>
+            <span style="font: 500 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #BC9763; font-variant-numeric: tabular-nums;">~1 h</span>
+            <span style="color: #86705A;">→</span>
+            <span style="font: 600 22px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #EA6B5D; font-variant-numeric: tabular-nums;">2 h 15 min</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Lo que salió mal" data-screen-label="Lo que salió mal" data-speaker-notes="Orquestar a muchos agentes trae sus propios errores. Los anote todos, y cada uno se volvio una regla del playbook." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: flex; flex-direction: column; padding: 152px 96px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 104px; display: flex; align-items: center; justify-content: space-between; padding: 0 96px; border-bottom: 1px solid #3B2A1B;">
+      <div style="display: flex; align-items: center; gap: 14px; font: 500 19px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">
+        <span style="color: #F7B7BA;">❯</span>
+        <span style="color: #FAEEE6;">ultracode</span>
+        <span style="color: #86705A;">· minuto dulce</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font: 500 16px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.4px; text-transform: uppercase; color: #BCA48C;">Lo que salió mal</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 58px; font-weight: 600; color: #FAEEE6; letter-spacing: -1.2px; line-height: 1.08;">Orquestar trae sus propios errores:<br>cada uno se volvió una regla</h2>
+    <div data-a="up2" style="margin-top: 32px; background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 22px; overflow: hidden; flex: 1; display: flex; flex-direction: column;">
+      <div style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 18px 32px; background: #1D140C; border-bottom: 1px solid #3B2A1B;">
+        <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #EA6B5D;">Qué pasó</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #BCA48C;">Qué costó</span><span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">La regla que salió</span>
+      </div>
+      
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">Sin kickoff ni cuenta de pruebas</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">18 flujos E2E con sesión nunca han corrido</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Kickoff con una cuenta de prueba dedicada</span>
+      </div>
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">El idioma del código no se decidió al inicio</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">Refactor a inglés a media obra y una migración que rompió producción hasta el redeploy</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Convenciones antes que código</span>
+      </div>
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">Más de lo necesario para una sola usuaria</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">CSP con nonce y ~850 pruebas</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Niveles S / M / L con techo</span>
+      </div>
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">El orquestador reportó un dato falso sobre la caché</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">Resumió sin contrastar con el código</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Sin evidencia no cuenta</span>
+      </div>
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; border-bottom: 1px solid #3B2A1B;">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">Las credenciales E2E eran de la cuenta real de la usuaria</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">Se detectó antes de lanzar nada</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Cuenta de prueba que no sea de una persona real</span>
+      </div>
+      <div data-falla style="display: grid; grid-template-columns: 1.1fr 1.2fr 1fr; gap: 30px; padding: 0 32px; align-items: center; flex: 1; ">
+        <span style="font-size: 20px; font-weight: 500; line-height: 1.35;">Un banco de pruebas improvisado en v0.4.0</span>
+        <span style="font-size: 19px; color: #BCA48C; line-height: 1.35;">Triplicó el costo del workflow</span>
+        <span style="font-size: 19px; color: #F7B7BA; line-height: 1.35;">Un prerrequisito faltante no se sustituye</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Cierre" data-screen-label="Cierre" data-speaker-notes="Lo que me llevo: ultracode rinde cuando yo pongo el alcance, el presupuesto y la revision final. El siguiente paso es convertir el playbook en skills despues de un segundo proyecto." style="background: #140D08; background-image: url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27280%27 height=%27280%27><filter id=%27g%27><feTurbulence type=%27fractalNoise%27 baseFrequency=%270.8%27 numOctaves=%272%27 stitchTiles=%27stitch%27/><feColorMatrix values=%270 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0%27/></filter><rect width=%27100%%27 height=%27100%%27 filter=%27url(%23g)%27/></svg>'), url('data:image/svg+xml,<svg xmlns=%27http://www.w3.org/2000/svg%27 width=%27240%27 height=%27240%27><rect x=%2722%27 y=%2730%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(35 29.5 32.5)%27/><rect x=%27118%27 y=%2718%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-20 125.5 20.5)%27/><rect x=%27196%27 y=%2764%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(70 203.5 66.5)%27/><rect x=%2764%27 y=%27104%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(-55 71.5 106.5)%27/><rect x=%27160%27 y=%27134%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(15 167.5 136.5)%27/><rect x=%2730%27 y=%27182%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23FAEEE6%27 fill-opacity=%270.11%27 transform=%27rotate(80 37.5 184.5)%27/><rect x=%27104%27 y=%27210%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23F7B7BA%27 fill-opacity=%270.11%27 transform=%27rotate(-30 111.5 212.5)%27/><rect x=%27214%27 y=%27196%27 width=%2715%27 height=%275%27 rx=%272.5%27 fill=%27%23BC9763%27 fill-opacity=%270.11%27 transform=%27rotate(40 221.5 198.5)%27/></svg>'), radial-gradient(62% 55% at 100% 0%, rgba(247,183,186,0.1) 0%, rgba(247,183,186,0) 62%), radial-gradient(55% 50% at 0% 100%, rgba(188,151,99,0.07) 0%, rgba(188,151,99,0) 60%); background-size: 280px 280px, 240px 240px, 100% 100%, 100% 100%; font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif; color: #FAEEE6; display: grid; grid-template-columns: 1.1fr 1fr; gap: 70px; align-items: center; padding: 0 110px; box-sizing: border-box; overflow: hidden;">
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <span data-chispa style="position: absolute; left: 120px; top: 90px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(35deg);"></span><span data-chispa style="position: absolute; left: 520px; top: 140px; width: 26px; height: 9px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(-50deg);"></span><span data-chispa style="position: absolute; left: 980px; top: 70px; width: 20px; height: 7px; border-radius: 99px; background: #FAEEE6; opacity: 0.85; transform: rotate(20deg);"></span><span data-chispa style="position: absolute; left: 1500px; top: 110px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(-30deg);"></span><span data-chispa style="position: absolute; left: 1800px; top: 240px; width: 26px; height: 9px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(60deg);"></span><span data-chispa style="position: absolute; left: 160px; top: 960px; width: 26px; height: 9px; border-radius: 99px; background: #BC9763; opacity: 0.85; transform: rotate(-20deg);"></span><span data-chispa style="position: absolute; left: 760px; top: 1000px; width: 22px; height: 7px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(45deg);"></span><span data-chispa style="position: absolute; left: 1720px; top: 980px; width: 26px; height: 9px; border-radius: 99px; background: #F7B7BA; opacity: 0.85; transform: rotate(-65deg);"></span>
+    </div>
+    <div style="position: relative; display: flex; flex-direction: column; gap: 30px;">
+      <div data-a="up" style="font: 500 20px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #F7B7BA;">❯ lo que me llevo</div>
+      <h2 data-split style="margin: 0; font-family: 'Fraunces', Georgia, serif; font-variation-settings: 'SOFT' 100, 'opsz' 144; font-size: 68px; font-weight: 600; letter-spacing: -1.6px; line-height: 1.06;">Ultracode rinde cuando <em style="font-style: italic; font-weight: 500; color: #D9F24A;">el humano</em> pone el alcance, el presupuesto y la revisión final</h2>
+      <span data-mano style="font: 700 40px/1 'Caveat', cursive; color: #D9F24A; transform: rotate(-3deg); align-self: flex-start;">— Axl</span>
+      <p data-a="up3" style="margin: 0; font-size: 24px; color: #BCA48C; line-height: 1.5;">Siguiente paso: convertir el playbook en skills —<span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">/kickoff</span> y <span style="font-family: 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; color: #FAEEE6;">/retro</span>— después de un segundo proyecto.</p>
+    </div>
+    <div data-a="up2" style="position: relative; background: linear-gradient(180deg, #271B11 0%, #1D140C 100%); border: 1px solid #3B2A1B; box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 18px 40px rgba(0,0,0,0.35); border-radius: 24px; padding: 34px 36px; display: flex; flex-direction: column; gap: 18px;">
+      <span style="font: 500 15px/1 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace; letter-spacing: 2.2px; text-transform: uppercase; color: #F7B7BA;">Checklist antes de lanzar un workflow</span>
+      
+      <div data-check style="display: flex; gap: 16px; align-items: flex-start;">
+        <span style="flex: none; margin-top: 2px; width: 28px; height: 28px; border-radius: 8px; background: rgba(247,183,186,0.16); border: 1.5px solid #F7B7BA; color: #F7B7BA; display: inline-flex; align-items: center; justify-content: center; font: 600 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">✓</span>
+        <span style="font-size: 23px; line-height: 1.4;">Kickoff con alcance, convenciones y cuenta de pruebas</span>
+      </div>
+      <div data-check style="display: flex; gap: 16px; align-items: flex-start;">
+        <span style="flex: none; margin-top: 2px; width: 28px; height: 28px; border-radius: 8px; background: rgba(247,183,186,0.16); border: 1.5px solid #F7B7BA; color: #F7B7BA; display: inline-flex; align-items: center; justify-content: center; font: 600 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">✓</span>
+        <span style="font-size: 23px; line-height: 1.4;">Presupuesto declarado y 1 ronda de corrección por gate</span>
+      </div>
+      <div data-check style="display: flex; gap: 16px; align-items: flex-start;">
+        <span style="flex: none; margin-top: 2px; width: 28px; height: 28px; border-radius: 8px; background: rgba(247,183,186,0.16); border: 1.5px solid #F7B7BA; color: #F7B7BA; display: inline-flex; align-items: center; justify-content: center; font: 600 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">✓</span>
+        <span style="font-size: 23px; line-height: 1.4;">Regla del cambio chico: no todo merece un workflow</span>
+      </div>
+      <div data-check style="display: flex; gap: 16px; align-items: flex-start;">
+        <span style="flex: none; margin-top: 2px; width: 28px; height: 28px; border-radius: 8px; background: rgba(247,183,186,0.16); border: 1.5px solid #F7B7BA; color: #F7B7BA; display: inline-flex; align-items: center; justify-content: center; font: 600 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">✓</span>
+        <span style="font-size: 23px; line-height: 1.4;">Toda afirmación con su evidencia</span>
+      </div>
+      <div data-check style="display: flex; gap: 16px; align-items: flex-start;">
+        <span style="flex: none; margin-top: 2px; width: 28px; height: 28px; border-radius: 8px; background: rgba(247,183,186,0.16); border: 1.5px solid #F7B7BA; color: #F7B7BA; display: inline-flex; align-items: center; justify-content: center; font: 600 16px 'DM Mono', ui-monospace, 'SF Mono', Menlo, monospace;">✓</span>
+        <span style="font-size: 23px; line-height: 1.4;">Revisión humana a 375 px antes de cada push</span>
+      </div>
+    </div>
+  </section>
+</deck-stage>
+<script src="./gsap.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) lanzar(activa);
+  }
+  // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
+  // elementos recién visibles entran animados; ocultar o revelar de golpe
+  // (llegar en reversa) no anima nada.
+  document.addEventListener('stepchange', function (e) {
+    var d = e.detail;
+    if (reducido || !d || d.step !== d.previousStep + 1) return;
+    var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
+    if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script>
+(function () {
+  var SRC = "video.mp4", TECLA = "v".toLowerCase();
+  var abierto = false, btn, capa, video;
+
+  function montar() {
+    btn = document.createElement('button');
+    btn.id = 'ver-video';
+    btn.type = 'button';
+    btn.textContent = '▶ Reproducir · ' + TECLA.toUpperCase();
+    btn.style.cssText = 'position:fixed;top:16px;right:150px;z-index:2147483000;' +
+      'padding:9px 18px;border:1px solid #F7B7BA;border-radius:999px;' +
+      'background:#F7B7BA;color:#FFFFFF;cursor:pointer;' +
+      'font:600 13px/1 inherit;letter-spacing:.6px;opacity:.85;transition:opacity 160ms ease';
+    btn.addEventListener('mouseenter', function () { btn.style.opacity = '1'; });
+    btn.addEventListener('mouseleave', function () { btn.style.opacity = abierto ? '1' : '.85'; });
+    btn.addEventListener('click', function () { alternar(); btn.blur(); });
+    document.body.appendChild(btn);
+
+    capa = document.createElement('div');
+    capa.id = 'capa-video';
+    capa.hidden = true;
+    capa.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(9,13,24,.92);' +
+      'display:flex;align-items:center;justify-content:center;padding:3vh 3vw';
+    video = document.createElement('video');
+    video.src = SRC;
+    video.controls = true;
+    video.playsInline = true;
+    video.style.cssText = 'max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.55)';
+    var cerrar = document.createElement('button');
+    cerrar.type = 'button';
+    cerrar.setAttribute('aria-label', 'Cerrar el video');
+    cerrar.textContent = '✕ Cerrar · Esc';
+    cerrar.style.cssText = 'position:absolute;top:18px;right:18px;padding:9px 18px;' +
+      'border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(0,0,0,.45);' +
+      'color:#FFF;cursor:pointer;font:600 13px/1 inherit;letter-spacing:.6px;z-index:2';
+    cerrar.addEventListener('click', function (e) { e.stopPropagation(); alternar(false); });
+    capa.addEventListener('click', function (e) { if (e.target === capa) alternar(false); });
+    capa.appendChild(video);
+    capa.appendChild(cerrar);
+    document.body.appendChild(capa);
+  }
+
+  function alternar(forzar) {
+    if (!btn) return;
+    abierto = forzar === undefined ? !abierto : forzar;
+    capa.hidden = !abierto;
+    btn.style.opacity = abierto ? '1' : '.85';
+    if (abierto) video.play().catch(function () {});   // si el navegador lo bloquea, quedan los controles
+    else {
+      video.pause();
+      if (document.fullscreenElement) document.exitFullscreen().catch(function () {});
+    }
+  }
+
+  // El botón nativo de pantalla completa pone en fullscreen el <video>, y
+  // entonces el navegador solo pinta ese elemento: el botón «Cerrar», que vive
+  // en la capa, desaparece y el video se queda sin salida. Se reconduce el
+  // fullscreen a la capa, que sí lo lleva dentro.
+  document.addEventListener('fullscreenchange', function () {
+    if (!video || document.fullscreenElement !== video) return;
+    document.exitFullscreen()
+      .then(function () { return capa.requestFullscreen(); })
+      .catch(function () {});
+  });
+
+  // Con la capa abierta, el teclado es del video: se corta antes de deck-stage.
+  window.addEventListener('keydown', function (e) {
+    if (!btn) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (abierto) {
+      if (e.key === 'Escape' || e.key.toLowerCase() === TECLA) { alternar(false); e.preventDefault(); e.stopPropagation(); return; }
+      if (['ArrowLeft', 'ArrowRight', ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End'].indexOf(e.key) >= 0) e.stopPropagation();
+      return;
+    }
+    if (e.key.toLowerCase() === TECLA) { alternar(true); e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  // En modo presentación desaparecen los dos, como el botón de presentar.
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!btn || !d || typeof d.__omelette_presenting !== 'boolean') return;
+    btn.style.display = d.__omelette_presenting ? 'none' : '';
+    if (d.__omelette_presenting) alternar(false);
+  });
+
+  // Sin archivo, no hay botón: mejor eso que un botón que abre una capa vacía.
+  fetch(SRC, { method: 'HEAD' })
+    .then(function (r) { if (r.ok) montar(); })
+    .catch(function () {});
+})();
+</script>
+<script>
+(function () {
+  if (!window.animar || !window.gsap) return;
+
+  // Titulares partidos en palabras (idempotente: las timelines se rehacen
+  // cada vez que la lámina se activa), respetando los <br>.
+  function partir(el, out) {
+    if (!el || (!out && el.dataset.partido)) return [];
+    out = out || [];
+    Array.prototype.slice.call(el.childNodes).forEach(function (n) {
+      // las cursivas (<em>) se parten igual, palabra por palabra
+      if (n.nodeType === 1 && n.tagName !== 'BR') { partir(n, out); return; }
+      if (n.nodeType !== 3) return;
+      var frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(function (p) {
+        if (!p) return;
+        if (/^\s+$/.test(p)) { frag.appendChild(document.createTextNode(p)); return; }
+        var s = document.createElement('span');
+        s.textContent = p; s.style.display = 'inline-block';
+        frag.appendChild(s); out.push(s);
+      });
+      el.replaceChild(frag, n);
+    });
+    el.dataset.partido = '1';
+    return out;
+  }
+  // Lo escrito a mano se «escribe»: se destapa de izquierda a derecha
+  function mano(tl, s, pos) {
+    Q(s, '[data-mano]').forEach(function (m, i) {
+      tl.from(m, { clipPath: 'inset(-20% 100% -20% 0%)', duration: 0.7, ease: 'power1.inOut' }, (pos || 0) + i * 0.2);
+    });
+  }
+  // Las chispas caen girando y rebotan un poco al llegar
+  function chispas(tl, s, pos) {
+    var cs = Q(s, '[data-chispa]');
+    if (cs.length) tl.from(cs, { y: -120, opacity: 0, rotation: '-=140', duration: 0.8, ease: 'bounce.out', stagger: 0.05 }, pos || 0);
+  }
+  function titular(tl, el, pos) {
+    if (!el) return;
+    var ps = el.dataset.partido ? el.querySelectorAll('span[style*="inline-block"]') : partir(el);
+    if (ps.length) tl.from(ps, { y: 34, opacity: 0, rotationX: -50, transformPerspective: 900,
+      transformOrigin: '50% 100%', duration: 0.65, stagger: 0.04, ease: 'power3.out' }, pos || 0);
+  }
+  // Los trazos SVG se dibujan desde su largo, calculado en build-time
+  function trazos(tl, lista, pos, cada) {
+    Array.prototype.forEach.call(lista, function (l, i) {
+      tl.from(l, { attr: { 'stroke-dashoffset': l.dataset.largo }, duration: 0.5, ease: 'power2.out' }, (pos || 0) + i * (cada || 0.03));
+    });
+  }
+  var Q = function (s, x) { return s.querySelectorAll(x); };
+  var q = function (s, x) { return s.querySelector(x); };
+  var cuentas = function (tl, s, pos) { Q(s, '[data-cuenta]').forEach(function (el) { cuenta(tl, el, pos); }); };
+
+  animar('Portada', function (tl, s) {
+    trazos(tl, Q(s, '[data-trazo]'), 0, 0.035);
+    tl.from(Q(s, '[data-punto]'), { scale: 0, transformOrigin: '50% 50%', duration: 0.4, ease: 'back.out(2)', stagger: 0.03 }, 0.25)
+      .from(q(s, '[data-a="up"]'), { x: -20, opacity: 0, duration: 0.5 }, 0.05);
+    titular(tl, q(s, 'h1'), 0.2);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.5 }, 0.6)
+      .from(Q(s, '[data-contador]'), { y: 26, opacity: 0, duration: 0.5, stagger: 0.08 }, 0.75)
+      .from(Q(s, '[data-a="up3"]')[1], { opacity: 0, duration: 0.5 }, 1.1);
+    cuentas(tl, s, 0.8);
+    chispas(tl, s, 0.1);
+    mano(tl, s, 1.15);
+  });
+
+  animar('Qué es ultracode', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    var p = Q(s, '[data-panel]');
+    tl.from(p, { y: 30, opacity: 0, duration: 0.55, stagger: 0.12 }, 0.2);
+    trazos(tl, p[0].querySelectorAll('[data-trazo]'), 0.45, 0.07);
+    trazos(tl, p[1].querySelectorAll('[data-trazo]'), 0.6, 0.025);
+    tl.from(p[0].querySelectorAll('[data-nodo]'), { opacity: 0, scale: 0.8, transformOrigin: '50% 50%', duration: 0.35, stagger: 0.06 }, 0.4)
+      .from(p[1].querySelectorAll('[data-nodo]'), { opacity: 0, scale: 0.8, transformOrigin: '50% 50%', duration: 0.35, stagger: 0.03 }, 0.55)
+      .from(Q(s, '[data-a="up3"] > span'), { y: 14, opacity: 0, duration: 0.4, stagger: 0.07 }, 1.15);
+  });
+
+  animar('Comparativo', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 26, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-izq]'), { x: -16, opacity: 0, duration: 0.4, stagger: 0.07 }, 0.45)
+      .from(Q(s, '[data-der]'), { x: 16, opacity: 0, duration: 0.4, stagger: 0.07 }, 0.7);
+  });
+
+  animar('El caso', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-ticket]'), { y: 28, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-renglon]'), { x: -14, opacity: 0, duration: 0.35, stagger: 0.09 }, 0.4)
+      .from(Q(s, '[data-dato]'), { y: 18, opacity: 0, duration: 0.45, stagger: 0.1 }, 0.5);
+  });
+
+  animar('Mi plan', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-kickoff]'), { x: -24, opacity: 0, duration: 0.5 }, 0.2)
+      .from(Q(s, '[data-etapa]'), { y: 22, opacity: 0, duration: 0.4, stagger: 0.07 }, 0.35)
+      .from(q(s, '[data-nota]'), { y: 16, opacity: 0, duration: 0.45 }, 1.05);
+    mano(tl, s, 0.95);
+  });
+
+  animar('Roles', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-rol]'), { x: -20, opacity: 0, duration: 0.38, stagger: 0.06 }, 0.2)
+      .from(Q(s, '[data-mec]'), { x: 20, opacity: 0, duration: 0.38, stagger: 0.06 }, 0.35)
+      .from(q(s, '[data-nota]'), { y: 16, opacity: 0, duration: 0.45 }, 1.0);
+  });
+
+  animar('Las primeras 6 horas', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    trazos(tl, Q(s, '[data-trazo]'), 0.2);
+    tl.from(Q(s, '[data-hora]'), { opacity: 0, duration: 0.3, stagger: 0.04 }, 0.3)
+      .from(Q(s, '[data-pausa]'), { opacity: 0, duration: 0.5 }, 0.55)
+      .from(Q(s, '[data-commit]'), { scale: 0, transformOrigin: '50% 50%', duration: 0.25, ease: 'back.out(2.4)', stagger: 0.022 }, 0.35)
+      .from(Q(s, '[data-hito]'), { y: 16, opacity: 0, duration: 0.4, stagger: 0.15 }, 0.9)
+      .from(Q(s, '[data-resumen]'), { y: 18, opacity: 0, duration: 0.4, stagger: 0.08 }, 1.15);
+  });
+
+  animar('Alcance', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-version]'), { y: 28, opacity: 0, duration: 0.5, stagger: 0.14 }, 0.2)
+      .from(Q(s, '[data-cifra]'), { y: 14, opacity: 0, duration: 0.35, stagger: 0.05 }, 0.45)
+      .from(Q(s, '[data-punto-v]'), { x: 14, opacity: 0, duration: 0.35, stagger: 0.07 }, 0.6);
+    cuentas(tl, s, 0.5);
+  });
+
+  animar('Encaminado', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-riel]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.8, ease: 'power2.inOut' }, 0.2)
+      .from(Q(s, '[data-ver]'), { y: 20, opacity: 0, duration: 0.45, stagger: 0.14 }, 0.3)
+      .from(q(s, '[data-a="up3"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.8)
+      .from(q(s, '[data-nota]'), { y: 16, opacity: 0, duration: 0.45 }, 1.05);
+    cuentas(tl, s, 0.85);
+  });
+
+  animar('Tutoriales', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-tut]'), { y: 40, opacity: 0, rotation: -2, duration: 0.5, stagger: 0.07, ease: 'power3.out' }, 0.2)
+      .from(Q(s, '[data-paso]'), { opacity: 0, x: -10, duration: 0.3, stagger: 0.05 }, 0.75)
+      .from(q(s, '[data-nota]'), { y: 16, opacity: 0, duration: 0.45 }, 1.1);
+  });
+
+  animar('Impacto', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-embudo]'), { y: 20, opacity: 0, duration: 0.45, stagger: 0.12 }, 0.2)
+      .from(Q(s, '[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.6, ease: 'power2.out', stagger: 0.1 }, 0.4)
+      .from(Q(s, '[data-bug]'), { x: 22, opacity: 0, duration: 0.4, stagger: 0.09 }, 0.45)
+      .from(q(s, '[data-nota]'), { y: 16, opacity: 0, duration: 0.45 }, 1.1);
+  });
+
+  animar('Esta presentación', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-frente]'), { x: -18, opacity: 0, duration: 0.35, stagger: 0.07 }, 0.2)
+      .from(Q(s, '[data-meta]'), { y: 18, opacity: 0, duration: 0.35, stagger: 0.06 }, 0.35)
+      .from(Q(s, '[data-corr]'), { y: 12, opacity: 0, duration: 0.35, stagger: 0.08 }, 0.85);
+    cuentas(tl, s, 0.4);
+  });
+
+  animar('Costo', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-wf]'), { x: -16, opacity: 0, duration: 0.35, stagger: 0.07 }, 0.2)
+      .from(Q(s, '[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.6, ease: 'power2.out', stagger: 0.07 }, 0.35)
+      .from(q(s, '[data-gauge]'), { y: 22, opacity: 0, duration: 0.45 }, 0.3);
+    var arco = q(s, '[data-arco]');
+    if (arco) tl.from(arco, { attr: { 'stroke-dasharray': '0 ' + arco.dataset.largo }, duration: 0.9, ease: 'power2.out' }, 0.5);
+    tl.from(q(s, '[data-plan]'), { y: 22, opacity: 0, duration: 0.45 }, 0.9);
+  });
+
+  animar('Lo que salió mal', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 24, opacity: 0, duration: 0.5 }, 0.2)
+      .from(Q(s, '[data-falla]'), { y: 12, opacity: 0, duration: 0.35, stagger: 0.08 }, 0.4);
+  });
+
+  animar('Cierre', function (tl, s) {
+    tl.from(q(s, '[data-a="up"]'), { x: -16, opacity: 0, duration: 0.45 }, 0);
+    titular(tl, q(s, 'h2'), 0.1);
+    tl.from(q(s, '[data-a="up2"]'), { x: 30, opacity: 0, duration: 0.55 }, 0.35)
+      .from(Q(s, '[data-check]'), { x: 14, opacity: 0, duration: 0.35, stagger: 0.08 }, 0.55)
+      .from(q(s, '[data-a="up3"]'), { y: 16, opacity: 0, duration: 0.45 }, 1.0);
+    chispas(tl, s, 0.05);
+    mano(tl, s, 0.9);
+  });
+})();
+</script>
+<script>
+(function () {
+  var on = false, btn = document.createElement('button');
+  btn.id = 'modo-presentacion'; btn.type = 'button';
+  function pinta() { btn.textContent = on ? 'Salir · Esc' : 'Presentar · P'; if (on) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on'); }
+  function poner(v) {
+    if (v === on) return; on = v;
+    window.postMessage({ __omelette_presenting: v }, '*');
+    if (v) { if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); }
+    else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    pinta();
+  }
+  btn.addEventListener('click', function () { poner(!on); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { poner(!on); e.preventDefault(); }
+    else if (e.key === 'Escape' && on && !document.fullscreenElement) poner(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && on) poner(false); });
+  pinta(); document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>

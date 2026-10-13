@@ -32,6 +32,7 @@ Para un video **solo con voz y animación** (sin nada quemado) pon `"subtitulos"
 - **Narrativa primero (arco y flecha)**: define UNA frase que el espectador deba recordar al terminar; cada slide acumula tensión o contexto hacia ella y el cierre la dispara. Si una slide no empuja hacia esa frase, su narración sobra o se acorta.
 - Parte del contenido real de cada slide y de sus `data-speaker-notes` (ahí está la intención de cada diapositiva). No leas la slide en voz alta: nárrala — tono conversacional, números redondeados al hablar, una idea por slide.
 - Longitud: la slide dura lo que dure su narración (+1 s de aire). Para TikTok apunta a 6–12 s por slide; para decks informativos hasta ~20 s.
+- **Video sin silencios** (lo pidió Axl para ultracode): `"recortar": true` quita el silencio que Fish deja en las orillas de cada clip (~0,5 s al final) y `"aire": [antes, después]` sustituye el aire por defecto de 0,35 + 0,65 s; con `[0.08, 0.15]` las láminas se encadenan sin huecos. En ese caso no uses `[break]` ni `[long-break]`: son pausas a propósito.
 - El texto va a TTS: evita siglas crípticas y símbolos (escribe «diecinueve horas», no «19 h»), y usa puntuación normal — los subtítulos se parten por puntuación y ~40 caracteres.
 - Enseña el borrador del guion al usuario antes de gastar API.
 

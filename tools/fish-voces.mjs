@@ -29,6 +29,10 @@ const GUARDADAS = {
     id: 'bfed5c0810a347dbb62e8ccce7f59c48',
     nota: 'Voz femenina español del catálogo. Es la que usa estancia/guion.json.',
   },
+  'axl': {
+    id: '9cf64f16ef2b48a5ac2975c00859cd84',
+    nota: 'La voz propia de Axl. Es la que usa ultracode/guion.json (velocidad 1).',
+  },
 };
 
 const raiz = path.resolve(import.meta.dirname, '..');
