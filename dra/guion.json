@@ -1,0 +1,28 @@
+{
+  "voz": "9cf64f16ef2b48a5ac2975c00859cd84",
+  "velocidad": 1,
+  "temperatura": 0.4,
+  "subtitulos": "ninguno",
+  "recortar": true,
+  "aire": [0.08, 0.15],
+  "slides": [
+    { "slide": 1, "texto": "Tenemos muchas ideas y poco tiempo. Por eso les propongo un método común para decidir cuáles explorar, basado en evidencia y no en quién habla más fuerte. Del pizarrón a la evidencia." },
+    { "slide": 2, "texto": "Son cuatro piezas: un embudo de cinco pasos por el que pasa toda idea, dos plataformas, una reunión de noventa minutos para decidir juntos, y experimentos baratos de máximo dos semanas antes de construir cualquier cosa." },
+    { "slide": 3, "texto": "En la primera reunión salieron seis ideas en el pizarrón. Sin un método, lo normal es discutir en círculos, elegir la más emocionante y no la más viable, empezar a construir antes de saber si alguien la quiere, y perder lo que se habló. Lo que buscamos es poder describir, comparar y probar cualquier idea de la misma forma." },
+    { "slide": 4, "texto": "Todo se sostiene en cinco principios. Lo que no está escrito no existe. Decidimos con evidencia. Probamos barato antes de construir. Tenemos foco: máximo tres ideas en validación. Y descartar también es avanzar, siempre que quede escrito por qué." },
+    { "slide": 5, "texto": "Este es el embudo. Cada paso responde una pregunta: si la idea entra, qué es, cuál va primero, qué la puede tumbar y si funciona. Al final solo hay tres salidas: validada, pivote o descartada." },
+    { "slide": 6, "texto": "El primer paso son los filtros que ya acordamos: nada de lugares físicos, nada ilegal, nada polémico ni político, y que la primera prueba quepa en nuestra capacidad. Entre los tres tenemos entre veintidós y treinta y seis horas por semana, y eso todavía hay que confirmarlo." },
+    { "slide": 7, "texto": "El segundo paso es el Lean Canvas: la idea en una sola página, en nueve bloques. Se llena en este orden, empezando por el cliente y el problema. Máximo cuarenta y cinco minutos por idea, y si algo no lo sabemos, se escribe no sabemos. Cada hueco se vuelve un supuesto por probar." },
+    { "slide": 8, "texto": "El tercer paso es ICE. Cada idea recibe tres calificaciones del uno al diez: impacto, confianza y facilidad. Se promedian, y luego se promedia entre los tres. Calificamos en secreto para no influirnos, y avanzan las de seis o más, hasta llenar tres lugares." },
+    { "slide": 9, "texto": "Para que un siete signifique lo mismo para todos, usamos siempre esta rúbrica. Fíjense en confianza: para pasar de seis hacen falta entrevistas, no opiniones. La evidencia sube la nota, el entusiasmo no." },
+    { "slide": 10, "texto": "El cuarto paso es el mapa de supuestos. Escribimos lo que damos por hecho: si lo quieren, si es negocio y si podemos hacerlo. Lo acomodamos por importancia y evidencia, y probamos primero lo muy importante con poca evidencia, porque si es falso, la idea se cae." },
+    { "slide": 11, "texto": "Y el quinto paso son las tarjetas. En la Test Card escribimos el criterio de éxito antes de ver los resultados, y en la Learning Card lo que observamos, lo que aprendimos y qué decidimos. Para probar usamos experimentos baratos: entrevistas, una landing, una preventa o un servicio manual." },
+    { "slide": 12, "texto": "Para operar todo esto, Notion es donde escribimos y Miro es donde vemos. Claude se conecta a los dos para redactar, investigar y actualizar los tableros. Y cuando el proceso esté probado, podemos construir nuestra propia plataforma." },
+    { "slide": 13, "texto": "Así viaja una idea. Nace como un sticky en Miro, pasa los filtros, el responsable llena su plantilla en Notion, en la reunión la calificamos, y el sticky avanza por el pipeline. Cada prueba deja su Learning Card." },
+    { "slide": 14, "texto": "El ritmo lo marca la reunión de propuestas. Antes, cada quien prepara dos ideas y las publica cuarenta y ocho horas antes. Durante noventa minutos presentamos, calificamos y armamos las Test Cards. Y en máximo dos semanas, cada dueño corre su prueba." },
+    { "slide": 15, "texto": "Un ejemplo con Pádel SoloQ, la idea más desarrollada del pizarrón. Al investigar encontramos que el mercado crece, con más de un millón de practicantes en México. Pero la idea ya existe: Playtomic tiene seis mil clubes y ya calcula el nivel de cada jugador." },
+    { "slide": 16, "texto": "Entonces, en vez de programar, diseñamos dos pruebas baratas para nuestro diferenciador. Primero entrevistas a diez jugadores y cinco organizadores. Después, una liga manual con una hoja de cálculo y el chat del grupo. Ese es el valor del método." },
+    { "slide": 17, "texto": "Para cerrar, necesitamos acordar cinco cosas: si adoptamos el método, si los números iniciales están bien, cómo quedan las aportaciones, quién toma cada idea, y cuándo es la reunión de propuestas." },
+    { "slide": 18, "texto": "En una frase: toda idea se escribe, se compara igual y se prueba barato. El siguiente paso es nuestra reunión de propuestas." }
+  ]
+}

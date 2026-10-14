@@ -804,6 +804,7 @@ ${slides.join('\n')}
 </deck-stage>
 <script src="./gsap.min.js"></script>
 ${kit.animador()}
+${kit.reproductor({ src: 'video.mp4', etiqueta: 'Reproducir', tecla: 'v', acento: ACC })}
 <script>
 // ── Coreografía ──────────────────────────────────────────────────────────
 // La familia de los reportes semanales: titulares partidos en palabras con
