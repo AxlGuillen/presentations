@@ -1,0 +1,30 @@
+{
+  "tabler": {
+    "nombre": "Tabler Icons",
+    "autor": "Paweł Kuna",
+    "licencia": "MIT",
+    "spdx": "MIT",
+    "url": "https://github.com/tabler/tabler-icons/blob/master/LICENSE"
+  },
+  "ph": {
+    "nombre": "Phosphor",
+    "autor": "Phosphor Icons",
+    "licencia": "MIT",
+    "spdx": "MIT",
+    "url": "https://github.com/phosphor-icons/core/blob/main/LICENSE"
+  },
+  "game-icons": {
+    "nombre": "Game Icons",
+    "autor": "GameIcons",
+    "licencia": "CC BY 3.0",
+    "spdx": "CC-BY-3.0",
+    "url": "https://github.com/game-icons/icons/blob/master/license.txt"
+  },
+  "lucide": {
+    "nombre": "Lucide",
+    "autor": "Lucide Contributors",
+    "licencia": "ISC",
+    "spdx": "ISC",
+    "url": "https://github.com/lucide-icons/lucide/blob/main/LICENSE"
+  }
+}

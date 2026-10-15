@@ -16,6 +16,15 @@
 //   grano({...})       → capa de ruido tipo grano de película (SVG feTurbulence en data-URI)
 //   malla(colores)     → capas de malla de gradientes (una por color, posiciones fijas)
 //   sombra({...})      → 'box-shadow: …;' en capas: contacto + elevación + halo opcional
+//
+// Animación y recursos (ver docs/animaciones-y-assets.md):
+//   gsap(dir, plugins)    → copia GSAP 3.15 + plugins al deck y devuelve los <script>
+//   efectos()             → catálogo de recetas: efecto(nombre, tl, el, o) y data-efecto="…"
+//   pincel/duotono/glitch → piezas de HTML que necesitan esas recetas
+//   patron(tipo, o)       → patrón generativo con semilla, SVG inline animable
+//   patronFondo(tipo, o)  → el mismo patrón como capa para fondo()
+//   icono(id, o)          → ícono de Iconify inline (caché en tools/cache/iconos)
+//   ilustracion(f, o)     → Open Doodles o un SVG de unDraw, recoloreado
 
 /** 'rgba(…)' a partir de '#RRGGBB' y una opacidad 0–1. */
 const alpha = (hex, a) => {
@@ -273,9 +282,15 @@ const animador = () => `<script>
       if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
       else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
     });
+    // Recetas declaradas en el HTML (data-efecto), si el deck carga kit.efectos().
+    if (window.efectosDeclarados) window.efectosDeclarados(tl, s);
   }
   function lanzar(s) {
     if (s.__tl) s.__tl.revert();
+    // Lo que las recetas cambiaron del DOM (SplitText, cortinas, rebanadas…)
+    // se deshace antes de reconstruir; si no, se partiría el texto dos veces.
+    (s.__deshacer || []).reverse().forEach(function (f) { try { f(); } catch (e) {} });
+    s.__deshacer = [];
     var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
     (registro[s.dataset.label] || porDefecto)(tl, s);
     if (reducido) tl.progress(1);
@@ -292,8 +307,12 @@ const animador = () => `<script>
     ds.querySelectorAll(':scope > section').forEach(function (s) {
       obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
     });
+    // La primera lámina espera a las fuentes: SplitText mide las líneas, y con
+    // la tipografía de respaldo saldrían cortes de línea distintos.
     var activa = ds.querySelector('section[data-deck-active]');
-    if (activa) lanzar(activa);
+    if (activa) (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+      if (activa.hasAttribute('data-deck-active') && !activa.__tl) lanzar(activa);
+    });
   }
   // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
   // elementos recién visibles entran animados; ocultar o revelar de golpe
@@ -366,4 +385,44 @@ const diferir = (html, { eager = 1 } = {}) => {
   return html.slice(0, abre) + diferidos.join('') + html.slice(cierra);
 };
 
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD };
+/** GSAP + los plugins que pida el deck, vendorizados en su carpeta.
+ *
+ *  Copia `tools/vendor/gsap.min.js` (3.15) y los plugins a la carpeta del deck
+ *  —cada deck sigue siendo autocontenido— y devuelve los <script> más el
+ *  registerPlugin. Uso en gen.js, al final del <body>:
+ *
+ *    ${kit.gsap(__dirname, ['SplitText', 'DrawSVG', 'Flip'])}
+ *    ${kit.efectos()}
+ *    ${kit.animador()}
+ *
+ *  Plugins: SplitText, DrawSVG, MorphSVG, Flip, ScrambleText, CustomEase,
+ *  CustomWiggle (trae CustomEase), MotionPath, Text, Physics2D, EasePack.
+ *  Desde la 3.13 todos son gratis (licencia «Standard no charge» de GSAP).
+ *  Los decks viejos traen su propia 3.12.5 y no se tocan. */
+const PLUGINS = {
+  SplitText: ['SplitText', ['SplitText']], DrawSVG: ['DrawSVGPlugin', ['DrawSVGPlugin']],
+  MorphSVG: ['MorphSVGPlugin', ['MorphSVGPlugin']], Flip: ['Flip', ['Flip']],
+  ScrambleText: ['ScrambleTextPlugin', ['ScrambleTextPlugin']], CustomEase: ['CustomEase', ['CustomEase']],
+  CustomWiggle: ['CustomWiggle', ['CustomWiggle']], MotionPath: ['MotionPathPlugin', ['MotionPathPlugin']],
+  Text: ['TextPlugin', ['TextPlugin']], Physics2D: ['Physics2DPlugin', ['Physics2DPlugin']],
+  EasePack: ['EasePack', ['ExpoScaleEase', 'RoughEase', 'SlowMo']],
+};
+const gsap = (dir, plugins = []) => {
+  const fs = require('fs');
+  const path = require('path');
+  const vendor = path.join(__dirname, 'vendor');
+  const pedidos = [...new Set(plugins.flatMap((p) => (p === 'CustomWiggle' ? ['CustomEase', p] : [p])))];
+  for (const p of pedidos) if (!PLUGINS[p]) throw new Error(`kit.gsap: plugin desconocido «${p}». Hay: ${Object.keys(PLUGINS).join(', ')}`);
+  const archivos = ['gsap', ...pedidos.map((p) => PLUGINS[p][0])];
+  for (const a of archivos) fs.copyFileSync(path.join(vendor, `${a}.min.js`), path.join(dir, `${a}.min.js`));
+  const globales = pedidos.flatMap((p) => PLUGINS[p][1]);
+  return archivos.map((a) => `<script src="./${a}.min.js"></script>`).join('\n') +
+    (globales.length ? `\n<script>gsap.registerPlugin(${globales.join(', ')});</${'script'}>` : '');
+};
+
+const { efectos, pincel, duotono, glitch } = require('./kit-efectos.cjs');
+const { patron, patronFondo } = require('./kit-patrones.cjs');
+const { icono, ilustracion } = require('./kit-recursos.cjs');
+
+module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
+  gsap, efectos, pincel, duotono, glitch, patron, patronFondo, icono, ilustracion };

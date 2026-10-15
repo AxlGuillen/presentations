@@ -1,8 +1,11 @@
 # Propuesta: animación y assets para la siguiente versión de los decks
 
-> Estado: **propuesta, sin implementar**. Investigación del 14/oct/2026.
-> Todo lo que dice «probado» se corrió en este repo ese día; lo demás sale de
-> la documentación o la licencia de cada proyecto (fuentes al final).
+> Estado: **implementado** el 14/oct/2026, el mismo día de la investigación
+> (los cinco updates; lo de Riot quedó fuera por decisión de Axl). El catálogo
+> vivo es el deck [`lab/`](../lab/) y lo que cambió respecto a la propuesta está
+> en «Lo que cambió al implementarlo», al final. Todo lo que dice «probado» se
+> corrió en este repo; lo demás sale de la documentación o la licencia de cada
+> proyecto (fuentes al final).
 
 ## En corto: cinco updates, en orden de impacto
 
@@ -283,6 +286,22 @@ en agosto de 2018):
 | **F6 · Lottie** (opcional) | Atado a la timeline | Se ve igual en el navegador y en `cuadros.mjs` |
 
 ---
+
+## Lo que cambió al implementarlo
+
+| Propuesto | Hecho | Por qué |
+|---|---|---|
+| `kit.efecto()` | `kit.efectos()` emite el catálogo en el navegador: `efecto(nombre, tl, el, o)` y `data-efecto="…"` en el HTML | Declarar en el HTML deja casi todas las láminas sin coreografía escrita; el animador aplica las recetas por defecto |
+| Flip para `crece` y `reordena` | FLIP a mano con `offsetLeft`/`offsetTop` | Flip no ve la escala que deck-stage aplica dentro de su shadow DOM: a mitad de animación la pieza salía desplazada |
+| ScrambleText para decodificar | Receta propia `revuelto`, con glifos sacados de un hash | ScrambleText sortea con `Math.random`: dos renders del video no saldrían iguales |
+| Physics2D para el confeti | `piezas` con `data-modo="cae"` y PRNG con semilla | Una caída con física no tiene estado final; el confeti tiene que aterrizar en su patrón |
+| `simplex-noise`, `d3-contour`, `d3-delaunay`, `roughjs` | Nada de eso: ruido simplex, Poisson, marching squares y trazo a mano propios en `kit-patrones.cjs` | Son unas 300 líneas y así no hay dependencias, ni ESM contra CommonJS en el kit |
+| unDraw y Open Peeps | Open Doodles (CC0) bajadas y recoloreables; unDraw solo por ruta, bajado a mano | La licencia de unDraw prohíbe la descarga automatizada; las Open Doodles están empaquetadas en react-open-doodles (MIT) |
+| Íconos «desde una caché» | `tools/iconos.mjs` + `tools/cache/iconos/` commiteada, con la licencia de cada colección | `kit.icono()` avisa cuando la colección pide crédito (game-icons) |
+| Lottie (opcional) | No se hizo | Era la fase 6 opcional; nada del catálogo lo necesitó |
+
+Además salió un bug ajeno al kit: en Windows con Node 24, `process.exit()` justo
+después de un `fetch` revienta libuv. Los descargadores usan `process.exitCode`.
 
 ## Fuentes
 

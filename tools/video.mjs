@@ -7,6 +7,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { execFileSync, spawnSync } from 'node:child_process';
+import { hayTransiciones, leerTransicion, unir as unirConTransiciones } from './transiciones.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const deck = (process.argv[2] || '').replace(/[\\/]/g, '');
@@ -25,6 +26,8 @@ const env = Object.fromEntries(
 if (!env.FISH_API_KEY) { console.error('Falta FISH_API_KEY en .env'); process.exit(1); }
 
 const guion = JSON.parse(fs.readFileSync(rutaGuion, 'utf8'));
+// Un nombre de transición mal escrito debe fallar aquí, antes de pedir la voz.
+guion.slides.forEach((s, i) => { if (i > 0) leerTransicion(s.transicion, guion.transicion); });
 const out = path.join(dirDeck, 'video-out');
 const dirAudio = path.join(out, 'audio');
 const dirSlides = path.join(out, 'slides');
@@ -244,7 +247,7 @@ const dirSeg = path.join(out, 'seg');
 fs.mkdirSync(dirSeg, { recursive: true });
 const ff = args => execFileSync('ffmpeg', ['-y', '-v', 'error', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
 
-const lista = [];
+const lista = [], segmentos = [];
 for (const [i, c] of clips.entries()) {
   const png = pngEsperados[i];
   const seg = path.join(dirSeg, `seg-${String(c.slide).padStart(2, '0')}.mp4`);
@@ -267,12 +270,21 @@ for (const [i, c] of clips.entries()) {
     process.stdout.write(`▢ seg ${c.slide} (${total}s)\n`);
   }
   lista.push(`file '${seg.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`);
+  segmentos.push(seg);
 }
 const rutaLista = path.join(dirSeg, 'lista.txt');
 fs.writeFileSync(rutaLista, lista.join('\n'));
 
 const sinSubs = path.join(out, 'video-sin-subs.mp4');
-ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', sinSubs]);
+if (hayTransiciones(guion)) {
+  // "transicion" en guion.json (global o por lámina): xfade entre segmentos.
+  // La duración total no cambia, así que tiempos.json y los subtítulos valen.
+  const trans = clips.map((c, i) => (i === 0 ? null : leerTransicion(c.transicion, guion.transicion)));
+  console.log(`\nTransiciones: ${trans.slice(1).map(t => (t.corte ? 'corte' : t.tipo)).join(' · ')}`);
+  unirConTransiciones({ segmentos, totales: tiempos.map(t => t.dur), trans, salida: sinSubs });
+} else {
+  ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', sinSubs]);
+}
 
 // ── 4 · Quemar subtítulos (salvo que el guion los desactive) ─────────────
 // "subtitulos": "ninguno" (o false) deja el video solo con voz y animación:

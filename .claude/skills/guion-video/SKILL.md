@@ -27,6 +27,8 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 
 Para un video **solo con voz y animación** (sin nada quemado) pon `"subtitulos": "ninguno"` — es lo que piden los reportes semanales, donde la lámina ya trae el texto. Para **subtítulos estilo TikTok** agrega `"subtitulos": "karaoke"` y `"acento": "#RRGGBB"` (el acento del deck): líneas de 3 palabras grandes y centradas donde la palabra hablada se resalta con el acento, sincronizada con los timestamps reales. Sin esos campos, subtítulos clásicos de dos líneas.
 
+**Transiciones entre láminas**: `"transicion": "smoothleft"` (o `{ "tipo": "circleopen", "dur": 0.4 }`) en la raíz del guion las aplica a todas; `"transicion"` dentro de una slide cambia la que **entra** a esa lámina, y `"corte"` deja un corte seco. Son las de `xfade` de ffmpeg (`fade`, `smoothleft/right/up/down`, `circleopen`, `slideup`, `pixelize`, `radial`, `dissolve`, `zoomin`…; la lista completa está en `tools/transiciones.mjs`). No mueven la voz ni los subtítulos: la transición arranca justo cuando empieza la narración de la lámina siguiente. Úsalas con medida: una sola familia por video.
+
 ## Escribir el guion
 
 - **Narrativa primero (arco y flecha)**: define UNA frase que el espectador deba recordar al terminar; cada slide acumula tensión o contexto hacia ella y el cierre la dispara. Si una slide no empuja hacia esa frase, su narración sobra o se acorta.

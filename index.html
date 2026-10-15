@@ -312,6 +312,8 @@ const DECKS = [
     desc: 'El triple empate que se rompe al descontar bóveda y prestigio, con los collages completos de Lux, Ahri y MF.', acento: '#E75FB4', glow: '231, 95, 180' },
     { grupo: 'Creador de contenido', ruta: 'caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
     desc: 'De 25 a 450 dólares en un solo año: exaltadas, trascendentes y el tarjetazo del Hall of Legends.', acento: '#F5C042', glow: '245, 192, 66' },
+    { grupo: 'Laboratorio', ruta: 'lab/', titulo: 'Laboratorio de efectos', serie: 'KIT · CATÁLOGO', datos: 'KIT · 9:16 · 39 DIAP · GSAP 3.15', meta: '9:16 · 39 DIAPOSITIVAS · OCT 2026',
+    desc: 'El catálogo vivo del kit: recetas para texto, imagen, contenedores y transiciones, patrones generativos con semilla, íconos e ilustraciones.', acento: '#FF6A3D', glow: '255, 106, 61' },
 ];
 
 const portada = d => 'portadas/' + d.ruta.replace('/', '') + '.jpg';
@@ -350,7 +352,7 @@ DECKS.forEach((d, i) => {
 
 // Etiqueta corta para la cabecera; un grupo que no esté aquí sale con su
 // nombre completo, así el contador nunca se queda mudo al agregar categorías.
-const CORTO = { 'Profesional': 'PROFESIONAL', 'Reportes semanales': 'REPORTES', 'Charlas': 'CHARLAS', 'Creador de contenido': 'CONTENIDO' };
+const CORTO = { 'Profesional': 'PROFESIONAL', 'Reportes semanales': 'REPORTES', 'Charlas': 'CHARLAS', 'Creador de contenido': 'CONTENIDO', 'Laboratorio': 'LAB' };
 document.getElementById('cuenta').textContent =
   [...new Set(DECKS.map(d => d.grupo))]
     .map(g => DECKS.filter(d => d.grupo === g).length + ' ' + (CORTO[g] || g.toUpperCase()))
