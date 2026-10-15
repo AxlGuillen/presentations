@@ -91,6 +91,7 @@ npx serve .
 ## Roadmap
 
 - [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. El módulo queda listo para cuando se quiera publicar un video en una card.
+- [**Segunda tanda de efectos**](docs/efectos-svg.md): **propuesta**. 25 efectos nuevos sobre todo con SVG (quemado, tinta, contorno sacado del propio arte, cámara entre focos, sello, gráficas que se dibujan, partículas), con 8 recomendados y prototipos probados.
 - [**Animación y assets**](docs/animaciones-y-assets.md): **implementado**. GSAP 3.15 con todos sus plugins (`kit.gsap`), catálogo de efectos (`kit.efectos`), patrones generativos con semilla (`kit.patron`), íconos e ilustraciones en build-time (`kit.icono`, `kit.ilustracion`) y transiciones `xfade` en el video. Todo se ve en [`/lab/`](lab/).
 - [**Capa de audio y tours guiados**](docs/audio-y-tours.md): **propuesta**. Música de fondo con ducking y efectos puntuales enganchados a las animaciones (los tiempos ya los da `tiempos.json` + `anim.json`), y más adelante videos de QA o tours de producto sobre la app real en vez de un deck.
 

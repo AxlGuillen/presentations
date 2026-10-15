@@ -64,5 +64,5 @@ export function unir({ segmentos, totales, trans, salida, fps = 30 }) {
   execFileSync('ffmpeg', ['-y', '-v', 'error', ...segmentos.flatMap((s) => ['-i', s]),
     '-filter_complex', filtros.join(';'), '-map', '[vout]', '-map', '[aout]',
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
-    '-c:a', 'aac', '-b:a', '160k', salida], { stdio: ['ignore', 'inherit', 'inherit'] });
+    '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', salida], { stdio: ['ignore', 'inherit', 'inherit'] });
 }

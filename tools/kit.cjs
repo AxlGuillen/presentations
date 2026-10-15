@@ -165,11 +165,15 @@ const reproductor = ({ src = 'video.mp4', etiqueta = 'Reproducir', tecla = 'v',
 
     capa = document.createElement('div');
     capa.id = 'capa-video';
-    capa.hidden = true;
+    // OJO: la capa se oculta con display:none, no con el atributo hidden. hidden
+    // pone display:none desde la hoja del navegador, y el display:flex en línea
+    // le ganaba: la capa salía abierta al cargar y tapaba el deck entero.
     capa.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(9,13,24,.92);' +
-      'display:flex;align-items:center;justify-content:center;padding:3vh 3vw';
+      'display:none;align-items:center;justify-content:center;padding:3vh 3vw';
     video = document.createElement('video');
-    video.src = SRC;
+    // Sin src hasta que se abre: con src y preload el navegador bajaba ~10 s de
+    // video al entrar al deck aunque nadie le diera play.
+    video.preload = 'none';
     video.controls = true;
     video.playsInline = true;
     video.style.cssText = 'max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.55)';
@@ -185,13 +189,25 @@ const reproductor = ({ src = 'video.mp4', etiqueta = 'Reproducir', tecla = 'v',
     capa.appendChild(video);
     capa.appendChild(cerrar);
     document.body.appendChild(capa);
+    colocar();
+    window.addEventListener('resize', colocar);
+    if (document.fonts) document.fonts.ready.then(colocar);
+  }
+
+  // El botón va a la izquierda de «Presentar · P», midiendo su ancho real: con
+  // un right fijo de 150px los dos se enciman en cuanto el texto mide más.
+  function colocar() {
+    var p = document.getElementById('modo-presentacion');
+    var r = p && p.getBoundingClientRect();
+    btn.style.right = (r && r.width ? Math.round(window.innerWidth - r.left + 10) : 150) + 'px';
   }
 
   function alternar(forzar) {
     if (!btn) return;
     abierto = forzar === undefined ? !abierto : forzar;
-    capa.hidden = !abierto;
+    capa.style.display = abierto ? 'flex' : 'none';
     btn.style.opacity = abierto ? '1' : '.85';
+    if (abierto && !video.getAttribute('src')) video.src = SRC;
     if (abierto) video.play().catch(function () {});   // si el navegador lo bloquea, quedan los controles
     else {
       video.pause();
@@ -229,6 +245,7 @@ const reproductor = ({ src = 'video.mp4', etiqueta = 'Reproducir', tecla = 'v',
     var d = e.data;
     if (!btn || !d || typeof d.__omelette_presenting !== 'boolean') return;
     btn.style.display = d.__omelette_presenting ? 'none' : '';
+    setTimeout(colocar, 0);   // «Presentar · P» cambia de texto y de ancho
     if (d.__omelette_presenting) alternar(false);
   });
 

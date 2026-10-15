@@ -48,7 +48,10 @@ const puerto = servidor.address().port;
 const salida = path.join(raiz, deck, 'video-out', 'slides');
 fs.mkdirSync(salida, { recursive: true });
 
-const navegador = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--force-device-scale-factor=1', '--hide-scrollbars'] });
+// Sin freno: con la pantalla apagada o bloqueada Chrome baja a ~1 cuadro por
+// segundo (lo mismo que en cuadros.mjs).
+const navegador = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--force-device-scale-factor=1', '--hide-scrollbars',
+  '--disable-gpu-vsync', '--disable-frame-rate-limit', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
 const pagina = await navegador.newPage();
 await pagina.goto(`http://127.0.0.1:${puerto}/${deck}/`, { waitUntil: 'networkidle0' });
 
@@ -66,6 +69,7 @@ await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, 
 // Fuera cualquier interfaz que no sea la diapositiva (botón «Presentar», overlays)
 await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
 await pagina.evaluate(() => document.fonts.ready);
+const cdp = await pagina.createCDPSession();
 
 const rutas = [];
 for (let i = 0; i < n; i++) {
@@ -78,15 +82,31 @@ for (let i = 0; i < n; i++) {
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   }, i);
   // Los assets van diferidos: la slide se hidrata al activarse, así que hay que
-  // esperar a que sus imágenes aterricen antes de contar el tiempo de animación.
+  // esperar a que sus imágenes aterricen.
   await pagina.waitForFunction(idx => {
     const s = document.querySelectorAll('deck-stage section')[idx];
     return s && [...s.querySelectorAll('img')].every(i => i.complete);
   }, { timeout: 20000 }, i).catch(() => {});
-  // dejar correr las animaciones de entrada (las timelines GSAP llegan a ~1.8s)
-  await new Promise(r => setTimeout(r, 2600)); // margen para las timelines GSAP (la más larga hoy: ~1,8 s)
+  // Estado final SIN esperar: antes se dejaban correr 2,6 s por lámina. Ahora la
+  // timeline GSAP salta a su final (es la misma imagen: la animación es
+  // determinista) y las animaciones CSS de los decks viejos se terminan con la
+  // Web Animations API; las infinitas se dejan donde caían a los 2,6 s.
+  await pagina.evaluate(async idx => {
+    const s = document.querySelectorAll('deck-stage section')[idx];
+    const cuadro = () => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
+    if (window.gsap && window.animar) for (let k = 0; k < 40 && !s.__tl; k++) await new Promise(r => setTimeout(r, 25));
+    await cuadro();
+    if (s.__tl) { s.__tl.pause(); s.__tl.progress(1); }
+    for (const a of document.getAnimations()) {
+      try { a.finish(); } catch { a.currentTime = 2600; a.pause(); }
+    }
+    await cuadro();
+  }, i);
   const archivo = path.join(salida, `slide-${String(i + 1).padStart(2, '0')}.png`);
-  await pagina.screenshot({ path: archivo });
+  // Captura directa por CDP: 2,5 veces más rápida que page.screenshot() con los
+  // mismos píxeles (optimizeForSpeed solo comprime menos el PNG).
+  const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
+  fs.writeFileSync(archivo, Buffer.from(data, 'base64'));
   rutas.push(archivo);
   process.stdout.write(`  ✓ ${path.basename(archivo)}\n`);
 }

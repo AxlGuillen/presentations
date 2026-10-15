@@ -6,7 +6,9 @@
 // timestamps palabra por palabra → los subtítulos salen sin transcribir.
 import fs from 'node:fs';
 import path from 'node:path';
-import { execFileSync, spawnSync } from 'node:child_process';
+import { execFileSync, spawnSync, spawn } from 'node:child_process';
+import crypto from 'node:crypto';
+import os from 'node:os';
 import { hayTransiciones, leerTransicion, unir as unirConTransiciones } from './transiciones.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
@@ -83,7 +85,7 @@ function recortarOrillas(wav, palabras) {
 async function tts(texto, extra = {}) {
   const res = await fetch('https://api.fish.audio/v1/tts/stream/with-timestamp', {
     method: 'POST',
-    headers: { Authorization: `Bearer ${env.FISH_API_KEY}`, 'Content-Type': 'application/json', model: 's2.1-pro-free' },
+    headers: { Authorization: `Bearer ${env.FISH_API_KEY}`, 'Content-Type': 'application/json', model: MODELO },
     body: JSON.stringify({ text: texto, format: 'wav', reference_id: guion.voz || undefined, latency: 'normal', ...extra }),
   });
   if (!res.ok) throw new Error(`TTS ${res.status}: ${(await res.text()).slice(0, 200)}`);
@@ -117,30 +119,72 @@ async function tts(texto, extra = {}) {
   return { audio: Buffer.concat(trozos), palabras, dur };
 }
 
-const clips = [];
-for (const s of guion.slides) {
-  const wav = path.join(dirAudio, `clip-${String(s.slide).padStart(2, '0')}.wav`);
-  process.stdout.write(`♪ slide ${s.slide} (${s.texto.length} chars)… `);
+// Caché de voz: la clave es todo lo que cambia el audio (texto, voz, modelo,
+// prosodia, temperatura). Regenerar un video tras tocar dos láminas solo le
+// pide esas dos a Fish; el resto sale de video-out/audio/cache/.
+// Las peticiones van en paralelo ("paralelo_voz" en guion.json, 3 por
+// defecto) con reintentos ante 429 o errores 5xx.
+const MODELO = 's2.1-pro-free';
+const dirCache = path.join(dirAudio, 'cache');
+fs.mkdirSync(dirCache, { recursive: true });
+const espera = ms => new Promise(r => setTimeout(r, ms));
+async function conReintentos(fn) {
+  for (let intento = 0; ; intento++) {
+    try { return await fn(); } catch (e) {
+      const estado = +((/TTS (\d+)/.exec(e.message) || [])[1] || 0);
+      const reintentable = !estado || estado === 429 || estado >= 500;
+      if (!reintentable || intento >= 4) throw e;
+      await espera(1500 * 2 ** intento);
+    }
+  }
+}
+async function voz(s) {
   // prosodia opcional desde guion.json: "velocidad" (0.5–2, global o por
   // slide) y "temperatura" (global; más baja = clips más consistentes)
   const extra = {};
   const velocidad = s.velocidad ?? guion.velocidad;
   if (velocidad) extra.prosody = { speed: velocidad };
   if (guion.temperatura != null) extra.temperature = guion.temperatura;
-  const { audio, palabras, dur } = await tts(s.texto, extra);
-  fs.writeFileSync(wav, audio);
+  const clave = crypto.createHash('sha256').update(JSON.stringify({ texto: s.texto, voz: guion.voz || null, modelo: MODELO, extra })).digest('hex').slice(0, 24);
+  const wavC = path.join(dirCache, `${clave}.wav`), jsonC = path.join(dirCache, `${clave}.json`);
+  if (fs.existsSync(wavC) && fs.existsSync(jsonC)) return { ...JSON.parse(fs.readFileSync(jsonC, 'utf8')), wavC, enCache: true };
+  const { audio, palabras, dur } = await conReintentos(() => tts(s.texto, extra));
+  fs.writeFileSync(wavC, audio);
+  fs.writeFileSync(jsonC, JSON.stringify({ palabras, dur }));
+  return { palabras, dur, wavC, enCache: false };
+}
+
+const tVoz = performance.now();
+const voces = new Array(guion.slides.length);
+let siguienteVoz = 0;
+const PARALELO_VOZ = Math.max(1, guion.paralelo_voz ?? 3);
+await Promise.all(Array.from({ length: Math.min(PARALELO_VOZ, guion.slides.length) }, async () => {
+  while (siguienteVoz < guion.slides.length) {
+    const k = siguienteVoz++;
+    voces[k] = await voz(guion.slides[k]);
+  }
+}));
+
+const clips = [];
+for (const [k, s] of guion.slides.entries()) {
+  const v = voces[k];
+  const wav = path.join(dirAudio, `clip-${String(s.slide).padStart(2, '0')}.wav`);
+  fs.copyFileSync(v.wavC, wav);   // recortarOrillas() escribe sobre esta copia, nunca sobre la caché
+  const origen = v.enCache ? 'caché' : 'Fish';
   // duración real medida por ffprobe (más fiable que el reporte del API)
   if (guion.recortar) {
     const antes = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
-    const r = recortarOrillas(wav, palabras);
+    const r = recortarOrillas(wav, v.palabras);
     clips.push({ ...s, wav, palabras: r.palabras, dur: r.dur });
-    console.log(`${r.dur.toFixed(2)}s (recortado de ${antes.toFixed(2)}s) · ${palabras.length} palabras`);
+    console.log(`♪ slide ${s.slide} (${origen}) ${r.dur.toFixed(2)}s (recortado de ${antes.toFixed(2)}s) · ${v.palabras.length} palabras`);
     continue;
   }
   const real = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', wav]).toString());
-  clips.push({ ...s, wav, palabras, dur: real || dur });
-  console.log(`${(real || dur).toFixed(2)}s · ${palabras.length} palabras`);
+  clips.push({ ...s, wav, palabras: v.palabras, dur: real || v.dur });
+  console.log(`♪ slide ${s.slide} (${origen}) ${(real || v.dur).toFixed(2)}s · ${v.palabras.length} palabras`);
 }
+const pedidas = voces.filter(v => !v.enCache).length;
+console.log(`Voz: ${pedidas} pedidas a Fish, ${voces.length - pedidas} de la caché · ${((performance.now() - tVoz) / 1000).toFixed(1)} s`);
 
 // ── 2 · Subtítulos (SRT) con tiempos globales ────────────────────────────
 const srtT = t => {
@@ -247,31 +291,44 @@ const dirSeg = path.join(out, 'seg');
 fs.mkdirSync(dirSeg, { recursive: true });
 const ff = args => execFileSync('ffmpeg', ['-y', '-v', 'error', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
 
+// Los segmentos se codifican en paralelo (cada ffmpeg ya usa varios hilos;
+// con 2–4 a la vez se aprovechan los núcleos que deja libres). Si después hay
+// otra pasada de codificación (subtítulos o transiciones), los segmentos van
+// en 'veryfast' con un CRF un poco más alto en calidad: son intermedios.
+const ffAsync = args => new Promise((ok, mal) => {
+  const p = spawn('ffmpeg', ['-y', '-v', 'error', ...args], { stdio: ['ignore', 'inherit', 'inherit'] });
+  p.on('close', c => (c === 0 ? ok() : mal(new Error(`ffmpeg salió con ${c}`))));
+});
+const segIntermedio = !sinSubtitulos || hayTransiciones(guion);
+const tSeg = performance.now();
 const lista = [], segmentos = [];
-for (const [i, c] of clips.entries()) {
+const trabajos = clips.map((c, i) => async () => {
   const png = pngEsperados[i];
   const seg = path.join(dirSeg, `seg-${String(c.slide).padStart(2, '0')}.mp4`);
   const total = (LEAD + c.dur + TAIL).toFixed(3);
   const anim = path.join(dirAnim, `anim-${String(c.slide).padStart(2, '0')}.mp4`);
   const audioArgs = ['-af', `adelay=${Math.round(LEAD * 1000)}|${Math.round(LEAD * 1000)},apad`, '-t', total];
-  const codecs = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
+  const codecs = ['-c:v', 'libx264', '-preset', segIntermedio ? 'veryfast' : 'medium', '-crf', segIntermedio ? '16' : '18', '-pix_fmt', 'yuv420p',
                   '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-ac', '2'];
   if (fs.existsSync(anim)) {
     // clip animado + congelar el último cuadro hasta cubrir la narración
     const durAnim = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', anim]).toString());
     const resto = Math.max(0, +total - durAnim).toFixed(3);
-    ff(['-i', anim, '-i', c.wav,
-        '-vf', `tpad=stop_mode=clone:stop_duration=${resto}`,
-        ...audioArgs, ...codecs, seg]);
+    await ffAsync(['-i', anim, '-i', c.wav, '-vf', `tpad=stop_mode=clone:stop_duration=${resto}`, ...audioArgs, ...codecs, seg]);
     process.stdout.write(`▢ seg ${c.slide} (${total}s · animado ${durAnim.toFixed(2)}s)\n`);
   } else {
-    ff(['-loop', '1', '-framerate', '30', '-i', png, '-i', c.wav,
-        ...audioArgs, ...codecs, seg]);
+    await ffAsync(['-loop', '1', '-framerate', '30', '-i', png, '-i', c.wav, ...audioArgs, ...codecs, seg]);
     process.stdout.write(`▢ seg ${c.slide} (${total}s)\n`);
   }
-  lista.push(`file '${seg.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`);
-  segmentos.push(seg);
-}
+  lista[i] = `file '${seg.replace(/\\/g, '/').replace(/'/g, "'\\''")}'`;
+  segmentos[i] = seg;
+});
+let siguienteSeg = 0;
+const PARALELO_SEG = Math.max(1, Math.min(4, Math.floor(os.cpus().length / 3)));
+await Promise.all(Array.from({ length: Math.min(PARALELO_SEG, trabajos.length) }, async () => {
+  while (siguienteSeg < trabajos.length) await trabajos[siguienteSeg++]();
+}));
+console.log(`Segmentos: ${segmentos.length} en ${((performance.now() - tSeg) / 1000).toFixed(1)} s (${PARALELO_SEG} a la vez)`);
 const rutaLista = path.join(dirSeg, 'lista.txt');
 fs.writeFileSync(rutaLista, lista.join('\n'));
 
@@ -283,7 +340,9 @@ if (hayTransiciones(guion)) {
   console.log(`\nTransiciones: ${trans.slice(1).map(t => (t.corte ? 'corte' : t.tipo)).join(' · ')}`);
   unirConTransiciones({ segmentos, totales: tiempos.map(t => t.dur), trans, salida: sinSubs });
 } else {
-  ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', sinSubs]);
+  // +faststart: el índice (moov) al principio, para que el navegador empiece a
+  // reproducir sin bajar antes la cola del archivo.
+  ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', '-movflags', '+faststart', sinSubs]);
 }
 
 // ── 4 · Quemar subtítulos (salvo que el guion los desactive) ─────────────
@@ -300,7 +359,7 @@ if (sinSubtitulos) {
   execFileSync('ffmpeg', ['-y', '-v', 'error', '-i', rel(sinSubs),
     '-vf', esKaraoke ? `ass=${rel(rutaAss)}` : `subtitles=${rel(rutaSrt)}:force_style='${estilo}'`,
     '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p',
-    '-c:a', 'copy', rel(final)], { cwd: out, stdio: ['ignore', 'inherit', 'inherit'] });
+    '-c:a', 'copy', '-movflags', '+faststart', rel(final)], { cwd: out, stdio: ['ignore', 'inherit', 'inherit'] });
 }
 
 const st = fs.statSync(final);

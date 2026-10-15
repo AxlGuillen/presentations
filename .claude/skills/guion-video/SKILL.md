@@ -27,6 +27,8 @@ Convierte un deck en `video-out/video.mp4` narrado con subtítulos sincronizados
 
 Para un video **solo con voz y animación** (sin nada quemado) pon `"subtitulos": "ninguno"` — es lo que piden los reportes semanales, donde la lámina ya trae el texto. Para **subtítulos estilo TikTok** agrega `"subtitulos": "karaoke"` y `"acento": "#RRGGBB"` (el acento del deck): líneas de 3 palabras grandes y centradas donde la palabra hablada se resalta con el acento, sincronizada con los timestamps reales. Sin esos campos, subtítulos clásicos de dos líneas.
 
+**Regenerar es barato**: la voz se guarda en caché (`video-out/audio/cache/`) por texto + voz + modelo + prosodia, así que después de corregir el guion solo se le piden a Fish las láminas que cambiaron; el resto del montaje (capturas, cuadros y segmentos) va en paralelo. Las peticiones a Fish van 3 a la vez; `"paralelo_voz": 1` las pone en serie si la cuenta da errores 429. Si el video se renderiza con la pantalla apagada ya no se arrastra (antes Chrome bajaba a 1 cuadro por segundo).
+
 **Transiciones entre láminas**: `"transicion": "smoothleft"` (o `{ "tipo": "circleopen", "dur": 0.4 }`) en la raíz del guion las aplica a todas; `"transicion"` dentro de una slide cambia la que **entra** a esa lámina, y `"corte"` deja un corte seco. Son las de `xfade` de ffmpeg (`fade`, `smoothleft/right/up/down`, `circleopen`, `slideup`, `pixelize`, `radial`, `dissolve`, `zoomin`…; la lista completa está en `tools/transiciones.mjs`). No mueven la voz ni los subtítulos: la transición arranca justo cuando empieza la narración de la lámina siguiente. Úsalas con medida: una sola familia por video.
 
 ## Escribir el guion
