@@ -437,9 +437,9 @@ const gsap = (dir, plugins = []) => {
     (globales.length ? `\n<script>gsap.registerPlugin(${globales.join(', ')});</${'script'}>` : '');
 };
 
-const { efectos, pincel, duotono, glitch } = require('./kit-efectos.cjs');
+const { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno } = require('./kit-efectos.cjs');
 const { patron, patronFondo } = require('./kit-patrones.cjs');
 const { icono, ilustracion } = require('./kit-recursos.cjs');
 
 module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
-  gsap, efectos, pincel, duotono, glitch, patron, patronFondo, icono, ilustracion };
+  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, patron, patronFondo, icono, ilustracion };

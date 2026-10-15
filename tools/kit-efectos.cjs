@@ -454,8 +454,174 @@ const efectos = () => `<script>
     }
   };
 
+  // ── SEGUNDA TANDA (docs/efectos-svg.md) ───────────────────────────────
+  // Todas sin plugins y sin azar: los puntos que viajan por un camino se
+  // calculan con getPointAtLength() en cada cuadro, así el seek es exacto.
+
+  // Quemado: la imagen aparece (o se deshace) a manchas con borde de brasa.
+  // Necesita el filtro de kit.quemado(); GSAP mueve el umbral del ruido.
+  R.quemado = function (tl, el, o) {
+    var f = document.getElementById(o.filtro || 'efx-quemado');
+    if (!f) return;
+    guardaEstilo(el);
+    el.style.filter = 'url(#' + f.id + ')';
+    var a1 = f.querySelector('[data-umbral="1"]'), a2 = f.querySelector('[data-umbral="2"]');
+    var M = function (k) { return '0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -30 0 0 0 ' + k; };
+    var aparece = (o.hacia || 'aparece') === 'aparece', desde = aparece ? 4 : 36, hasta = aparece ? 36 : 4;
+    var dur = o.dur || 1.6, en = o.en || 0, ease = 'power1.inOut';
+    tl.fromTo(a1, { attr: { values: M(desde) } }, { attr: { values: M(hasta) }, duration: dur, ease: ease }, en)
+      .fromTo(a2, { attr: { values: M(desde + 0.9) } }, { attr: { values: M(hasta + 0.9) }, duration: dur, ease: ease }, en);
+  };
+
+  // Tinta: una mancha orgánica crece desde un punto y destapa el arte. La
+  // máscara (círculo deformado con ruido) la emite kit.tinta().
+  R.tinta = function (tl, el, o) {
+    var m = document.getElementById(o.mascara || 'efx-tinta');
+    if (!m) return;
+    guardaEstilo(el);
+    el.style.webkitMask = 'url(#' + m.id + ')';
+    el.style.mask = 'url(#' + m.id + ')';
+    var c = m.querySelector('circle');
+    tl.fromTo(c, { attr: { r: 0 } }, { attr: { r: parseFloat(c.getAttribute('data-r')) }, duration: o.dur || 1.6, ease: o.ease || 'power2.in' }, o.en || 0);
+  };
+
+  // Contorno: el arte aparece primero como dibujo de líneas sacado de sí mismo
+  // (el <svg data-contorno> de kit.contorno()) y luego entra a color.
+  R.contorno = function (tl, el, o) {
+    var svg = el.querySelector('[data-contorno]'), img = imagenDe(el);
+    if (!svg) return;
+    // Son cientos de trazos: el escalón se reparte en la mitad de la duración
+    // para que el dibujo termine a tiempo pase lo que pase con el arte.
+    var en = o.en || 0, dur = o.dur || 1.5, trazos = svg.querySelectorAll('path');
+    var esc = o.escalon == null ? (dur * 0.5) / Math.max(1, trazos.length) : o.escalon;
+    dibujar(tl, trazos, { en: en, dur: dur - esc * trazos.length, escalon: esc, ease: 'power1.inOut' });
+    var color = en + dur * 0.9;
+    if (img) tl.fromTo(img, { opacity: 0 }, { opacity: 1, duration: o.fundido || 0.9, ease: 'power1.inOut' }, color);
+    tl.fromTo(svg, { opacity: 1 }, { opacity: parseFloat(svg.getAttribute('data-queda') || '0.18'), duration: o.fundido || 0.9 }, color + 0.1);
+  };
+
+  // Cometa: el trazo se dibuja con un punto brillante en la punta.
+  R.cometa = function (tl, el, o) {
+    var NS = 'http://www.w3.org/2000/svg';
+    var caminos = lista(el.querySelectorAll('[data-camino]'));
+    if (!caminos.length) caminos = lista(el.querySelectorAll('path'));
+    caminos.forEach(function (c, k) {
+      guardaEstilo(c);
+      var L = c.getTotalLength(), color = o.color || c.getAttribute('stroke') || '#FFFFFF', r = o.radio || 8;
+      var punta = document.createElementNS(NS, 'g');
+      [[r * 3.2, 0.16], [r * 1.9, 0.35], [r, 1]].forEach(function (a, j) {
+        var ci = document.createElementNS(NS, 'circle');
+        ci.setAttribute('r', a[0]);
+        ci.setAttribute('fill', j === 2 ? '#FFFFFF' : color);
+        ci.setAttribute('opacity', a[1]);
+        punta.appendChild(ci);
+      });
+      c.parentNode.appendChild(punta);
+      deshacer(el, function () { punta.remove(); });
+      c.style.strokeDasharray = L + 1;
+      var est = { p: 0 };
+      var pinta = function () {
+        var q = c.getPointAtLength(L * est.p);
+        punta.setAttribute('transform', 'translate(' + q.x + ' ' + q.y + ')');
+        c.style.strokeDashoffset = (L + 1) * (1 - est.p);
+      };
+      var ini = (o.en || 0) + k * (o.escalon == null ? 0.25 : o.escalon), dur = o.dur || 1.6;
+      tl.fromTo(est, { p: 0 }, { p: 1, duration: dur, ease: o.ease || 'power2.inOut', immediateRender: true, onUpdate: pinta }, ini);
+      if (o.queda !== 'si') tl.to(punta, { opacity: 0, duration: 0.35 }, ini + dur);
+      pinta();
+    });
+  };
+
+  // Sello: cae desde grande, golpea y la lámina tiembla (sin azar: el temblor
+  // es una secuencia fija que se apaga).
+  R.sello = function (tl, el, o) {
+    var en = o.en || 0, dur = o.dur || 0.42;
+    tl.from(el, { scale: o.desde || 2.4, opacity: 0, rotation: '+=10', duration: dur, ease: 'power4.in' }, en);
+    if (o.temblor === 'no') return;
+    var f = o.fuerza || 14, blanco = el.parentElement;
+    tl.to(blanco, { keyframes: [{ x: -f, y: f * 0.5, duration: 0.05 }, { x: f * 0.8, y: -f * 0.4, duration: 0.05 },
+      { x: -f * 0.5, y: f * 0.3, duration: 0.05 }, { x: f * 0.25, y: -f * 0.15, duration: 0.05 }, { x: 0, y: 0, duration: 0.06 }], ease: 'none' }, en + dur);
+  };
+
+  // Ventana: el nombre gigante es la ventana al arte; la cámara entra por las
+  // letras hasta la imagen completa. La máscara la emite kit.ventana().
+  R.ventana = function (tl, el, o) {
+    var m = document.getElementById(o.mascara || 'efx-ventana');
+    if (!m) return;
+    guardaEstilo(el);
+    el.style.webkitMask = 'url(#' + m.id + ')';
+    el.style.mask = 'url(#' + m.id + ')';
+    var letras = m.querySelector('[data-letras]'), fondo = m.querySelector('[data-fondo-ventana]');
+    var cx = parseFloat(letras.getAttribute('data-cx')), cy = parseFloat(letras.getAttribute('data-cy'));
+    var en = o.en || 0.5, dur = o.dur || 1.4, z = o.zoom || 14, est = { s: 1 };
+    var pinta = function () {
+      letras.setAttribute('transform', 'translate(' + cx + ' ' + cy + ') scale(' + est.s + ') translate(' + (-cx) + ' ' + (-cy) + ')');
+    };
+    tl.fromTo(est, { s: 1 }, { s: z, duration: dur, ease: 'power3.in', immediateRender: true, onUpdate: pinta }, en)
+      .fromTo(fondo, { attr: { opacity: 0 } }, { attr: { opacity: 1 }, duration: dur * 0.45, ease: 'power1.in' }, en + dur * 0.6);
+    pinta();
+  };
+
+  // Cámara: paneo y zoom entre varios focos del arte.
+  // data-focos="62 30 2.2; 40 70 1.8; 50 50 1"  (x% y% zoom por foco)
+  R.camara = function (tl, el, o) {
+    var img = imagenDe(el) || el.firstElementChild;
+    if (!img) return;
+    var W = el.clientWidth, H = el.clientHeight;
+    var focos = String(o.focos || '50 50 1').split(';').map(function (f) {
+      var p = f.split(' ').filter(function (x) { return x; }).map(parseFloat);
+      var z = p[2] || 1, x = W / 2 - (p[0] / 100) * W * z, y = H / 2 - (p[1] / 100) * H * z;
+      return { scale: z, x: Math.min(0, Math.max(W - W * z, x)), y: Math.min(0, Math.max(H - H * z, y)), transformOrigin: '0 0' };
+    });
+    var t = o.en || 0, paso = o.dur || 0.9, pausa = o.pausa == null ? 0.3 : o.pausa;
+    for (var i = 1; i < focos.length; i++) {
+      tl.fromTo(img, focos[i - 1], Object.assign({ duration: paso, ease: 'power2.inOut', immediateRender: i === 1 }, focos[i]), t + (i - 1) * (paso + pausa));
+    }
+  };
+
+  // Línea: la gráfica de kit.grafica() se dibuja, el área se destapa al mismo
+  // ritmo, un punto va en la punta y el valor lo acompaña.
+  R.linea = function (tl, el, o) {
+    var svg = el.matches && el.matches('[data-grafica]') ? el : el.querySelector('[data-grafica]');
+    if (!svg) return;
+    var ln = svg.querySelector('[data-linea]'), av = svg.querySelector('[data-avance]'), punta = svg.querySelector('[data-punta]');
+    var val = svg.querySelector('[data-valor]'), hitos = lista(svg.querySelectorAll('[data-hito]'));
+    var xs = JSON.parse(svg.getAttribute('data-xs')), vs = JSON.parse(svg.getAttribute('data-vs'));
+    var W = parseFloat(av.getAttribute('width')), L = ln.getTotalLength();
+    var sep = svg.getAttribute('data-sep') || ' ', dec = +(svg.getAttribute('data-dec') || 0), suf = svg.getAttribute('data-suf') || '';
+    var fmt = function (v) {
+      var t = v.toFixed(dec).split('.'), e = t[0], s = '';
+      while (e.length > 3) { s = sep + e.slice(-3) + s; e = e.slice(0, -3); }
+      return e + s + (t[1] ? ',' + t[1] : '') + suf;
+    };
+    var estado = { punta: punta.getAttribute('transform'), texto: val.textContent, x: val.getAttribute('x'), y: val.getAttribute('y') };
+    guardaEstilo(ln);
+    deshacer(el, function () {
+      av.setAttribute('width', W); punta.setAttribute('transform', estado.punta);
+      val.textContent = estado.texto; val.setAttribute('x', estado.x); val.setAttribute('y', estado.y);
+      hitos.forEach(function (h) { h.style.opacity = ''; });
+    });
+    ln.style.strokeDasharray = L + 1;
+    var est = { p: 0 };
+    var pinta = function () {
+      var q = ln.getPointAtLength(L * est.p);
+      ln.style.strokeDashoffset = (L + 1) * (1 - est.p);
+      av.setAttribute('width', q.x);
+      punta.setAttribute('transform', 'translate(' + q.x + ' ' + q.y + ')');
+      var k = 0;
+      while (k < xs.length - 2 && q.x > xs[k + 1]) k++;
+      var f = Math.max(0, Math.min(1, (q.x - xs[k]) / ((xs[k + 1] - xs[k]) || 1)));
+      val.textContent = fmt(vs[k] + (vs[k + 1] - vs[k]) * f);
+      val.setAttribute('x', Math.max(60, Math.min(W - 60, q.x)));
+      val.setAttribute('y', q.y - 34);
+      hitos.forEach(function (h) { h.style.opacity = parseFloat(h.getAttribute('cx')) <= q.x + 0.5 ? 1 : 0; });
+    };
+    tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 1.8, ease: o.ease || 'power1.inOut', immediateRender: true, onUpdate: pinta }, o.en || 0);
+    pinta();
+  };
+
   // ── API ────────────────────────────────────────────────────────────────
-  var NUM = /^-?\\d+(\\.\\d+)?$/;
+  var NUM =/^-?\\d+(\\.\\d+)?$/;
   function leer(el) {
     var o = {}, d = el.dataset;
     for (var k in d) {
@@ -519,4 +685,142 @@ const glitch = (id = 'efx-glitch', { frecuencia = '0.0006 0.11' } = {}) =>
   `<feTurbulence type="fractalNoise" baseFrequency="${frecuencia}" numOctaves="1" seed="1" result="ruido"/>` +
   `<feDisplacementMap in="SourceGraphic" in2="ruido" scale="0" xChannelSelector="R" yChannelSelector="G"/></filter></svg>`;
 
-module.exports = { efectos, pincel, duotono, glitch };
+// ── Segunda tanda: piezas de build-time ──────────────────────────────────
+const svgOculto = (cuerpo) => `<svg width="0" height="0" style="position:absolute" aria-hidden="true">${cuerpo}</svg>`;
+const n1 = (v) => Math.round(v * 10) / 10;
+
+/** Filtro de la receta 'quemado': ruido fijo con dos umbrales; el borde entre
+ *  ellos se pinta de `brasa` con un brillo. Va una vez en el HTML. */
+const quemado = (id = 'efx-quemado', { brasa = '#FF7A1A', frecuencia = 0.005, semilla = 7 } = {}) => {
+  const M = (k) => `0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -30 0 0 0 ${k}`;
+  return svgOculto(`<filter id="${id}" x="0" y="0" width="100%" height="100%" color-interpolation-filters="sRGB">` +
+    `<feTurbulence type="fractalNoise" baseFrequency="${frecuencia}" numOctaves="4" seed="${semilla}" result="n"/>` +
+    `<feColorMatrix data-umbral="1" in="n" type="matrix" values="${M(36)}" result="a"/>` +
+    `<feColorMatrix data-umbral="2" in="n" type="matrix" values="${M(36.9)}" result="b"/>` +
+    `<feComposite in="b" in2="a" operator="out" result="borde"/>` +
+    `<feFlood flood-color="${brasa}"/><feComposite in2="borde" operator="in" result="brasa"/>` +
+    `<feGaussianBlur in="brasa" stdDeviation="3" result="brasaB"/>` +
+    `<feComposite in="SourceGraphic" in2="a" operator="in" result="img"/>` +
+    `<feMerge><feMergeNode in="img"/><feMergeNode in="brasaB"/><feMergeNode in="brasa"/></feMerge></filter>`);
+};
+
+/** Máscara de la receta 'tinta': un círculo deformado con ruido que crece desde
+ *  `origen` (fracciones). `ancho`/`alto` son los del elemento enmascarado. */
+const tinta = (id = 'efx-tinta', { ancho = 912, alto = 960, origen = [0.5, 0.5], semilla = 3, escala = 110 } = {}) => {
+  const cx = ancho * origen[0], cy = alto * origen[1];
+  const r = Math.hypot(Math.max(cx, ancho - cx), Math.max(cy, alto - cy)) + escala;
+  return svgOculto(`<defs><filter id="${id}-f" filterUnits="userSpaceOnUse" x="${-ancho * 0.3}" y="${-alto * 0.3}" width="${ancho * 1.6}" height="${alto * 1.6}">` +
+    `<feTurbulence type="fractalNoise" baseFrequency="0.011" numOctaves="3" seed="${semilla}" result="n"/>` +
+    `<feDisplacementMap in="SourceGraphic" in2="n" scale="${escala}" xChannelSelector="R" yChannelSelector="G"/></filter>` +
+    `<mask id="${id}" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${ancho}" height="${alto}">` +
+    `<g filter="url(#${id}-f)"><circle cx="${n1(cx)}" cy="${n1(cy)}" r="${n1(r)}" data-r="${n1(r)}" fill="#FFFFFF"/></g></mask></defs>`);
+};
+
+/** Máscara de la receta 'ventana': el `texto` gigante, que luego se amplía
+ *  desde `origen` hasta abrir la imagen entera. */
+const ventana = (texto, { id = 'efx-ventana', ancho = 912, alto = 960, origen = [0.5, 0.5], fuente = "'Bebas Neue', Impact, sans-serif", tam = null } = {}) => {
+  const fs = tam || Math.min(alto * 0.72, (ancho * 0.92) / Math.max(1, texto.length) * 3.2);
+  return svgOculto(`<mask id="${id}" maskUnits="userSpaceOnUse" maskContentUnits="userSpaceOnUse" x="0" y="0" width="${ancho}" height="${alto}">` +
+    `<g data-letras data-cx="${n1(ancho * origen[0])}" data-cy="${n1(alto * origen[1])}"><text x="${ancho / 2}" y="${alto / 2}" text-anchor="middle" dominant-baseline="central" ` +
+    `font-family="${fuente}" font-size="${n1(fs)}" fill="#FFFFFF" textLength="${n1(ancho * 0.9)}" lengthAdjust="spacingAndGlyphs">${texto}</text></g>` +
+    `<rect data-fondo-ventana x="0" y="0" width="${ancho}" height="${alto}" fill="#FFFFFF" opacity="1"/></mask>`);
+};
+
+/** Sello de tinta (receta 'sello'): marco doble y texto, con huecos de tinta y
+ *  bordes irregulares por un ruido con semilla fija. */
+const sello = (texto, { color = '#E5483E', ancho = 560, alto = 220, rotacion = -8, semilla = 4 } = {}) => {
+  const id = `sello-${semillaDe(texto + semilla).toString(36)}`;
+  return `<svg data-sello viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="${texto}" style="display:block;width:${ancho}px;max-width:100%;height:auto;transform:rotate(${rotacion}deg)">` +
+    `<defs><filter id="${id}" x="-5%" y="-5%" width="110%" height="110%">` +
+    `<feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="2" seed="${semilla}" result="g"/>` +
+    `<feColorMatrix in="g" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -3 0 0 0 2.35" result="huecos"/>` +
+    `<feComposite in="SourceGraphic" in2="huecos" operator="in" result="tinta"/>` +
+    `<feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="2" seed="${semilla + 1}" result="ondas"/>` +
+    `<feDisplacementMap in="tinta" in2="ondas" scale="6" xChannelSelector="R" yChannelSelector="G"/></filter></defs>` +
+    `<g filter="url(#${id})" fill="none" stroke="${color}">` +
+    `<rect x="8" y="8" width="${ancho - 16}" height="${alto - 16}" rx="18" stroke-width="10"/>` +
+    `<rect x="26" y="26" width="${ancho - 52}" height="${alto - 52}" rx="10" stroke-width="3"/>` +
+    `<text x="${ancho / 2}" y="${alto / 2 + 4}" text-anchor="middle" dominant-baseline="central" font-family="'Bebas Neue', Impact, sans-serif" ` +
+    `font-size="${n1(alto * 0.58)}" fill="${color}" stroke="none" textLength="${ancho - 100}" lengthAdjust="spacingAndGlyphs">${texto}</text></g></svg>`;
+};
+
+/** Gráfica de línea (receta 'linea'), con viewBox en píxeles reales para que
+ *  getTotalLength() cuadre con lo dibujado. `valores` en orden; `etiquetas`
+ *  opcionales bajo cada punto. */
+const grafica = (valores, { ancho = 912, alto = 560, color = '#FF6A3D', area = color, margen = 60, min = null, max = null,
+  etiquetas = [], textoColor = '#F2EFE8', ejeColor = 'rgba(255,255,255,.14)', decimales = 0, sufijo = '', separador = ' ', tamValor = 46 } = {}) => {
+  const lo = min ?? Math.min(...valores), hi = max ?? Math.max(...valores);
+  const xs = valores.map((_, i) => margen + (i * (ancho - 2 * margen)) / Math.max(1, valores.length - 1));
+  const ys = valores.map((v) => alto - margen - ((v - lo) / ((hi - lo) || 1)) * (alto - 2 * margen - tamValor));
+  const linea = 'M' + xs.map((x, i) => `${n1(x)} ${n1(ys[i])}`).join('L');
+  const zona = `${linea}L${n1(xs.at(-1))} ${alto - margen}L${n1(xs[0])} ${alto - margen}Z`;
+  const id = `graf-${semillaDe(valores.join(',') + color).toString(36)}`;
+  const fmt = (v) => { const t = v.toFixed(decimales).split('.'); return t[0].replace(/\B(?=(\d{3})+(?!\d))/g, separador) + (t[1] ? ',' + t[1] : '') + sufijo; };
+  return `<svg data-grafica viewBox="0 0 ${ancho} ${alto}" data-xs="${JSON.stringify(xs.map(n1))}" data-vs="${JSON.stringify(valores)}" data-sep="${separador}" data-dec="${decimales}" data-suf="${sufijo}" ` +
+    `style="display:block;width:100%;height:auto;overflow:visible" role="img" aria-label="Gráfica: ${valores.join(', ')}">` +
+    `<defs><linearGradient id="${id}-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${area}" stop-opacity=".42"/><stop offset="1" stop-color="${area}" stop-opacity="0"/></linearGradient>` +
+    `<clipPath id="${id}-c"><rect data-avance x="0" y="0" width="${ancho}" height="${alto}"/></clipPath></defs>` +
+    `<line x1="${margen}" y1="${alto - margen}" x2="${ancho - margen}" y2="${alto - margen}" stroke="${ejeColor}" stroke-width="2"/>` +
+    etiquetas.map((e, i) => `<text x="${n1(xs[i])}" y="${alto - margen + 34}" text-anchor="middle" font-family="'Barlow', system-ui, sans-serif" font-size="22" font-weight="600" fill="${ejeColor.replace(/[\d.]+\)$/, '.55)')}">${e}</text>`).join('') +
+    `<path data-area d="${zona}" fill="url(#${id}-g)" clip-path="url(#${id}-c)"/>` +
+    `<path data-linea d="${linea}" fill="none" stroke="${color}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>` +
+    xs.map((x, i) => `<circle data-hito cx="${n1(x)}" cy="${n1(ys[i])}" r="7" fill="${color}"/>`).join('') +
+    `<g data-punta transform="translate(${n1(xs.at(-1))} ${n1(ys.at(-1))})"><circle r="18" fill="${color}" opacity=".3"/><circle r="9" fill="#FFFFFF"/></g>` +
+    `<text data-valor x="${n1(Math.min(ancho - 60, xs.at(-1)))}" y="${n1(ys.at(-1) - 34)}" text-anchor="middle" font-family="'Bebas Neue', Impact, sans-serif" font-size="${tamValor}" fill="${textoColor}">${fmt(valores.at(-1))}</text></svg>`;
+};
+
+/** Contorno (receta 'contorno'): curvas de nivel de la luminancia de una imagen,
+ *  recortada como object-fit: cover a `ancho`×`alto`. El análisis lo hace
+ *  tools/contorno.mjs con Chrome (decodificar y suavizar); el resultado se
+ *  guarda en tools/cache/contornos/ para no relanzar Chrome en cada gen.js. */
+const contorno = (archivo, { ancho = 912, alto = 960, niveles = 7, detalle = 220, suavizado = 1.1, posicion = [0.5, 0.5],
+  color = '#FFFFFF', grosor = 1.8, minimo = 24, queda = 0.18 } = {}) => {
+  const fs = require('fs'), path = require('path'), crypto = require('crypto');
+  const { execFileSync } = require('child_process');
+  const { encadenar } = require('./kit-patrones.cjs');
+  const opciones = { ancho, alto, detalle, suavizado, posicion };
+  const clave = crypto.createHash('sha1').update(fs.readFileSync(archivo)).update(JSON.stringify(opciones)).digest('hex').slice(0, 16);
+  const dirCache = path.join(__dirname, 'cache', 'contornos');
+  const rutaCache = path.join(dirCache, `${clave}.json`);
+  let rejilla;
+  if (fs.existsSync(rutaCache)) rejilla = JSON.parse(fs.readFileSync(rutaCache, 'utf8'));
+  else {
+    rejilla = JSON.parse(execFileSync(process.execPath, [path.join(__dirname, 'contorno.mjs'), JSON.stringify({ archivo: path.resolve(archivo), ...opciones })],
+      { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 }));
+    fs.mkdirSync(dirCache, { recursive: true });
+    fs.writeFileSync(rutaCache, JSON.stringify(rejilla));
+  }
+  const { w, h, lum } = rejilla;
+  // Niveles por cuantiles: reparten las curvas donde de verdad hay tonos.
+  const orden = [...lum].sort((a, b) => a - b);
+  const umbrales = Array.from({ length: niveles }, (_, k) => orden[Math.floor(((k + 1) / (niveles + 1)) * (orden.length - 1))] + 0.5);
+  const ex = ancho / (w - 1), ey = alto / (h - 1);
+  const val = (i, j) => lum[j * w + i];
+  const paths = [];
+  umbrales.forEach((u, nivel) => {
+    const segs = [];
+    const it = (x1, y1, a, x2, y2, b) => { const t = (u - a) / ((b - a) || 1e-9); return [x1 + (x2 - x1) * t, y1 + (y2 - y1) * t]; };
+    for (let j = 0; j < h - 1; j++) {
+      for (let i = 0; i < w - 1; i++) {
+        const a = val(i, j), b = val(i + 1, j), c = val(i + 1, j + 1), d = val(i, j + 1);
+        const k = (a > u ? 8 : 0) | (b > u ? 4 : 0) | (c > u ? 2 : 0) | (d > u ? 1 : 0);
+        if (k === 0 || k === 15) continue;
+        const T = () => it(i, j, a, i + 1, j, b), R = () => it(i + 1, j, b, i + 1, j + 1, c);
+        const B = () => it(i, j + 1, d, i + 1, j + 1, c), Lf = () => it(i, j, a, i, j + 1, d);
+        const P = { 1: [[Lf, B]], 2: [[B, R]], 3: [[Lf, R]], 4: [[T, R]], 5: [[Lf, T], [B, R]], 6: [[T, B]], 7: [[Lf, T]], 8: [[Lf, T]],
+          9: [[T, B]], 10: [[T, R], [Lf, B]], 11: [[T, R]], 12: [[Lf, R]], 13: [[B, R]], 14: [[Lf, B]] }[k];
+        for (const [p, q] of P) { const A = p(), Q = q(); segs.push([A[0], A[1], Q[0], Q[1]]); }
+      }
+    }
+    for (const l of encadenar(segs)) {
+      if (l.length < minimo) continue;
+      const pts = l.filter((_, k) => k % 2 === 0 || k === l.length - 1);
+      paths.push(`<path d="M${pts.map(([x, y]) => `${Math.round(x * ex)} ${Math.round(y * ey)}`).join('L')}" stroke-opacity="${(0.45 + (0.55 * (nivel + 1)) / niveles).toFixed(2)}"/>`);
+    }
+  });
+  return `<svg data-contorno data-queda="${queda}" viewBox="0 0 ${ancho} ${alto}" preserveAspectRatio="xMidYMid slice" aria-hidden="true" ` +
+    `style="position:absolute;inset:0;width:100%;height:100%;opacity:${queda};pointer-events:none">` +
+    `<g fill="none" stroke="${color}" stroke-width="${grosor}" stroke-linejoin="round" stroke-linecap="round">${paths.join('')}</g></svg>`;
+};
+
+module.exports = { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno };

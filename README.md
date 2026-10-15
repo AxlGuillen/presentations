@@ -46,8 +46,9 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
                      · fotos de Wikimedia Commons con licencia libre — créditos en caps/CREDITOS.md
 /skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
 /caras/              Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
-/lab/                Laboratorio de efectos: catálogo vivo del kit (recetas, patrones, íconos) · 9:16 · 39 slides
+/lab/                Laboratorio de efectos: catálogo vivo del kit (recetas, patrones, íconos) · 9:16 · 47 slides
                      · créditos de game-icons en lab/CREDITOS.md
+/novedades/          Lo nuevo del kit: cuaderno de novedades con una demo viva por lámina · 16:9 · 24 slides
 /semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides
 /semana35/           Reporte semanal Jira: semana 35 (25–31 ago 2026) · 16:9 · 10 slides
 /semana36/           Reporte semanal Jira: semana 36 (1–7 sep 2026) · 16:9 · 11 slides
@@ -91,7 +92,7 @@ npx serve .
 ## Roadmap
 
 - [**Presentación → video narrado**](docs/video-narrado.md): **implementado** con Fish Audio (`node tools/video.mjs <carpeta>`). Cada deck con un `guion.json` genera `video.mp4` con voz y subtítulos sincronizados. El módulo queda listo para cuando se quiera publicar un video en una card.
-- [**Segunda tanda de efectos**](docs/efectos-svg.md): **propuesta**. 25 efectos nuevos sobre todo con SVG (quemado, tinta, contorno sacado del propio arte, cámara entre focos, sello, gráficas que se dibujan, partículas), con 8 recomendados y prototipos probados.
+- [**Segunda tanda de efectos**](docs/efectos-svg.md): **8 implementados**, 17 en propuesta. Quemado, tinta, contorno sacado del propio arte, cometa, sello, ventana, cámara entre focos y gráficas que se dibujan ya son recetas del kit; se ven en [`/lab/`](lab/) y se explican en [`/novedades/`](novedades/).
 - [**Animación y assets**](docs/animaciones-y-assets.md): **implementado**. GSAP 3.15 con todos sus plugins (`kit.gsap`), catálogo de efectos (`kit.efectos`), patrones generativos con semilla (`kit.patron`), íconos e ilustraciones en build-time (`kit.icono`, `kit.ilustracion`) y transiciones `xfade` en el video. Todo se ve en [`/lab/`](lab/).
 - [**Capa de audio y tours guiados**](docs/audio-y-tours.md): **propuesta**. Música de fondo con ducking y efectos puntuales enganchados a las animaciones (los tiempos ya los da `tiempos.json` + `anim.json`), y más adelante videos de QA o tours de producto sobre la app real en vez de un deck.
 

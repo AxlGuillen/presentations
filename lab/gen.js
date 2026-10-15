@@ -9,6 +9,8 @@
 //     (recetas declaradas con data-efecto="…" o llamadas con efecto(…))
 //   · Patrones generativos → kit.patron()
 //   · Íconos e ilustraciones → kit.icono() y kit.ilustracion()
+//   · Segunda tanda (docs/efectos-svg.md): quemado, tinta, contorno, cometa,
+//     sello, ventana, cámara y línea, con sus piezas de build-time
 //
 // Aquí sí hay texto en las láminas, a propósito: es una herramienta, no B-roll.
 // Los splashes y retratos son de Data Dragon; las ilustraciones, Open Doodles
@@ -203,6 +205,31 @@ lamina({ grupo: 'Recursos', nombre: 'íconos', uso: "kit.icono('tabler:sword', {
 lamina({ grupo: 'Recursos', nombre: 'ilustraciones', uso: "kit.ilustracion('doodle:Reading', { tinta, acento })  · Open Doodles (CC0); unDraw por ruta",
   cuerpo: `<div data-efecto="bento" data-en="0.2" data-escala="0.85" style="width:100%;display:grid;grid-template-columns:1fr;gap:10px">
     ${['Reading', 'Coffee', 'Zombieing'].map((d, i) => `<div style="border-radius:18px;background:${PANEL};padding:0 40px">${kit.ilustracion(`doodle:${d}`, { tinta: BONE, acento: [CORAL, VIOLETA, CORAL][i], estilo: 'height:300px;width:auto;margin:0 auto' })}</div>`).join('')}</div>` });
+
+// ── SEGUNDA TANDA (docs/efectos-svg.md) ──────────────────────────────────
+// Las ocho recomendadas. Las que necesitan un filtro o una máscara la llevan
+// emitida por su pieza de build-time (kit.quemado, kit.tinta, kit.ventana…).
+const S2 = 'Segunda tanda';
+lamina({ grupo: S2, nombre: 'quemado', uso: '${kit.quemado()}  +  data-efecto="quemado"  · data-hacia="deshace" la quema al revés',
+  cuerpo: `${kit.quemado('efx-quemado', { brasa: CORAL })}<div data-efecto="quemado" data-en="0.3" data-dur="1.8" style="width:100%;height:100%">${marco(imagen('Jinx_0.jpg', 'Jinx', '62% 30%'))}</div>` });
+lamina({ grupo: S2, nombre: 'tinta', uso: "${kit.tinta(id, { ancho, alto, origen: [0.3, 0.7] })}  +  data-efecto=\"tinta\"",
+  cuerpo: `${kit.tinta('efx-tinta', { ancho: 912, alto: 960, origen: [0.28, 0.72] })}<div data-efecto="tinta" data-en="0.3" data-dur="1.7" style="width:100%;height:100%">${marco(imagen('Vi_0.jpg', 'Vi', '50% 30%'))}</div>` });
+lamina({ grupo: S2, nombre: 'contorno', uso: "${kit.contorno(archivo, { ancho, alto, posicion })}  +  data-efecto=\"contorno\"  · líneas sacadas del propio arte",
+  cuerpo: `<div data-efecto="contorno" data-en="0.2" data-dur="1.6" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Jinx_0.jpg', 'Jinx', '62% 30%')}${kit.contorno(__dirname + '/assets/Jinx_0.jpg', { ancho: 912, alto: 960, posicion: [0.62, 0.3], color: BONE })}</div>` });
+const COMETAS = ['M40 820 C 220 760, 300 380, 520 420 S 820 300, 870 90', 'M40 520 C 260 600, 420 180, 620 260 S 800 520, 870 420',
+  'M120 930 C 180 640, 520 760, 560 560 S 700 160, 860 220'];
+lamina({ grupo: S2, nombre: 'cometa', uso: 'data-efecto="cometa"  · cada <path data-camino> se dibuja con un punto brillante en la punta',
+  cuerpo: `<svg data-efecto="cometa" data-en="0.25" data-dur="1.5" data-radio="9" viewBox="0 0 912 960" style="width:912px;height:960px;overflow:visible">
+    ${COMETAS.map((d, i) => `<path data-camino d="${d}" fill="none" stroke="${[CORAL, VIOLETA, BONE][i]}" stroke-width="${[7, 5, 3][i]}" stroke-linecap="round"/>`).join('')}</svg>` });
+lamina({ grupo: S2, nombre: 'sello', uso: "${kit.sello('NERFEADO', { color })}  dentro de  data-efecto=\"sello\"  · cae, golpea y la lámina tiembla",
+  cuerpo: `<div style="position:relative;width:100%;height:100%">${marco(imagen('Viktor_0.jpg', 'Viktor', '50% 35%'), 'filter: saturate(0.55) brightness(0.8);')}
+    <div data-efecto="sello" data-en="0.55" style="position:absolute;left:50%;top:50%;width:620px;margin:-120px 0 0 -310px">${kit.sello('NERFEADO', { color: CORAL, ancho: 620, alto: 240 })}</div></div>` });
+lamina({ grupo: S2, nombre: 'ventana', uso: "${kit.ventana('JINX', { ancho, alto, origen })}  +  data-efecto=\"ventana\"  · la cámara entra por las letras",
+  cuerpo: `${kit.ventana('JINX', { ancho: 912, alto: 960, origen: [0.4, 0.5] })}<div data-efecto="ventana" data-en="0.7" data-dur="1.5" style="width:100%;height:100%">${marco(imagen('Jinx_0.jpg', 'Jinx', '62% 30%'))}</div>` });
+lamina({ grupo: S2, nombre: 'cámara', uso: 'data-efecto="camara" data-focos="76 40 2.6; 52 62 1.9; 50 50 1"  · x% y% zoom por foco',
+  cuerpo: `<div data-efecto="camara" data-focos="76 40 2.6; 52 62 1.9; 50 50 1" data-en="0.3" data-dur="1" style="width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Vi_0.jpg', 'Vi', '50% 30%')}</div>` });
+lamina({ grupo: S2, nombre: 'línea', uso: "${kit.grafica(valores, { etiquetas, decimales, sufijo })}  +  data-efecto=\"linea\"",
+  cuerpo: `<div data-efecto="linea" data-en="0.3" data-dur="2" style="width:100%">${kit.grafica([1.2, 3.4, 2.9, 6.1, 9.9], { ancho: 912, alto: 640, color: CORAL, etiquetas: ['2022', '2023', '2024', '2025', '2026'], decimales: 1, sufijo: ' M', tamValor: 64, textoColor: BONE })}</div>` });
 
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>

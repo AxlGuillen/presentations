@@ -1,7 +1,9 @@
 # Propuesta: segunda tanda de efectos (SVG, filtros, datos, partículas)
 
-> Estado: **propuesta, sin implementar**. Investigación del 15/oct/2026, sobre
-> el catálogo que ya existe en `tools/kit-efectos.cjs` (las 25 recetas del deck
+> Estado: **los 8 recomendados están implementados** (15/oct/2026, ver «Lo que
+> cambió al implementarlo» al final); los otros 17 siguen en propuesta.
+> Investigación del 15/oct/2026, sobre
+> el catálogo que ya existe en `tools/kit-efectos.cjs` (las 27 recetas del deck
 > `lab/`). Los efectos marcados «probado» se armaron como prototipo en Chrome
 > 155 a 1080×1920 y escala 1, igual que `cuadros.mjs`, sin tocar el repo.
 
@@ -92,6 +94,29 @@
   pueden costar ~10 veces más; según Chromium, los filtros sobre SVG van siempre
   por procesador. Contención: `numOctaves` ≤ 4, región del filtro ajustada y no
   más de dos capas a sangre filtradas a la vez.
+
+## Lo que cambió al implementarlo
+
+Los 8 ★ son recetas de `kit.efectos()` con su pieza de build-time en
+`tools/kit-efectos.cjs`, y tienen lámina en `lab/` (40–47) y en `novedades/`.
+
+- **contorno**: no se hizo con Pillow sino con Chrome (`tools/contorno.mjs`),
+  que ya es dependencia de las herramientas y decodifica cualquier JPEG/PNG; la
+  luminancia se guarda en `tools/cache/contornos/`. Con la portada de Jinx los
+  40 trazos del prototipo no alcanzaban: con 7 niveles a 220 de detalle salen
+  ~150 y se reconoce, a 60–90 KB inline (~37 KB comprimido).
+- **ventana**: va con `mask: url(#…)` sobre el `<img>`, no con
+  `background-clip: text`. Así el arte sigue siendo un `<img>` (diferido y
+  optimizado) y la cámara puede entrar escalando solo el texto de la máscara.
+- **sello**: sin CustomEase ni CustomWiggle. La caída es `power4.in` y el
+  temblor una secuencia fija de cinco fotogramas que se apaga; los huecos de
+  tinta y el borde irregular salen de dos `feTurbulence` con semilla.
+- **cometa** y **línea**: sin MotionPath ni DrawSVG para la punta; se coloca con
+  `getPointAtLength()` en el `onUpdate`, que solo depende del progreso.
+- **quemado**: el umbral útil va de 4 a 36 y la franja de brasa es el segundo
+  umbral a +0,9 (con +1,4 la brasa tapaba media imagen).
+- **Determinismo**: ir a 1,1 s, saltar a 2,6 s y volver da el mismo cuadro en
+  las 8 (69–104 dB dentro de la lámina).
 
 ## Fuentes
 

@@ -323,4 +323,4 @@ const patronFondo = (tipo, opciones = {}) => {
   return { imagen: `url("data:image/svg+xml,${encodeURIComponent(svg)}")`, tam: 'cover' };
 };
 
-module.exports = { patron, patronFondo, prng, semillaDe, ruido2D };
+module.exports = { patron, patronFondo, prng, semillaDe, ruido2D, encadenar };
