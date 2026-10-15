@@ -315,3 +315,5 @@ Cada deck (y la galería raíz) lleva metas OG/Twitter en el `<head>` para que e
 `docs/video-narrado.md` — convertir decks en MP4 narrado. **Ya implementado** con Fish Audio (ver «Módulo de video»); el documento queda como registro de la propuesta original, que hablaba de ElevenLabs.
 
 `docs/audio-y-tours.md` — **propuesta, sin implementar**: música de fondo con ducking (`sidechaincompress`) y efectos puntuales sincronizados con las animaciones, más la idea de videos de QA y tours de producto grabando la app real. El primer video (`semana38`) salió solo con voz.
+
+`docs/animaciones-y-assets.md` — **propuesta, sin implementar** (14/oct/2026): GSAP 3.15 con todos los plugins (probado: funciona con `kit.animador()` sin cambios y es determinista al seekear; ⚠️ SplitText con máscara corta las tildes de las mayúsculas y el arreglo está ahí), catálogo de efectos y deck `lab/`, `kit.patron()` generativo con semilla, `kit.icono()` en build-time, transiciones `xfade` en `video.mjs` y la revisión de la política de fans de Riot (aviso obligatorio y nada de logos sin licencia).
