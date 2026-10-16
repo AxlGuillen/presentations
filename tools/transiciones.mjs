@@ -34,6 +34,18 @@ export function leerTransicion(valor, porDefecto = null) {
   return { tipo, dur };
 }
 
+/** Láminas enlazadas por la receta continua: las que comparten un
+ *  data-continua con la lámina anterior del deck. Ahí la continuidad ya es la
+ *  transición, y un xfade encima enseñaría el objeto dos veces. Devuelve los
+ *  números de lámina (desde 1). */
+export function enlazadas(html) {
+  const nombres = html.split(/<section[\s>]/).slice(1)
+    .map((t) => new Set([...t.matchAll(/data-continua="([^"]+)"/g)].map((m) => m[1])));
+  const fuera = new Set();
+  nombres.forEach((n, i) => { if (i > 0 && [...n].some((x) => nombres[i - 1].has(x))) fuera.add(i + 1); });
+  return fuera;
+}
+
 /** ¿El guion pide alguna transición? */
 export function hayTransiciones(guion) {
   return !!guion.transicion || guion.slides.some((s, i) => i > 0 && s.transicion && s.transicion !== 'corte' && s.transicion !== 'ninguna');

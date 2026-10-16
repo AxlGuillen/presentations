@@ -289,6 +289,83 @@ const GEN = {
     return out;
   },
 
+  // Crestas que se tapan entre sí (la portada de Unknown Pleasures). Trazos
+  // puros, sin rellenos: el «horizonte flotante» dibuja de adelante hacia atrás
+  // y de cada línea solo deja lo que asoma por encima de las de adelante, así
+  // va sobre cualquier fondo. Una pieza por línea.
+  hilos({ ancho, alto, paleta, ruido, lineas = 44, amplitud = 5.5, campana = 0.24, desde = 0.18, hasta = 0.92, grosor = 1.3, opacidad }) {
+    const paso = (alto * (hasta - desde)) / (lineas - 1), dx = 6, N = Math.ceil(ancho / dx) + 1, out = [];
+    const H = new Float64Array(N).fill(Infinity);
+    for (let k = lineas - 1; k >= 0; k--) {
+      const y0 = alto * desde + k * paso, ys = new Float64Array(N);
+      for (let i = 0; i < N; i++) {
+        const x = i * dx, u = (x - ancho / 2) / (ancho * campana), c = Math.exp(-u * u);
+        const v = (ruido(x * 0.012, k * 0.35) + 1) / 2 + 0.35 * ((ruido(x * 0.045, k * 0.9 + 9) + 1) / 2);
+        ys[i] = y0 - c * v * paso * amplitud + ruido(x * 0.05, k * 2.1) * paso * 0.12;
+      }
+      let d = '', abierto = false;
+      const punto = (x, y) => { d += `${abierto ? 'L' : 'M'}${n1(x)} ${n1(y)}`; abierto = true; };
+      for (let i = 0; i < N; i++) {
+        const vis = ys[i] < H[i] - 0.5;
+        if (i > 0) {
+          const visA = ys[i - 1] < H[i - 1] - 0.5;
+          if (vis !== visA) {   // cruce con el horizonte: corta justo ahí
+            const a = H[i - 1] - ys[i - 1], b = H[i] - ys[i], t = Number.isFinite(a) && Number.isFinite(b) ? a / (a - b) : (vis ? 0 : 1);
+            const x = (i - 1 + t) * dx, y = ys[i - 1] + (ys[i] - ys[i - 1]) * t;
+            punto(x, y);
+            if (!vis) abierto = false;
+          }
+        }
+        if (vis) punto(i * dx, ys[i]);
+        else abierto = false;
+      }
+      for (let i = 0; i < N; i++) H[i] = Math.min(H[i], ys[i]);
+      if (d) out.unshift(`<path data-pieza d="${d}" fill="none" stroke="${enPaleta(paleta, k / lineas)}" stroke-width="${grosor}" stroke-linejoin="round" stroke-linecap="round" opacity="${opacidad}"/>`);
+    }
+    return out;
+  },
+
+  // Rejilla en perspectiva hasta el horizonte y un sol de franjas (paleta:
+  // rejilla, sol, línea del horizonte).
+  horizonte({ ancho, alto, paleta, horizonte: h = 0.55, radiales = 15, filas = 13, sol = true, grosor = 1.4, opacidad }) {
+    const hy = alto * h, cx = ancho / 2, out = [];
+    const [rej, solC = rej, linea = rej] = paleta, pieza = (x1, y1, x2, y2, c, op = opacidad) =>
+      `<line data-pieza x1="${n1(x1)}" y1="${n1(y1)}" x2="${n1(x2)}" y2="${n1(y2)}" stroke="${c}" stroke-width="${grosor}" stroke-linecap="round" opacity="${op}"/>`;
+    out.push(pieza(0, hy, ancho, hy, linea));
+    if (sol) {
+      const r = Math.min(ancho, alto) * 0.2, sy = hy - r * 0.08, s = r / 11;
+      for (let y = sy - r + s * 0.5, j = 0; y < hy - 2; y += s, j++) {
+        const w = Math.sqrt(Math.max(0, r * r - (y - sy) ** 2));
+        if ((y - (sy - r)) / r > 0.5 && j % 2) continue;   // la mitad de abajo, en franjas
+        out.push(pieza(cx - w, y, cx + w, y, solC));
+      }
+    }
+    for (let i = -radiales; i <= radiales; i++) {
+      // la fuga se corta en el borde del lienzo, no más allá
+      const x2 = cx + (i / radiales) * ancho * 1.6, t = x2 < 0 ? cx / (cx - x2) : x2 > ancho ? (ancho - cx) / (x2 - cx) : 1;
+      out.push(pieza(cx, hy, cx + (x2 - cx) * t, hy + (alto - hy) * t, rej, opacidad * 0.75));
+    }
+    for (let j = 0; j < filas; j++) { const y = hy + (alto - hy) / (1 + j * 0.42); out.push(pieza(0, y, ancho, y, rej, opacidad * 0.75)); }
+    return out;
+  },
+
+  // Guilloché: anillos ondulados con la fase corrida, como el fondo de un
+  // billete. Dos bandas concéntricas; una pieza por anillo.
+  guilloche({ ancho, alto, paleta, radio = 0.34, anillos = 12, ondas = 14, amplitud = 0.07, grosor = 1, muestras = 300, opacidad }) {
+    const cx = ancho / 2, cy = alto / 2, R = Math.min(ancho, alto) * radio, out = [];
+    for (const [banda, rb, sentido] of [[0, R, 1], [1, R * 0.62, -1]]) {
+      for (let k = 0; k < anillos; k++) {
+        const fase = (k / anillos) * Math.PI * 2 / ondas * sentido, pts = [];
+        for (let i = 0; i <= muestras; i++) {
+          const t = (i / muestras) * Math.PI * 2, r = rb * (1 + amplitud * Math.sin(ondas * t + fase * ondas) + amplitud * 0.45 * Math.sin((ondas * 2 + 1) * t - fase * 3));
+          pts.push([cx + Math.cos(t) * r, cy + Math.sin(t) * r]);
+        }
+        out.push(`<path data-pieza d="${ruta(pts, true)}" fill="none" stroke="${enPaleta(paleta, (banda + k / anillos) / 2)}" stroke-width="${grosor}" opacity="${opacidad}"/>`);
+      }
+    }
+    return out;
+  },
+
   // Marco a mano: cuatro lados con sobrepaso y doble pasada.
   marco({ ancho, alto, paleta, r, grosor = 6, temblor = 6, pasadas = 2 }) {
     const out = [], m = grosor * 2, sob = 18;

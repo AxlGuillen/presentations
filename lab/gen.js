@@ -43,10 +43,10 @@ const imagen = (src, alt, pos = '50% 30%', attrs = '') =>
 
 let n = 0;
 const slides = [];
-const lamina = ({ grupo, nombre, uso, cuerpo, alto = 960, notas = '' }) => {
+const lamina = ({ grupo, nombre, uso, cuerpo, alto = 960, notas = '', fondo = BG }) => {
   n++;
   slides.push(`
-  <section data-label="${nombre}" data-screen-label="${String(n).padStart(2, '0')} · ${grupo} · ${nombre}" data-speaker-notes="${esc(notas)}" style="${SECCION}">
+  <section data-label="${nombre}" data-screen-label="${String(n).padStart(2, '0')} · ${grupo} · ${nombre}" data-speaker-notes="${esc(notas)}" style="${SECCION.replace(BG, fondo)}">
     <header data-a="up" style="margin-bottom: 34px;">
       <div style="font: 700 24px/1 ${BODY}; letter-spacing: 4px; text-transform: uppercase; color: ${CORAL};">${String(n).padStart(2, '0')} · ${grupo}</div>
       <h2 style="margin: 12px 0 0; font: 400 112px/0.9 ${DISPLAY}; color: ${BONE};">${nombre}</h2>
@@ -230,6 +230,93 @@ lamina({ grupo: S2, nombre: 'cámara', uso: 'data-efecto="camara" data-focos="76
   cuerpo: `<div data-efecto="camara" data-focos="76 40 2.6; 52 62 1.9; 50 50 1" data-en="0.3" data-dur="1" style="width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Vi_0.jpg', 'Vi', '50% 30%')}</div>` });
 lamina({ grupo: S2, nombre: 'línea', uso: "${kit.grafica(valores, { etiquetas, decimales, sufijo })}  +  data-efecto=\"linea\"",
   cuerpo: `<div data-efecto="linea" data-en="0.3" data-dur="2" style="width:100%">${kit.grafica([1.2, 3.4, 2.9, 6.1, 9.9], { ancho: 912, alto: 640, color: CORAL, etiquetas: ['2022', '2023', '2024', '2025', '2026'], decimales: 1, sufijo: ' M', tamValor: 64, textoColor: BONE })}</div>` });
+
+// ── CONTINUIDAD (docs/lineas-y-continuidad.md) ───────────────────────────
+// Seis láminas SEGUIDAS a propósito: lo que lleva el mismo data-continua viaja
+// de una a la siguiente. Hay que recorrerlas en orden para verlo.
+const C = 'Continuidad';
+const anilloProg = (p) => `<svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+  <circle cx="50" cy="50" r="46" fill="none" stroke="${BONE}" stroke-opacity=".16" stroke-width="1"/>
+  <circle data-progreso="${p}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="${(1 - p).toFixed(2)}" cx="50" cy="50" r="46" fill="none" stroke="${CORAL}" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg>`;
+const anilloCont = (p, num, estilo) => `<div data-continua="anillo" style="position:absolute;${estilo}">${anilloProg(p)}
+  <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span data-continua="numero" data-cuenta="${num}" data-prefijo="0" style="font:400 150px/1 ${DISPLAY};color:${BONE}">0${num}</span></div></div>`;
+const cartaCont = (estilo, extra = '') => `<div data-continua="carta" ${extra} style="position:absolute;overflow:hidden;border-radius:20px;background:${PANEL};${estilo}">${imagen('Jinx_0.jpg', 'Jinx', '62% 30%')}</div>`;
+const formaCont = (d, color, estilo) => `<svg data-continua="lienzo" viewBox="0 0 900 900" style="position:absolute;${estilo}"><path data-continua="forma" d="${d}" fill="${color}"/></svg>`;
+lamina({ grupo: C, nombre: 'continua', uso: 'data-continua="nombre" en láminas seguidas  · → para ver cómo viaja cada pieza',
+  notas: 'Primera de seis láminas seguidas: avanzar con → para ver la continuidad.',
+  cuerpo: cartaCont('left:30px;top:40px;width:300px;height:430px') + anilloCont(0.25, 1, 'right:40px;top:60px;width:300px;height:300px') +
+    formaCont(mancha('mancha-a'), VIOLETA, 'left:300px;top:560px;width:320px;height:320px') });
+lamina({ grupo: C, nombre: 'mueve · cuenta · transforma', fondo: '#151022', uso: 'mueve (FLIP) · cuenta (el 01 sigue al 02) · transforma (MorphSVG) · y el fondo funde',
+  cuerpo: cartaCont('right:20px;top:200px;width:420px;height:600px') + anilloCont(0.5, 2, 'left:10px;top:40px;width:420px;height:420px') +
+    formaCont(mancha('estrella', 10), CORAL, 'left:40px;top:560px;width:360px;height:360px') });
+lamina({ grupo: C, nombre: 'crece · continua', fondo: '#151022', uso: 'data-como="crece"  · un marco chico se vuelve el elemento grande, con la imagen donde estaba',
+  cuerpo: cartaCont('inset:0', 'data-como="crece"') });
+lamina({ grupo: C, nombre: 'cámara · continua', uso: 'data-focos="…"  · la cámara arranca en el último foco de la lámina anterior',
+  cuerpo: cartaCont('inset:0', 'data-focos="58 24 2.6; 40 62 1.8"') });
+const SERIE = [1.2, 3.4, 2.9, 6.1, 9.9];
+const RUTA = 'M60 880 C 200 700, 120 520, 330 470 S 640 520, 700 330 S 820 120, 870 70';
+const graficaCont = (hasta, efecto = '') => `<div data-continua="grafica" ${efecto} style="position:absolute;left:0;right:0;top:0">${kit.grafica(SERIE, { ancho: 912, alto: 560, color: CORAL, hasta, etiquetas: ['2022', '2023', '2024', '2025', '2026'], decimales: 1, sufijo: ' M', tamValor: 60, textoColor: BONE, min: 0, max: 10 })}</div>`;
+const rutaCont = (p) => `<svg viewBox="0 0 912 960" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none"><path d="${RUTA}" fill="none" stroke="${MUTED}" stroke-opacity=".35" stroke-width="2" stroke-dasharray="3 12" stroke-linecap="round"/>
+  <path data-continua="ruta" data-progreso="${p}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="${(1 - p).toFixed(2)}" d="${RUTA}" fill="none" stroke="${VIOLETA}" stroke-width="6" stroke-linecap="round"/></svg>`;
+lamina({ grupo: C, nombre: 'sigue', uso: 'kit.grafica(serie, { hasta: 3 })  · y un trazo con pathLength="1" data-progreso="0.4"',
+  cuerpo: rutaCont(0.4) + graficaCont(3, 'data-efecto="linea" data-en="0.3"') });
+lamina({ grupo: C, nombre: 'sigue · 2', uso: 'la misma serie con hasta: 5  · la línea y el trazo siguen desde donde se quedaron',
+  cuerpo: rutaCont(1) + graficaCont(5) });
+
+// ── LÍNEAS (kit.lineas + fondos de líneas) ───────────────────────────────
+const LN = kit.lineas, LI = 'Líneas';
+const cajaJuego = () => {
+  const W = 150, H = 200, D = 44, c = LN.caja([0, 0, 0], [W, H, D]), f = c.frente;
+  f.detalles.push(LN.rect(f, 0.06, 0.045, 0.94, 0.955), LN.linea(f, 0.06, 0.865, 0.94, 0.865), LN.linea(f, 0.12, 0.91, 0.42, 0.91),
+    LN.circulo(f, 0.5, 0.56, 42 / W, 42 / H), LN.circulo(f, 0.5, 0.56, 24 / W, 24 / H), LN.linea(f, 0.16, 0.24, 0.84, 0.24), LN.linea(f, 0.28, 0.19, 0.72, 0.19), LN.rect(f, 0.1, 0.07, 0.19, 0.125));
+  c.der.detalles.push(LN.linea(c.der, 0.5, 0.14, 0.5, 0.72), LN.rect(c.der, 0.22, 0.86, 0.78, 0.93));
+  c.der.achurado = { paso: 7, angulo: 45 };
+  const encima = [...LN.cota([-W / 2, -H / 2, D / 2], [W / 2, -H / 2, D / 2], [0, -26, 0], '150 mm'),
+    ...LN.cota([-W / 2, -H / 2, D / 2], [-W / 2, H / 2, D / 2], [-26, 0, 0], '200'), ...LN.cota([W / 2, -H / 2, D / 2], [W / 2, -H / 2, -D / 2], [0, -26, 0], '44')];
+  return LN.dibujar([c], { camara: { ojo: [330, 190, 400] }, ancho: 912, alto: 960, margen: 60, tinta: BONE, acento: CORAL, grosor: 3, fino: 1.6, tamTexto: 24, encima, estilo: 'width:100%;height:100%', titulo: 'Caja de un juego' });
+};
+const suave = (pts, pasos = 6) => {
+  const out = [], N = pts.length;
+  for (let i = 0; i < N; i++) {
+    const p0 = pts[(i - 1 + N) % N], p1 = pts[i], p2 = pts[(i + 1) % N], p3 = pts[(i + 2) % N];
+    for (let k = 0; k < pasos; k++) {
+      const t = k / pasos, t2 = t * t, t3 = t2 * t;
+      out.push([0, 1].map((j) => 0.5 * (2 * p1[j] + (-p0[j] + p2[j]) * t + (2 * p0[j] - 5 * p1[j] + 4 * p2[j] - p3[j]) * t2 + (-p0[j] + 3 * p1[j] - 3 * p2[j] + p3[j]) * t3)));
+    }
+  }
+  return out;
+};
+const control = () => {
+  const der = [[0, 36], [40, 38], [62, 33], [76, 18], [82, -4], [84, -30], [78, -50], [64, -56], [52, -46], [42, -26], [26, -18], [0, -18]];
+  const e = LN.extruir(suave([...der, ...der.slice(1, -1).reverse().map(([x, y]) => [-x, y])]), 24), plano = (pts) => pts.map(([x, y]) => [x, y, 12]);
+  const circ = (cx, cy, r, k = 40) => plano(Array.from({ length: k + 1 }, (_, i) => [cx + Math.cos((i / k) * 6.2832) * r, cy + Math.sin((i / k) * 6.2832) * r]));
+  const cruz = (cx, cy, a, w) => plano([[cx - w, cy + a], [cx + w, cy + a], [cx + w, cy + w], [cx + a, cy + w], [cx + a, cy - w], [cx + w, cy - w], [cx + w, cy - a],
+    [cx - w, cy - a], [cx - w, cy - w], [cx - a, cy - w], [cx - a, cy + w], [cx - w, cy + w], [cx - w, cy + a]]);
+  e.tapa.detalles.push(cruz(-50, 8, 13, 4.5), circ(-24, -16, 11), circ(-24, -16, 6), circ(24, -16, 11), circ(24, -16, 6), plano([[-14, 22], [-4, 22]]), plano([[4, 22], [14, 22]]));
+  for (const [x, y] of [[50, 20], [62, 8], [50, -4], [38, 8]]) e.tapa.detalles.push(circ(x, y, 5.5));
+  return LN.dibujar([e], { camara: { ojo: [90, 260, 330] }, ancho: 912, alto: 560, margen: 40, tinta: BONE, grosor: 3, fino: 1.8, estilo: 'width:100%;height:100%', titulo: 'Control' });
+};
+const CAJA = cajaJuego();
+lamina({ grupo: LI, nombre: 'traza · caja', uso: "kit.lineas.caja(…) + detalles por cara + cotas  →  kit.lineas.dibujar(…)  ·  data-efecto=\"traza\"",
+  notas: 'Silueta, pliegues, detalles, achurado y cotas, en ese orden. Líneas ocultas reales: van sobre cualquier fondo.',
+  cuerpo: `<div data-continua="caja-juego" data-efecto="traza" data-dur="2.6" style="position:absolute;inset:0">${CAJA}</div>` });
+lamina({ grupo: LI, nombre: 'traza · control', uso: 'kit.lineas.extruir(contorno, prof)  ·  y la caja de la lámina anterior se va a la esquina con continua',
+  cuerpo: `<div data-continua="caja-juego" style="position:absolute;left:0;top:0;width:285px;height:300px">${CAJA}</div>
+    <div data-efecto="traza" data-en="0.5" data-dur="2.2" style="position:absolute;left:0;right:0;bottom:40px;height:560px">${control()}</div>` });
+const copa = LN.revolucion([[0, 40], [10, 40], [10, 52], [6, 60], [6, 78], [22, 92], [34, 120], [38, 150], [36, 150], [32, 122], [20, 98], [0, 96]], { segmentos: 56 });
+const pedestal = LN.caja([0, 18, 0], [64, 36, 64]);
+pedestal.frente.detalles.push(LN.rect(pedestal.frente, 0.15, 0.3, 0.85, 0.7));
+lamina({ grupo: LI, nombre: 'trofeo · sombra', uso: "kit.lineas.revolucion(perfil)  ·  sombra: { luz, paso, umbrales } raya las caras oscuras como un grabado",
+  cuerpo: `<div data-efecto="traza" data-dur="2.6" style="position:absolute;inset:0">${LN.dibujar([copa, pedestal], { camara: { ojo: [180, 260, 420], centro: [0, 80, 0] }, ancho: 912, alto: 960, margen: 50, tinta: BONE, grosor: 3, fino: 1.6,
+    sombra: { luz: [-0.6, 0.7, 0.6], paso: 7, umbrales: [0.5, 0.85] }, estilo: 'width:100%;height:100%', titulo: 'Trofeo' })}</div>` });
+const DADOS = [['tetraedro', 'd4'], ['cubo', 'd6'], ['octaedro', 'd8'], ['dodecaedro', 'd12'], ['icosaedro', 'd20']];
+lamina({ grupo: LI, nombre: 'dados · isométrica', uso: "kit.lineas.poliedro('icosaedro', centro, radio)  ·  camara: { iso: true, giro, altura }",
+  cuerpo: `<div data-efecto="traza" data-dur="2.2" style="position:absolute;inset:0">${LN.dibujar(DADOS.map(([p], i) => LN.poliedro(p, [(i % 3) * 150 - 150 + (i > 2 ? 75 : 0), i > 2 ? -150 : 0, 0], 58)),
+    { camara: { iso: true, giro: 28, altura: 22 }, ancho: 912, alto: 960, margen: 70, tinta: BONE, grosor: 3, umbral: 15, estilo: 'width:100%;height:100%', titulo: 'Cinco dados',
+      encima: DADOS.map(([, t], i) => ({ pts: [[(i % 3) * 150 - 150 + (i > 2 ? 75 : 0), (i > 2 ? -150 : 0) - 82, 0]], texto: t })), tamTexto: 30, acento: CORAL })}</div>` });
+patronLamina('hilos', 'hilos', { paleta: [BONE], lineas: 46 }, 'dibuja', "kit.patron('hilos', { lineas, amplitud })  · crestas que se tapan sin rellenos (horizonte flotante)");
+patronLamina('horizonte', 'horizonte', { paleta: [BONE, CORAL, VIOLETA] }, 'dibuja', "kit.patron('horizonte', { horizonte, radiales, filas, sol })");
+patronLamina('guilloche', 'guilloche', { paleta: [VIOLETA, CORAL] }, 'dibuja', "kit.patron('guilloche', { anillos, ondas, amplitud })  · el fondo de un billete");
 
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>

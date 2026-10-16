@@ -9,7 +9,7 @@ import path from 'node:path';
 import { execFileSync, spawnSync, spawn } from 'node:child_process';
 import crypto from 'node:crypto';
 import os from 'node:os';
-import { hayTransiciones, leerTransicion, unir as unirConTransiciones } from './transiciones.mjs';
+import { enlazadas, hayTransiciones, leerTransicion, unir as unirConTransiciones } from './transiciones.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const deck = (process.argv[2] || '').replace(/[\\/]/g, '');
@@ -336,7 +336,14 @@ const sinSubs = path.join(out, 'video-sin-subs.mp4');
 if (hayTransiciones(guion)) {
   // "transicion" en guion.json (global o por lámina): xfade entre segmentos.
   // La duración total no cambia, así que tiempos.json y los subtítulos valen.
-  const trans = clips.map((c, i) => (i === 0 ? null : leerTransicion(c.transicion, guion.transicion)));
+  // Las láminas enlazadas con continua van con corte seco, salvo que el guion
+  // diga otra cosa para esa lámina: el objeto que viaja ya es la transición.
+  const enlace = enlazadas(fs.readFileSync(path.join(dirDeck, 'index.html'), 'utf8'));
+  const trans = clips.map((c, i) => {
+    if (i === 0) return null;
+    if (c.transicion == null && enlace.has(c.slide) && clips[i - 1].slide === c.slide - 1) return leerTransicion('corte');
+    return leerTransicion(c.transicion, guion.transicion);
+  });
   console.log(`\nTransiciones: ${trans.slice(1).map(t => (t.corte ? 'corte' : t.tipo)).join(' · ')}`);
   unirConTransiciones({ segmentos, totales: tiempos.map(t => t.dur), trans, salida: sinSubs });
 } else {

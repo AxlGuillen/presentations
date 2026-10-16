@@ -185,13 +185,13 @@ const efectos = () => `<script>
     var orig = el.textContent;
     deshacer(el, function () { el.textContent = orig; });
     var fin = parseFloat(o.cuenta != null ? o.cuenta : orig.replace(/[^0-9.]/g, ''));
-    var sep = o.separador == null ? '\\u00A0' : o.separador, dec = o.decimales || 0, pre = o.prefijo || '', suf = o.sufijo || '';
-    var est = { v: 0 };
+    var sep = o.separador == null ? '\\u00A0' : o.separador, dec = o.decimales || 0, pre = o.prefijo == null ? '' : String(o.prefijo), suf = o.sufijo == null ? '' : String(o.sufijo);
+    var ini = o.desde || 0, est = { v: ini };
     function pinta() {
       var t = est.v.toFixed(dec).split('.');
       el.textContent = pre + t[0].replace(/\\B(?=(\\d{3})+(?!\\d))/g, sep) + (t[1] ? ',' + t[1] : '') + suf;
     }
-    tl.fromTo(est, { v: 0 }, { v: fin, duration: o.dur || 1.2, ease: 'power2.out', immediateRender: true, onUpdate: pinta }, o.en || 0);
+    tl.fromTo(est, { v: ini }, { v: fin, duration: o.dur || 1.2, ease: o.ease || 'power2.out', immediateRender: true, onUpdate: pinta }, o.en || 0);
     pinta();
   };
 
@@ -415,6 +415,22 @@ const efectos = () => `<script>
     dibujar(tl, els, { en: o.en || 0, dur: o.dur || 1.2, escalon: o.escalon == null ? 0.05 : o.escalon });
   };
 
+  // Dibujo a líneas de kit.lineas: capa por capa, como una sola pluma —
+  // silueta, pliegues, detalles, achurado y al final las cotas con su medida.
+  R.traza = function (tl, el, o) {
+    var svg = el.matches && el.matches('[data-lineas]') ? el : el.querySelector('[data-lineas]');
+    if (!svg) return;
+    var en = o.en || 0, dur = o.dur || 2.4;
+    [['silueta', 0, 0.42], ['pliegue', 0.2, 0.6], ['detalle', 0.38, 0.8], ['achurado', 0.55, 0.95], ['cota', 0.72, 1]].forEach(function (c) {
+      var ps = lista(svg.querySelectorAll('[data-capa="' + c[0] + '"] path'));
+      if (!ps.length) return;
+      var ventana = dur * (c[2] - c[1]), esc = Math.min(0.08, (ventana * 0.5) / ps.length);
+      dibujar(tl, ps, { en: en + dur * c[1], dur: ventana - esc * (ps.length - 1), escalon: esc, ease: 'power1.inOut' });
+    });
+    var textos = svg.querySelectorAll('[data-capa="cota"] text');
+    if (textos.length) tl.from(textos, { opacity: 0, duration: 0.4, stagger: 0.06 }, en + dur * 0.86);
+  };
+
   // Una forma se convierte en otra (MorphSVG). data-desde = selector o path.
   R.transforma = function (tl, el, o) {
     if (!window.MorphSVGPlugin || !o.desde) return tl.from(el, { opacity: 0, duration: 0.5 }, o.en || 0);
@@ -594,18 +610,28 @@ const efectos = () => `<script>
       while (e.length > 3) { s = sep + e.slice(-3) + s; e = e.slice(0, -3); }
       return e + s + (t[1] ? ',' + t[1] : '') + suf;
     };
-    var estado = { punta: punta.getAttribute('transform'), texto: val.textContent, x: val.getAttribute('x'), y: val.getAttribute('y') };
+    var estado = { punta: punta.getAttribute('transform'), texto: val.textContent, x: val.getAttribute('x'), y: val.getAttribute('y'), ancho: av.getAttribute('width') };
     guardaEstilo(ln);
     deshacer(el, function () {
-      av.setAttribute('width', W); punta.setAttribute('transform', estado.punta);
+      av.setAttribute('width', estado.ancho); punta.setAttribute('transform', estado.punta);
       val.textContent = estado.texto; val.setAttribute('x', estado.x); val.setAttribute('y', estado.y);
       hitos.forEach(function (h) { h.style.opacity = ''; });
     });
+    // La animación avanza en x, no en largo: así puede arrancar y parar en un
+    // punto de la serie (data-hasta = cuántos puntos enseña la lámina; o.desdePunto
+    // = desde cuál arranca, que es lo que usa continua para «sigue»).
+    var n = xs.length, hasta = Math.max(1, Math.min(n, +(svg.getAttribute('data-hasta') || n)));
+    var x0 = xs[Math.max(1, Math.min(hasta, o.desdePunto || 1)) - 1], x1 = xs[hasta - 1];
+    var largoEn = function (x) {
+      var lo = 0, hi = L;
+      for (var i = 0; i < 24; i++) { var m = (lo + hi) / 2; if (ln.getPointAtLength(m).x < x) lo = m; else hi = m; }
+      return hi;
+    };
     ln.style.strokeDasharray = L + 1;
-    var est = { p: 0 };
+    var est = { x: x0 };
     var pinta = function () {
-      var q = ln.getPointAtLength(L * est.p);
-      ln.style.strokeDashoffset = (L + 1) * (1 - est.p);
+      var l = largoEn(est.x), q = ln.getPointAtLength(l);
+      ln.style.strokeDashoffset = (L + 1) - l;
       av.setAttribute('width', q.x);
       punta.setAttribute('transform', 'translate(' + q.x + ' ' + q.y + ')');
       var k = 0;
@@ -616,8 +642,145 @@ const efectos = () => `<script>
       val.setAttribute('y', q.y - 34);
       hitos.forEach(function (h) { h.style.opacity = parseFloat(h.getAttribute('cx')) <= q.x + 0.5 ? 1 : 0; });
     };
-    tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 1.8, ease: o.ease || 'power1.inOut', immediateRender: true, onUpdate: pinta }, o.en || 0);
+    tl.fromTo(est, { x: x0 }, { x: x1, duration: o.dur || 1.8, ease: o.ease || 'power1.inOut', immediateRender: true, onUpdate: pinta }, o.en || 0);
     pinta();
+  };
+
+  // ── CONTINUIDAD ────────────────────────────────────────────────────────
+  // El mismo elemento (data-continua="nombre") en láminas seguidas: al entrar,
+  // arranca como estaba en la lámina de la que venimos y llega a su estado.
+  // Es el Morph de PowerPoint / Magic Move de Keynote. La pareja es la lámina
+  // anterior EN EL ORDEN DEL DECK (así el video cuadro a cuadro, que siempre
+  // avanza, es determinista); si se llegó retrocediendo, la siguiente.
+  //   data-como = mueve | cuenta | transforma | crece | sigue | camara
+  //   (varios separados por espacio; sin data-como se deduce del elemento)
+  var vista = null;
+  document.addEventListener('slidechange', function (e) { var d = e.detail || {}; vista = { de: d.previousIndex, a: d.index }; }, true);
+  function seccionesDe(s) { return lista(s.parentNode ? s.parentNode.children : []).filter(function (x) { return x.tagName === 'SECTION'; }); }
+  function origenDe(s) {
+    var todas = seccionesDe(s), i = todas.indexOf(s);
+    if (vista && vista.a === i && vista.de === i + 1) return todas[i + 1];
+    return i > 0 ? todas[i - 1] : null;
+  }
+  // Caja en coordenadas de diseño, con offsets de layout: no las mueven los
+  // transforms (ni los from() que otras recetas ya aplicaron) ni la escala de
+  // deck-stage. Los elementos SVG no tienen offsets: van por su rectángulo.
+  function abs(e) { var x = 0, y = 0; while (e) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } return [x, y]; }
+  function cajaEn(el, s) {
+    if (!(el instanceof HTMLElement)) {
+      var r = el.getBoundingClientRect(), rs = s.getBoundingClientRect(), k = rs.width / (s.offsetWidth || rs.width) || 1;
+      return { x: (r.left - rs.left) / k, y: (r.top - rs.top) / k, w: r.width / k, h: r.height / k };
+    }
+    var x = 0, y = 0, e = el;
+    while (e && e !== s) { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; }
+    if (e !== s) { var b = abs(s); x -= b[0]; y -= b[1]; }
+    return { x: x, y: y, w: el.offsetWidth, h: el.offsetHeight };
+  }
+  function numeroDe(el) {
+    var c = el.getAttribute('data-cuenta');
+    if (c != null) return parseFloat(c);
+    return parseFloat(el.textContent.replace(/[^0-9,.-]/g, '').replace(/\\.(?=\\d{3}(\\D|$))/g, '').replace(',', '.')) || 0;
+  }
+  function progresoDe(el) { var p = el.getAttribute('data-progreso'); return p == null ? 1 : parseFloat(p); }
+  function ultimoFoco(el) { var f = String(el.getAttribute('data-focos') || '50 50 1').split(';'); return f[f.length - 1].trim() || '50 50 1'; }
+  // Recorte que hace una imagen con object-fit: cover dentro de su caja.
+  function recorte(img, c) {
+    var iw = img.naturalWidth || c.w, ih = img.naturalHeight || c.h, k = Math.max(c.w / iw, c.h / ih);
+    var pos = (getComputedStyle(img).objectPosition || '50% 50%').split(' ').map(function (v) { return v.indexOf('%') > 0 ? parseFloat(v) / 100 : 0.5; });
+    return { x: c.x + (c.w - iw * k) * pos[0], y: c.y + (c.h - ih * k) * pos[1], w: iw * k, h: ih * k };
+  }
+  function modosDe(el, par) {
+    var c = el.getAttribute('data-como');
+    if (c) return c.split(/\\s+/);
+    if (el.hasAttribute('data-focos')) return ['camara'];
+    if (el.matches('[data-grafica]') || el.querySelector('[data-grafica]')) return ['sigue'];
+    if (el.hasAttribute('data-progreso')) return ['sigue'];
+    if (el.tagName.toLowerCase() === 'path' && par.getAttribute('d') !== el.getAttribute('d')) return ['transforma'];
+    return el.hasAttribute('data-cuenta') ? ['mueve', 'cuenta'] : ['mueve'];
+  }
+  // Interpola el avance de un trazo con pathLength="1" (data-progreso de 0 a 1).
+  function sigueTrazo(tl, el, par, o) {
+    if (!el.getAttribute('pathLength')) return;
+    tl.fromTo(el, { attr: { 'stroke-dashoffset': 1 - progresoDe(par) } }, { attr: { 'stroke-dashoffset': 1 - progresoDe(el) }, duration: o.dur, ease: o.ease }, o.en);
+  }
+  var MODOS = {
+    mueve: function (tl, el, par, a, b, o) {
+      if (o.uniforme) {
+        var k = Math.min(a.w / b.w, a.h / b.h);
+        tl.from(el, { x: a.x + a.w / 2 - (b.x + b.w * k / 2) , y: a.y + a.h / 2 - (b.y + b.h * k / 2), scale: k, transformOrigin: '0 0', duration: o.dur, ease: o.ease }, o.en);
+      } else {
+        tl.from(el, { x: a.x - b.x, y: a.y - b.y, scaleX: a.w / b.w, scaleY: a.h / b.h, transformOrigin: '0 0', duration: o.dur, ease: o.ease }, o.en);
+      }
+      // los trazos de avance de adentro (anillos, barras) siguen desde los de la pareja
+      var mios = lista(el.querySelectorAll('[data-progreso]')), suyos = lista(par.querySelectorAll('[data-progreso]'));
+      mios.forEach(function (m, i) { if (suyos[i]) sigueTrazo(tl, m, suyos[i], o); });
+    },
+    cuenta: function (tl, el, par, a, b, o) {
+      R.contador(tl, el, Object.assign({}, o, { cuenta: numeroDe(el), desde: numeroDe(par), ease: 'power2.inOut' }));
+    },
+    transforma: function (tl, el, par, a, b, o) {
+      if (window.MorphSVGPlugin && el.tagName.toLowerCase() === 'path') tl.from(el, { morphSVG: par, duration: o.dur, ease: o.ease }, o.en);
+      var cs = getComputedStyle(par), cm = getComputedStyle(el), desde = {};
+      if (cs.fill !== cm.fill) desde.fill = cs.fill;
+      if (cs.stroke !== cm.stroke) desde.stroke = cs.stroke;
+      if (Object.keys(desde).length) tl.from(el, Object.assign(desde, { duration: o.dur, ease: o.ease }), o.en);
+    },
+    // Un marco chico de la lámina anterior se vuelve este elemento grande: la
+    // ventana (clip-path) arranca en la caja del marco y la imagen de adentro,
+    // donde la pareja la enseñaba. Exacto si las dos usan el mismo archivo.
+    crece: function (tl, el, par, a, b, o) {
+      guardaEstilo(el);
+      var rad = parseFloat(getComputedStyle(par).borderTopLeftRadius) || 0;
+      var ins = function (t, r, bo, l, rr) { return 'inset(' + t + 'px ' + r + 'px ' + bo + 'px ' + l + 'px round ' + rr + 'px)'; };
+      tl.fromTo(el, { clipPath: ins(a.y - b.y, b.x + b.w - a.x - a.w, b.y + b.h - a.y - a.h, a.x - b.x, rad) },
+        { clipPath: ins(0, 0, 0, 0, 0), duration: o.dur, ease: o.ease }, o.en);
+      var img = imagenDe(el), imgPar = imagenDe(par);
+      if (img && imgPar) {
+        var ra = recorte(imgPar, cajaEn(imgPar, seccionDe(par))), cb = cajaEn(img, seccionDe(el)), rb = recorte(img, cb), k = ra.w / rb.w;
+        tl.from(img, { x: ra.x - cb.x - k * (rb.x - cb.x), y: ra.y - cb.y - k * (rb.y - cb.y), scale: k, transformOrigin: '0 0', duration: o.dur, ease: o.ease }, o.en);
+      }
+    },
+    sigue: function (tl, el, par, a, b, o) {
+      var g = el.matches('[data-grafica]') ? el : el.querySelector('[data-grafica]');
+      if (g) {
+        var gp = par.matches('[data-grafica]') ? par : par.querySelector('[data-grafica]');
+        var desde = gp ? +(gp.getAttribute('data-hasta') || JSON.parse(gp.getAttribute('data-xs')).length) : 1;
+        return R.linea(tl, g, Object.assign({}, o, { desdePunto: desde, ease: o.ease }));
+      }
+      sigueTrazo(tl, el, par, o);
+    },
+    camara: function (tl, el, par, a, b, o) {
+      R.camara(tl, el, Object.assign({}, o, { focos: ultimoFoco(par) + ';' + (el.getAttribute('data-focos') || '50 50 1'), pausa: o.pausa == null ? 0.25 : o.pausa }));
+    },
+  };
+  // Lo que cada modo ya anima: si el elemento también lo declara con
+  // data-efecto, la receta suelta no corre (la continuidad la sustituye).
+  var SUSTITUYE = { cuenta: 'contador', transforma: 'transforma', sigue: 'linea', camara: 'camara' };
+  window.continua = function (tl, s) {
+    var hechos = [], origen = origenDe(s);
+    if (!origen) return hechos;
+    var pares = lista(s.querySelectorAll('[data-continua]')).map(function (el) {
+      return { el: el, par: origen.querySelector('[data-continua="' + el.getAttribute('data-continua') + '"]') };
+    }).filter(function (p) { return p.par; });
+    if (!pares.length) return hechos;
+    // Medir todo antes de que ningún from() mueva nada.
+    pares.forEach(function (p) { p.a = cajaEn(p.par, origen); p.b = cajaEn(p.el, s); });
+    var fondoA = getComputedStyle(origen).backgroundColor, fondoB = getComputedStyle(s).backgroundColor;
+    if (fondoA !== fondoB && s.getAttribute('data-continua-fondo') !== 'no') {
+      guardaEstilo(s);
+      tl.fromTo(s, { backgroundColor: fondoA }, { backgroundColor: fondoB, duration: 0.9, ease: 'power2.inOut' }, 0);
+    }
+    pares.forEach(function (p) {
+      var o = leer(p.el);
+      o.dur = o.dur || 0.9; o.en = o.en || 0; o.ease = o.ease || 'power3.inOut';
+      // anidado en otro elemento que viaja: su posición ya la lleva el de afuera
+      var anidado = p.el.parentElement && p.el.parentElement.closest('[data-continua]');
+      anidado = anidado && s.contains(anidado);
+      var modos = modosDe(p.el, p.par).filter(function (m) { return MODOS[m] && !(anidado && (m === 'mueve' || m === 'crece')); });
+      modos.forEach(function (m) { MODOS[m](tl, p.el, p.par, p.a, p.b, o); });
+      hechos.push({ el: p.el, modos: modos });
+    });
+    return hechos;
   };
 
   // ── API ────────────────────────────────────────────────────────────────
@@ -639,8 +802,16 @@ const efectos = () => `<script>
     return tl;
   };
   window.efectosDeclarados = function (tl, s) {
+    // La continuidad mide primero, antes de que las demás recetas apliquen sus from().
+    var omitir = [];
+    window.continua(tl, s).forEach(function (h) {
+      h.modos.forEach(function (m) { if (SUSTITUYE[m]) omitir.push({ el: h.el, nombre: SUSTITUYE[m] }); });
+    });
     lista(s.querySelectorAll('[data-efecto]')).forEach(function (el) {
-      el.getAttribute('data-efecto').split(/\\s+/).forEach(function (nombre) { window.efecto(nombre, tl, el, leer(el)); });
+      el.getAttribute('data-efecto').split(/\\s+/).forEach(function (nombre) {
+        var sustituida = omitir.some(function (x) { return x.nombre === nombre && (x.el === el || x.el.contains(el)); });
+        if (!sustituida) window.efecto(nombre, tl, el, leer(el));
+      });
     });
   };
   window.efectosDisponibles = Object.keys(R);
@@ -747,26 +918,32 @@ const sello = (texto, { color = '#E5483E', ancho = 560, alto = 220, rotacion = -
 /** Gráfica de línea (receta 'linea'), con viewBox en píxeles reales para que
  *  getTotalLength() cuadre con lo dibujado. `valores` en orden; `etiquetas`
  *  opcionales bajo cada punto. */
-const grafica = (valores, { ancho = 912, alto = 560, color = '#FF6A3D', area = color, margen = 60, min = null, max = null,
+let graficas = 0;
+const grafica = (valores, { ancho = 912, alto = 560, color = '#FF6A3D', area = color, margen = 60, min = null, max = null, hasta = null,
   etiquetas = [], textoColor = '#F2EFE8', ejeColor = 'rgba(255,255,255,.14)', decimales = 0, sufijo = '', separador = ' ', tamValor = 46 } = {}) => {
+  // hasta: cuántos puntos enseña (los demás quedan recortados). Con la misma
+  // serie y un hasta mayor en la lámina siguiente, continua «sigue» la línea.
+  const h = Math.max(1, Math.min(valores.length, hasta || valores.length)), parcial = h < valores.length;
   const lo = min ?? Math.min(...valores), hi = max ?? Math.max(...valores);
   const xs = valores.map((_, i) => margen + (i * (ancho - 2 * margen)) / Math.max(1, valores.length - 1));
   const ys = valores.map((v) => alto - margen - ((v - lo) / ((hi - lo) || 1)) * (alto - 2 * margen - tamValor));
   const linea = 'M' + xs.map((x, i) => `${n1(x)} ${n1(ys[i])}`).join('L');
   const zona = `${linea}L${n1(xs.at(-1))} ${alto - margen}L${n1(xs[0])} ${alto - margen}Z`;
-  const id = `graf-${semillaDe(valores.join(',') + color).toString(36)}`;
+  // El id lleva un contador: dos gráficas iguales en el mismo deck (la de
+  // «sigue») no pueden compartir el clipPath.
+  const id = `graf-${semillaDe(valores.join(',') + color).toString(36)}-${++graficas}`;
   const fmt = (v) => { const t = v.toFixed(decimales).split('.'); return t[0].replace(/\B(?=(\d{3})+(?!\d))/g, separador) + (t[1] ? ',' + t[1] : '') + sufijo; };
-  return `<svg data-grafica viewBox="0 0 ${ancho} ${alto}" data-xs="${JSON.stringify(xs.map(n1))}" data-vs="${JSON.stringify(valores)}" data-sep="${separador}" data-dec="${decimales}" data-suf="${sufijo}" ` +
+  return `<svg data-grafica viewBox="0 0 ${ancho} ${alto}" data-xs="${JSON.stringify(xs.map(n1))}" data-vs="${JSON.stringify(valores)}" data-sep="${separador}" data-dec="${decimales}" data-suf="${sufijo}"${parcial ? ` data-hasta="${h}"` : ''} ` +
     `style="display:block;width:100%;height:auto;overflow:visible" role="img" aria-label="Gráfica: ${valores.join(', ')}">` +
     `<defs><linearGradient id="${id}-g" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${area}" stop-opacity=".42"/><stop offset="1" stop-color="${area}" stop-opacity="0"/></linearGradient>` +
-    `<clipPath id="${id}-c"><rect data-avance x="0" y="0" width="${ancho}" height="${alto}"/></clipPath></defs>` +
+    `<clipPath id="${id}-c"><rect data-avance x="0" y="0" width="${parcial ? n1(xs[h - 1]) : ancho}" height="${alto}"/></clipPath></defs>` +
     `<line x1="${margen}" y1="${alto - margen}" x2="${ancho - margen}" y2="${alto - margen}" stroke="${ejeColor}" stroke-width="2"/>` +
     etiquetas.map((e, i) => `<text x="${n1(xs[i])}" y="${alto - margen + 34}" text-anchor="middle" font-family="'Barlow', system-ui, sans-serif" font-size="22" font-weight="600" fill="${ejeColor.replace(/[\d.]+\)$/, '.55)')}">${e}</text>`).join('') +
     `<path data-area d="${zona}" fill="url(#${id}-g)" clip-path="url(#${id}-c)"/>` +
-    `<path data-linea d="${linea}" fill="none" stroke="${color}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>` +
-    xs.map((x, i) => `<circle data-hito cx="${n1(x)}" cy="${n1(ys[i])}" r="7" fill="${color}"/>`).join('') +
-    `<g data-punta transform="translate(${n1(xs.at(-1))} ${n1(ys.at(-1))})"><circle r="18" fill="${color}" opacity=".3"/><circle r="9" fill="#FFFFFF"/></g>` +
-    `<text data-valor x="${n1(Math.min(ancho - 60, xs.at(-1)))}" y="${n1(ys.at(-1) - 34)}" text-anchor="middle" font-family="'Bebas Neue', Impact, sans-serif" font-size="${tamValor}" fill="${textoColor}">${fmt(valores.at(-1))}</text></svg>`;
+    `<path data-linea d="${linea}"${parcial ? ` clip-path="url(#${id}-c)"` : ''} fill="none" stroke="${color}" stroke-width="6" stroke-linejoin="round" stroke-linecap="round"/>` +
+    xs.map((x, i) => `<circle data-hito cx="${n1(x)}" cy="${n1(ys[i])}" r="7" fill="${color}"${i >= h ? ' opacity="0"' : ''}/>`).join('') +
+    `<g data-punta transform="translate(${n1(xs[h - 1])} ${n1(ys[h - 1])})"><circle r="18" fill="${color}" opacity=".3"/><circle r="9" fill="#FFFFFF"/></g>` +
+    `<text data-valor x="${n1(Math.max(60, Math.min(ancho - 60, xs[h - 1])))}" y="${n1(ys[h - 1] - 34)}" text-anchor="middle" font-family="'Bebas Neue', Impact, sans-serif" font-size="${tamValor}" fill="${textoColor}">${fmt(valores[h - 1])}</text></svg>`;
 };
 
 /** Contorno (receta 'contorno'): curvas de nivel de la luminancia de una imagen,

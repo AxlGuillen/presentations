@@ -121,7 +121,7 @@ const FRENTES = [
   ['tabler:flame', '8 efectos SVG', 'Quemado, tinta, contorno, cometa, sello, ventana, cámara y línea.', '09'],
   ['tabler:palette', 'Assets generativos', 'Patrones con semilla, íconos de Iconify e ilustraciones recoloreadas.', '18'],
   ['tabler:movie', 'Video', 'Captura y render en paralelo, voz en caché y transiciones entre láminas.', '20'],
-  ['tabler:flask', 'El laboratorio', '/lab/ — el catálogo vivo, una lámina por receta con la línea para copiarla.', '24'],
+  ['tabler:flask', 'El laboratorio', '/lab/ — el catálogo vivo, una lámina por receta con la línea para copiarla.', '27'],
 ];
 n++;
 slides.push(`
@@ -359,11 +359,56 @@ lamina({ nombre: 'Arreglos', grupo: 'Video', titulo: 'Lo que se <em>arregló</em
       <div style="margin-top:18px;font:400 36px/1.05 ${SERIF};color:${CLARO}">${t}</div>
       <div style="margin-top:12px;font:400 19px/1.45 ${SANS};color:${APAGADO}">${esc(d)}</div></div>`).join('')}</div>` });
 
-// ── 23 · Dónde vive ──────────────────────────────────────────────────────
-const ARBOL = [['tools/', ''], ['  kit.cjs', 'gsap() · animador() · reproductor()'], ['  kit-efectos.cjs', 'las 35 recetas + piezas de build-time'],
-  ['  kit-patrones.cjs', 'patron() · patronFondo() · semillas'], ['  kit-recursos.cjs', 'icono() · ilustracion()'], ['  contorno.mjs', 'luminancia para kit.contorno()'],
+// ── 23–25 · Tercera tanda: continuidad y dibujo a líneas ────────────────
+// Las dos primeras van SEGUIDAS a propósito: lo que lleva el mismo
+// data-continua en la pantalla de la 23 viaja a su sitio en la 24.
+const anilloN = (p) => `<svg viewBox="0 0 100 100" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible">
+  <circle cx="50" cy="50" r="46" fill="none" stroke="${CLARO}" stroke-opacity=".16" stroke-width="1"/>
+  <circle data-progreso="${p}" pathLength="1" stroke-dasharray="1" stroke-dashoffset="${(1 - p).toFixed(2)}" cx="50" cy="50" r="46" fill="none" stroke="${NARANJA}" stroke-width="2.4" stroke-linecap="round" transform="rotate(-90 50 50)"/></svg>`;
+const piezasC = ({ carta, anillo, num, p, forma, color, lienzo }) =>
+  `<div data-continua="carta" style="position:absolute;overflow:hidden;border-radius:18px;${carta}">${imagen('Jinx_0.jpg', 'Jinx', '62% 30%')}</div>
+  <div data-continua="anillo" style="position:absolute;${anillo}">${anilloN(p)}<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span data-continua="numero" data-cuenta="${num}" data-prefijo="0" style="font:400 120px/1 ${DISPLAY};color:${CLARO}">0${num}</span></div></div>
+  <svg data-continua="lienzo" viewBox="0 0 900 900" style="position:absolute;${lienzo}"><path data-continua="forma" d="${forma}" fill="${color}"/></svg>`;
+lamina({ nombre: 'Continuidad', grupo: 'Tercera tanda', titulo: 'El objeto que <em>se queda</em>',
+  texto: 'Es el Morph de PowerPoint o el Magic Move de Keynote: el mismo elemento, marcado con <b>data-continua</b> en láminas seguidas, arranca donde estaba en la anterior y viaja a su lugar nuevo. <b>Avanza a la siguiente para verlo.</b>',
+  code: '<div data-continua="carta">…</div>\n<b data-continua="numero" data-cuenta="2">02</b>\n<path data-continua="forma" d="…"/>',
+  notas: 'Esta lámina y la siguiente van juntas: al avanzar, la carta, el anillo, el número y la forma viajan.',
+  demo: piezasC({ carta: 'left:40px;top:50px;width:240px;height:340px', anillo: 'right:60px;top:60px;width:260px;height:260px', num: 1, p: 0.25,
+    forma: forma('mancha-a', 0, 450, 450, 1), color: AZUL_CLARO, lienzo: 'left:330px;top:440px;width:300px;height:300px' }) });
+lamina({ nombre: 'Seis modos', grupo: 'Tercera tanda', titulo: 'Seis formas de <em>viajar</em>',
+  texto: '<b>mueve</b> lleva posición y tamaño; <b>cuenta</b> sigue la cifra desde la anterior; <b>transforma</b> vuelve una forma otra; <b>crece</b> hace de un marco chico el fondo entero; <b>sigue</b> continúa una línea donde se quedó, y <b>cámara</b> mueve la vista en vez del objeto. Y el fondo de la lámina funde de un color al otro.',
+  extra: chips(['mueve', 'cuenta', 'transforma', 'crece', 'sigue', 'cámara'], NARANJA) +
+    `<div data-a="up2" style="margin-top: 16px; font: 400 19px/1.45 ${SANS}; color: ${GRIS};">En el video, las láminas enlazadas van con corte seco solas: la continuidad ya es la transición.</div>`,
+  code: '<div data-continua="carta" data-como="crece">…</div>\n<div data-continua="carta" data-focos="58 24 2.6">…</div>',
+  demo: piezasC({ carta: 'right:40px;top:150px;width:360px;height:520px', anillo: 'left:40px;top:40px;width:400px;height:400px', num: 2, p: 0.5,
+    forma: forma('estrella', 10, 450, 450, 1), color: NARANJA, lienzo: 'left:90px;top:470px;width:300px;height:300px' }) });
+const LNV = kit.lineas;
+const cajaN = (() => {
+  const W = 150, H = 200, D = 44, c = LNV.caja([0, 0, 0], [W, H, D]), f = c.frente;
+  f.detalles.push(LNV.rect(f, 0.06, 0.045, 0.94, 0.955), LNV.linea(f, 0.06, 0.865, 0.94, 0.865), LNV.circulo(f, 0.5, 0.56, 42 / W, 42 / H), LNV.circulo(f, 0.5, 0.56, 24 / W, 24 / H),
+    LNV.linea(f, 0.16, 0.24, 0.84, 0.24), LNV.linea(f, 0.28, 0.19, 0.72, 0.19));
+  c.der.detalles.push(LNV.linea(c.der, 0.5, 0.14, 0.5, 0.72));
+  c.der.achurado = { paso: 7 };
+  return LNV.dibujar([c], { camara: { ojo: [330, 190, 400] }, ancho: 440, alto: 640, margen: 50, tinta: CLARO, acento: NARANJA, grosor: 2.6, fino: 1.4, tamTexto: 18,
+    encima: [...LNV.cota([-W / 2, -H / 2, D / 2], [W / 2, -H / 2, D / 2], [0, -26, 0], '150'), ...LNV.cota([-W / 2, -H / 2, D / 2], [-W / 2, H / 2, D / 2], [-26, 0, 0], '200')],
+    estilo: 'width:100%;height:100%', titulo: 'Caja de un juego' });
+})();
+const trofeoN = LNV.dibujar([LNV.revolucion([[0, 40], [10, 40], [10, 52], [6, 60], [6, 78], [22, 92], [34, 120], [38, 150], [36, 150], [32, 122], [20, 98], [0, 96]], { segmentos: 56 }), LNV.caja([0, 18, 0], [64, 36, 64])],
+  { camara: { ojo: [180, 260, 420], centro: [0, 80, 0] }, ancho: 440, alto: 640, margen: 40, tinta: CLARO, grosor: 2.6, fino: 1.4, sombra: { luz: [-0.6, 0.7, 0.6], paso: 6, umbrales: [0.5, 0.85] }, estilo: 'width:100%;height:100%', titulo: 'Trofeo' });
+lamina({ nombre: 'Dibujo a líneas', grupo: 'Tercera tanda', titulo: 'Objetos dibujados <em>a líneas</em>',
+  texto: '<b>kit.lineas</b> arma cajas, contornos extruidos, piezas de revolución y dados, y los pinta solo con trazos: siluetas, pliegues y detalles, quitando de verdad lo que queda detrás, con achurado de grabado y cotas de plano. La receta <b>traza</b> los dibuja capa por capa.',
+  extra: para('generar los objetos en vez de usar ilustraciones de stock; y de fondo, kit.patron(\'hilos\' | \'horizonte\' | \'guilloche\').'),
+  code: "const caja = kit.lineas.caja([0, 0, 0], [150, 200, 44]);\ncaja.frente.detalles.push(kit.lineas.circulo(caja.frente, .5, .56, .28));\n${kit.lineas.dibujar([caja], { camara, encima: cotas })}",
+  tamCodigo: 17,
+  demo: `<div style="display:grid;grid-template-columns:440px 440px;gap:20px">
+    <div data-efecto="traza" data-en="0.3" data-dur="2.4" style="height:640px">${cajaN}</div>
+    <div data-efecto="traza" data-en="0.6" data-dur="2.4" style="height:640px">${trofeoN}</div></div>` });
+
+// ── 26 · Dónde vive ──────────────────────────────────────────────────────
+const ARBOL = [['tools/', ''], ['  kit.cjs', 'gsap() · animador() · reproductor()'], ['  kit-efectos.cjs', 'las 36 recetas, continua y piezas'],
+  ['  kit-patrones.cjs', 'patron(): 12 tipos con semilla'], ['  kit-lineas.cjs', 'dibujo a líneas: cajas, dados…'], ['  kit-recursos.cjs', 'icono() · ilustracion()'], ['  contorno.mjs', 'luminancia para kit.contorno()'],
   ['  transiciones.mjs', 'las 57 de xfade'], ['  cache/', 'íconos, doodles y contornos'], ['  vendor/', 'GSAP 3.15 y sus plugins'], ['lab/', 'una lámina por receta'],
-  ['docs/', ''], ['  animaciones-y-assets.md', 'la primera tanda'], ['  efectos-svg.md', '25 propuestos, 8 hechos']];
+  ['docs/', ''], ['  animaciones-y-assets.md', 'la primera tanda'], ['  efectos-svg.md', '25 propuestos, 8 hechos'], ['  lineas-y-continuidad.md', 'continua y kit.lineas']];
 const REGLAS = [['Sin azar', 'nada de Math.random: PRNG con semilla o hash.'], ['Seekeables', 'el video salta a cualquier tiempo y sale el mismo cuadro.'],
   ['Solo from()', 'nunca ocultar en CSS: sin JS el deck se ve completo.'], ['Se deshacen', 'lo que tocan del DOM lo registran con deshacer().']];
 lamina({ nombre: 'Dónde vive', grupo: 'Mapa', titulo: 'Dónde vive <em>cada cosa</em>',
@@ -372,7 +417,7 @@ lamina({ nombre: 'Dónde vive', grupo: 'Mapa', titulo: 'Dónde vive <em>cada cos
   demo: `<div data-efecto="bento" data-desde="start" data-escalon="0.05" data-escala="0.96" style="width:860px;font:500 21px/1.75 ${MONO};white-space:pre">${ARBOL.map(([f, d]) =>
     `<div style="display:flex"><span style="flex:0 0 370px;color:${f.trim().endsWith('/') ? AZUL_CLARO : CLARO}">${f}</span><span style="color:${APAGADO}">${d}</span></div>`).join('')}</div>` });
 
-// ── 24 · Cierre ──────────────────────────────────────────────────────────
+// ── 27 · Cierre ──────────────────────────────────────────────────────────
 const FALTAN = ['pixelado', 'aberración', 'especular', 'neón', 'foco', 'silueta', 'destello', 'órbita', 'rotulado', 'mosaico', 'cortina líquida', 'dona', 'radar', 'chispas', 'ensamble', 'derrumbe', 'golpe'];
 lamina({ nombre: 'Cierre', grupo: 'Lo que sigue', titulo: 'Faltan <em>diecisiete</em>',
   texto: '<b>docs/efectos-svg.md</b> trae los que siguen, varios ya con prototipo probado en Chrome. Mientras, todo lo de este cuaderno se puede ver suelto, una receta por lámina, en el laboratorio.',
