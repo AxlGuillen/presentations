@@ -114,6 +114,8 @@ for (const carpeta of carpetas) {
   for (const [nombre, escala] of Object.entries(escalas)) {
     // og.png la regenera tools/og.mjs y tiene que seguir siendo PNG de 1200×630.
     if (nombre === 'og.png') continue;
+    // Los SVG son vectoriales: no hay píxeles que recortar y Pillow no los abre.
+    if (/\.svg$/i.test(nombre)) continue;
     const abs = path.join(dir, nombre);
     if (!fs.existsSync(abs)) continue;
     plan.push({ carpeta, nombre, abs, escala: Math.min(1, escala * holgura), bytes: fs.statSync(abs).size });
