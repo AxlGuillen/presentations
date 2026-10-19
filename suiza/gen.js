@@ -40,7 +40,7 @@ const MONO = `'JetBrains Mono', ui-monospace, monospace`;
 const EQ = {
   GEN: { marca: 'GEN.G', nombre: 'Gen.G', region: 'LCK', color: '#C9A35C', estrella: ['chovy', 'Chovy', '8 Mundiales · 0 títulos'], extra: ['ruler', 'canyon'] },
   IG: { marca: 'INVICTUS', nombre: 'Invictus Gaming', region: 'LPL', color: '#D9DFE7', estrella: ['theshy', 'TheShy', 'Campeón 2018'], extra: ['rookie', 'meiko'] },
-  TL: { marca: 'LIQUID', nombre: 'Team Liquid Alienware', region: 'LCS', color: '#3F7FE0', estrella: ['corejj', 'CoreJJ', 'Campeón 2017 · 9 Mundiales'], extra: ['josedeodo'] },
+  TL: { marca: 'LIQUID', nombre: 'Team Liquid Alienware', region: 'LCS', color: '#3F7FE0', estrella: ['josedeodo', 'Josedeodo', 'Jungla argentino'], extra: ['corejj'] },
   CFO: { marca: 'CFO', nombre: 'CTBC Flying Oyster', region: 'LCP', color: '#F5A524', estrella: ['doggo', 'Doggo', 'ADC'], extra: ['shad0w'] },
   AL: { marca: 'ANYONE’S', nombre: 'Anyone’s Legend', region: 'LPL', color: '#E5392E', estrella: ['tarzan', 'Tarzan', 'Jungla veterano'], extra: [] },
   KC: { marca: 'KARMINE', nombre: 'Karmine Corp', region: 'LEC', color: '#19D3F3', estrella: ['caliste', 'Caliste', 'Campeón del Play-In'], extra: ['kyeahoo'] },
@@ -59,7 +59,7 @@ const EQ = {
 // Ronda 1, en el orden del calendario (hora CDMX, todos el viernes 23).
 const R1 = [
   ['GEN', 'IG', '11:00', 'Chovy contra los campeones de 2018'],
-  ['TL', 'CFO', '12:00', 'CoreJJ: nueve Mundiales y un título'],
+  ['TL', 'CFO', '12:00', 'Josedeodo, el latino del Mundial'],
   ['AL', 'KC', '13:00', 'Debuta el campeón del Play-In'],
   ['G2', 'DK', '14:00', 'Caps contra ShowMaker'],
   ['HLE', 'TES', '15:00', 'El MVP de la final 2025 contra JackeyLove'],
