@@ -1,8 +1,8 @@
 // Generador de index.html — Worlds 2026 · Fase suiza (vertical, 1080×1920)
 // Ejecutar: node suiza/gen.js
 //
-// Encargo: la información del formato suizo y, al final, el cuadro de la
-// ronda 1 «muy bonito», con logos, fotos y los nombres de los equipos
+// Encargo: la ronda 1 de la fase suiza y, al final, su cuadro «muy bonito»,
+// con logos, fotos y los nombres de los equipos
 // estilizados **como flyer de evento**. Que parezcan partidos especiales,
 // pero sin amontonar cosas: cada partido es una lámina con dos estrellas
 // frente a frente, el nombre del equipo en grande, la banda del VS con la
@@ -15,8 +15,9 @@
 //
 // ⚠️ La ronda 1 entera cae el **viernes 23 de octubre** en hora de CDMX: el
 // último partido es 24/10 a las 00:00 UTC, que en México son las 18:00 del 23.
-// ⚠️ Las series de clasificación y de eliminación son Bo3 (2–0, 0–2, 2–1,
-// 1–2 y 2–2); las demás, Bo1. Así lo pinta el cuadro de la lámina 3.
+// Las cuatro láminas de información (reglas, cuadro de récords, calendario y
+// bombos) se quitaron el 18/10 a pedido de Axl: el deck es portada, los ocho
+// flyers y el cuadro.
 // ⚠️ TL y TSW tienen logo blanco: solo van sobre fondo oscuro (aquí todo lo es).
 const fs = require('fs');
 const kit = require('../tools/kit.cjs');
@@ -66,7 +67,6 @@ const R1 = [
   ['TSW', 'LYON', '17:00', 'Vietnam contra Norteamérica'],
   ['BLG', 'MKOI', '18:00', 'Viper contra Elyoya'],
 ];
-const BOMBOS = [['GEN', 'AL', 'TL', 'G2'], ['TSW', 'LOS', 'HLE', 'BLG'], ['LYON', 'MKOI', 'T1', 'TES'], ['CFO', 'DK', 'IG', 'KC']];
 
 const logo = (t) => `assets/logos/${t}.png`;
 const foto = (id) => `assets/jugadores/${id}.webp`;
@@ -102,141 +102,7 @@ slides.push(`
     ${grano}
   </section>`);
 
-// ── 2 · Las reglas ───────────────────────────────────────────────────────
-const pips = (n, color, hueco = 0) => Array.from({ length: n + hueco }, (_, i) =>
-  `<span data-pip style="width: 64px; height: 64px; border-radius: 50%; ${i < n ? `background: ${color}; box-shadow: 0 0 28px ${a(color, 0.6)};` : `border: 3px solid ${a(PLATA, 0.25)};`}"></span>`).join('');
-const regla = (num, palabra, color, destino) => `
-      <div data-regla style="display: flex; align-items: center; justify-content: space-between; padding: 34px 0; border-bottom: 1px solid ${a(PLATA, 0.12)};">
-        <div>
-          <div style="display: flex; gap: 14px; margin-bottom: 18px;">${pips(3, color)}</div>
-          <div style="font-family: ${DISPLAY}; font-size: 120px; line-height: 0.9;">${num} <span style="color: ${color};">${palabra}</span></div>
-        </div>
-        <div style="font-family: ${DISPLAY}; font-size: 64px; line-height: 0.95; text-align: right; color: ${color};">${destino}</div>
-      </div>`;
-slides.push(`
-  <section data-label="Reglas" data-screen-label="02 · Las reglas" data-speaker-notes="Las reglas son simples: con tres victorias clasificas a cuartos y con tres derrotas te vas a casa. Y cuando te juegas clasificar o quedar fuera, la serie es al mejor de tres; todo lo demás, a un solo mapa." style="${SECCION} display: flex; flex-direction: column; justify-content: center;">
-    ${halo(SUBE, 260, 700, 900, 900, 0.16)}
-    ${halo(FUERA, 860, 1050, 900, 900, 0.16)}
-    <div style="position: relative;">
-      ${chip('Sistema suizo')}
-      <h2 data-titulo class="cromo" style="margin: 26px 0 10px; font-family: ${DISPLAY}; font-weight: 400; font-size: 150px; line-height: 0.88;">LAS REGLAS</h2>
-      ${regla(3, 'VICTORIAS', SUBE, 'A<br>CUARTOS')}
-      ${regla(3, 'DERROTAS', FUERA, 'FUERA')}
-      <div data-regla style="display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-top: 40px;">
-        <div style="padding: 30px; border-radius: 22px; background: ${a(HIELO, 0.1)}; border: 2px solid ${HIELO};">
-          <div style="font-family: ${DISPLAY}; font-size: 96px; line-height: 0.9; color: ${HIELO};">BO3</div>
-          <div style="margin-top: 14px; font-size: 30px; font-weight: 600; line-height: 1.25;">Si te juegas clasificar o quedar fuera</div>
-        </div>
-        <div style="padding: 30px; border-radius: 22px; border: 2px solid ${a(PLATA, 0.25)};">
-          <div style="font-family: ${DISPLAY}; font-size: 96px; line-height: 0.9;">BO1</div>
-          <div style="margin-top: 14px; font-size: 30px; font-weight: 600; line-height: 1.25; color: ${MUTED};">Todo lo demás: un solo mapa</div>
-        </div>
-      </div>
-    </div>
-    ${grano}
-  </section>`);
-
-// ── 3 · El cuadro suizo ──────────────────────────────────────────────────
-// Cada caja es un récord; la x sale de (derrotas − victorias), así que los
-// que ganan se van a la izquierda y los que pierden a la derecha.
-const NODOS = [
-  [[0, 0, 16]],
-  [[1, 0, 8], [0, 1, 8]],
-  [[2, 0, 4], [1, 1, 8], [0, 2, 4]],
-  [[3, 0, 2], [2, 1, 6], [1, 2, 6], [0, 3, 2]],
-  [[3, 1, 3], [2, 2, 6], [1, 3, 3]],
-  [[3, 2, 3], [2, 3, 3]],
-];
-const DW = 912, NW = 186, NH = 104, PASO_X = 113, PASO_Y = 168;
-const pos = (w, l) => ({ x: DW / 2 + (l - w) * PASO_X, y: 40 + (w + l) * PASO_Y });
-const bo3 = (w, l) => (w === 2 || l === 2) && w < 3 && l < 3 && !(w === 1 && l === 1) && !(w + l < 2);
-let lineas = '', cajas = '';
-for (const fila of NODOS) for (const [w, l, n] of fila) {
-  const p = pos(w, l);
-  if (w < 3 && l < 3) {
-    for (const [dw, dl, col] of [[1, 0, SUBE], [0, 1, FUERA]]) {
-      const q = pos(w + dw, l + dl);
-      lineas += `<path data-linea d="M${p.x} ${p.y + NH / 2} C ${p.x} ${p.y + NH / 2 + 40}, ${q.x} ${q.y - NH / 2 - 40}, ${q.x} ${q.y - NH / 2}" fill="none" stroke="${a(col, 0.55)}" stroke-width="3"/>`;
-    }
-  }
-  const fin = w === 3 ? SUBE : l === 3 ? FUERA : null;
-  const borde = fin || (bo3(w, l) ? HIELO : a(PLATA, 0.3));
-  const fondo = fin ? a(fin, 0.16) : bo3(w, l) ? a(HIELO, 0.08) : '#0E0E14';
-  const pie = w === 3 ? 'CLASIFICA' : l === 3 ? 'FUERA' : bo3(w, l) ? `${n} · BO3` : `${n} · BO1`;
-  cajas += `<g data-nodo data-fila="${w + l}">
-      <rect x="${p.x - NW / 2}" y="${p.y - NH / 2}" width="${NW}" height="${NH}" rx="18" fill="${fondo}" stroke="${borde}" stroke-width="${bo3(w, l) || fin ? 3 : 2}" ${bo3(w, l) ? 'stroke-dasharray="10 7"' : ''}/>
-      <text x="${p.x}" y="${p.y + 6}" text-anchor="middle" font-family="Anton, Impact" font-size="54" fill="${fin || PLATA}">${w}–${l}</text>
-      <text x="${p.x}" y="${p.y + 38}" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="17" font-weight="600" letter-spacing="2" fill="${fin || (bo3(w, l) ? HIELO : MUTED)}">${pie}</text>
-    </g>`;
-}
-const altoDiagrama = 40 + 5 * PASO_Y + NH / 2 + 10;
-slides.push(`
-  <section data-label="Cuadro suizo" data-screen-label="03 · El cuadro suizo" data-speaker-notes="Así se ve el cuadro: todos arrancan cero cero, y en cada ronda juegas contra alguien con tu mismo récord. Los que llegan a tres victorias pasan, los que llegan a tres derrotas se van. Al final quedan ocho." style="${SECCION}">
-    <div style="text-align: center;">
-      ${chip('Mismo récord contra mismo récord')}
-      <h2 data-titulo class="cromo" style="margin: 22px 0 26px; font-family: ${DISPLAY}; font-weight: 400; font-size: 120px; line-height: 0.88;">EL CUADRO SUIZO</h2>
-    </div>
-    <svg data-diagrama viewBox="0 0 ${DW} ${altoDiagrama}" width="${DW}" height="${altoDiagrama}" style="display: block; overflow: visible;">
-      ${lineas}
-      ${cajas}
-    </svg>
-    <div data-pie style="margin-top: 22px; display: flex; justify-content: center; gap: 36px; font-family: ${MONO}; font-size: 22px; font-weight: 600; letter-spacing: 2px;">
-      <span style="color: ${SUBE};">━ GANA</span><span style="color: ${FUERA};">━ PIERDE</span><span style="color: ${HIELO};">┅ BO3</span>
-    </div>
-    ${grano}
-  </section>`);
-
-// ── 4 · Calendario ───────────────────────────────────────────────────────
-const PARADAS = [
-  ['23–26 OCT', 'Fase suiza', 'Allen, Texas', HIELO],
-  ['28–31 OCT', 'Fase suiza', 'Allen, Texas', HIELO],
-  ['3–6 NOV', 'Cuartos', '', PLATA],
-  ['7–8 NOV', 'Semifinales', '', PLATA],
-  ['14 NOV', 'La final', 'Nueva York', '#F2C95C'],
-];
-slides.push(`
-  <section data-label="Calendario" data-screen-label="04 · Calendario" data-speaker-notes="Son dos semanas de fase suiza en Allen, Texas, del veintitrés al veintiséis y del veintiocho al treinta y uno de octubre. Luego cuartos, semis, y la final el catorce de noviembre en Nueva York. Hay cinco millones de dólares en la bolsa y se juega en el parche veintiséis punto veinte." style="${SECCION} display: flex; flex-direction: column; justify-content: center;">
-    ${halo(HIELO, 200, 800, 900, 900, 0.14)}
-    <div style="position: relative;">
-      ${chip('El camino a Nueva York')}
-      <div data-premio style="margin: 30px 0 6px; font-family: ${DISPLAY}; font-size: 190px; line-height: 0.86;" class="cromo">$5 000 000</div>
-      <div data-premio style="font-family: ${MONO}; font-size: 24px; font-weight: 600; letter-spacing: 3px; color: ${MUTED};">EN LA BOLSA · PARCHE 26.20</div>
-      <div style="position: relative; margin-top: 56px; padding-left: 60px;">
-        <div data-riel style="position: absolute; left: 17px; top: 18px; bottom: 36px; width: 4px; border-radius: 2px; background: linear-gradient(${HIELO}, ${PLATA} 60%, #F2C95C); transform-origin: top;"></div>
-        ${PARADAS.map(([f, n, lugar, col]) => `
-        <div data-parada style="position: relative; padding-bottom: 40px;">
-          <span style="position: absolute; left: -58px; top: 12px; width: 36px; height: 36px; border-radius: 50%; background: ${BG}; border: 4px solid ${col}; box-sizing: border-box;"></span>
-          <div style="font-family: ${MONO}; font-size: 26px; font-weight: 600; letter-spacing: 2px; color: ${col};">${f}</div>
-          <div style="font-family: ${DISPLAY}; font-size: 76px; line-height: 1;">${n.toUpperCase()}${lugar ? ` <span style="font-family: ${BODY}; font-size: 30px; font-weight: 700; font-style: italic; color: ${MUTED}; letter-spacing: 0;">${lugar}</span>` : ''}</div>
-        </div>`).join('')}
-      </div>
-    </div>
-    ${grano}
-  </section>`);
-
-// ── 5 · Bombos ───────────────────────────────────────────────────────────
-slides.push(`
-  <section data-label="Bombos" data-screen-label="05 · Bombos" data-speaker-notes="Para la primera ronda los dieciséis se repartieron en cuatro bombos: los cabezas de serie en el uno, y en el cuatro, donde caen sorpresas como Dplus, Invictus y Karmine." style="${SECCION} display: flex; flex-direction: column; justify-content: center;">
-    <div style="text-align: center;">
-      ${chip('Los 16 equipos')}
-      <h2 data-titulo class="cromo" style="margin: 22px 0 34px; font-family: ${DISPLAY}; font-weight: 400; font-size: 140px; line-height: 0.88;">LOS BOMBOS</h2>
-    </div>
-    ${BOMBOS.map((fila, i) => `
-    <div data-bombo style="display: flex; align-items: center; gap: 16px; margin-bottom: 18px;">
-      <div style="width: 82px; flex: none; text-align: center;">
-        <div style="font-family: ${MONO}; font-size: 16px; font-weight: 600; letter-spacing: 2px; color: ${MUTED};">BOMBO</div>
-        <div class="cromo" style="font-family: ${DISPLAY}; font-size: 96px; line-height: 0.95;">${i + 1}</div>
-      </div>
-      ${fila.map(t => `
-      <div data-equipo style="flex: 1; height: 190px; border-radius: 20px; background: linear-gradient(160deg, ${a(EQ[t].color, 0.22)}, #0E0E14 70%); border: 1px solid ${a(EQ[t].color, 0.45)}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px;">
-        <img src="${logo(t)}" alt="${EQ[t].nombre}" style="max-width: 118px; max-height: 104px; object-fit: contain;">
-        <div style="font-family: ${DISPLAY}; font-size: 34px; line-height: 1; letter-spacing: 1px;">${t}</div>
-      </div>`).join('')}
-    </div>`).join('')}
-    ${grano}
-  </section>`);
-
-// ── 6–13 · Flyers de la ronda 1 ──────────────────────────────────────────
+// ── 2–9 · Flyers de la ronda 1 ──────────────────────────────────────────
 // Arriba el primer equipo (estrella a la derecha, nombre a la izquierda),
 // abajo el segundo en espejo; en medio la banda del VS, girada, con el borde
 // de arriba del color de uno y el de abajo del color del otro.
@@ -275,7 +141,7 @@ R1.forEach(([A, B, hora, gancho], i) => {
   const la = lado(A, true), lb = lado(B, false);
   const notas = `Partido ${i + 1} de la ronda uno: ${ea.nombre} contra ${eb.nombre}, viernes veintitrés a las ${hora} de la Ciudad de México, a un solo mapa. ${gancho}.`;
   slides.push(`
-  <section data-label="Partido ${i + 1}" data-screen-label="${String(6 + i).padStart(2, '0')} · ${A} vs ${B}" data-speaker-notes="${notas}" style="${SECCION}">
+  <section data-label="Partido ${i + 1}" data-screen-label="${String(2 + i).padStart(2, '0')} · ${A} vs ${B}" data-speaker-notes="${notas}" style="${SECCION}">
     <div data-fondo-a style="position: absolute; inset: 0 0 50% 0; background: linear-gradient(200deg, ${a(ea.color, 0.38)}, ${a(ea.color, 0)} 62%);"></div>
     <div data-fondo-b style="position: absolute; inset: 50% 0 0 0; background: linear-gradient(20deg, ${a(eb.color, 0.38)}, ${a(eb.color, 0)} 62%);"></div>
     ${halo(ea.color, 800, 640, 820, 820, 0.4)}
@@ -298,7 +164,7 @@ R1.forEach(([A, B, hora, gancho], i) => {
   </section>`);
 });
 
-// ── 14 · El cuadro de la ronda 1 ─────────────────────────────────────────
+// ── 10 · El cuadro de la ronda 1 ─────────────────────────────────────────
 const cara = (t, color) => `<div style="width: 100px; height: 100px; flex: none; border-radius: 50%; overflow: hidden; border: 3px solid ${color}; background: radial-gradient(circle at 50% 30%, ${a(color, 0.45)}, #0E0E14 75%); box-shadow: 0 0 24px ${a(color, 0.45)};">
           <img src="${foto(EQ[t].estrella[0])}" alt="${EQ[t].estrella[1]}" style="width: 100%; height: 100%; object-fit: cover; object-position: 50% 0%; transform: scale(1.35); transform-origin: 50% 0%;">
         </div>`;
@@ -321,7 +187,7 @@ const filaCuadro = ([A, B, hora], i) => {
     </div>`;
 };
 slides.push(`
-  <section data-label="Cuadro" data-screen-label="14 · El cuadro de la ronda 1" data-speaker-notes="Y este es el cuadro de la primera ronda, ocho partidos el viernes veintitrés desde las once de la mañana. Los ganadores pasan a uno cero y los perdedores a cero uno, y a partir de ahí, mismo récord contra mismo récord." style="${SECCION}">
+  <section data-label="Cuadro" data-screen-label="10 · El cuadro de la ronda 1" data-speaker-notes="Y este es el cuadro de la primera ronda, ocho partidos el viernes veintitrés desde las once de la mañana. Los ganadores pasan a uno cero y los perdedores a cero uno, y a partir de ahí, mismo récord contra mismo récord." style="${SECCION}">
     ${halo(HIELO, 540, 400, 1100, 700, 0.16)}
     <div style="position: relative; text-align: center;">
       ${chip('Viernes 23 de octubre · hora CDMX')}
@@ -353,36 +219,6 @@ const coreografias = `<script>
       .from(uno(s, '[data-chip]'), { y: -20, opacity: 0, duration: 0.5 }, 0.3)
       .from(uno(s, '[data-titulo]'), { scale: 1.25, opacity: 0, duration: 0.7, ease: 'expo.out' }, 0.7)
       .from(uno(s, '[data-sub]'), { y: 20, opacity: 0, duration: 0.5 }, 1.1);
-  });
-
-  animar('Reglas', function (tl, s) {
-    tl.from(uno(s, '[data-chip]'), { y: 20, opacity: 0, duration: 0.45 }, 0)
-      .from(uno(s, '[data-titulo]'), { y: 40, opacity: 0, duration: 0.6 }, 0.1)
-      .from(q(s, '[data-regla]'), { y: 40, opacity: 0, duration: 0.6, stagger: 0.25 }, 0.4)
-      .from(q(s, '[data-pip]'), { scale: 0, duration: 0.35, stagger: 0.08, ease: 'back.out(3)' }, 0.6);
-  });
-
-  animar('Cuadro suizo', function (tl, s) {
-    tl.from(uno(s, '[data-chip]'), { y: 20, opacity: 0, duration: 0.45 }, 0)
-      .from(uno(s, '[data-titulo]'), { y: 40, opacity: 0, duration: 0.6 }, 0.1);
-    for (var f = 0; f <= 5; f++) {
-      tl.from(q(s, '[data-nodo][data-fila="' + f + '"]'), { scale: 0.6, opacity: 0, transformOrigin: '50% 50%', duration: 0.4, stagger: 0.05, ease: 'back.out(2)' }, 0.45 + f * 0.32);
-    }
-    tl.from(q(s, '[data-linea]'), { drawSVG: '0%', duration: 0.5, stagger: 0.03 }, 0.6)
-      .from(uno(s, '[data-pie]'), { opacity: 0, duration: 0.5 }, 2.4);
-  });
-
-  animar('Calendario', function (tl, s) {
-    tl.from(uno(s, '[data-chip]'), { y: 20, opacity: 0, duration: 0.45 }, 0)
-      .from(q(s, '[data-premio]'), { y: 40, opacity: 0, duration: 0.6, stagger: 0.12 }, 0.1)
-      .from(uno(s, '[data-riel]'), { scaleY: 0, duration: 1.2, ease: 'power2.inOut' }, 0.5)
-      .from(q(s, '[data-parada]'), { x: -30, opacity: 0, duration: 0.5, stagger: 0.18 }, 0.55);
-  });
-
-  animar('Bombos', function (tl, s) {
-    tl.from(uno(s, '[data-chip]'), { y: 20, opacity: 0, duration: 0.45 }, 0)
-      .from(uno(s, '[data-titulo]'), { y: 40, opacity: 0, duration: 0.6 }, 0.1)
-      .from(q(s, '[data-equipo]'), { scale: 0.8, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'back.out(1.8)' }, 0.4);
   });
 
   function flyer(tl, s) {
@@ -455,7 +291,7 @@ ${kit.og({ titulo: 'Worlds 2026 · Fase suiza', descripcion: 'El formato suizo d
 <deck-stage width="1080" height="1920">
 ${slides.join('\n')}
 </deck-stage>
-${kit.gsap(__dirname, ['DrawSVG'])}
+${kit.gsap(__dirname, [])}
 ${kit.animador()}
 ${coreografias}
 <script>

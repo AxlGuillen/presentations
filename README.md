@@ -37,7 +37,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /swain/              Swain cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 14 slides
 /xerath/             Xerath cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /jinx/               Jinx cumple 13 años (apoyo visual para TikTok, animado, solo arte) · 9:16 · 17 slides
-/suiza/              Worlds 2026 · fase suiza: formato y ronda 1 en flyers (animado) · 9:16 · 14 slides
+/suiza/              Worlds 2026 · fase suiza: la ronda 1 en flyers y su cuadro (animado) · 9:16 · 10 slides
 /parche2620/         Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
