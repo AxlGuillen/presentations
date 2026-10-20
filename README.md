@@ -57,6 +57,8 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /semana36/           Reporte semanal Jira: semana 36 (1–7 sep 2026) · 16:9 · 11 slides
 /semana38/           Reporte semanal Jira: semana 38 (15–21 sep 2026) · 16:9 · 11 slides
                      · la semana 37 no tuvo reporte: solo 3 h 13 m, todas el martes 8
+/semana42/           Reporte semanal Jira: semana 42 (13–19 oct 2026) · 16:9 · 12 slides
+                     · cierra con las novedades de presentations y walkthrough de la semana
 /ultracode/          Charla: Ultracode en la práctica (caso Minuto Dulce) · 16:9 · 15 slides
 /seating3dmap/       seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
 /dra/                Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
