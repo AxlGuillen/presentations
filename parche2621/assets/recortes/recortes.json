@@ -1,0 +1,485 @@
+{
+ "cabecera": {
+  "w": 1200,
+  "h": 940,
+  "marcas": [
+   {
+    "x": 820,
+    "y": 717,
+    "w": 164,
+    "h": 92,
+    "archivo": "cabecera-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "intro": {
+  "w": 1079,
+  "h": 618,
+  "marcas": [
+   {
+    "x": 637,
+    "y": 198,
+    "w": 392,
+    "h": 46,
+    "archivo": "intro-m0.png"
+   },
+   {
+    "x": 70,
+    "y": 242,
+    "w": 284,
+    "h": 46,
+    "archivo": "intro-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "jinx": {
+  "w": 1092,
+  "h": 696,
+  "marcas": [
+   {
+    "x": 547,
+    "y": 256,
+    "w": 230,
+    "h": 46,
+    "archivo": "jinx-m0.png"
+   },
+   {
+    "x": 484,
+    "y": 570,
+    "w": 165,
+    "h": 46,
+    "archivo": "jinx-m1.png"
+   },
+   {
+    "x": 385,
+    "y": 622,
+    "w": 208,
+    "h": 46,
+    "archivo": "jinx-m2.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "caitlyn": {
+  "w": 1092,
+  "h": 1108,
+  "marcas": [
+   {
+    "x": 200,
+    "y": 750,
+    "w": 160,
+    "h": 46,
+    "archivo": "caitlyn-m0.png"
+   },
+   {
+    "x": 574,
+    "y": 1034,
+    "w": 319,
+    "h": 46,
+    "archivo": "caitlyn-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "leesin": {
+  "w": 1092,
+  "h": 1204,
+  "marcas": [
+   {
+    "x": 259,
+    "y": 706,
+    "w": 42,
+    "h": 46,
+    "archivo": "leesin-m0.png"
+   },
+   {
+    "x": 332,
+    "y": 1086,
+    "w": 205,
+    "h": 46,
+    "archivo": "leesin-m1.png"
+   },
+   {
+    "x": 688,
+    "y": 946,
+    "w": 205,
+    "h": 46,
+    "archivo": "leesin-m2.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "qiyana": {
+  "w": 1092,
+  "h": 668,
+  "marcas": [
+   {
+    "x": 739,
+    "y": 550,
+    "w": 330,
+    "h": 46,
+    "archivo": "qiyana-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "viktor": {
+  "w": 1092,
+  "h": 884,
+  "marcas": [
+   {
+    "x": 238,
+    "y": 256,
+    "w": 267,
+    "h": 46,
+    "archivo": "viktor-m0.png"
+   },
+   {
+    "x": 305,
+    "y": 570,
+    "w": 61,
+    "h": 46,
+    "archivo": "viktor-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "nidalee": {
+  "w": 1092,
+  "h": 772,
+  "marcas": [
+   {
+    "x": 952,
+    "y": 414,
+    "w": 103,
+    "h": 46,
+    "archivo": "nidalee-m0.png"
+   },
+   {
+    "x": 54,
+    "y": 458,
+    "w": 214,
+    "h": 46,
+    "archivo": "nidalee-m1.png"
+   },
+   {
+    "x": 550,
+    "y": 698,
+    "w": 300,
+    "h": 46,
+    "archivo": "nidalee-m2.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "wukong": {
+  "w": 1092,
+  "h": 740,
+  "marcas": [
+   {
+    "x": 711,
+    "y": 622,
+    "w": 102,
+    "h": 46,
+    "archivo": "wukong-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "rammus": {
+  "w": 1092,
+  "h": 816,
+  "marcas": [
+   {
+    "x": 253,
+    "y": 308,
+    "w": 471,
+    "h": 46,
+    "archivo": "rammus-m0.png"
+   },
+   {
+    "x": 78,
+    "y": 360,
+    "w": 56,
+    "h": 46,
+    "archivo": "rammus-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "tristana": {
+  "w": 1092,
+  "h": 728,
+  "marcas": [
+   {
+    "x": 602,
+    "y": 256,
+    "w": 460,
+    "h": 46,
+    "archivo": "tristana-m0.png"
+   },
+   {
+    "x": 579,
+    "y": 654,
+    "w": 327,
+    "h": 46,
+    "archivo": "tristana-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "yone": {
+  "w": 1092,
+  "h": 532,
+  "marcas": [
+   {
+    "x": 956,
+    "y": 414,
+    "w": 78,
+    "h": 46,
+    "archivo": "yone-m0.png"
+   },
+   {
+    "x": 54,
+    "y": 458,
+    "w": 45,
+    "h": 46,
+    "archivo": "yone-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "darius": {
+  "w": 1092,
+  "h": 728,
+  "marcas": [
+   {
+    "x": 422,
+    "y": 654,
+    "w": 209,
+    "h": 46,
+    "archivo": "darius-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "sion": {
+  "w": 1092,
+  "h": 1032,
+  "marcas": [
+   {
+    "x": 360,
+    "y": 360,
+    "w": 428,
+    "h": 46,
+    "archivo": "sion-m0.png"
+   },
+   {
+    "x": 369,
+    "y": 534,
+    "w": 198,
+    "h": 46,
+    "archivo": "sion-m1.png"
+   },
+   {
+    "x": 335,
+    "y": 818,
+    "w": 135,
+    "h": 46,
+    "archivo": "sion-m2.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "ryze": {
+  "w": 1092,
+  "h": 912,
+  "marcas": [
+   {
+    "x": 856,
+    "y": 414,
+    "w": 160,
+    "h": 46,
+    "archivo": "ryze-m0.png"
+   },
+   {
+    "x": 54,
+    "y": 458,
+    "w": 155,
+    "h": 46,
+    "archivo": "ryze-m1.png"
+   },
+   {
+    "x": 207,
+    "y": 838,
+    "w": 118,
+    "h": 46,
+    "archivo": "ryze-m2.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "orianna": {
+  "w": 1092,
+  "h": 816,
+  "marcas": [
+   {
+    "x": 964,
+    "y": 414,
+    "w": 82,
+    "h": 46,
+    "archivo": "orianna-m0.png"
+   },
+   {
+    "x": 54,
+    "y": 458,
+    "w": 44,
+    "h": 46,
+    "archivo": "orianna-m1.png"
+   },
+   {
+    "x": 987,
+    "y": 698,
+    "w": 81,
+    "h": 46,
+    "archivo": "orianna-m2.png"
+   },
+   {
+    "x": 54,
+    "y": 742,
+    "w": 44,
+    "h": 46,
+    "archivo": "orianna-m3.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "azir": {
+  "w": 1092,
+  "h": 456,
+  "marcas": [
+   {
+    "x": 376,
+    "y": 382,
+    "w": 119,
+    "h": 46,
+    "archivo": "azir-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "taric": {
+  "w": 1092,
+  "h": 1076,
+  "marcas": [
+   {
+    "x": 22,
+    "y": 672,
+    "w": 217,
+    "h": 46,
+    "archivo": "taric-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "hubris": {
+  "w": 1092,
+  "h": 564,
+  "marcas": [
+   {
+    "x": 476,
+    "y": 438,
+    "w": 278,
+    "h": 46,
+    "archivo": "hubris-m0.png"
+   },
+   {
+    "x": 520,
+    "y": 490,
+    "w": 252,
+    "h": 46,
+    "archivo": "hubris-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "greaves": {
+  "w": 1092,
+  "h": 548,
+  "marcas": [
+   {
+    "x": 310,
+    "y": 438,
+    "w": 86,
+    "h": 46,
+    "archivo": "greaves-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "repeticiones": {
+  "w": 1160,
+  "h": 644,
+  "marcas": [
+   {
+    "x": 842,
+    "y": 140,
+    "w": 152,
+    "h": 46,
+    "archivo": "repeticiones-m0.png"
+   },
+   {
+    "x": 211,
+    "y": 360,
+    "w": 203,
+    "h": 46,
+    "archivo": "repeticiones-m1.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "truedamage": {
+  "w": 1160,
+  "h": 959,
+  "marcas": [
+   {
+    "x": 630,
+    "y": 851,
+    "w": 227,
+    "h": 46,
+    "archivo": "truedamage-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/en-us/news/game-updates/league-of-legends-patch-26-21-notes/"
+ },
+ "mel": {
+  "w": 1160,
+  "h": 320,
+  "marcas": [
+   {
+    "x": 103,
+    "y": 114,
+    "w": 687,
+    "h": 46,
+    "archivo": "mel-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/es-mx/news/dev/dev-mel-midscope/"
+ },
+ "mel-w": {
+  "w": 1160,
+  "h": 320,
+  "marcas": [
+   {
+    "x": 22,
+    "y": 26,
+    "w": 661,
+    "h": 46,
+    "archivo": "mel-w-m0.png"
+   }
+  ],
+  "url": "https://www.leagueoflegends.com/es-mx/news/dev/dev-mel-midscope/"
+ }
+}

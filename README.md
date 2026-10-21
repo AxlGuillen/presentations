@@ -41,6 +41,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /lux/                Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /graves/             Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
 /parche2620/         Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
+/parche2621/         Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
 /guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
 /helia/              La Ruina de Helia · paquete de assets del episodio 2 de lore · 9:16 · 18 slides

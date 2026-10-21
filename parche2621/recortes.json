@@ -1,0 +1,209 @@
+{
+  "url": "https://www.leagueoflegends.com/{lang}/news/game-updates/league-of-legends-patch-26-21-notes/",
+  "lang": "en-us",
+  "ancho": 600,
+  "escala": 2,
+  "recortes": [
+    {
+      "id": "cabecera",
+      "cabecera": true,
+      "recorteAlto": 470,
+      "margen": 0,
+      "marcar": [
+        "26.21"
+      ]
+    },
+    {
+      "id": "intro",
+      "parrafo": "Worlds has begun",
+      "marcar": [
+        "with the Worlds patch locked in",
+        "Azir, Orianna, and Ryze"
+      ]
+    },
+    {
+      "id": "jinx",
+      "bloque": "Jinx",
+      "marcar": [
+        "similarly dominant",
+        "59 + 3/Level",
+        "610 + 105/Level"
+      ]
+    },
+    {
+      "id": "caitlyn",
+      "bloque": "Caitlyn",
+      "marcar": [
+        "60 - 80% AD",
+        "50 / 95 / 140 / 185 / 230"
+      ]
+    },
+    {
+      "id": "leesin",
+      "bloque": "Lee Sin",
+      "partes": [
+        "W - Safeguard",
+        "R - Dragon's Rage"
+      ],
+      "marcar": [
+        "8s",
+        "150 / 350 / 550",
+        "150 / 350 / 550"
+      ]
+    },
+    {
+      "id": "qiyana",
+      "bloque": "Qiyana",
+      "marcar": [
+        "70 / 100 / 130 / 160 / 190"
+      ]
+    },
+    {
+      "id": "viktor",
+      "bloque": "Viktor",
+      "marcar": [
+        "Glorious…Devolution",
+        "330"
+      ]
+    },
+    {
+      "id": "nidalee",
+      "bloque": "Nidalee",
+      "sinCita": true,
+      "marcar": [
+        "50 / 80 / 110 / 140 / 170",
+        "20 / 30 / 40 / 50 / 60%"
+      ]
+    },
+    {
+      "id": "wukong",
+      "bloque": "Wukong",
+      "sinCita": true,
+      "marcar": [
+        "4.5 - 10"
+      ]
+    },
+    {
+      "id": "rammus",
+      "bloque": "Rammus",
+      "marcar": [
+        "rolling over pretty much everyone else",
+        "ok?"
+      ]
+    },
+    {
+      "id": "tristana",
+      "bloque": "Tristana",
+      "marcar": [
+        "Level 1 press [Q] and just auto attack",
+        "40 / 60 / 80 / 100 / 120%"
+      ]
+    },
+    {
+      "id": "yone",
+      "bloque": "Yone",
+      "sinCita": true,
+      "marcar": [
+        "105% AD"
+      ]
+    },
+    {
+      "id": "darius",
+      "bloque": "Darius",
+      "marcar": [
+        "9 / 8 / 7 / 6 / 4s"
+      ]
+    },
+    {
+      "id": "sion",
+      "bloque": "Sion",
+      "marcar": [
+        "GET IN THERE rather than run away",
+        "655 + 95/Level",
+        "+0 - 200%"
+      ]
+    },
+    {
+      "id": "ryze",
+      "bloque": "Ryze",
+      "sinCita": true,
+      "marcar": [
+        "10% / 40% / 70% / 100%",
+        "+70% AP"
+      ]
+    },
+    {
+      "id": "orianna",
+      "bloque": "Orianna",
+      "sinCita": true,
+      "marcar": [
+        "+60% AP",
+        "+85% AP"
+      ]
+    },
+    {
+      "id": "azir",
+      "bloque": "Azir",
+      "sinCita": true,
+      "marcar": [
+        "50/Level"
+      ]
+    },
+    {
+      "id": "taric",
+      "bloque": "Taric",
+      "partes": [
+        "E - Dazzle"
+      ],
+      "marcar": [
+        "(sorry, Master Yi)"
+      ]
+    },
+    {
+      "id": "hubris",
+      "bloque": "Hubris",
+      "marcar": [
+        "15 Melee / 10 Ranged",
+        "3 Melee / 2 Ranged"
+      ]
+    },
+    {
+      "id": "greaves",
+      "bloque": "Gluttonous Greaves",
+      "marcar": [
+        "1100g"
+      ]
+    },
+    {
+      "id": "repeticiones",
+      "seccion": "Replay Download Limits",
+      "marcar": [
+        "10 per hour",
+        "vibecoded apps"
+      ]
+    },
+    {
+      "id": "truedamage",
+      "seccion": "Patch Highlights",
+      "marcar": [
+        "October 21, 2026"
+      ]
+    },
+    {
+      "id": "mel",
+      "url": "https://www.leagueoflegends.com/es-mx/news/dev/dev-mel-midscope/",
+      "parrafo": "resultaba imposible lograr el balance",
+      "marcar": [
+        "resultaba imposible lograr el balance de sus habilidades"
+      ]
+    },
+    {
+      "id": "mel-w",
+      "url": "https://www.leagueoflegends.com/es-mx/news/dev/dev-mel-midscope/",
+      "parrafo": "Decidimos quitar el efecto de reflejo",
+      "marcar": [
+        "Decidimos quitar el efecto de reflejo de la [W] de Mel."
+      ]
+    }
+  ]
+}
