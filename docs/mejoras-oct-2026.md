@@ -6,6 +6,8 @@ Documento para retomar el trabajo desde una sesión nueva, sin más contexto que
 - Las deudas que se encontraron al revisar el repo.
 - Lo que salió de la investigación del 22/oct/2026 sobre las tres herramientas de video: este repo, walkthrough y ReelForge.
 
+**El orden de ejecución, las fases, las ramas y las verificaciones están en `docs/plan-mejoras-oct-2026.md`.** Aquí está el diseño de cada mejora; si los dos documentos no coinciden en el orden, manda el plan.
+
 Cada mejora dice:
 
 - Por qué importa.
@@ -14,7 +16,7 @@ Cada mejora dice:
 - Cómo probarla.
 - Cuándo está terminada.
 
-**Punto de partida:** `main` en `cb2a259` (20/oct/2026). Las últimas entregas son `parche2621`, `semana42`, `lux`, `graves` y `suiza`; las tres primeras ya usan el montaje automático con `tools/laminas.mjs`.
+**Punto de partida:** `main` en `cb2a259` (20/oct/2026). Las últimas entregas son `parche2621`, `semana42`, `lux`, `graves` y `suiza`. De esas, **`parche2621`, `lux` y `graves`** usan el montaje automático con `tools/laminas.mjs` (llevan `data-lamina`); `suiza` recorta sus flyers con `cuadros.mjs` sin pasar por `laminas.mjs`, y `semana42` es un reporte semanal, fuera del montaje.
 
 ## Cómo arrancar una sesión con este archivo
 
@@ -257,9 +259,11 @@ Los edits del canal (de anime, de partidas de Worlds) necesitan un acabado gráf
 
 Todas van en `tools/kit-efectos.cjs`, deterministas y con su lámina en `lab/`.
 
+**Antes de la primera receta:** `kit.random(semilla)` **todavía no existe**. Hoy hay dos PRNG internos sin exportar, `prng` en `tools/kit-efectos.cjs` y `mulberry` en `tools/kit-patrones.cjs`. El primer paso de P4 es unificarlos en uno solo y exponerlo como `kit.random(semilla)` (build-time) y como `random(semilla)` dentro de `kit.efectos()` (runtime), con la misma secuencia en los dos lados y una prueba que lo compare.
+
 | Receta | Qué se ve | Notas |
 |---|---|---|
-| `brasas` / `chispas` | Partículas que suben o estallan y se apagan | Posiciones y velocidades de `kit.random(semilla)`; fórmula cerrada en el tiempo, sin Physics2D. Terminan invisibles, así que el estado final es vacío |
+| `brasas` / `chispas` | Partículas que suben o estallan y se apagan | Posiciones y velocidades de un PRNG con semilla; fórmula cerrada en el tiempo, sin Physics2D. Terminan invisibles, así que el estado final es vacío |
 | `rayo` | Estela de luz que cruza el cuadro | Un trazo con degradado y desenfoque; misma técnica que `cometa` |
 | `impacto` | Líneas de velocidad hacia el centro | Rayos con semilla en build-time; solo escala y opacidad |
 | `palabra` | Una palabra gigante con degradado que entra con golpe (125 % → 100 % en 80 ms) | La firma del edit de referencia. El degradado al texto **va en cada letra** si las letras se animan por separado (lección de `lux`) |

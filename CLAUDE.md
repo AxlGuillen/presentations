@@ -415,7 +415,7 @@ Cada deck (y la galería raíz) lleva metas OG/Twitter en el `<head>` para que e
 
 ## Roadmap
 
-`docs/mejoras-oct-2026.md` — **lo abierto al 22/oct/2026, listo para retomar**: capas con alfa para el montaje, música y efectos de sonido en el video, animación al ritmo, kit de edit, los efectos SVG que faltan, objetos que giran, Linux y pruebas del kit, deudas de documentación y estándares de salida. Cada mejora trae diseño, pruebas y criterio de terminado.
+`docs/mejoras-oct-2026.md` — **lo abierto al 22/oct/2026, listo para retomar**: capas con alfa para el montaje, música y efectos de sonido en el video, animación al ritmo, kit de edit, los efectos SVG que faltan, objetos que giran, Linux y pruebas del kit, deudas de documentación y estándares de salida. Cada mejora trae diseño, pruebas y criterio de terminado. El orden de ejecución está en **`docs/plan-mejoras-oct-2026.md`**: 6 fases y unas 12–14 sesiones, con la fase 0 (Chrome en Linux, pruebas del kit, `kit.random` y las deudas de documentación) primero porque destraba las demás.
 
 `docs/video-narrado.md` — convertir decks en MP4 narrado. **Ya implementado** con Fish Audio (ver «Módulo de video»); el documento queda como registro de la propuesta original, que hablaba de ElevenLabs.
 
