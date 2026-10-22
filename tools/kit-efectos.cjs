@@ -44,7 +44,9 @@ const efectos = () => `<script>
   function seccionDe(el) { return el.closest ? (el.closest('section') || el) : el; }
   function deshacer(el, fn) { var s = seccionDe(el); (s.__deshacer = s.__deshacer || []).push(fn); }
   function guardaEstilo(el) { var c = el.getAttribute('style'); deshacer(el, function () { if (c == null) el.removeAttribute('style'); else el.setAttribute('style', c); }); }
-  function semilla(txt) { var h = 2166136261 >>> 0; txt = String(txt); for (var i = 0; i < txt.length; i++) { h ^= txt.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  // Mismo hash que semillaDe() de kit-patrones (por code points): así random(semilla) en la página
+  // y kit.random(semilla) en build-time dan la misma secuencia.
+  function semilla(txt) { var h = 2166136261 >>> 0; for (var c of String(txt)) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
   function prng(s) { var a = typeof s === 'number' ? s : semilla(s); return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function hashEntero(n) { n = Math.imul(n ^ n >>> 16, 0x45d9f3b); n = Math.imul(n ^ n >>> 16, 0x45d9f3b); return (n ^ n >>> 16) >>> 0; }
   function lista(x) { return x && x.length !== undefined && !x.tagName ? [].slice.call(x) : (x ? [x] : []); }
@@ -794,6 +796,8 @@ const efectos = () => `<script>
     }
     return o;
   }
+  // PRNG con semilla para coreografías propias (nunca Math.random: rompe el render cuadro a cuadro)
+  window.random = prng;
   window.efecto = function (nombre, tl, el, opciones) {
     if (!el) return tl;
     var f = R[nombre];

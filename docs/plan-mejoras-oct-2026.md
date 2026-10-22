@@ -8,12 +8,14 @@ Si los dos documentos no coinciden en el diseño de una mejora, manda `mejoras-o
 
 | Fase | Mejoras | Sesiones | Qué destraba |
 |---|---|---|---|
-| **0 · Cimientos** | P9, P8, `kit.random` | 1 | Que las herramientas corran en la nube y que el kit tenga pruebas |
+| **0 · Cimientos** | P9, pruebas del kit (P8), `kit.random` | 1 | Que el kit tenga pruebas y el PRNG que pide P4 |
 | **1 · Capas con alfa** | P1 y la parte de fps de P10 | 2 | El montaje sin rectángulos y todo el kit de edit (P4) |
 | **2 · Sonido** | P2 y la parte de loudness de P10 | 2 | Videos narrados con música, y los estándares de salida |
 | **3 · Ritmo y edit** | P3, P4 y P5 (chispas, destello) | 3–4 | Las capas de edits sobre el beat |
 | **4 · Acabado** | P7 y P5 (golpe, dona, radar, pixelado, derrumbe) | 2–3 | Que las láminas se vean menos «hechas con código» |
 | **5 · Exploración** | P6 y P11 | 2, cada una con una prueba antes | Objetos que giran, Lottie y Three.js |
+
+**Todo se desarrolla y se prueba en local, en la Mac de Axl** (decisión del 22/oct/2026): no se verifica nada en sesiones en la nube. Por eso la parte de Linux de P8 queda descartada.
 
 Una **sesión** es una conversación de trabajo que termina con commits verificados en una rama. Son unas **12–14 sesiones** en total; las fases 3 y 4 se pueden alternar según lo que pidan las series activas.
 
@@ -21,17 +23,17 @@ Una **sesión** es una conversación de trabajo que termina con commits verifica
 
 El documento de mejoras ordena por impacto (P1, P2, P3…). Aquí se adelantan dos cosas chicas porque condicionan a las demás:
 
-1. **P8 va primero.** `capturar.mjs` y `cuadros.mjs` solo buscan Chrome en rutas de macOS y Windows, así que en una sesión en la nube (Linux) no se puede verificar nada que pase por un navegador: ni P1, ni P2, ni P7. El propio documento de mejoras salió de una sesión en la nube.
-2. **P9 va con P8.** Son correcciones de texto y la tabla rota de `CLAUDE.md` confunde a cualquier sesión que lo lea. Cuestan minutos.
+1. **Las pruebas del kit van primero.** Sin ellas, cada fase que toque `kit.patron`, `kit.lineas` o `kit.diferir` puede ensuciar los diffs de todos los decks sin que nada avise.
+2. **P9 va con ellas.** Son correcciones de texto y la tabla rota de `CLAUDE.md` confunde a cualquier sesión que lo lea. Cuestan minutos.
 3. **`kit.random` antes de P4.** P4 lo pide para sus partículas y hoy no existe (hay dos PRNG internos sin exportar). Conviene hacerlo en la fase 0, con su prueba, para que la fase 3 arranque sin deudas.
 
 ### Dependencias
 
 ```
-P8 ──┬─> P1 ──┬─> P4 ──> P5 (chispas, destello)
-     │        └─> P7 (desenfoque: no combinar con alfa sin probar)
-     ├─> P2 ──> P10 (loudness)
-     └─> P7
+Fase 0 ──┬─> P1 ──┬─> P4 ──> P5 (chispas, destello)
+         │        └─> P7 (desenfoque: no combinar con alfa sin probar)
+         ├─> P2 ──> P10 (loudness)
+         └─> P7
 P1 ──> P10 (fps en laminas.mjs)
 P3 ──> P4 (letreros y palabra al beat)
 P6, P11: independientes; van al final porque llevan riesgo
@@ -39,10 +41,10 @@ P6, P11: independientes; van al final porque llevan riesgo
 
 ## Reglas para todas las fases
 
-- **Una rama por mejora**, desde `main` al día: `mejora/p8-chrome`, `mejora/p1-alfa`, etc. Se integra a `stg` con un PR y de `stg` a `main` como siempre.
+- **Se trabaja en `stg`**, al día con `main`, con un commit por mejora o por fase (así lo pidió Axl el 22/oct). Las ramas que nombra cada fase quedan como sugerencia si una mejora se alarga. De `stg` a `main` se pasa con PR, como siempre.
 - **Antes de empezar:** `git log -5` y revisar que los archivos que nombra la mejora sigan como dice el documento. Si algo cambió, se anota en la mejora antes de seguir.
 - **Antes de cada commit**, según lo que se toque:
-  - `node --test tools/` (desde la fase 0).
+  - `node --test "tools/**/*.test.mjs"` (desde la fase 0).
   - `node tools/qa-deck.mjs <deck>` en los decks afectados: sin desbordes nuevos ni errores de consola.
   - `node tools/qa-anim.mjs <deck> <n> <t1,t2,…>` si cambia una coreografía o una receta: ir y volver dentro de la lámina da el mismo cuadro.
   - `node tools/cuadros.mjs <deck>` o `laminas.mjs` si cambia el render.
@@ -66,10 +68,7 @@ P6, P11: independientes; van al final porque llevan riesgo
    - Reemplazar el `md5 -q` del skill `nuevo-deck` por una línea de Node que corra en macOS, Windows y Linux.
    - Marcar como cubierta por walkthrough la segunda parte de `docs/audio-y-tours.md`.
    - `404.html` queda anotado como pendiente: es diseño, no deuda de texto, y no bloquea nada.
-2. **P8, Chrome en un solo lugar:**
-   - Crear `tools/chrome.mjs`, que resuelva el ejecutable en este orden: `CHROME_PATH`, rutas de macOS, Windows y Linux (`/usr/bin/google-chrome`, `/usr/bin/chromium`, `/usr/bin/chromium-browser`, `/opt/pw-browsers/chromium-*/chrome-linux/chrome`).
-   - Que lo importen `capturar`, `cuadros`, `og`, `portadas`, `qa-*`, `recortes`, `contorno` y `diagrama`.
-   - En Linux, agregar `--no-sandbox` solo si el proceso corre como root.
+2. **P8, Chrome en Linux: descartado.** Todo se prueba en la Mac, donde las herramientas ya encuentran Chrome. De P8 solo queda la parte de pruebas (paso 4).
 3. **`kit.random`:**
    - Unificar `prng` (`kit-efectos.cjs`) y `mulberry` (`kit-patrones.cjs`) en una sola función.
    - Exportarla como `kit.random(semilla)` y emitir la misma en el runtime de `kit.efectos()`.
@@ -79,14 +78,14 @@ P6, P11: independientes; van al final porque llevan riesgo
    - `kit.lineas`: una caja isométrica da el número esperado de aristas visibles.
    - `kit.diferir`: idempotente y deja intacta la primera lámina.
    - `kit.random`: la misma semilla da la misma secuencia en Node y en el runtime (se compara contra una lista fija).
-   - `tools/chrome.mjs`: con `CHROME_PATH` falso da un error legible.
 
 ### Terminado cuando
 
-- `node --test tools/` pasa en macOS.
-- En una sesión en la nube, `node tools/capturar.mjs lux` corre con `CHROME_PATH` o con Chromium instalado.
-- Los SVG de patrones de `lab/` no cambian (diff vacío tras regenerar).
-- `CLAUDE.md` explica `tools/chrome.mjs`, `CHROME_PATH` y `node --test tools/`.
+- `node --test "tools/**/*.test.mjs"` pasa en la Mac (con la ruta sola, `node --test tools/`, Node 24 la toma como archivo y falla).
+- Los SVG de patrones no cambian (mismo hash que antes del cambio).
+- `CLAUDE.md` explica las pruebas y `kit.random`.
+
+**Hecho el 22/oct/2026.** Además de lo anterior, `optimizar-imagenes.mjs` llama a `python3` en macOS y Linux, así que ya no hace falta el alias.
 
 ---
 
@@ -215,9 +214,9 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 
 | Mejora | Fase | Estado | Rama | Commit |
 |---|---|---|---|---|
-| P9 · Deudas de documentación | 0 | Pendiente | | |
-| P8 · Chrome en Linux y pruebas | 0 | Pendiente | | |
-| `kit.random` | 0 | Pendiente | | |
+| P9 · Deudas de documentación | 0 | Hecho (22/oct; `404.html` sigue pendiente) | stg | ver fase 0 |
+| P8 · Pruebas del kit (Linux descartado) | 0 | Hecho (22/oct) | stg | ver fase 0 |
+| `kit.random` | 0 | Hecho (22/oct) | stg | ver fase 0 |
 | P1 · Capas con alfa | 1 | Pendiente | | |
 | P10 · fps en `laminas.mjs` | 1 | Pendiente | | |
 | P2 · Música, ducking y loudness | 2 | Pendiente | | |
@@ -238,5 +237,4 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 ## Notas de entorno
 
 - **Esta Mac (22/oct/2026):** ffmpeg 8.1.1 con `prores_ks`, `libvpx-vp9`, `sidechaincompress`, `loudnorm`, `ebur128`, `alimiter` y `tmix`; Node 24 (`node --test` incluido).
-- **`optimizar-imagenes.mjs`** llama a `python`, que en esta Mac no existe: hay que darle un alias a `python3` (anotado en `CLAUDE.md`). Si la fase 0 toca herramientas, conviene que busque `python3` primero.
 - **El repo es público otra vez al 22/oct** (estuvo privado el 20/oct). `CLAUDE.md` lo da por hecho en sus reglas; si cambia, hay que revisar el correo de los commits (ver «Reglas para todas las fases»).

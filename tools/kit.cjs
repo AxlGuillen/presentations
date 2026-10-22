@@ -438,9 +438,12 @@ const gsap = (dir, plugins = []) => {
 };
 
 const { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno } = require('./kit-efectos.cjs');
-const { patron, patronFondo } = require('./kit-patrones.cjs');
+const { patron, patronFondo, prng } = require('./kit-patrones.cjs');
 const { icono, ilustracion } = require('./kit-recursos.cjs');
 const lineas = require('./kit-lineas.cjs');
 
+/** PRNG con semilla (mulberry32), el mismo que usan kit.patron y las recetas
+ *  del runtime: kit.random('confeti')() da la misma secuencia que
+ *  random('confeti')() dentro de la página. La semilla puede ser número o texto. */
 module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
-  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, patron, patronFondo, icono, ilustracion, lineas };
+  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, patron, patronFondo, icono, ilustracion, lineas, random: prng };

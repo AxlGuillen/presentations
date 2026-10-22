@@ -103,6 +103,8 @@ así que no crecen con cada deck.
 
 ## 2 · Tours guiados y videos de QA
 
+> **Resuelto fuera de este repo (22/oct/2026):** esta parte la cubre **walkthrough**, el repo hermano que recorre la app real con Playwright y produce el video narrado. Lo que sigue queda como registro de la propuesta original; en este repo solo queda pendiente la parte de sonido (sección 1), que es la mejora P2 de `docs/mejoras-oct-2026.md`.
+
 La idea: usar el mismo pipeline para explicar **lo que se agregó**, no lo que se
 trabajó. En vez de un reporte de horas, un recorrido por la funcionalidad nueva.
 
