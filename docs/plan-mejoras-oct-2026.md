@@ -157,6 +157,14 @@ Lo que dice P1, más: `laminas.mjs graves --alfa` también produce sus `.mov`, y
 
 Fijar los valores con Axl (reel corto −14 LUFS / −1 dBTP; narrado largo −16) en `metodologia/video/estandares.md` del PKB, y que `CLAUDE.md` lo enlace en vez de copiarlo. Este paso es del PKB, no de este repo, así que se propone y no se hace sin que Axl lo apruebe.
 
+### Resultado (22/oct, hecho en stg)
+
+- **Los efectos se sintetizan en Node y no con fuentes de ffmpeg**: el bus completo sale de `tools/audio.mjs` como un WAV con cada efecto en su muestra, con el PRNG del kit. Es lo mismo que pedía el plan (sin archivos y con semilla), pero sin cadenas de `adelay` ni `asetpts`.
+- **El loudness se aplica con una ganancia fija y no con `loudnorm linear=true`**, que se pasa solo a modo dinámico cuando el pico no le cabe. La primera pasada mide con `ebur128`.
+- **El `adelay` de los segmentos (paso 4) se queda**: la mezcla parte del audio ya concatenado del video, que trae sus marcas de tiempo, así que el problema de P2 no aplica. Se comprobó que audio y video miden lo mismo (112,52 y 112,53 s en semana38).
+- semana38 solo usa `cuenta()`, así que en su prueba sonaron tres *ticks*. Las demás recetas se comprobaron leyendo las etiquetas de las 60 láminas de `lab/`.
+- **Pendiente:** el sonido «apenas audible» del cambio de lámina, que la tabla de P2 menciona, no se hizo porque choca con la regla de un efecto por lámina. También queda pendiente que Axl escuche la prueba y diga si los volúmenes (`cama` −12 LU y el bus de efectos a 1) le funcionan.
+
 ### Riesgo
 
 **La licencia de la música.** Ninguna pista con licencia de uso entra al repo; los videos publicados en las cards llevan la pista ya mezclada, que sí se puede distribuir.
@@ -228,8 +236,8 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | `kit.random` | 0 | Hecho (22/oct) | stg | ver fase 0 |
 | P1 · Capas con alfa | 1 | Hecho (22/oct; probado en lux y graves) | stg | ver fase 1 |
 | P10 · fps en `laminas.mjs` | 1 | Hecho (22/oct) | stg | ver fase 1 |
-| P2 · Música, ducking y loudness | 2 | Pendiente | | |
-| P2 · Efectos de sonido | 2 | Pendiente | | |
+| P2 · Música, ducking y loudness | 2 | Hecho (22/oct) | stg | ver fase 2 |
+| P2 · Efectos de sonido | 2 | Hecho (22/oct; falta el sonido de cambio de lámina) | stg | ver fase 2 |
 | P10 · Estándares de loudness (PKB) | 2 | Pendiente, requiere a Axl | | |
 | P3 · `kit.ritmo` | 3 | Pendiente | | |
 | P4 · Recetas de edit | 3 | Pendiente | | |

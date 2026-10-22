@@ -10,6 +10,7 @@ import { execFileSync, spawnSync, spawn } from 'node:child_process';
 import crypto from 'node:crypto';
 import os from 'node:os';
 import { enlazadas, hayTransiciones, leerTransicion, unir as unirConTransiciones } from './transiciones.mjs';
+import { EFECTO_DE, bus, escribirWav, mezclar, resolverPista } from './audio.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const deck = (process.argv[2] || '').replace(/[\\/]/g, '');
@@ -30,6 +31,17 @@ if (!env.FISH_API_KEY) { console.error('Falta FISH_API_KEY en .env'); process.ex
 const guion = JSON.parse(fs.readFileSync(rutaGuion, 'utf8'));
 // Un nombre de transición mal escrito debe fallar aquí, antes de pedir la voz.
 guion.slides.forEach((s, i) => { if (i > 0) leerTransicion(s.transicion, guion.transicion); });
+// Sonido (tools/audio.mjs). "musica": "pista.mp3" o { pista, volumen, cama,
+// desde, fadeIn, fadeOut, ducking }: la pista puede vivir fuera del repo
+// (ruta absoluta o MUSICA_DIR en el entorno o en .env), porque una pista con
+// licencia de uso no se puede redistribuir en un repo público. "sfx": false
+// apaga los efectos (o { "volumen": 0.8 }); por lámina, slides[i].sfx: false.
+// "loudness": { "objetivo": -16, "pico": -1 } (−14 para un reel corto).
+// Una pista mal escrita falla aquí, antes de pedir la voz.
+const cfgMusica = typeof guion.musica === 'string' ? { pista: guion.musica } : guion.musica || null;
+const musica = cfgMusica && { ...cfgMusica, archivo: resolverPista(cfgMusica.pista, { musicaDir: process.env.MUSICA_DIR || env.MUSICA_DIR, dirDeck }) };
+const cfgSfx = guion.sfx === false ? null : (typeof guion.sfx === 'object' ? guion.sfx : {});
+const cfgLoud = { objetivo: -16, pico: -1, ...(guion.loudness || {}) };
 const out = path.join(dirDeck, 'video-out');
 const dirAudio = path.join(out, 'audio');
 const dirSlides = path.join(out, 'slides');
@@ -284,6 +296,22 @@ if (esKaraoke) {
   fs.writeFileSync(rutaAss, assHeader + assLineas.join('\n') + '\n', 'utf8');
   console.log(`Karaoke: ${assLineas.length} líneas → ${path.relative(raiz, rutaAss)}`);
 }
+// Efectos de sonido: las etiquetas sfx:<receta> que cuadros.mjs leyó de cada
+// timeline, sumadas al arranque de su lámina. Uno por lámina como máximo (el
+// primero) y nunca después de que termine su animación.
+const eventos = [];
+const animMeta = fs.existsSync(path.join(dirAnim, 'anim.json')) ? JSON.parse(fs.readFileSync(path.join(dirAnim, 'anim.json'), 'utf8')) : null;
+if (cfgSfx && animMeta) {
+  clips.forEach((c, i) => {
+    if (c.sfx === false) return;
+    const a = animMeta.clips.find(x => x.slide === c.slide);
+    const e = (a?.sfx || []).find(x => EFECTO_DE[x.receta] && x.t <= a.dur + 1e-6);
+    if (!e) return;
+    tiempos[i].sfx = { receta: e.receta, efecto: EFECTO_DE[e.receta], t: +(tiempos[i].ini + e.t).toFixed(3) };
+    eventos.push(tiempos[i].sfx);
+  });
+  if (!animMeta.clips.some(x => x.sfx)) console.log('Sin etiquetas sfx en anim.json: si el deck usa recetas, regenera el deck y borra video-out/anim para que cuadros.mjs las lea.');
+}
 fs.writeFileSync(path.join(out, 'tiempos.json'), JSON.stringify(tiempos, null, 2));
 
 // ── 3 · Segmentos de video y concatenación ───────────────────────────────
@@ -350,6 +378,25 @@ if (hayTransiciones(guion)) {
   // +faststart: el índice (moov) al principio, para que el navegador empiece a
   // reproducir sin bajar antes la cola del archivo.
   ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', '-movflags', '+faststart', sinSubs]);
+}
+
+// ── 3b · Sonido: música con ducking, efectos y loudness ──────────────────
+// Solo si hay algo que mezclar; un video de solo voz queda como antes.
+if (musica || eventos.length || guion.loudness) {
+  const tSon = performance.now();
+  const durVideo = tiempos.reduce((a, t) => a + t.dur, 0);
+  let rutaFx = null;
+  if (eventos.length) {
+    rutaFx = path.join(dirAudio, 'efectos.wav');
+    escribirWav(rutaFx, bus(eventos, durVideo, { volumen: cfgSfx.volumen ?? 1 }));
+  }
+  const mezcla = path.join(dirAudio, 'mezcla.wav');
+  const r = mezclar({ voz: sinSubs, dur: durVideo, musica, efectos: rutaFx, salida: mezcla, objetivo: cfgLoud.objetivo, pico: cfgLoud.pico, tmp: dirAudio });
+  const conSonido = path.join(out, 'video-sonido.mp4');
+  ff(['-i', sinSubs, '-i', mezcla, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-c:a', 'aac', '-b:a', '192k', '-ar', '48000', '-movflags', '+faststart', conSonido]);
+  fs.renameSync(conSonido, sinSubs);
+  const partes = [musica && `música (${path.basename(musica.archivo)})`, eventos.length && `${eventos.length} efecto${eventos.length === 1 ? '' : 's'} (${eventos.map(e => e.efecto).join(', ')})`].filter(Boolean);
+  console.log(`\nSonido: ${partes.join(' + ') || 'solo voz'} · ${r.I.toFixed(1)} LUFS, pico ${r.TP.toFixed(1)} dBTP (objetivo ${cfgLoud.objetivo}) · ${((performance.now() - tSon) / 1000).toFixed(1)} s`);
 }
 
 // ── 4 · Quemar subtítulos (salvo que el guion los desactive) ─────────────

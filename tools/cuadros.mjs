@@ -33,8 +33,9 @@
 // también salen las láminas sin timeline, como un clip de un solo cuadro, para
 // que laminas.mjs tenga de dónde sacar su PNG con transparencia.
 //
-// Salida: <carpeta>/video-out/anim/anim-NN.mp4 + anim.json (duraciones); en modo alfa,
-// video-out/anim-alfa/anim-NN.mov (o .webm) + su propio anim.json.
+// Salida: <carpeta>/video-out/anim/anim-NN.mp4 + anim.json (duraciones y, por
+// lámina, las etiquetas sfx:<receta> de su timeline con su segundo); en modo
+// alfa, video-out/anim-alfa/anim-NN.mov (o .webm) + su propio anim.json.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -144,7 +145,7 @@ async function renderizar(t, i) {
     if (typeof ds._go === 'function') ds._go(idx);
     else location.hash = '#' + (idx + 1);
   }, i);
-  const dur = await pagina.evaluate(async idx => {
+  const { dur, sfx } = await pagina.evaluate(async idx => {
     const s = document.querySelectorAll('deck-stage section')[idx];
     // el video muestra la slide completa: todos los pasos revelados
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
@@ -167,15 +168,23 @@ async function renderizar(t, i) {
     await Promise.all([...urls].map(u => new Promise(r => { const im = new Image(); im.onload = () => im.decode().then(r, r); im.onerror = r; im.src = u; })));
     await Promise.all([...s.querySelectorAll('img')].map(i => (i.decode ? i.decode().catch(() => {}) : null)));
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-    if (!s.__tl) return -1;
+    if (!s.__tl) return { dur: -1, sfx: [] };
     s.__tl.pause(0);           // desde aquí solo avanzamos con seeks explícitos
-    return s.__tl.duration();
+    // Etiquetas sfx:<receta> (también las de timelines anidadas, sumando su
+    // arranque): video.mjs pone ahí los efectos de sonido.
+    const sfx = [];
+    (function juntar(tl, base) {
+      for (const [k, v] of Object.entries(tl.labels)) if (k.startsWith('sfx:')) sfx.push({ receta: k.slice(4).split('#')[0], t: +(base + v).toFixed(3) });
+      for (const h of tl.getChildren(false, false, true)) juntar(h, base + h.startTime());
+    })(s.__tl, 0);
+    sfx.sort((a, b) => a.t - b.t);
+    return { dur: s.__tl.duration(), sfx };
   }, i);
   const num = String(i + 1).padStart(2, '0');
   // Sin timeline: en modo normal se salta (video.mjs usa su PNG); en modo alfa
   // sale un clip de un solo cuadro, porque el PNG de capturar.mjs es opaco.
   const sinTimeline = dur <= 0;
-  if (sinTimeline && !ALFA) return { i, num, estatica: true };
+  if (sinTimeline && !ALFA) return { i, num, estatica: true, sfx };
 
   const tPrep = performance.now() - tIni;
   const clip = path.join(dirAnim, `anim-${num}.${EXT}`);
@@ -194,7 +203,7 @@ async function renderizar(t, i) {
   }
   ff.stdin.end();
   await terminado;
-  return { i, num, dur: +Math.max(dur, 0).toFixed(3), cuadros, sinTimeline, prep: tPrep, total: performance.now() - tIni };
+  return { i, num, dur: +Math.max(dur, 0).toFixed(3), cuadros, sinTimeline, sfx, prep: tPrep, total: performance.now() - tIni };
 }
 
 // ── Reparto: cada trabajador toma la siguiente lámina libre ──────────────
@@ -225,7 +234,7 @@ servidor.closeAllConnections();
 servidor.close();
 
 const meta = resultados.filter(r => !r.estatica).sort((a, b) => a.i - b.i)
-  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}) }));
+  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}), ...(r.sfx.length ? { sfx: r.sfx } : {}) }));
 fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, alfa: ALFA || false, ext: EXT, clips: meta }, null, 2));
 const total = meta.reduce((a, c) => a + c.cuadros, 0);
 console.log(`\nListo: ${meta.length} clips (${total} cuadros) en ${path.relative(raiz, dirAnim)} · ${((performance.now() - t0) / 1000).toFixed(1)} s`);

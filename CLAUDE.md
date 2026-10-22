@@ -366,6 +366,19 @@ Prueba de punta a punta con 4 láminas: 31 s la primera vez, **5,8 s** la segund
 
 Los MP4 salen con `+faststart` (el índice al principio): sin eso el navegador tenía que bajar la cola del archivo antes de reproducir.
 
+**Música, efectos de sonido y loudness** (`tools/audio.mjs`, desde el 22/oct/2026). Al final del montaje `video.mjs` mezcla tres buses en un solo `amix`:
+- **la voz**, tal como quedó en el video;
+- **la música** (`"musica"` en el guion), recortada al largo del video, nivelada a `cama` LU bajo la voz (−12 por defecto) y agachada con `sidechaincompress` (`threshold=0.03:ratio=8:attack=20:release=400`) con la voz de llave;
+- **los efectos**, que entran después del ducking para no agachar la música.
+
+Luego mide el integrado y aplica la ganancia que falta para el `objetivo` (−16 LUFS por defecto), lineal, con un `alimiter` que deja el pico real bajo −1 dBTP. Lo aprendido:
+- **No se aplica con `loudnorm`**: con `linear=true` se pasa solo a modo dinámico cuando el pico no le cabe y deshace la bajada de la música. Una ganancia fija con limitador es lineal siempre.
+- **Los efectos se sintetizan en Node**, sin archivos ni licencias: *whoosh* (ruido con un pasabanda que barre), golpe (un seno que se hunde de 120 a 48 Hz), *ticks* (clics espaciados como un `power2.out`) y *pop*, con el PRNG del kit. El bus se escribe entero en un WAV con cada efecto en su muestra, así que no hay `adelay`: su relleno sale sin marcas de tiempo en ffmpeg 8.1 y adelantaba lo que venía después.
+- **El momento sale de la timeline**: `efecto()` y `cuenta()` ponen `sfx:<receta>` donde se ve lo que suena (el sello, al caer), `cuadros.mjs` las junta en `anim.json` (también las de timelines anidadas) y `video.mjs` las suma al arranque de cada lámina en `tiempos.json`. Uno por lámina como máximo.
+- **Solo se mezcla si hay algo que mezclar** (música, efectos o `"loudness"` en el guion): un video de solo voz sale igual que antes.
+- La pista con licencia de uso **no entra al repo**: va con ruta absoluta o `MUSICA_DIR`, y en `tools/audio/` solo van pistas CC0 con su `CREDITOS.md`.
+- **Medido**: con señales sintéticas la cama baja 15 dB mientras suena la voz y la mezcla queda en −16,0 y −14,0 LUFS (picos de −4,2 y −2,2 dBTP). En semana38, con música de Mixkit tomada de fuera, salieron −16,0 LUFS, −1,9 dBTP, la misma duración de audio y video, y los tres *ticks* a 0,5 ms de su etiqueta.
+
 **Transiciones** (`tools/transiciones.mjs`; las láminas enlazadas con `data-continua` van con corte seco sin pedirlo): `"transicion": "smoothleft"` en `guion.json` —o `{ "tipo": "circleopen", "dur": 0.4 }`; global, o por lámina en `slides[i].transicion` para la que entra a esa lámina, con `"corte"` para un corte seco— une los segmentos con `xfade` de ffmpeg (las 57 que trae la 8.x) en vez del `concat` seco. Cada segmento se alarga congelando su último cuadro lo que dura la transición que lo sigue, y el xfade arranca justo cuando empieza la narración de la lámina siguiente: **la duración total no cambia**, así que `tiempos.json` y los subtítulos siguen valiendo. El audio no pasa por xfade; se concatena aparte. Probado con segmentos sintéticos (rojo 2 s, verde 1,5 s, azul 2,5 s): 6,000 s exactos y cada transición empieza en el segundo justo. Un nombre mal escrito falla antes de pedir la voz.
 
 ### Elegir la voz
@@ -426,7 +439,7 @@ Cada deck (y la galería raíz) lleva metas OG/Twitter en el `<head>` para que e
 
 `docs/video-narrado.md` — convertir decks en MP4 narrado. **Ya implementado** con Fish Audio (ver «Módulo de video»); el documento queda como registro de la propuesta original, que hablaba de ElevenLabs.
 
-`docs/audio-y-tours.md` — **propuesta, sin implementar**: música de fondo con ducking (`sidechaincompress`) y efectos puntuales sincronizados con las animaciones, más la idea de videos de QA y tours de producto grabando la app real. El primer video (`semana38`) salió solo con voz.
+`docs/audio-y-tours.md` — **la parte de sonido está implementada** (22/oct/2026: música con ducking, efectos sintetizados y loudness, en `tools/audio.mjs`); la de videos de QA y tours de producto la resolvió walkthrough.
 
 `docs/lineas-y-continuidad.md` — **implementado** (16/oct/2026): la receta `continua` (el Morph/Magic Move, con seis modos), el motor `kit.lineas` con la receta `traza` y los fondos `hilos`, `horizonte` y `guilloche`; todo en `lab/` y en `novedades/`. Queda pendiente: que los objetos a líneas **giren** entre láminas (dejar el modelo en el HTML y proyectar en cada cuadro) y el deck de prueba que junte todo antes de volverlo criterio de serie. El documento conserva la investigación —el nombre de la técnica, las librerías revisadas y los estilos de presentación— y al final dice qué cambió al implementarlo.
 

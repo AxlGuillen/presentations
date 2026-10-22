@@ -1,7 +1,9 @@
 # Feature propuesta: capa de audio y tours guiados
 
-> Estado: **propuesta, sin implementar**. Documentado el 22/sep/2026, después de
-> entregar el primer video narrado (`semana38`, 1:50, voz fija y sin subtítulos).
+> Estado: **la parte 1 (sonido) está implementada** desde el 22/oct/2026 en
+> `tools/audio.mjs` y `video.mjs` (ver «Módulo de video» en CLAUDE.md); la parte 2
+> la resolvió walkthrough. Documentado el 22/sep/2026, después de entregar el
+> primer video narrado (`semana38`, 1:50, voz fija y sin subtítulos).
 
 Dos ideas que salieron al entregar ese video. La primera es incremental y se
 puede hacer ya; la segunda es un producto nuevo y queda para más adelante.

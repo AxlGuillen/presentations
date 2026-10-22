@@ -798,11 +798,28 @@ const efectos = () => `<script>
   }
   // PRNG con semilla para coreografías propias (nunca Math.random: rompe el render cuadro a cuadro)
   window.random = prng;
+  // Recetas que suenan en el video: video.mjs pone su efecto (whoosh, golpe,
+  // ticks o pop) donde la timeline lleva la etiqueta sfx:<receta>. El momento
+  // es el primer cuadro en que se ve lo que suena: el arranque de la receta,
+  // salvo el sello, que suena al caer. data-sfx="no" la deja muda.
+  var SFX = { cortinilla: 0, lineas: 0, contador: 0, bento: 0, piezas: 0,
+    sello: function (o) { return o.dur || 0.42; } };
+  window.sfx = function (tl, nombre, pos) {
+    var base = 'sfx:' + nombre, n = 1, k = base;
+    while (tl.labels[k] != null) k = base + '#' + (++n);   // addLabel con el mismo nombre pisaría el anterior
+    tl.addLabel(k, pos);
+    return tl;
+  };
   window.efecto = function (nombre, tl, el, opciones) {
     if (!el) return tl;
     var f = R[nombre];
     if (!f) { console.warn('efecto desconocido:', nombre); return tl; }
-    f(tl, el, opciones || {});
+    var o = opciones || {};
+    f(tl, el, o);
+    if (nombre in SFX && o.sfx !== 'no' && el.getClientRects().length) {
+      var d = SFX[nombre];
+      window.sfx(tl, nombre, (o.en || 0) + (typeof d === 'function' ? d(o) : d));
+    }
     return tl;
   };
   window.efectosDeclarados = function (tl, s) {
