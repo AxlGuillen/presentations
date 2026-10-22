@@ -121,6 +121,15 @@ Lo que dice P1, más: `laminas.mjs graves --alfa` también produce sus `.mov`, y
 - **El peso de ProRes 4444** (decenas de MB por clip). Si estorba para pasarlo entre herramientas, el webm es el plan B, y se mide el tiempo de codificación de los dos.
 - **El desenfoque de las copias borrosas hace de fondo** en lux: al apagarlo con `data-fondo`, revisar que el primer plano siga leyéndose sobre el gameplay. Si no, se agrega una sombra que solo exista en modo alfa.
 
+### Resultado (22/oct, hecho en stg)
+
+- `optimizeForSpeed` **sí conserva el alfa**: no hubo que apagarlo.
+- ProRes sin tope pesaba 580 MB por clip; con `-qscale:v 9` (49 dB) y los fondos marcados, el render de lux bajó de 3,1 GB a 702 MB y de 170 s a 62 s.
+- Además de los helpers (`borroso`, `ambiente`, `rayos`, `humo`), hubo que marcar a mano tres capas a sangre que no salían de ellos: la copia borrosa de la skin expandida de lux y los tintes `data-frio` / `data-sombra` de lux y graves. Para encontrarlas sirvió componer cada PNG final sobre un damero.
+- Sobre el video de prueba el primer plano se lee sin la copia borrosa: no hizo falta la sombra de modo alfa.
+- El modo opaco no cambió: el HTML, sin las marcas `data-fondo`, solo difiere en el runtime del kit de la fase 0, y los clips opacos dan 48–82 dB de PSNR contra los de la versión anterior de `cuadros.mjs` (la variación normal entre corridas es 41–60 dB), con las mismas duraciones.
+- Apareció un error ajeno a la fase: `cuadros.mjs` no salía al terminar porque las conexiones keep-alive dejaban vivo el servidor. Se arregló aquí mismo.
+
 ---
 
 ## Fase 2 · Sonido (2 sesiones)
@@ -217,8 +226,8 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | P9 · Deudas de documentación | 0 | Hecho (22/oct; `404.html` sigue pendiente) | stg | ver fase 0 |
 | P8 · Pruebas del kit (Linux descartado) | 0 | Hecho (22/oct) | stg | ver fase 0 |
 | `kit.random` | 0 | Hecho (22/oct) | stg | ver fase 0 |
-| P1 · Capas con alfa | 1 | Pendiente | | |
-| P10 · fps en `laminas.mjs` | 1 | Pendiente | | |
+| P1 · Capas con alfa | 1 | Hecho (22/oct; probado en lux y graves) | stg | ver fase 1 |
+| P10 · fps en `laminas.mjs` | 1 | Hecho (22/oct) | stg | ver fase 1 |
 | P2 · Música, ducking y loudness | 2 | Pendiente | | |
 | P2 · Efectos de sonido | 2 | Pendiente | | |
 | P10 · Estándares de loudness (PKB) | 2 | Pendiente, requiere a Axl | | |

@@ -1,6 +1,6 @@
 // Renderiza las animaciones GSAP de un deck cuadro a cuadro y las encoda
 // en un clip MP4 por diapositiva.
-// Uso: node tools/cuadros.mjs <carpeta> [fps] [--paralelo=N]
+// Uso: node tools/cuadros.mjs <carpeta> [fps] [--paralelo=N] [--alfa | --alfa=webm]
 //
 // Cómo: activa cada slide, pausa su timeline (section.__tl, la deja el
 // pegamento kit.animador()) y la recorre con tl.time(t) a 30 fps, tomando una
@@ -23,7 +23,18 @@
 // entre cuadros. Ya pasaba con el script anterior (medido: 4 corridas de riven
 // daban de 2 a 4 clips idénticos de 4); no lo introduce el paralelo.
 //
-// Salida: <carpeta>/video-out/anim/anim-NN.mp4 + anim.json (duraciones).
+// Modo --alfa: los clips salen con TRANSPARENCIA para montarlos encima de otro
+// video. Se vacían los fondos de la página (html, body, deck-stage, las
+// <section> y los dos del shadow DOM de deck-stage: :host y .canvas), se apagan
+// los elementos marcados con data-fondo (copias desenfocadas, rayos, lavados:
+// lo pone el gen.js, no es una heurística) y Chrome pinta con fondo de alfa 0.
+// Se codifica en ProRes 4444 (.mov, yuva444p10le) o, con --alfa=webm, en VP9
+// con alfa (yuva420p, más liviano y más lento de codificar). En modo alfa
+// también salen las láminas sin timeline, como un clip de un solo cuadro, para
+// que laminas.mjs tenga de dónde sacar su PNG con transparencia.
+//
+// Salida: <carpeta>/video-out/anim/anim-NN.mp4 + anim.json (duraciones); en modo alfa,
+// video-out/anim-alfa/anim-NN.mov (o .webm) + su propio anim.json.
 import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
@@ -37,6 +48,15 @@ const deck = (args.find(a => !a.startsWith('--') && !/^\d+$/.test(a)) || '').rep
 const FPS = Math.max(1, parseInt(args.find(a => /^\d+$/.test(a)) || '30', 10));
 const pedido = args.find(a => a.startsWith('--paralelo='));
 const PARALELO = Math.max(1, pedido ? parseInt(pedido.split('=')[1], 10) : Math.min(6, Math.floor(os.cpus().length / 2)));
+const pideAlfa = args.find(a => a === '--alfa' || a.startsWith('--alfa='));
+const ALFA = pideAlfa ? (pideAlfa === '--alfa=webm' ? 'webm' : 'mov') : null;
+const EXT = ALFA || 'mp4';
+// ProRes 4444 es lo que ya lee ReelForge; VP9 con alfa pesa menos. Nada de qtrle:
+// pesa demasiado para pasarlo entre herramientas.
+// qscale 9: medido en lux, 49 dB contra la calidad por defecto con un 25 % menos de peso.
+const CODEC = ALFA === 'mov' ? ['-c:v', 'prores_ks', '-profile:v', '4444', '-pix_fmt', 'yuva444p10le', '-vendor', 'apl0', '-qscale:v', '9']
+  : ALFA === 'webm' ? ['-c:v', 'libvpx-vp9', '-pix_fmt', 'yuva420p', '-b:v', '0', '-crf', '30', '-row-mt', '1', '-deadline', 'good', '-cpu-used', '4']
+  : ['-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p'];
 // Con la pantalla apagada o bloqueada Chrome baja a ~1 cuadro por segundo: un
 // render de 15 s tardaba más de 3 minutos. Estos flags lo desligan del monitor.
 const SIN_FRENO = ['--disable-gpu-vsync', '--disable-frame-rate-limit', '--disable-background-timer-throttling',
@@ -75,7 +95,8 @@ const servidor = http.createServer((req, res) => {
 await new Promise(r => servidor.listen(0, '127.0.0.1', r));
 const url = `http://127.0.0.1:${servidor.address().port}/${deck}/`;
 
-const dirAnim = path.join(raiz, deck, 'video-out', 'anim');
+// En modo alfa los clips van a su propia carpeta: video.mjs lee anim/ y espera mp4 opacos.
+const dirAnim = path.join(raiz, deck, 'video-out', ALFA ? 'anim-alfa' : 'anim');
 fs.mkdirSync(dirAnim, { recursive: true });
 const t0 = performance.now();
 
@@ -83,6 +104,9 @@ const t0 = performance.now();
 async function abrir() {
   const navegador = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--force-device-scale-factor=1', '--hide-scrollbars', ...SIN_FRENO] });
   const pagina = await navegador.newPage();
+  const cdp = await pagina.createCDPSession();
+  // Fondo de página con alfa 0: si no, Chrome rellena de blanco lo que nadie pinta.
+  if (ALFA) await cdp.send('Emulation.setDefaultBackgroundColorOverride', { color: { r: 0, g: 0, b: 0, a: 0 } });
   await pagina.goto(url, { waitUntil: 'networkidle0' });
   const info = await pagina.evaluate(() => {
     const ds = document.querySelector('deck-stage');
@@ -92,8 +116,19 @@ async function abrir() {
   await pagina.setViewport({ width: info.w, height: info.h, deviceScaleFactor: 1 });
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
   await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
+  if (ALFA) {
+    await pagina.addStyleTag({ content: 'html,body,deck-stage,deck-stage>section{background:transparent!important;background-image:none!important}[data-fondo]{display:none!important}' });
+    // Una hoja de afuera no entra al shadow DOM (salvo :host desde el documento):
+    // los fondos de :host y del lienzo de deck-stage se vacían desde adentro.
+    await pagina.evaluate(() => {
+      const raizSombra = document.querySelector('deck-stage').shadowRoot;
+      const st = document.createElement('style');
+      st.textContent = ':host{background:transparent!important}.canvas{background:transparent!important}';
+      raizSombra.appendChild(st);
+    });
+  }
   await pagina.evaluate(() => document.fonts.ready);
-  return { navegador, pagina, cdp: await pagina.createCDPSession(), info };
+  return { navegador, pagina, cdp, info };
 }
 
 /** Escribe en el stdin de ffmpeg respetando la contrapresión. (Los errores
@@ -132,31 +167,34 @@ async function renderizar(t, i) {
     await Promise.all([...urls].map(u => new Promise(r => { const im = new Image(); im.onload = () => im.decode().then(r, r); im.onerror = r; im.src = u; })));
     await Promise.all([...s.querySelectorAll('img')].map(i => (i.decode ? i.decode().catch(() => {}) : null)));
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
-    if (!s.__tl) return 0;
+    if (!s.__tl) return -1;
     s.__tl.pause(0);           // desde aquí solo avanzamos con seeks explícitos
     return s.__tl.duration();
   }, i);
   const num = String(i + 1).padStart(2, '0');
-  if (!dur) return { i, num, estatica: true };
+  // Sin timeline: en modo normal se salta (video.mjs usa su PNG); en modo alfa
+  // sale un clip de un solo cuadro, porque el PNG de capturar.mjs es opaco.
+  const sinTimeline = dur <= 0;
+  if (sinTimeline && !ALFA) return { i, num, estatica: true };
 
   const tPrep = performance.now() - tIni;
-  const clip = path.join(dirAnim, `anim-${num}.mp4`);
+  const clip = path.join(dirAnim, `anim-${num}.${EXT}`);
   const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-    '-c:v', 'libx264', '-preset', 'medium', '-crf', '18', '-pix_fmt', 'yuv420p', clip], { stdio: ['pipe', 'ignore', 'inherit'] });
+    ...CODEC, clip], { stdio: ['pipe', 'ignore', 'inherit'] });
   ff.stdin.on('error', () => {});   // si ffmpeg muere, el error real llega por 'close'
   const terminado = new Promise((ok, mal) => ff.on('close', c => (c === 0 ? ok() : mal(new Error(`ffmpeg salió con ${c} en la slide ${num}`)))));
-  const cuadros = Math.ceil(dur * FPS) + 1; // el último cuadro cae exacto en t = dur
+  const cuadros = sinTimeline ? 1 : Math.ceil(dur * FPS) + 1; // el último cuadro cae exacto en t = dur
   for (let f = 0; f < cuadros; f++) {
-    const tt = Math.min(f / FPS, dur);
+    const tt = Math.min(f / FPS, Math.max(dur, 0));
     // cuerpo con llaves a propósito: si la flecha devolviera la timeline,
     // puppeteer la serializaría entera (cuesta ~0,8 s por cuadro)
-    await pagina.evaluate((idx, x) => { document.querySelectorAll('deck-stage section')[idx].__tl.time(x, false); }, i, tt);
+    if (!sinTimeline) await pagina.evaluate((idx, x) => { document.querySelectorAll('deck-stage section')[idx].__tl.time(x, false); }, i, tt);
     const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
     await escribir(ff.stdin, Buffer.from(data, 'base64'));
   }
   ff.stdin.end();
   await terminado;
-  return { i, num, dur: +dur.toFixed(3), cuadros, prep: tPrep, total: performance.now() - tIni };
+  return { i, num, dur: +Math.max(dur, 0).toFixed(3), cuadros, sinTimeline, prep: tPrep, total: performance.now() - tIni };
 }
 
 // ── Reparto: cada trabajador toma la siguiente lámina libre ──────────────
@@ -177,14 +215,18 @@ await Promise.all(trabajadores.map(async (t) => {
     const r = await renderizar(t, siguiente++);
     resultados.push(r);
     if (r.estatica) console.log(`  – slide ${r.num}: sin timeline, queda estática`);
-    else console.log(`  ✓ slide ${r.num}: ${r.cuadros} cuadros · ${r.dur.toFixed(2)}s → anim-${r.num}.mp4  (${(r.total / 1000).toFixed(1)} s, preparar ${(r.prep / 1000).toFixed(1)} s)`);
+    else console.log(`  ✓ slide ${r.num}: ${r.cuadros} cuadro${r.cuadros === 1 ? '' : 's'} · ${r.dur.toFixed(2)}s → anim-${r.num}.${EXT}${r.sinTimeline ? '  (sin timeline, un cuadro)' : ''}  (${(r.total / 1000).toFixed(1)} s, preparar ${(r.prep / 1000).toFixed(1)} s)`);
   }
 }));
 await Promise.all(trabajadores.map(t => t.navegador.close()));
+// Las conexiones keep-alive de Chrome dejaban vivo el servidor y el proceso no
+// salía al terminar (laminas.mjs se quedaba esperando).
+servidor.closeAllConnections();
 servidor.close();
 
 const meta = resultados.filter(r => !r.estatica).sort((a, b) => a.i - b.i)
-  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros }));
-fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, clips: meta }, null, 2));
+  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}) }));
+fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, alfa: ALFA || false, ext: EXT, clips: meta }, null, 2));
 const total = meta.reduce((a, c) => a + c.cuadros, 0);
 console.log(`\nListo: ${meta.length} clips (${total} cuadros) en ${path.relative(raiz, dirAnim)} · ${((performance.now() - t0) / 1000).toFixed(1)} s`);
+process.exit(0);

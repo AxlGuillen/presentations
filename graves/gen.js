@@ -29,6 +29,8 @@
 // bio oficial es-MX, Inven Global para Flandre).
 const fs = require('fs');
 const kit = require('../tools/kit.cjs');
+// Los fondos (copia desenfocada, lavados, rayos o humo) llevan data-fondo: en
+// `laminas.mjs --alfa` se apagan y la lámina sale transparente sobre el gameplay.
 
 // ── Paleta: Aguasturbias de noche ────────────────────────────────────────
 const BG = '#0E0D0C';        // humo
@@ -52,18 +54,18 @@ function prng(semilla) {
 const SECCION = `background: ${BG}; color: ${HUESO}; font-family: ${DISPLAY}; position: relative; overflow: hidden;`;
 
 const borroso = (src, brillo = 0.45, extra = '') => `
-    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
       <div data-borroso style="position: absolute; inset: -80px; background-image: url('assets/${src}'); background-size: cover; background-position: center; filter: blur(48px) saturate(1.1) brightness(${brillo}); ${extra}"></div>
     </div>`;
 
 // Lavado de pólvora y viñeta: nunca un fondo plano.
 const ambiente = (x = 50, y = 30, color = COBRE) => `
-    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(75% 45% at ${x}% ${y}%, ${a(color, 0.2)}, ${a(color, 0)} 70%);"></div>
-    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 50%, rgba(6,5,4,0.7) 100%);"></div>`;
+    <div data-fondo style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(75% 45% at ${x}% ${y}%, ${a(color, 0.2)}, ${a(color, 0)} 70%);"></div>
+    <div data-fondo style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 50%, rgba(6,5,4,0.7) 100%);"></div>`;
 
 // Humo de pólvora: líneas de flujo en cobre, desenfocadas, que derivan.
 const humo = (semilla, opacidad = 0.5) => `
-    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
       <div data-humo style="position: absolute; inset: -60px; filter: blur(7px); mix-blend-mode: screen; opacity: ${opacidad};">
         ${kit.patron('flujo', { ancho: 1200, alto: 2040, paleta: [COBRE, LATON, '#7A6A58'], semilla, lineas: 70, pasos: 90, paso: 10, grosor: 7, escala: 0.0011, opacidad: 0.55, estilo: 'width:100%;height:100%' })}
       </div>
@@ -244,8 +246,8 @@ slides.push(lamina('graves-golpes', 'Hicieron que dos casas nobles de Noxus se p
 slides.push(lamina('graves-traicion', 'Pero un dia un golpe salio mal. Atraparon a Graves y Twisted Fate huyo y lo dejo atras. Graves paso anos encerrado en una prision llamada el Cajon, alimentando el rencor contra su companero.', `
     ${kit.quemado('efx-quemado', { brasa: COBRE })}
     ${borroso('cartas/02BW026-fondo.jpg', 0.5)}
-    <div data-frio style="position: absolute; inset: 0; background: #1A1D22; mix-blend-mode: color; pointer-events: none;"></div>
-    <div data-sombra style="position: absolute; inset: 0; background: rgba(8,9,11,0.55); pointer-events: none;"></div>
+    <div data-fondo data-frio style="position: absolute; inset: 0; background: #1A1D22; mix-blend-mode: color; pointer-events: none;"></div>
+    <div data-fondo data-sombra style="position: absolute; inset: 0; background: rgba(8,9,11,0.55); pointer-events: none;"></div>
     ${ambiente(50, 50, '#5A6270')}
     ${panel(`
       <div data-quema style="position: absolute; left: 0; top: 380px; width: 1080px; height: 610px;">
