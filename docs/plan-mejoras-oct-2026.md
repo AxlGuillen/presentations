@@ -249,6 +249,15 @@ Cada una arranca con **una prueba de una sesión** y solo sigue si la prueba sal
 - La receta `gira` y el modo `gira` de `continua` interpolan la cámara en órbita. La receta da la vuelta entera sin camino corto, para que 360° no se anule.
 - En `lab/` hay tres láminas, deterministas yendo y volviendo (80 dB a idéntico).
 
+### Resultado de P11 (22/oct, hecho en stg)
+
+- **Las pruebas** (`tools/pruebas/deck-lottie.cjs` y `deck-three.cjs`) son 10 s de una animación y una escena hechas a mano, sin assets de terceros. Las dos dan unos 28 ms por cuadro, con la captura incluida, y dos renders idénticos en los 301 cuadros. Three.js corre en la GPU (ANGLE Metal, M2). Licencias MIT en `tools/vendor/`.
+- **La prueba destapó un error de `cuadros.mjs`, no de Lottie:** `pause(0)` no llama a los `onUpdate`, así que el cuadro 0 de toda receta que pinta ahí salía con lo que hubiera dejado la reproducción automática. Ahora es `pause(0, false)`.
+- **Lottie** es la versión light (solo SVG). Su receta vuelve a pintar en `DOMLoaded`, porque `loadAnimation` monta el DOM después.
+- **three.js 0.186 ya no trae build minificado** y es un módulo ES (2,1 MB). Como carga tarde, `kit.animador` ganó `window.relanzar()` y el arranque de three lo llama. Se comprobó con una escena en la primera lámina.
+- En `lab/` hay dos láminas (`lottie` y `tres`), deterministas yendo y volviendo.
+- **Pendiente:** probar en una máquina sin GPU y revisar la licencia de cualquier animación de LottieFiles antes de usarla en un deck.
+
 ---
 
 ## Seguimiento
@@ -271,7 +280,7 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | P7 · Easing y desenfoque | 4 | Hecho (22/oct) | stg | ver fase 4 |
 | P5 · Golpe, dona, radar, pixelado, derrumbe | 4 | Hecho (22/oct) | stg | ver fase 4 |
 | P6 · Objetos que giran | 5 | Hecho (22/oct; la prueba pasó: 43 ms por cuadro) | stg | ver fase 5 |
-| P11 · Lottie y Three.js | 5 | Pendiente, con prueba | | |
+| P11 · Lottie y Three.js | 5 | Hecho (22/oct; las dos pruebas pasaron) | stg | ver fase 5 |
 
 ## Prompt para arrancar cada sesión
 

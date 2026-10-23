@@ -346,6 +346,12 @@ const animador = () => `<script>
     var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
     if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
   });
+  // Reconstruye la timeline de la lámina activa: lo usa el arranque de
+  // three.js (kit.threeScript), que es un módulo y carga después.
+  window.relanzar = function () {
+    var a = document.querySelector('deck-stage > section[data-deck-active]');
+    if (a) lanzar(a);
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
 })();
@@ -458,8 +464,32 @@ const lineasRuntime = () => {
 };
 const { ritmo, voz, golpe } = require('./kit-ritmo.cjs');
 
+// ── Lottie y Three.js (P11), vendorizados por carpeta como gsap ──────────
+// Licencias MIT en tools/vendor/lottie.LICENSE.md y three.LICENSE. Las
+// ANIMACIONES de Lottie son aparte: en un repo público solo entran las de
+// licencia clara (o hechas a mano).
+const copiaVendor = (dir, archivos) => {
+  const fs = require('fs'), path = require('path');
+  for (const a of archivos) fs.copyFileSync(path.join(__dirname, 'vendor', a), path.join(dir, a));
+};
+/** Copia lottie-web (la versión light, solo SVG) a la carpeta y da su <script>. */
+// El minificado de lottie no trae su aviso de licencia (los de three sí): va al lado.
+const lottieScript = (dir) => { copiaVendor(dir, ['lottie_light.min.js', 'lottie.LICENSE.md']); return `<script src="./lottie_light.min.js"></script>`; };
+/** Una animación de Lottie para la receta 'lottie': los datos van en un
+ *  <script type="application/json"> y el lienzo al lado. */
+const lottie = (datos, { ancho = 1080, alto = 1080, estilo = '' } = {}) =>
+  `<div data-lottie style="position:relative;width:${ancho}px;height:${alto}px;${estilo}"><script type="application/json">${JSON.stringify(datos).replace(/</g, '\\u003c')}</${'script'}>` +
+  `<div data-lienzo style="position:absolute;inset:0"></div></div>`;
+/** Copia three.js (módulo ES: three.module.js + three.core.js, ~2,1 MB sin
+ *  minificar) y lo carga en window.THREE; al cargar reconstruye la timeline de
+ *  la lámina activa, porque el módulo llega después que los demás scripts. */
+const threeScript = (dir) => {
+  copiaVendor(dir, ['three.module.js', 'three.core.js']);
+  return `<script type="module">import * as THREE from './three.module.js'; window.THREE = THREE; if (window.relanzar) window.relanzar();</${'script'}>`;
+};
+
 /** PRNG con semilla (mulberry32), el mismo que usan kit.patron y las recetas
  *  del runtime: kit.random('confeti')() da la misma secuencia que
  *  random('confeti')() dentro de la página. La semilla puede ser número o texto. */
 module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
-  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, lineasRuntime, ritmo, voz, golpe, random: prng };
+  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, lineasRuntime, ritmo, voz, golpe, lottieScript, lottie, threeScript, random: prng };

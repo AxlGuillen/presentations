@@ -1029,6 +1029,42 @@ const efectos = () => `<script>
     animaVivo(tl, el, v, a, b, Object.assign({}, o, { vueltas: 0, directo: true }));
   };
 
+  // ── LOTTIE Y THREE.JS (P11) ───────────────────────────────────────────
+  // Las dos van llevadas por la timeline, sin requestAnimationFrame: Lottie con
+  // goToAndStop(cuadro, true) y three.js con renderer.render() en cada seek.
+  // Medido en esta Mac: ~28 ms por cuadro las dos, y dos renders idénticos.
+
+  // Lottie: la animación de kit.lottie() de su primer a su último cuadro (o en
+  // data-dur segundos). loadAnimation monta su DOM después, así que al cargar
+  // se pinta el cuadro en que va la timeline.
+  R.lottie = function (tl, el, o) {
+    var caja = el.matches('[data-lottie]') ? el : el.querySelector('[data-lottie]');
+    if (!caja || !window.lottie) return;
+    if (!caja.__datos) caja.__datos = JSON.parse(caja.querySelector('script[type="application/json"]').textContent);
+    var d = caja.__datos;
+    if (!caja.__anim) caja.__anim = window.lottie.loadAnimation({ container: caja.querySelector('[data-lienzo]'), renderer: 'svg', loop: false, autoplay: false, animationData: d });
+    var anim = caja.__anim, total = Math.max(0, d.op - d.ip - 1), est = { f: 0 };
+    var pinta = function () { anim.goToAndStop(est.f, true); };
+    tl.fromTo(est, { f: 0 }, { f: total, duration: o.dur || total / (d.fr || 30), ease: o.ease || 'none', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    if (anim.isLoaded) pinta(); else anim.addEventListener('DOMLoaded', pinta);
+  };
+
+  // Tres: una escena de three.js registrada con tres('nombre', function (THREE,
+  // canvas) { …arma la escena…; return function (t) { …mueve y renderiza… }; })
+  // y llevada por la timeline: data-escena="nombre" data-dur="4". La fábrica
+  // corre una sola vez por canvas.
+  var escenas3d = {};
+  window.tres = function (nombre, fabrica) { escenas3d[nombre] = fabrica; };
+  R.tres = function (tl, el, o) {
+    var canvas = el.tagName === 'CANVAS' ? el : el.querySelector('canvas'), fab = escenas3d[o.escena];
+    if (!canvas || !fab || !window.THREE) return;
+    if (!canvas.__pinta) canvas.__pinta = fab(window.THREE, canvas);
+    var pinta = canvas.__pinta, est = { t: 0 }, dur = o.dur || 3;
+    var p = function () { pinta(est.t); };
+    tl.fromTo(est, { t: 0 }, { t: dur, duration: dur, ease: o.ease || 'none', immediateRender: true, onUpdate: p, onReverseComplete: p }, o.en || 0);
+    p();
+  };
+
   // ── CONTINUIDAD ────────────────────────────────────────────────────────
   // El mismo elemento (data-continua="nombre") en láminas seguidas: al entrar,
   // arranca como estaba en la lámina de la que venimos y llega a su estado.

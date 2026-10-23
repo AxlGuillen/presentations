@@ -176,7 +176,11 @@ async function renderizar(t, i) {
     await Promise.all([...s.querySelectorAll('img')].map(i => (i.decode ? i.decode().catch(() => {}) : null)));
     await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)));
     if (!s.__tl) return { dur: -1, sfx: [] };
-    s.__tl.pause(0);           // desde aquí solo avanzamos con seeks explícitos
+    // Desde aquí solo avanzamos con seeks explícitos. Con callbacks (false):
+    // la timeline ya iba corriendo sola, y pause(0) a secas no llama a los
+    // onUpdate, así que el cuadro 0 de un contador, unas partículas o un Lottie
+    // salía con lo que hubiera pintado la reproducción automática.
+    s.__tl.pause(0, false);
     // Etiquetas sfx:<receta> (también las de timelines anidadas, sumando su
     // arranque): video.mjs pone ahí los efectos de sonido.
     const sfx = [];

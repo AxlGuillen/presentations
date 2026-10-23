@@ -398,6 +398,17 @@ lamina({ grupo: LV, nombre: 'gira · llega', uso: 'modo «gira» de continua: ra
   cuerpo: `<div data-continua="trofeo-vivo" data-vueltas="1" data-dur="1.8" style="position:absolute;left:0;top:0;width:456px;height:480px">${trofeoVivo([430, 420, 160], 560)}</div>
     <div data-a="up2" style="position:absolute;left:0;right:0;bottom:60px;font:500 26px/1.5 ${MONO};color:${MUTED};text-align:center">la misma escena, otra cámara<br>y una vuelta de más en el camino</div>` });
 
+// ── LOTTIE Y THREE.JS (P11) ──────────────────────────────────────────────
+// Las dos llevadas por la timeline (seekeables). La animación y la escena son
+// de ejemplo y hechas a mano: tools/pruebas/lottie-ejemplo.cjs y tres-ejemplo.cjs.
+const LT = 'Lottie y Three.js';
+lamina({ grupo: LT, nombre: 'lottie', uso: "${kit.lottieScript(dir)}  +  ${kit.lottie(datos, { ancho, alto })}  dentro de  data-efecto=\"lottie\"",
+  notas: 'Solo entran al repo animaciones de licencia clara o hechas a mano; esta es hecha a mano.',
+  cuerpo: `<div data-efecto="lottie" data-en="0.2" data-dur="4" style="width:912px;height:912px;border-radius:22px;overflow:hidden;background:${PANEL}">${kit.lottie(require('../tools/pruebas/lottie-ejemplo.cjs'), { ancho: 912, alto: 912 })}</div>` });
+lamina({ grupo: LT, nombre: 'tres', uso: "${kit.threeScript(dir)}  +  tres('nombre', (THREE, canvas) => t => …)  +  <canvas data-efecto=\"tres\" data-escena=\"nombre\">",
+  notas: 'three.js corre en la GPU (ANGLE Metal en esta Mac). Sin GPU (SwiftShader) es unas 4 veces más lento y el determinismo entre máquinas no está garantizado.',
+  cuerpo: `<canvas data-efecto="tres" data-escena="estrella" data-dur="4" width="912" height="912" style="width:912px;height:912px;border-radius:22px;background:${PANEL}"></canvas>` });
+
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>
 (function () {
@@ -466,9 +477,14 @@ ${slides.join('\n')}
 </deck-stage>
 ${kit.gsap(__dirname, ['SplitText', 'DrawSVG', 'MorphSVG', 'MotionPath', 'CustomEase'])}
 ${kit.lineasRuntime()}
+${kit.lottieScript(__dirname)}
 ${kit.efectos()}
 ${kit.animador()}
+${kit.threeScript(__dirname)}
 ${coreografias}
+<script>
+${require('../tools/pruebas/tres-ejemplo.cjs')}
+</script>
 <script>
 (function () {
   var presenting = false, btn = document.createElement('button');
