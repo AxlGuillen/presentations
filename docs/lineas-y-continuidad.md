@@ -2,8 +2,9 @@
 
 > Estado: **implementado** el 16/oct/2026 (ver «Lo que cambió al implementarlo»
 > al final): la receta `continua`, el motor `kit.lineas` con la receta `traza` y
-> los fondos `hilos`, `horizonte` y `guilloche`. Pendiente: objetos que giren
-> entre láminas y el deck de prueba. Las imágenes de esta carpeta son de los
+> los fondos `hilos`, `horizonte` y `guilloche`. Los objetos que **giran** entre
+> láminas entraron el 22/oct/2026 (`kit.lineas.vivo`, receta `gira` y modo
+> `gira` de `continua`, ver CLAUDE.md). Pendiente: el deck de prueba. Las imágenes de esta carpeta son de los
 > prototipos de la investigación.
 > Responde a dos pedidos de Axl: que los SVG ilustrativos se **generen** —objetos
 > como la caja de un juego y fondos decorativos, minimalistas y hechos de líneas—

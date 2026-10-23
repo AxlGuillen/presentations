@@ -447,10 +447,19 @@ const { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafic
 const { patron, patronFondo, prng } = require('./kit-patrones.cjs');
 const { icono, ilustracion } = require('./kit-recursos.cjs');
 const lineas = require('./kit-lineas.cjs');
+/** kit-lineas.cjs como <script> en la página (window.lineas), desde la misma
+ *  fuente: es lo que deja proyectar un modelo en cada cuadro (P6). Lo único que
+ *  importa de fuera es encadenar() de kit-patrones, que va incrustada. */
+const lineasRuntime = () => {
+  const fs = require('fs'), path = require('path');
+  const fuente = fs.readFileSync(path.join(__dirname, 'kit-lineas.cjs'), 'utf8');
+  const { encadenar } = require('./kit-patrones.cjs');
+  return `<script>(function () {\nvar module = { exports: {} }, require = function () { return { encadenar: ${encadenar.toString()} }; };\n${fuente}\nwindow.lineas = module.exports;\n})();</${'script'}>`;
+};
 const { ritmo, voz, golpe } = require('./kit-ritmo.cjs');
 
 /** PRNG con semilla (mulberry32), el mismo que usan kit.patron y las recetas
  *  del runtime: kit.random('confeti')() da la misma secuencia que
  *  random('confeti')() dentro de la página. La semilla puede ser número o texto. */
 module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
-  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, ritmo, voz, golpe, random: prng };
+  gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, lineasRuntime, ritmo, voz, golpe, random: prng };

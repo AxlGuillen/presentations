@@ -241,6 +241,14 @@ Cada una arranca con **una prueba de una sesión** y solo sigue si la prueba sal
 - **P6, objetos que giran:** un deck de prueba con un objeto que gira entre dos láminas, medido con `cuadros.mjs`. Se sigue si cada cuadro cuesta menos de ~100 ms en Chrome.
 - **P11, Lottie y Three.js:** 10 s de cada uno, midiendo el tiempo por cuadro y comparando dos renders por PSNR. Se sigue si el render es determinista en esta Mac y la licencia de cada asset es clara.
 
+### Resultado de P6 (22/oct, hecho en stg)
+
+- **La prueba** (`tools/pruebas/deck-gira.cjs`) es el trofeo con sombra dando una vuelta en 3 s. Proyectar cuesta 43 ms de media por cuadro en Chrome (p95 70, máximo 86), sobre los ~90 ms que ya cuesta capturar. Pasa el criterio, así que se integró.
+- **El runtime sale de la misma fuente** (opción 1 del diseño): `kit.lineasRuntime()` incrusta `kit-lineas.cjs` y la única función que importa, `encadenar`. Se comprobó que da el mismo SVG que el build-time.
+- **Hizo falta un encuadre fijo** (`escala` en `dibujar`): con el ajuste automático, el objeto se acercaba y se alejaba al girar.
+- La receta `gira` y el modo `gira` de `continua` interpolan la cámara en órbita. La receta da la vuelta entera sin camino corto, para que 360° no se anule.
+- En `lab/` hay tres láminas, deterministas yendo y volviendo (80 dB a idéntico).
+
 ---
 
 ## Seguimiento
@@ -262,7 +270,7 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | P5 · Chispas y destello | 3 | Hecho (22/oct) | stg | ver fase 3 |
 | P7 · Easing y desenfoque | 4 | Hecho (22/oct) | stg | ver fase 4 |
 | P5 · Golpe, dona, radar, pixelado, derrumbe | 4 | Hecho (22/oct) | stg | ver fase 4 |
-| P6 · Objetos que giran | 5 | Pendiente, con prueba | | |
+| P6 · Objetos que giran | 5 | Hecho (22/oct; la prueba pasó: 43 ms por cuadro) | stg | ver fase 5 |
 | P11 · Lottie y Three.js | 5 | Pendiente, con prueba | | |
 
 ## Prompt para arrancar cada sesión

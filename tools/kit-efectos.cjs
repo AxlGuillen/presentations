@@ -972,13 +972,70 @@ const efectos = () => `<script>
     });
   };
 
+  // ── LÍNEAS VIVAS (P6) ─────────────────────────────────────────────────
+  // Un dibujo de kit.lineas.vivo() trae su modelo en data-modelo y se vuelve a
+  // proyectar en cada cuadro con window.lineas (lo carga kit.lineasRuntime()).
+  // La cámara se mueve en órbita alrededor de su centro: radio, acimut (por el
+  // camino corto, más data-vueltas), elevación y fov se interpolan aparte, así
+  // el objeto gira y no atraviesa la cámara. La trofeo con sombra cuesta ~43 ms
+  // por cuadro en Chrome (medido con tools/pruebas/deck-gira.cjs).
+  function vivoDe(el) {
+    var v = el.matches('[data-lineas-vivo]') ? el : el.querySelector('[data-lineas-vivo]');
+    if (!v || !window.lineas) return null;
+    if (!v.__modelo) v.__modelo = JSON.parse(v.getAttribute('data-modelo'));
+    return { el: v, m: v.__modelo };
+  }
+  function orbita(cam, escala) {
+    var c = cam.centro || [0, 0, 0];
+    if (cam.iso) return { iso: true, c: c, giro: cam.giro == null ? 45 : cam.giro, altura: cam.altura == null ? 35.264 : cam.altura, escala: escala };
+    var o = cam.ojo || [320, 220, 480], d = [o[0] - c[0], o[1] - c[1], o[2] - c[2]], r = Math.hypot(d[0], d[1], d[2]) || 1;
+    return { c: c, r: r, az: Math.atan2(d[0], d[2]), el: Math.asin(d[1] / r), fov: cam.fov || 24, escala: escala };
+  }
+  function camaraDe(q) {
+    if (q.iso) return { iso: true, centro: q.c, giro: q.giro, altura: q.altura };
+    var ce = Math.cos(q.el);
+    return { ojo: [q.c[0] + Math.sin(q.az) * ce * q.r, q.c[1] + Math.sin(q.el) * q.r, q.c[2] + Math.cos(q.az) * ce * q.r], centro: q.c, fov: q.fov };
+  }
+  // directo: sin camino corto (la receta gira da la vuelta entera).
+  function mezclaOrbita(a, b, t, vueltas, directo) {
+    var L = function (x, y) { return x + (y - x) * t; }, c = [L(a.c[0], b.c[0]), L(a.c[1], b.c[1]), L(a.c[2], b.c[2])];
+    if (a.iso && b.iso) {
+      var dg = (directo ? b.giro - a.giro : ((b.giro - a.giro + 540) % 360) - 180) + (vueltas || 0) * 360;
+      return { iso: true, c: c, giro: a.giro + dg * t, altura: L(a.altura, b.altura), escala: L(a.escala, b.escala) };
+    }
+    if (a.iso || b.iso) return t < 1 ? a : b;   // de iso a perspectiva no se interpola
+    var dz = b.az - a.az;
+    if (!directo) dz = ((dz + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+    dz += (vueltas || 0) * 2 * Math.PI;
+    return { c: c, r: L(a.r, b.r), az: a.az + dz * t, el: L(a.el, b.el), fov: L(a.fov, b.fov), escala: L(a.escala, b.escala) };
+  }
+  function animaVivo(tl, el, v, a, b, o) {
+    var orig = v.el.innerHTML, est = { t: 0 };
+    deshacer(el, function () { v.el.innerHTML = orig; });
+    var pinta = function () {
+      var q = mezclaOrbita(a, b, est.t, o.vueltas, o.directo);
+      v.el.innerHTML = window.lineas.dibujar(v.m.objetos, Object.assign({}, v.m.opciones, { camara: camaraDe(q), escala: q.escala }));
+    };
+    tl.fromTo(est, { t: 0 }, { t: 1, duration: o.dur || 2.4, ease: o.ease || 'deriva', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    pinta();
+  }
+  // Gira: el objeto da data-giro grados (360 por defecto) y termina en la
+  // cámara del HTML, así el estado final es el dibujo de build-time.
+  R.gira = function (tl, el, o) {
+    var v = vivoDe(el);
+    if (!v) return;
+    var b = orbita(v.m.camara, v.m.opciones.escala), a = Object.assign({}, b), g = o.giro == null ? 360 : +o.giro;
+    if (b.iso) a.giro = b.giro - g; else a.az = b.az - g * Math.PI / 180;
+    animaVivo(tl, el, v, a, b, Object.assign({}, o, { vueltas: 0, directo: true }));
+  };
+
   // ── CONTINUIDAD ────────────────────────────────────────────────────────
   // El mismo elemento (data-continua="nombre") en láminas seguidas: al entrar,
   // arranca como estaba en la lámina de la que venimos y llega a su estado.
   // Es el Morph de PowerPoint / Magic Move de Keynote. La pareja es la lámina
   // anterior EN EL ORDEN DEL DECK (así el video cuadro a cuadro, que siempre
   // avanza, es determinista); si se llegó retrocediendo, la siguiente.
-  //   data-como = mueve | cuenta | transforma | crece | sigue | camara
+  //   data-como = mueve | cuenta | transforma | crece | sigue | camara | gira
   //   (varios separados por espacio; sin data-como se deduce del elemento)
   var vista = null;
   document.addEventListener('slidechange', function (e) { var d = e.detail || {}; vista = { de: d.previousIndex, a: d.index }; }, true);
@@ -1019,6 +1076,7 @@ const efectos = () => `<script>
     var c = el.getAttribute('data-como');
     if (c) return c.split(/\\s+/);
     if (el.hasAttribute('data-focos')) return ['camara'];
+    if ((el.matches('[data-lineas-vivo]') || el.querySelector('[data-lineas-vivo]')) && (par.matches('[data-lineas-vivo]') || par.querySelector('[data-lineas-vivo]'))) return ['mueve', 'gira'];
     if (el.matches('[data-grafica]') || el.querySelector('[data-grafica]')) return ['sigue'];
     if (el.hasAttribute('data-progreso')) return ['sigue'];
     if (el.tagName.toLowerCase() === 'path' && par.getAttribute('d') !== el.getAttribute('d')) return ['transforma'];
@@ -1078,10 +1136,16 @@ const efectos = () => `<script>
     camara: function (tl, el, par, a, b, o) {
       R.camara(tl, el, Object.assign({}, o, { focos: ultimoFoco(par) + ';' + (el.getAttribute('data-focos') || '50 50 1'), pausa: o.pausa == null ? 0.25 : o.pausa }));
     },
+    // El objeto a líneas gira de la cámara de la pareja a la suya (P6).
+    gira: function (tl, el, par, a, b, o) {
+      var v = vivoDe(el), vp = vivoDe(par);
+      if (!v || !vp) return;
+      animaVivo(tl, el, v, orbita(vp.m.camara, vp.m.opciones.escala), orbita(v.m.camara, v.m.opciones.escala), Object.assign({}, o, { dur: o.dur || 1.4 }));
+    },
   };
   // Lo que cada modo ya anima: si el elemento también lo declara con
   // data-efecto, la receta suelta no corre (la continuidad la sustituye).
-  var SUSTITUYE = { cuenta: 'contador', transforma: 'transforma', sigue: 'linea', camara: 'camara' };
+  var SUSTITUYE = { cuenta: 'contador', transforma: 'transforma', sigue: 'linea', camara: 'camara', gira: 'gira' };
   window.continua = function (tl, s) {
     var hechos = [], origen = origenDe(s);
     if (!origen) return hechos;

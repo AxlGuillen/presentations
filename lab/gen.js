@@ -381,6 +381,23 @@ lamina({ grupo: AC, nombre: 'pixelado', uso: 'data-efecto="pixelado" data-desde=
 lamina({ grupo: AC, nombre: 'derrumbe', uso: 'data-efecto="derrumbe" data-en="0.8" data-semilla="…"  · la salida: las letras caen con giro y deriva',
   cuerpo: `<div data-efecto="derrumbe" data-en="0.9" data-semilla="lab" style="font:400 230px/0.9 ${ANTON};color:${BONE};text-align:center">GAME<br>OVER</div>` });
 
+// ── LÍNEAS VIVAS (P6): el modelo en el HTML, proyectado en cada cuadro ──
+const LV = 'Líneas vivas';
+const dadosVivos = DADOS.map(([p], i) => LN.poliedro(p, [(i % 3) * 150 - 150 + (i > 2 ? 75 : 0), i > 2 ? -150 : 0, 0], 58));
+lamina({ grupo: LV, nombre: 'gira', uso: "kit.lineas.vivo(objetos, { camara, … })  +  data-efecto=\"gira\" data-giro=\"360\"  · y kit.lineasRuntime() en el deck",
+  notas: 'El modelo va en data-modelo y window.lineas lo proyecta en cada cuadro: las líneas ocultas se recalculan al girar.',
+  cuerpo: `<div data-efecto="gira" data-en="0.3" data-dur="3" style="position:absolute;inset:0">${LN.vivo(dadosVivos, { camara: { iso: true, giro: 28, altura: 22 }, ancho: 912, alto: 960, margen: 70, tinta: BONE, grosor: 3, umbral: 15 })}</div>` });
+const copaVivo = LN.revolucion([[0, 40], [10, 40], [10, 52], [6, 60], [6, 78], [22, 92], [34, 120], [38, 150], [36, 150], [32, 122], [20, 98], [0, 96]], { segmentos: 28 });
+const pedestalVivo = LN.caja([0, 18, 0], [64, 36, 64]);
+pedestalVivo.frente.detalles.push(LN.rect(pedestalVivo.frente, 0.15, 0.3, 0.85, 0.7));
+const trofeoVivo = (ojo, escala) => LN.vivo([copaVivo, pedestalVivo], { camara: { ojo, centro: [0, 80, 0], fov: 24 }, ancho: 912, alto: 960, tinta: BONE, grosor: 3, fino: 1.6, escala });
+lamina({ grupo: LV, nombre: 'gira · continua', uso: 'data-continua="trofeo" con un kit.lineas.vivo() en las dos láminas  · → la cámara viaja de una a otra',
+  notas: 'Primera de dos: avanzar con → para ver al trofeo girar mientras se va a la esquina.',
+  cuerpo: `<div data-continua="trofeo-vivo" style="position:absolute;inset:0">${trofeoVivo([0, 150, 540], 560)}</div>` });
+lamina({ grupo: LV, nombre: 'gira · llega', uso: 'modo «gira» de continua: radio, acimut (camino corto + data-vueltas), elevación y fov se interpolan aparte',
+  cuerpo: `<div data-continua="trofeo-vivo" data-vueltas="1" data-dur="1.8" style="position:absolute;left:0;top:0;width:456px;height:480px">${trofeoVivo([430, 420, 160], 560)}</div>
+    <div data-a="up2" style="position:absolute;left:0;right:0;bottom:60px;font:500 26px/1.5 ${MONO};color:${MUTED};text-align:center">la misma escena, otra cámara<br>y una vuelta de más en el camino</div>` });
+
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>
 (function () {
@@ -448,6 +465,7 @@ ${kit.og({ titulo: 'Laboratorio de efectos', descripcion: 'El catálogo vivo del
 ${slides.join('\n')}
 </deck-stage>
 ${kit.gsap(__dirname, ['SplitText', 'DrawSVG', 'MorphSVG', 'MotionPath', 'CustomEase'])}
+${kit.lineasRuntime()}
 ${kit.efectos()}
 ${kit.animador()}
 ${coreografias}
