@@ -27,7 +27,8 @@ const { prng } = require('./kit-patrones.cjs');
 export const SR = 48000;
 
 // Qué suena con cada receta del kit (las etiquetas sfx:<receta> de la timeline).
-export const EFECTO_DE = { cortinilla: 'whoosh', lineas: 'whoosh', sello: 'golpe', contador: 'ticks', bento: 'pop', piezas: 'pop' };
+export const EFECTO_DE = { cortinilla: 'whoosh', lineas: 'whoosh', sello: 'golpe', contador: 'ticks', bento: 'pop', piezas: 'pop',
+  palabra: 'golpe', multikill: 'golpe', impacto: 'golpe', rayo: 'whoosh', letrero: 'whoosh' };
 
 // ── Síntesis ──────────────────────────────────────────────────────────────
 // Cada efecto arranca en su muestra 0: lo que se ve y lo que suena empiezan

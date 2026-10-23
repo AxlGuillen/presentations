@@ -200,6 +200,16 @@ Cada receta lleva:
 
 Las recetas están en el catálogo de `CLAUDE.md` y en `lab/`, y un deck de prueba de 3 láminas de edit (partículas, palabra y letrero) sale con alfa y se monta a mano sobre un clip sin rectángulos.
 
+### Resultado (22/oct, hecho en stg y en una sola sesión)
+
+- `kit.ritmo` vive en `tools/kit-ritmo.cjs`, con 4 pruebas sobre `tools/pruebas/beatmap.json`. Los índices empiezan en 0 desde la lámina, y además de `b`, `compas`, `drop` y `palabra` trae `beats(desde, n)` y `seccion(tipo)`.
+- Las ocho recetas (`chispas`, `brasas`, `destello`, `palabra`, `multikill`, `letrero`, `rayo` e `impacto`) tienen su lámina en el grupo «Edit» de `lab/`. Las partículas no usan Physics2D: son una fórmula cerrada con roce y gravedad.
+- **La prueba de ida y vuelta se hizo en la misma página** (mitad → final → mitad), con un script aparte, porque `qa-anim` nombra los PNG por tiempo y no deja repetir uno.
+  - En el área de la demo dio de 68 dB a idéntica.
+  - Lo que cambia en las láminas cortas es la cabecera a medio animar, igual que con `sello` y `cortinilla`.
+- **El deck de prueba es un generador** (`tools/pruebas/deck-edit.cjs` → `prueba-edit/`, ignorada en git) para no sumar un deck público a la galería. Se montó con `overlay` sobre 12 s del video de ultracode.
+- Las recetas que suenan suman su efecto a la tabla de P2: `palabra`, `multikill` e `impacto` → golpe; `rayo` y `letrero` → *whoosh*.
+
 ---
 
 ## Fase 4 · Acabado (2–3 sesiones)
@@ -239,9 +249,9 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | P2 · Música, ducking y loudness | 2 | Hecho (22/oct) | stg | ver fase 2 |
 | P2 · Efectos de sonido | 2 | Hecho (22/oct; falta el sonido de cambio de lámina) | stg | ver fase 2 |
 | P10 · Estándares de loudness (PKB) | 2 | Pendiente, requiere a Axl | | |
-| P3 · `kit.ritmo` | 3 | Pendiente | | |
-| P4 · Recetas de edit | 3 | Pendiente | | |
-| P5 · Chispas y destello | 3 | Pendiente | | |
+| P3 · `kit.ritmo` | 3 | Hecho (22/oct) | stg | ver fase 3 |
+| P4 · Recetas de edit | 3 | Hecho (22/oct) | stg | ver fase 3 |
+| P5 · Chispas y destello | 3 | Hecho (22/oct) | stg | ver fase 3 |
 | P7 · Easing y desenfoque | 4 | Pendiente | | |
 | P5 · Golpe, dona, radar, pixelado, derrumbe | 4 | Pendiente | | |
 | P6 · Objetos que giran | 5 | Pendiente, con prueba | | |

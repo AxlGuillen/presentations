@@ -318,11 +318,60 @@ patronLamina('hilos', 'hilos', { paleta: [BONE], lineas: 46 }, 'dibuja', "kit.pa
 patronLamina('horizonte', 'horizonte', { paleta: [BONE, CORAL, VIOLETA] }, 'dibuja', "kit.patron('horizonte', { horizonte, radiales, filas, sol })");
 patronLamina('guilloche', 'guilloche', { paleta: [VIOLETA, CORAL] }, 'dibuja', "kit.patron('guilloche', { anillos, ondas, amplitud })  · el fondo de un billete");
 
+// ── EDIT (docs/mejoras-oct-2026.md, P3 y P4) ─────────────────────────────
+// Capas para montar encima de un edit con laminas.mjs --alfa. La de ritmo lee
+// lab/beatmap.json (un beatmap de ejemplo a 120 bpm; la música no se commitea).
+const ED = 'Edit';
+const RITMO = kit.ritmo(require('./beatmap.json'), { desde: 4 });
+const ANTON = `'Anton', Impact, sans-serif`;
+const golpes = RITMO.beats(0, 8);
+lamina({ grupo: ED, nombre: 'ritmo', uso: "const r = kit.ritmo(beatmap, { desde: 4 })  ·  r.b(n) · r.compas(n) · r.drop · r.palabra('survive')",
+  notas: `Beats de la lámina: ${golpes.join(', ')} s. Palabra «survive» en ${RITMO.palabra('survive')} s y drop en ${RITMO.drop} s.`,
+  cuerpo: `<div data-lab="ritmo" data-golpes="${golpes.join(',')}" data-palabra="${RITMO.palabra('survive')}" data-drop="${RITMO.drop}" style="position:relative;width:100%;height:100%">
+    <div style="position:absolute;left:0;right:0;top:40px;display:grid;grid-template-columns:repeat(4,1fr);gap:28px 0;justify-items:center">
+      ${golpes.map((t, i) => `<div data-golpe style="width:${i % 4 ? 120 : 160}px;height:${i % 4 ? 120 : 160}px;border-radius:50%;background:${i % 4 ? VIOLETA : CORAL};display:flex;align-items:center;justify-content:center;font:500 22px/1 ${MONO};color:${BONE};align-self:center">${t.toFixed(2)}</div>`).join('')}</div>
+    <div data-sfx="no" data-palabra-lab style="position:absolute;left:0;right:0;top:470px;text-align:center;font:400 200px/1 ${ANTON}">SURVIVE</div>
+    <div data-chispas-lab style="position:absolute;left:0;right:0;top:420px;height:400px"></div>
+    <div style="position:absolute;left:0;right:0;bottom:30px;text-align:center;font:500 24px/1.5 ${MONO};color:${MUTED}">un círculo por beat · coral = primer tiempo del compás<br>la palabra cae en r.palabra() y las chispas en r.drop</div></div>` });
+lamina({ grupo: ED, nombre: 'brasas', uso: 'data-efecto="brasas" data-n="34" data-dur="3" data-color="#FF8A3D,#FFC46B"  · suben y se apagan',
+  cuerpo: `<div data-efecto="brasas" data-en="0" data-dur="3.2" data-n="42" data-semilla="lab" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:radial-gradient(90% 60% at 50% 100%, #2A1208, ${PANEL})"></div>` });
+lamina({ grupo: ED, nombre: 'chispas', uso: 'data-efecto="chispas" data-origen="50 45" data-fuerza="900"  · estallan con roce y gravedad, en fórmula cerrada',
+  cuerpo: `<div data-efecto="chispas" data-en="0.3" data-origen="50 45" data-semilla="lab" style="position:relative;width:100%;height:100%;border-radius:22px;background:${PANEL}"></div>` });
+lamina({ grupo: ED, nombre: 'destello', uso: "${kit.destello({ tam, rayos, color, semilla })}  dentro de  data-efecto=\"destello\"",
+  cuerpo: `<div style="position:relative;width:100%;height:100%;display:flex;align-items:center;justify-content:center">
+    <div data-efecto="destello" data-en="0.25" style="position:absolute;left:50%;top:50%;width:760px;height:760px;margin:-380px 0 0 -380px">${kit.destello({ tam: 760, rayos: 22, color: '#FFD36B', semilla: 'lab' })}</div>
+    <div data-a="up2" style="position:relative;font:400 300px/1 ${DISPLAY};color:${BONE};text-shadow:0 10px 40px rgba(0,0,0,.6)">#1</div></div>` });
+lamina({ grupo: ED, nombre: 'palabra', uso: 'data-efecto="palabra" data-color2="#FF6A3D"  · golpe de 125 % a 100 % en 80 ms  · data-letras="si" o data-tiempos="…"',
+  cuerpo: `<div style="display:flex;flex-direction:column;align-items:center;gap:60px">
+    <div data-efecto="palabra" data-en="0.3" data-color="#FFE9A8" data-color2="#FF6A3D" style="font:400 300px/0.9 ${ANTON}">GG</div>
+    <div data-efecto="palabra" data-tiempos="${RITMO.beats(0, 7).map((t) => (t + 0.4).toFixed(3)).join(',')}" data-color="#FFFFFF" data-color2="#7C5CFF" style="font:400 190px/0.9 ${ANTON}">SURVIVE</div></div>` });
+lamina({ grupo: ED, nombre: 'multikill', uso: "${kit.multikill('QUADRA KILL')}  dentro de  data-efecto=\"multikill\"  · cae como el sello y le pasa un brillo",
+  cuerpo: `<div style="position:relative;width:100%;height:100%">${marco(imagen('Jinx_0.jpg', 'Jinx', '62% 30%'), 'filter: saturate(0.5) brightness(0.55);')}
+    <div data-efecto="multikill" data-en="0.45" style="position:absolute;left:50%;top:50%;width:860px;margin:-110px 0 0 -430px">${kit.multikill('QUADRA KILL', { ancho: 860, alto: 220 })}</div></div>` });
+lamina({ grupo: ED, nombre: 'letrero-kill', uso: "${kit.letrero({ nombre, campeon, retrato })}  +  data-efecto=\"letrero\"  · centrado por la altura de las mayúsculas",
+  notas: 'Las líneas punteadas marcan la altura de las mayúsculas del NOMBRE: el centro del retrato cae en medio de las dos líneas de texto, no de sus cajas.',
+  cuerpo: `<div data-efecto="letrero" data-en="0.3" style="position:relative">${kit.letrero({ nombre: 'POWDER', campeon: 'JINX · PENTAKILL', retrato: 'assets/Jinx_0.jpg', color: CORAL, tam: 150 })}</div>` });
+lamina({ grupo: ED, nombre: 'rayo', uso: "${kit.rayo([d, …], { ancho, alto, color })}  dentro de  data-efecto=\"rayo\"  · una estela que cruza y sale",
+  cuerpo: `<div data-efecto="rayo" data-en="0.3" data-dur="0.6" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${kit.rayo(['M-60 820 C 260 700, 520 420, 980 120', 'M-60 520 C 300 560, 620 300, 980 330', 'M120 1020 C 300 640, 620 600, 980 -40'], { ancho: 912, alto: 960, color: '#8FD3FF', grosor: 9 })}</div>` });
+lamina({ grupo: ED, nombre: 'impacto', uso: "${kit.impacto({ ancho, alto, n, hueco })}  dentro de  data-efecto=\"impacto\"  · data-queda=\"si\" las deja puestas",
+  cuerpo: `<div data-efecto="impacto" data-en="0.3" data-queda="si" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Vi_0.jpg', 'Vi', '50% 30%')}${kit.impacto({ ancho: 912, alto: 960, n: 70, hueco: 0.42, centro: [0.5, 0.36] })}</div>` });
+
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>
 (function () {
   if (!window.animar) return;
   function cabecera(tl, s) { tl.from(s.querySelector('header'), { y: 26, opacity: 0, duration: 0.5 }, 0); }
+  // ritmo: cada círculo golpea en su beat (los segundos vienen de kit.ritmo en
+  // build-time), la palabra en r.palabra() y las chispas en el drop.
+  animar('ritmo', function (tl, s) {
+    cabecera(tl, s);
+    var lab = s.querySelector('[data-lab="ritmo"]'), ts = lab.getAttribute('data-golpes').split(',').map(parseFloat);
+    lab.querySelectorAll('[data-golpe]').forEach(function (g, i) {
+      tl.from(g, { scale: 0.35, opacity: 0.2, duration: 0.16, ease: 'power3.out' }, ts[i]);
+    });
+    efecto('palabra', tl, lab.querySelector('[data-palabra-lab]'), { en: +lab.getAttribute('data-palabra'), color: '#FFE9A8', color2: '#FF6A3D' });
+    efecto('chispas', tl, lab.querySelector('[data-chispas-lab]'), { en: +lab.getAttribute('data-drop'), origen: '50 40', semilla: 'drop' });
+  });
   animar('crece', function (tl, s) {
     cabecera(tl, s);
     var r = s.querySelector('[data-lab="crece"]');
@@ -341,7 +390,7 @@ const html = `<!DOCTYPE html>
 ${kit.og({ titulo: 'Laboratorio de efectos', descripcion: 'El catálogo vivo del kit: recetas de animación para texto, imagen, contenedores y transiciones, patrones generativos, íconos e ilustraciones.', carpeta: 'lab' })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Barlow:wght@500;600;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <script src="./deck-stage.js"></script>
 <style>
   html, body { margin: 0; padding: 0; background: ${BG}; }
