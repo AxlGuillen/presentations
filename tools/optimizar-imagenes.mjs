@@ -169,7 +169,8 @@ const tmp = path.join(os.tmpdir(), `optimizar-${process.pid}.json`);
 fs.writeFileSync(tmp, JSON.stringify(tareas), 'utf8');
 let bruto;
 try {
-  bruto = execFileSync('python', ['-c', script, tmp], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  // En macOS y Linux solo existe python3; en Windows el lanzador es python (igual que portadas.mjs)
+  bruto = execFileSync(process.platform === 'win32' ? 'python' : 'python3', ['-c', script, tmp], { encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
 } finally {
   fs.rmSync(tmp, { force: true });
 }

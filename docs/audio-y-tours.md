@@ -1,7 +1,9 @@
 # Feature propuesta: capa de audio y tours guiados
 
-> Estado: **propuesta, sin implementar**. Documentado el 22/sep/2026, después de
-> entregar el primer video narrado (`semana38`, 1:50, voz fija y sin subtítulos).
+> Estado: **la parte 1 (sonido) está implementada** desde el 22/oct/2026 en
+> `tools/audio.mjs` y `video.mjs` (ver «Módulo de video» en CLAUDE.md); la parte 2
+> la resolvió walkthrough. Documentado el 22/sep/2026, después de entregar el
+> primer video narrado (`semana38`, 1:50, voz fija y sin subtítulos).
 
 Dos ideas que salieron al entregar ese video. La primera es incremental y se
 puede hacer ya; la segunda es un producto nuevo y queda para más adelante.
@@ -102,6 +104,8 @@ así que no crecen con cada deck.
 ---
 
 ## 2 · Tours guiados y videos de QA
+
+> **Resuelto fuera de este repo (22/oct/2026):** esta parte la cubre **walkthrough**, el repo hermano que recorre la app real con Playwright y produce el video narrado. Lo que sigue queda como registro de la propuesta original; en este repo solo queda pendiente la parte de sonido (sección 1), que es la mejora P2 de `docs/mejoras-oct-2026.md`.
 
 La idea: usar el mismo pipeline para explicar **lo que se agregó**, no lo que se
 trabajó. En vez de un reporte de horas, un recorrido por la funcionalidad nueva.

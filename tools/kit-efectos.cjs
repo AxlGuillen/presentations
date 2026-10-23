@@ -41,10 +41,31 @@ const efectos = () => `<script>
     '.efx-linea-mask{padding-top:.18em;margin-top:-.18em}';
   document.head.appendChild(css);
 
+  // Curvas con nombre (P7). entrada: llega rápido y frena suave · salida:
+  // arranca lento y se va · golpe: llega de golpe y rebota apenas · asentar:
+  // se pasa un poco y se asienta · deriva: va y viene despacio. Si el deck
+  // cargó CustomEase (kit.gsap(dir, ['CustomEase'])) salen de estos trazos; si
+  // no, de la curva estándar más parecida. Las dos son deterministas, y las
+  // recetas nuevas las piden por nombre: ease: 'golpe'.
+  var CURVAS = {
+    entrada: ['M0,0 C0.12,0.72 0.28,1 1,1', 'expo.out'],
+    salida: ['M0,0 C0.55,0 0.85,0.38 1,1', 'power2.in'],
+    golpe: ['M0,0 C0.06,0.78 0.14,1.12 0.3,1.07 C0.46,1.02 0.62,0.99 1,1', 'back.out(2)'],
+    asentar: ['M0,0 C0.2,0.86 0.34,1.1 0.52,1.03 C0.68,0.98 0.82,1 1,1', 'back.out(1.3)'],
+    deriva: ['M0,0 C0.4,0 0.6,1 1,1', 'sine.inOut']
+  };
+  Object.keys(CURVAS).forEach(function (n) {
+    if (window.CustomEase) window.CustomEase.create(n, CURVAS[n][0]);
+    else G.registerEase(n, G.parseEase(CURVAS[n][1]));
+  });
+  window.curvas = Object.keys(CURVAS);
+
   function seccionDe(el) { return el.closest ? (el.closest('section') || el) : el; }
   function deshacer(el, fn) { var s = seccionDe(el); (s.__deshacer = s.__deshacer || []).push(fn); }
   function guardaEstilo(el) { var c = el.getAttribute('style'); deshacer(el, function () { if (c == null) el.removeAttribute('style'); else el.setAttribute('style', c); }); }
-  function semilla(txt) { var h = 2166136261 >>> 0; txt = String(txt); for (var i = 0; i < txt.length; i++) { h ^= txt.charCodeAt(i); h = Math.imul(h, 16777619); } return h >>> 0; }
+  // Mismo hash que semillaDe() de kit-patrones (por code points): así random(semilla) en la página
+  // y kit.random(semilla) en build-time dan la misma secuencia.
+  function semilla(txt) { var h = 2166136261 >>> 0; for (var c of String(txt)) { h ^= c.codePointAt(0); h = Math.imul(h, 16777619); } return h >>> 0; }
   function prng(s) { var a = typeof s === 'number' ? s : semilla(s); return function () { a |= 0; a = a + 0x6D2B79F5 | 0; var t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
   function hashEntero(n) { n = Math.imul(n ^ n >>> 16, 0x45d9f3b); n = Math.imul(n ^ n >>> 16, 0x45d9f3b); return (n ^ n >>> 16) >>> 0; }
   function lista(x) { return x && x.length !== undefined && !x.tagName ? [].slice.call(x) : (x ? [x] : []); }
@@ -646,13 +667,411 @@ const efectos = () => `<script>
     pinta();
   };
 
+  // ── EDIT (docs/mejoras-oct-2026.md, P4) ───────────────────────────────
+  // Capas para montar encima de un edit (laminas.mjs --alfa). Sin azar: todo
+  // sale de prng(semilla) y de fórmulas cerradas en el tiempo, así el seek es
+  // exacto yendo y volviendo. Las piezas de build-time (kit.destello,
+  // kit.impacto, kit.rayo, kit.multikill, kit.letrero) no traen arte: el arte
+  // lo pone el deck.
+
+  function colores(o, def) { return String(o.color || def).split(',').map(function (c) { return c.trim(); }); }
+  function par(v, def) { var p = String(v || def).split(' ').filter(Boolean).map(parseFloat); return [p[0], p.length > 1 ? p[1] : p[0]]; }
+
+  // Partículas: n puntos dentro de el (que va posicionado) y un solo tween de
+  // un reloj; en cada cuadro se coloca cada punto con su fórmula. Chispas:
+  // estallan desde data-origen con roce y gravedad. Brasas: suben de la orilla
+  // de abajo meciéndose. Las dos terminan invisibles.
+  function particulas(tl, el, o, modo) {
+    var chispa = modo === 'chispas', r = prng(o.semilla || el.getAttribute('data-semilla') || modo);
+    var n = o.n || (chispa ? 46 : 34), W = el.offsetWidth, H = el.offsetHeight;
+    var cols = colores(o, chispa ? '#FFE9A8,#FFB347,#FFFFFF' : '#FF8A3D,#FFC46B');
+    var dur = o.dur || (chispa ? 1.3 : 3), tam = o.tam || (chispa ? 7 : 9), org = par(o.origen, '50 50');
+    var capa = document.createElement('div');
+    capa.setAttribute('data-particulas', modo);
+    capa.style.cssText = 'position:absolute;inset:0;pointer-events:none;overflow:visible';
+    el.appendChild(capa);
+    deshacer(el, function () { capa.remove(); });
+    var ps = [];
+    for (var i = 0; i < n; i++) {
+      var d = document.createElement('i'), c = cols[i % cols.length], s = tam * (0.55 + r() * 0.9);
+      d.style.cssText = 'position:absolute;left:0;top:0;width:' + s + 'px;height:' + s + 'px;margin:' + (-s / 2) + 'px 0 0 ' + (-s / 2) + 'px;border-radius:50%;' +
+        'background:' + c + ';box-shadow:0 0 ' + (s * 1.6) + 'px ' + (s * 0.5) + 'px ' + c + ';opacity:0';
+      capa.appendChild(d);
+      var ret = chispa ? r() * 0.06 : r() * dur * 0.55, vida = (dur - ret) * (0.6 + r() * 0.4);
+      if (chispa) {
+        var ang = r() * Math.PI * 2, v = (o.fuerza || 900) * (0.35 + r() * 0.75);
+        ps.push({ d: d, x0: W * org[0] / 100, y0: H * org[1] / 100, vx: Math.cos(ang) * v, vy: Math.sin(ang) * v - (o.subida == null ? 180 : o.subida), vida: vida, ret: ret });
+      } else {
+        ps.push({ d: d, x0: W * r(), y0: H * (0.84 + r() * 0.2), vy: -(o.fuerza || 300) * (0.5 + r() * 0.8), osc: 14 + r() * 26, fase: r() * 6.283, frec: 0.6 + r() * 0.9, vida: vida, ret: ret });
+      }
+    }
+    var g = o.gravedad == null ? (chispa ? 1400 : 0) : o.gravedad, roce = chispa ? (o.roce == null ? 2.2 : o.roce) : 0;
+    var reloj = { t: 0 };
+    var pinta = function () {
+      for (var k = 0; k < ps.length; k++) {
+        var p = ps[k], t = reloj.t - p.ret, x, y, op, q;
+        if (t <= 0 || t >= p.vida) { p.d.style.opacity = 0; continue; }
+        q = t / p.vida;
+        if (chispa) {
+          // roce lineal en forma cerrada: x = vx (1 - e^(-k t)) / k
+          var e = roce ? (1 - Math.exp(-roce * t)) / roce : t;
+          x = p.x0 + p.vx * e; y = p.y0 + p.vy * e + 0.5 * g * t * t;
+          op = Math.min(1, t / 0.03) * (1 - q * q);
+        } else {
+          x = p.x0 + Math.sin(p.fase + t * p.frec * 6.283) * p.osc; y = p.y0 + p.vy * t;
+          op = Math.sin(Math.PI * q) * 0.95;
+        }
+        p.d.style.transform = 'translate(' + x.toFixed(1) + 'px,' + y.toFixed(1) + 'px) scale(' + (1 - 0.55 * q).toFixed(3) + ')';
+        p.d.style.opacity = op.toFixed(3);
+      }
+    };
+    tl.fromTo(reloj, { t: 0 }, { t: dur, duration: dur, ease: 'none', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    pinta();
+  }
+  R.chispas = function (tl, el, o) { particulas(tl, el, o, 'chispas'); };
+  R.brasas = function (tl, el, o) { particulas(tl, el, o, 'brasas'); };
+
+  // Destello (P5): el halo se abre, los rayos de kit.destello() crecen desde
+  // el centro (cada uno a su tiempo, de la semilla) y el brillo de cuatro
+  // puntas entra girando. Todo con from(): el estado final es el del HTML.
+  R.destello = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg');
+    if (!svg) return;
+    var c = svg.getAttribute('data-centro') || '0 0', r = prng(o.semilla || svg.getAttribute('data-semilla') || 'destello'), en = o.en || 0;
+    var halo = svg.querySelector('[data-halo]'), brillo = svg.querySelector('[data-brillo]'), grupo = svg.querySelector('[data-rayos]');
+    if (halo) tl.from(halo, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45, ease: 'entrada' }, en);
+    lista(svg.querySelectorAll('[data-rayo]')).forEach(function (x) {
+      tl.from(x, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45 + r() * 0.35, ease: 'entrada' }, en + r() * 0.14);
+    });
+    if (grupo) tl.from(grupo, { rotation: o.giro == null ? -24 : o.giro, svgOrigin: c, duration: o.dur || 1.8, ease: 'deriva' }, en);
+    if (brillo) tl.from(brillo, { scale: 0, rotation: -60, svgOrigin: c, duration: 0.5, ease: 'golpe' }, en + 0.04);
+  };
+
+  // Palabra: gigante, entra con golpe (de 125 % a 100 % en 80 ms) y un
+  // fogonazo. data-letras="si" golpea letra por letra (cada data-escalon, o en
+  // los segundos de data-tiempos="0.3,0.8,…", que es lo que da kit.ritmo).
+  // Con data-color2 lleva degradado, y va EN CADA LETRA con el tamaño y el
+  // desfase de la palabra entera: en el padre no se pinta si las letras se
+  // animan por separado (lección de lux), y así se ve continuo.
+  R.palabra = function (tl, el, o) {
+    var orig = el.innerHTML, texto = el.textContent, en = o.en || 0, golpe = o.golpe || 1.25, dg = o.duracion || 0.08;
+    deshacer(el, function () { el.innerHTML = orig; });
+    var porLetra = o.letras === 'si' || !!o.tiempos;
+    var spans = [];
+    if (porLetra || o.color2) {
+      el.innerHTML = '';
+      for (var ch of texto) {
+        var s = document.createElement('span');
+        s.textContent = ch;
+        s.style.display = 'inline-block';
+        if (ch === ' ') s.style.whiteSpace = 'pre';
+        el.appendChild(s); spans.push(s);
+      }
+    }
+    if (o.color2 && spans.length) {
+      var x0 = spans[0].offsetLeft, y0 = spans[0].offsetTop, ult = spans[spans.length - 1];
+      var W = ult.offsetLeft + ult.offsetWidth - x0, H = spans[0].offsetHeight;
+      spans.forEach(function (s) {
+        s.style.backgroundImage = 'linear-gradient(' + (o.angulo == null ? 180 : o.angulo) + 'deg, ' + (o.color || '#FFFFFF') + ', ' + o.color2 + ')';
+        s.style.backgroundSize = W + 'px ' + H + 'px';
+        s.style.backgroundPosition = (x0 - s.offsetLeft) + 'px ' + (y0 - s.offsetTop) + 'px';
+        s.style.webkitBackgroundClip = 'text'; s.style.backgroundClip = 'text';
+        s.style.color = 'transparent'; s.style.webkitTextFillColor = 'transparent';
+      });
+    }
+    if (porLetra) {
+      var ts = o.tiempos ? String(o.tiempos).split(',').map(parseFloat) : null, esc = o.escalon == null ? 0.07 : o.escalon;
+      spans.forEach(function (s, i) {
+        var t = ts ? (ts[Math.min(i, ts.length - 1)] || 0) : en + i * esc;
+        tl.from(s, { scale: golpe, opacity: 0, transformOrigin: '50% 60%', duration: dg, ease: 'entrada' }, t);
+      });
+    } else {
+      tl.from(el, { scale: golpe, opacity: 0, transformOrigin: '50% 55%', duration: dg, ease: 'entrada' }, en);
+    }
+    if (o.fogonazo !== 'no') tl.from(el, { filter: 'brightness(2.6)', duration: 0.35, ease: 'entrada' }, porLetra && ts ? ts[0] : en);
+  };
+
+  // Multikill: el sello en oro de kit.multikill(): cae y golpea como el sello y
+  // al asentarse le pasa un brillo de punta a punta.
+  R.multikill = function (tl, el, o) {
+    R.sello(tl, el, o);
+    var b = el.querySelector('[data-brillo-mk]');
+    if (b) tl.from(b, { attr: { x: -(+b.getAttribute('width') || 300) }, duration: 0.6, ease: 'deriva' }, (o.en || 0) + (o.dur || 0.42) + 0.12);
+  };
+
+  // Letrero de kill (kit.letrero): el retrato salta, la barra se tiende, el
+  // NOMBRE se destapa de izquierda a derecha y el campeón sube.
+  R.letrero = function (tl, el, o) {
+    var en = o.en || 0, q = function (s) { return el.querySelector(s); };
+    var foto = q('[data-retrato]'), barra = q('[data-barra]'), nom = q('[data-nombre]'), camp = q('[data-campeon]');
+    if (foto) tl.from(foto, { scale: 0, opacity: 0, duration: 0.45, ease: 'asentar' }, en);
+    if (barra) tl.from(barra, { scaleX: 0, transformOrigin: '0% 50%', duration: 0.4, ease: 'entrada' }, en + 0.1);
+    if (nom) tl.fromTo(nom, { clipPath: 'inset(-20% 100% -20% 0%)' }, { clipPath: 'inset(-20% 0% -20% 0%)', duration: 0.45, ease: 'entrada', immediateRender: true }, en + 0.16);
+    if (camp) tl.from(camp, { y: 26, opacity: 0, duration: 0.4, ease: 'entrada' }, en + 0.42);
+  };
+
+  // Rayo: por cada trazo de kit.rayo() cruza una estela, un tramo corto del
+  // trazo (dasharray) que viaja de punta a punta y sale del cuadro.
+  R.rayo = function (tl, el, o) {
+    var grupos = lista(el.querySelectorAll('[data-rayo]'));
+    if (!grupos.length) grupos = lista(el.querySelectorAll('path')).map(function (p) { return { querySelectorAll: function () { return [p]; } }; });
+    grupos.forEach(function (gr, k) {
+      lista(gr.querySelectorAll('path')).forEach(function (c) {
+        guardaEstilo(c);
+        var L = c.getTotalLength(), largo = L * (o.largo || 0.34), est = { p: 0 };
+        c.style.strokeDasharray = largo + ' ' + (L + largo * 2);
+        var pinta = function () { c.style.strokeDashoffset = largo - est.p * (L + largo); };
+        tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 0.55, ease: o.ease || 'salida', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta },
+          (o.en || 0) + k * (o.escalon == null ? 0.09 : o.escalon));
+        pinta();
+      });
+    });
+  };
+
+  // Impacto: las líneas de velocidad de kit.impacto() aparecen de golpe con
+  // el marco un poco cerrado, parpadean (secuencia fija de la semilla) y se
+  // apagan; data-queda="si" las deja puestas.
+  R.impacto = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg');
+    var ls = svg ? lista(svg.querySelectorAll('[data-linea]')) : [];
+    if (!ls.length) return;
+    var r = prng(o.semilla || svg.getAttribute('data-semilla') || 'impacto'), en = o.en || 0, dur = o.dur || 0.6;
+    tl.from(svg, { scale: o.desde || 1.3, transformOrigin: '50% 50%', duration: dur, ease: 'entrada' }, en);
+    ls.forEach(function (l) {
+      var a = +(l.getAttribute('opacity') || 1), t = en + r() * 0.1;
+      tl.from(l, { opacity: 0, duration: 0.03, ease: 'none' }, t);
+      tl.to(l, { keyframes: [{ opacity: a * 0.3, duration: 0.05 }, { opacity: a, duration: 0.05 }], ease: 'none' }, t + 0.08 + r() * 0.08);
+    });
+    if (o.queda !== 'si') tl.to(svg, { opacity: 0, duration: 0.25, ease: 'salida' }, en + dur);
+  };
+
+  // ── ACABADO (P5: golpe, dona, radar, pixelado, derrumbe) ──────────────
+
+  // Parte el texto de el en <span> por palabra (o por letra), con su deshacer.
+  // Recorre los nodos de texto y deja los elementos donde están: un <br> o un
+  // <span> de color siguen en su lugar.
+  function trozos(el, porLetra) {
+    var orig = el.innerHTML, out = [], nodos = [];
+    deshacer(el, function () { el.innerHTML = orig; });
+    var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while (w.nextNode()) nodos.push(w.currentNode);
+    nodos.forEach(function (nodo) {
+      var frag = document.createDocumentFragment(), partes = porLetra ? Array.from(nodo.nodeValue) : nodo.nodeValue.split(' ');
+      partes.forEach(function (t, i) {
+        if (!porLetra && i) frag.appendChild(document.createTextNode(' '));
+        if (!t) return;
+        if (!porLetra && !t.trim()) { frag.appendChild(document.createTextNode(t)); return; }
+        var s = document.createElement('span');
+        s.textContent = t;
+        s.style.display = 'inline-block';
+        if (t === ' ') s.style.whiteSpace = 'pre';
+        frag.appendChild(s); out.push(s);
+      });
+      nodo.parentNode.replaceChild(frag, nodo);
+    });
+    return out;
+  }
+
+  // Golpe: palabra por palabra al ritmo de la voz. data-tiempos trae un
+  // segundo por palabra (kit.golpe() los saca de los tiempos de Fish que deja
+  // video.mjs); sin ellos, cada data-escalon. data-acento pinta la palabra
+  // al entrar y la devuelve a su color.
+  R.golpe = function (tl, el, o) {
+    var ps = trozos(el, false), ts = o.tiempos ? String(o.tiempos).split(',').map(parseFloat) : null;
+    var esc = o.escalon == null ? 0.28 : o.escalon, en = o.en || 0;
+    ps.forEach(function (w, i) {
+      var t = ts && Number.isFinite(ts[i]) ? ts[i] : en + i * esc;
+      tl.from(w, { scale: o.golpe || 1.22, yPercent: 18, opacity: 0, transformOrigin: '50% 70%', duration: 0.14, ease: 'golpe' }, t);
+      if (o.acento) tl.from(w, { color: o.acento, duration: 0.45, ease: 'deriva' }, t + 0.06);
+    });
+  };
+
+  // Dona: cada arco de kit.dona() se traza en orden (pathLength = 1, así el
+  // dasharray va en fracciones) y la cifra del centro cuenta.
+  R.dona = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg[data-dona]');
+    if (!svg) return;
+    var en = o.en || 0, dur = o.dur || 1.1, arcos = lista(svg.querySelectorAll('[data-arco]')), t = en;
+    tl.from(svg, { rotation: -30, transformOrigin: '50% 50%', duration: dur + 0.3, ease: 'entrada' }, en);
+    arcos.forEach(function (a) {
+      var f = +a.getAttribute('data-frac'), d = Math.max(0.18, dur * f);
+      tl.fromTo(a, { attr: { 'stroke-dasharray': '0 1' } }, { attr: { 'stroke-dasharray': a.getAttribute('stroke-dasharray') }, duration: d, ease: 'power1.inOut', immediateRender: true }, t);
+      t += d * 0.92;
+    });
+    var v = svg.querySelector('[data-dona-valor]');
+    if (v && v.hasAttribute('data-cuenta')) R.contador(tl, v, { en: en, dur: t - en, cuenta: v.getAttribute('data-cuenta'), sufijo: v.getAttribute('data-sufijo') || '', decimales: +(v.getAttribute('data-decimales') || 0) });
+  };
+
+  // Radar: la red de kit.radar() se dibuja, la primera serie crece desde el
+  // centro y las siguientes se transforman desde la anterior (antes → después
+  // de un parche). Los vértices se interpolan a mano: seek exacto.
+  R.radar = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg[data-radar]');
+    if (!svg) return;
+    var en = o.en || 0, c = svg.getAttribute('data-centro').split(' ').map(parseFloat);
+    dibujar(tl, svg.querySelectorAll('[data-red]'), { en: en, dur: 0.8, escalon: 0.05, ease: 'entrada' });
+    var series = lista(svg.querySelectorAll('[data-serie]')), previo = null, t = en + 0.5;
+    var leerPts = function (p) { return p.getAttribute('points').split(' ').map(function (q) { return q.split(',').map(parseFloat); }); };
+    series.forEach(function (p, k) {
+      var fin = leerPts(p), ini = previo || fin.map(function () { return c.slice(); }), est = { p: 0 }, orig = p.getAttribute('points');
+      deshacer(el, function () { p.setAttribute('points', orig); });
+      var pinta = function () {
+        p.setAttribute('points', fin.map(function (q, i) { return (ini[i][0] + (q[0] - ini[i][0]) * est.p).toFixed(1) + ',' + (ini[i][1] + (q[1] - ini[i][1]) * est.p).toFixed(1); }).join(' '));
+      };
+      tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 0.9, ease: k ? 'asentar' : 'entrada', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, t);
+      if (k) tl.from(p, { opacity: 0, duration: 0.2 }, t);
+      pinta();
+      previo = fin; t += (o.dur || 0.9) + (o.pausa == null ? 0.35 : o.pausa);
+    });
+  };
+
+  // Pixelado: «adivina la skin». Un canvas encima del <img> lo pinta en
+  // bloques que se hacen chicos por pasos (data-desde px → nítido en
+  // data-pasos), con el mismo recorte que object-fit: cover y object-position.
+  R.pixelado = function (tl, el, o) {
+    var img = imagenDe(el);
+    if (!img) return;
+    var cv = document.createElement('canvas'), W = img.offsetWidth, H = img.offsetHeight;
+    cv.width = W; cv.height = H;
+    cv.style.cssText = 'position:absolute;left:' + img.offsetLeft + 'px;top:' + img.offsetTop + 'px;width:' + W + 'px;height:' + H + 'px;pointer-events:none';
+    img.parentNode.insertBefore(cv, img.nextSibling);
+    deshacer(el, function () { cv.remove(); });
+    var ctx = cv.getContext('2d'), chico = document.createElement('canvas'), cc = chico.getContext('2d');
+    var desde = o.desde || 72, pasos = o.pasos || 6, est = { k: 0 }, ultimo = -1;
+    var pinta = function () {
+      var k = Math.min(pasos, Math.floor(est.k * pasos + 1e-6));
+      if (k === ultimo && img.complete) return;
+      ultimo = k;
+      if (k >= pasos || !img.complete || !img.naturalWidth) { cv.style.visibility = 'hidden'; return; }
+      cv.style.visibility = 'visible';
+      var b = Math.max(2, desde / Math.pow(2, k * Math.log2(desde / 2) / Math.max(1, pasos - 1)));
+      var sw = Math.max(1, Math.round(W / b)), sh = Math.max(1, Math.round(H / b));
+      chico.width = sw; chico.height = sh;
+      var nw = img.naturalWidth, nh = img.naturalHeight, esc = Math.max(W / nw, H / nh);
+      var pos = getComputedStyle(img).objectPosition.split(' ').map(parseFloat), cw = W / esc, ch = H / esc;
+      var sx = (nw - cw) * (pos[0] / 100), sy = (nh - ch) * ((pos.length > 1 ? pos[1] : 50) / 100);
+      cc.imageSmoothingEnabled = true;
+      cc.drawImage(img, sx, sy, cw, ch, 0, 0, sw, sh);
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(chico, 0, 0, sw, sh, 0, 0, W, H);
+    };
+    tl.fromTo(est, { k: 0 }, { k: 1, duration: o.dur || 3, ease: 'none', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    pinta();
+  };
+
+  // Derrumbe: la salida que le faltaba al catálogo. Las letras caen con
+  // gravedad (ease 'salida'), giro y deriva de la semilla, en un orden también
+  // de la semilla. Termina vacío, como toda salida.
+  R.derrumbe = function (tl, el, o) {
+    var ls = trozos(el, true).filter(function (s) { return s.textContent !== ' '; });
+    var r = prng(o.semilla || el.getAttribute('data-semilla') || 'derrumbe'), en = o.en || 0, dur = o.dur || 0.95;
+    var caida = o.caida || 1500, abanico = o.abanico == null ? 0.35 : o.abanico;
+    ls.forEach(function (s) {
+      tl.to(s, { y: caida * (0.8 + r() * 0.4), x: (r() - 0.5) * 160, rotation: (r() - 0.5) * 220, opacity: 0, duration: dur, ease: 'salida' }, en + r() * abanico);
+    });
+  };
+
+  // ── LÍNEAS VIVAS (P6) ─────────────────────────────────────────────────
+  // Un dibujo de kit.lineas.vivo() trae su modelo en data-modelo y se vuelve a
+  // proyectar en cada cuadro con window.lineas (lo carga kit.lineasRuntime()).
+  // La cámara se mueve en órbita alrededor de su centro: radio, acimut (por el
+  // camino corto, más data-vueltas), elevación y fov se interpolan aparte, así
+  // el objeto gira y no atraviesa la cámara. La trofeo con sombra cuesta ~43 ms
+  // por cuadro en Chrome (medido con tools/pruebas/deck-gira.cjs).
+  function vivoDe(el) {
+    var v = el.matches('[data-lineas-vivo]') ? el : el.querySelector('[data-lineas-vivo]');
+    if (!v || !window.lineas) return null;
+    if (!v.__modelo) v.__modelo = JSON.parse(v.getAttribute('data-modelo'));
+    return { el: v, m: v.__modelo };
+  }
+  function orbita(cam, escala) {
+    var c = cam.centro || [0, 0, 0];
+    if (cam.iso) return { iso: true, c: c, giro: cam.giro == null ? 45 : cam.giro, altura: cam.altura == null ? 35.264 : cam.altura, escala: escala };
+    var o = cam.ojo || [320, 220, 480], d = [o[0] - c[0], o[1] - c[1], o[2] - c[2]], r = Math.hypot(d[0], d[1], d[2]) || 1;
+    return { c: c, r: r, az: Math.atan2(d[0], d[2]), el: Math.asin(d[1] / r), fov: cam.fov || 24, escala: escala };
+  }
+  function camaraDe(q) {
+    if (q.iso) return { iso: true, centro: q.c, giro: q.giro, altura: q.altura };
+    var ce = Math.cos(q.el);
+    return { ojo: [q.c[0] + Math.sin(q.az) * ce * q.r, q.c[1] + Math.sin(q.el) * q.r, q.c[2] + Math.cos(q.az) * ce * q.r], centro: q.c, fov: q.fov };
+  }
+  // directo: sin camino corto (la receta gira da la vuelta entera).
+  function mezclaOrbita(a, b, t, vueltas, directo) {
+    var L = function (x, y) { return x + (y - x) * t; }, c = [L(a.c[0], b.c[0]), L(a.c[1], b.c[1]), L(a.c[2], b.c[2])];
+    if (a.iso && b.iso) {
+      var dg = (directo ? b.giro - a.giro : ((b.giro - a.giro + 540) % 360) - 180) + (vueltas || 0) * 360;
+      return { iso: true, c: c, giro: a.giro + dg * t, altura: L(a.altura, b.altura), escala: L(a.escala, b.escala) };
+    }
+    if (a.iso || b.iso) return t < 1 ? a : b;   // de iso a perspectiva no se interpola
+    var dz = b.az - a.az;
+    if (!directo) dz = ((dz + Math.PI) % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI) - Math.PI;
+    dz += (vueltas || 0) * 2 * Math.PI;
+    return { c: c, r: L(a.r, b.r), az: a.az + dz * t, el: L(a.el, b.el), fov: L(a.fov, b.fov), escala: L(a.escala, b.escala) };
+  }
+  function animaVivo(tl, el, v, a, b, o) {
+    var orig = v.el.innerHTML, est = { t: 0 };
+    deshacer(el, function () { v.el.innerHTML = orig; });
+    var pinta = function () {
+      var q = mezclaOrbita(a, b, est.t, o.vueltas, o.directo);
+      v.el.innerHTML = window.lineas.dibujar(v.m.objetos, Object.assign({}, v.m.opciones, { camara: camaraDe(q), escala: q.escala }));
+    };
+    tl.fromTo(est, { t: 0 }, { t: 1, duration: o.dur || 2.4, ease: o.ease || 'deriva', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    pinta();
+  }
+  // Gira: el objeto da data-giro grados (360 por defecto) y termina en la
+  // cámara del HTML, así el estado final es el dibujo de build-time.
+  R.gira = function (tl, el, o) {
+    var v = vivoDe(el);
+    if (!v) return;
+    var b = orbita(v.m.camara, v.m.opciones.escala), a = Object.assign({}, b), g = o.giro == null ? 360 : +o.giro;
+    if (b.iso) a.giro = b.giro - g; else a.az = b.az - g * Math.PI / 180;
+    animaVivo(tl, el, v, a, b, Object.assign({}, o, { vueltas: 0, directo: true }));
+  };
+
+  // ── LOTTIE Y THREE.JS (P11) ───────────────────────────────────────────
+  // Las dos van llevadas por la timeline, sin requestAnimationFrame: Lottie con
+  // goToAndStop(cuadro, true) y three.js con renderer.render() en cada seek.
+  // Medido en esta Mac: ~28 ms por cuadro las dos, y dos renders idénticos.
+
+  // Lottie: la animación de kit.lottie() de su primer a su último cuadro (o en
+  // data-dur segundos). loadAnimation monta su DOM después, así que al cargar
+  // se pinta el cuadro en que va la timeline.
+  R.lottie = function (tl, el, o) {
+    var caja = el.matches('[data-lottie]') ? el : el.querySelector('[data-lottie]');
+    if (!caja || !window.lottie) return;
+    if (!caja.__datos) caja.__datos = JSON.parse(caja.querySelector('script[type="application/json"]').textContent);
+    var d = caja.__datos;
+    if (!caja.__anim) caja.__anim = window.lottie.loadAnimation({ container: caja.querySelector('[data-lienzo]'), renderer: 'svg', loop: false, autoplay: false, animationData: d });
+    var anim = caja.__anim, total = Math.max(0, d.op - d.ip - 1), est = { f: 0 };
+    var pinta = function () { anim.goToAndStop(est.f, true); };
+    tl.fromTo(est, { f: 0 }, { f: total, duration: o.dur || total / (d.fr || 30), ease: o.ease || 'none', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    if (anim.isLoaded) pinta(); else anim.addEventListener('DOMLoaded', pinta);
+  };
+
+  // Tres: una escena de three.js registrada con tres('nombre', function (THREE,
+  // canvas) { …arma la escena…; return function (t) { …mueve y renderiza… }; })
+  // y llevada por la timeline: data-escena="nombre" data-dur="4". La fábrica
+  // corre una sola vez por canvas.
+  var escenas3d = {};
+  window.tres = function (nombre, fabrica) { escenas3d[nombre] = fabrica; };
+  R.tres = function (tl, el, o) {
+    var canvas = el.tagName === 'CANVAS' ? el : el.querySelector('canvas'), fab = escenas3d[o.escena];
+    if (!canvas || !fab || !window.THREE) return;
+    if (!canvas.__pinta) canvas.__pinta = fab(window.THREE, canvas);
+    var pinta = canvas.__pinta, est = { t: 0 }, dur = o.dur || 3;
+    var p = function () { pinta(est.t); };
+    tl.fromTo(est, { t: 0 }, { t: dur, duration: dur, ease: o.ease || 'none', immediateRender: true, onUpdate: p, onReverseComplete: p }, o.en || 0);
+    p();
+  };
+
   // ── CONTINUIDAD ────────────────────────────────────────────────────────
   // El mismo elemento (data-continua="nombre") en láminas seguidas: al entrar,
   // arranca como estaba en la lámina de la que venimos y llega a su estado.
   // Es el Morph de PowerPoint / Magic Move de Keynote. La pareja es la lámina
   // anterior EN EL ORDEN DEL DECK (así el video cuadro a cuadro, que siempre
   // avanza, es determinista); si se llegó retrocediendo, la siguiente.
-  //   data-como = mueve | cuenta | transforma | crece | sigue | camara
+  //   data-como = mueve | cuenta | transforma | crece | sigue | camara | gira
   //   (varios separados por espacio; sin data-como se deduce del elemento)
   var vista = null;
   document.addEventListener('slidechange', function (e) { var d = e.detail || {}; vista = { de: d.previousIndex, a: d.index }; }, true);
@@ -693,6 +1112,7 @@ const efectos = () => `<script>
     var c = el.getAttribute('data-como');
     if (c) return c.split(/\\s+/);
     if (el.hasAttribute('data-focos')) return ['camara'];
+    if ((el.matches('[data-lineas-vivo]') || el.querySelector('[data-lineas-vivo]')) && (par.matches('[data-lineas-vivo]') || par.querySelector('[data-lineas-vivo]'))) return ['mueve', 'gira'];
     if (el.matches('[data-grafica]') || el.querySelector('[data-grafica]')) return ['sigue'];
     if (el.hasAttribute('data-progreso')) return ['sigue'];
     if (el.tagName.toLowerCase() === 'path' && par.getAttribute('d') !== el.getAttribute('d')) return ['transforma'];
@@ -752,10 +1172,16 @@ const efectos = () => `<script>
     camara: function (tl, el, par, a, b, o) {
       R.camara(tl, el, Object.assign({}, o, { focos: ultimoFoco(par) + ';' + (el.getAttribute('data-focos') || '50 50 1'), pausa: o.pausa == null ? 0.25 : o.pausa }));
     },
+    // El objeto a líneas gira de la cámara de la pareja a la suya (P6).
+    gira: function (tl, el, par, a, b, o) {
+      var v = vivoDe(el), vp = vivoDe(par);
+      if (!v || !vp) return;
+      animaVivo(tl, el, v, orbita(vp.m.camara, vp.m.opciones.escala), orbita(v.m.camara, v.m.opciones.escala), Object.assign({}, o, { dur: o.dur || 1.4 }));
+    },
   };
   // Lo que cada modo ya anima: si el elemento también lo declara con
   // data-efecto, la receta suelta no corre (la continuidad la sustituye).
-  var SUSTITUYE = { cuenta: 'contador', transforma: 'transforma', sigue: 'linea', camara: 'camara' };
+  var SUSTITUYE = { cuenta: 'contador', transforma: 'transforma', sigue: 'linea', camara: 'camara', gira: 'gira' };
   window.continua = function (tl, s) {
     var hechos = [], origen = origenDe(s);
     if (!origen) return hechos;
@@ -794,11 +1220,30 @@ const efectos = () => `<script>
     }
     return o;
   }
+  // PRNG con semilla para coreografías propias (nunca Math.random: rompe el render cuadro a cuadro)
+  window.random = prng;
+  // Recetas que suenan en el video: video.mjs pone su efecto (whoosh, golpe,
+  // ticks o pop) donde la timeline lleva la etiqueta sfx:<receta>. El momento
+  // es el primer cuadro en que se ve lo que suena: el arranque de la receta,
+  // salvo el sello, que suena al caer. data-sfx="no" la deja muda.
+  var SFX = { cortinilla: 0, lineas: 0, contador: 0, bento: 0, piezas: 0, palabra: 0, rayo: 0, impacto: 0, letrero: 0.16, dona: 0, derrumbe: 0,
+    sello: function (o) { return o.dur || 0.42; }, multikill: function (o) { return o.dur || 0.42; } };
+  window.sfx = function (tl, nombre, pos) {
+    var base = 'sfx:' + nombre, n = 1, k = base;
+    while (tl.labels[k] != null) k = base + '#' + (++n);   // addLabel con el mismo nombre pisaría el anterior
+    tl.addLabel(k, pos);
+    return tl;
+  };
   window.efecto = function (nombre, tl, el, opciones) {
     if (!el) return tl;
     var f = R[nombre];
     if (!f) { console.warn('efecto desconocido:', nombre); return tl; }
-    f(tl, el, opciones || {});
+    var o = opciones || {};
+    f(tl, el, o);
+    if (nombre in SFX && o.sfx !== 'no' && el.getClientRects().length) {
+      var d = SFX[nombre];
+      window.sfx(tl, nombre, (o.en || 0) + (typeof d === 'function' ? d(o) : d));
+    }
     return tl;
   };
   window.efectosDeclarados = function (tl, s) {
@@ -1000,4 +1445,125 @@ const contorno = (archivo, { ancho = 912, alto = 960, niveles = 7, detalle = 220
     `<g fill="none" stroke="${color}" stroke-width="${grosor}" stroke-linejoin="round" stroke-linecap="round">${paths.join('')}</g></svg>`;
 };
 
-module.exports = { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno };
+// ── Piezas del kit de edit (P4) ─────────────────────────────────────────
+// Ninguna trae arte: el retrato del letrero lo pone el deck, como <img> normal
+// para que kit.diferir y optimizar-imagenes lo vean.
+
+/** Destello (receta 'destello'): rayos alrededor de un centro, con largos y
+ *  gruesos de la semilla, un halo y un brillo de cuatro puntas. */
+const destello = ({ tam = 640, rayos = 18, color = '#FFE9A8', brillo = '#FFFFFF', semilla = 'destello', grosor = 1 } = {}) => {
+  const r = prng(semilla), c = tam / 2, R = tam / 2;
+  const id = `destello-${semillaDe(String(semilla)).toString(36)}`;
+  const grads = [];
+  const tiras = Array.from({ length: rayos }, (_, i) => {
+    // Fino en el centro y abierto hacia afuera, como un rayo de luz; el
+    // degradado radial lo apaga en la punta.
+    const a = (i + (r() - 0.5) * 0.6) / rayos * Math.PI * 2, largo = R * (0.5 + r() * 0.48), ancho = (0.018 + r() * 0.04) * grosor;
+    const p = (ang, d) => `${n1(c + Math.cos(ang) * d)},${n1(c + Math.sin(ang) * d)}`;
+    // Cada rayo con su degradado del centro a SU punta, para que se apague
+    // justo donde termina y no se corte de golpe.
+    const [px, py] = p(a, largo).split(',');
+    grads.push(`<linearGradient id="${id}-r${i}" gradientUnits="userSpaceOnUse" x1="${c}" y1="${c}" x2="${px}" y2="${py}"><stop offset="0" stop-color="${brillo}"/><stop offset=".3" stop-color="${color}"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></linearGradient>`);
+    return `<polygon data-rayo points="${p(a, R * 0.05)} ${p(a - ancho, largo)} ${p(a + ancho, largo)}" fill="url(#${id}-r${i})" opacity="${n1(0.45 + r() * 0.55)}"/>`;
+  }).join('');
+  const b = R * 0.34, f = b * 0.16;
+  const estrella = `M${c} ${n1(c - b)} Q${n1(c + f)} ${n1(c - f)} ${n1(c + b)} ${c} Q${n1(c + f)} ${n1(c + f)} ${c} ${n1(c + b)} Q${n1(c - f)} ${n1(c + f)} ${n1(c - b)} ${c} Q${n1(c - f)} ${n1(c - f)} ${c} ${n1(c - b)}Z`;
+  return `<svg data-destello data-centro="${c} ${c}" data-semilla="${semilla}" viewBox="0 0 ${tam} ${tam}" style="display:block;width:${tam}px;height:${tam}px;overflow:visible;pointer-events:none">` +
+    `<defs><radialGradient id="${id}-h"><stop offset="0" stop-color="${color}" stop-opacity=".75"/><stop offset=".45" stop-color="${color}" stop-opacity=".18"/><stop offset="1" stop-color="${color}" stop-opacity="0"/></radialGradient>` +
+    grads.join('') +
+    `<filter id="${id}-b" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="${n1(tam / 90)}"/></filter></defs>` +
+    `<circle data-halo cx="${c}" cy="${c}" r="${n1(R * 0.62)}" fill="url(#${id}-h)"/>` +
+    `<g data-rayos style="mix-blend-mode:screen">${tiras}</g>` +
+    `<g data-brillo><path d="${estrella}" fill="${color}" filter="url(#${id}-b)"/><path d="${estrella}" fill="${brillo}" transform="translate(${c} ${c}) scale(.62) translate(${-c} ${-c})"/></g></svg>`;
+};
+
+/** Impacto (receta 'impacto'): líneas de velocidad que apuntan al centro,
+ *  dejando libre un hueco (proporción del lado corto). */
+const impacto = ({ ancho = 1080, alto = 1370, n = 64, color = '#FFFFFF', semilla = 'impacto', hueco = 0.36, centro = [0.5, 0.5] } = {}) => {
+  const r = prng(semilla), cx = ancho * centro[0], cy = alto * centro[1], R = Math.hypot(ancho, alto) * 0.75, h0 = Math.min(ancho, alto) / 2 * hueco;
+  const lineas = Array.from({ length: n }, (_, i) => {
+    const a = (i + r() * 0.8) / n * Math.PI * 2, w = (0.004 + r() * 0.014), dentro = h0 * (0.85 + r() * 0.9);
+    const p = (ang, d) => `${n1(cx + Math.cos(ang) * d)},${n1(cy + Math.sin(ang) * d)}`;
+    return `<polygon data-linea points="${p(a - w, R)} ${p(a, dentro)} ${p(a + w, R)}" fill="${color}" opacity="${n1(0.35 + r() * 0.65)}"/>`;
+  }).join('');
+  return `<svg data-impacto data-semilla="${semilla}" viewBox="0 0 ${ancho} ${alto}" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none">${lineas}</svg>`;
+};
+
+/** Rayo (receta 'rayo'): una estela por camino, con núcleo blanco y halo de
+ *  color. caminos = [d, …] en un viewBox de ancho × alto. */
+const rayo = (caminos, { ancho = 1080, alto = 1370, color = '#8FD3FF', grosor = 10 } = {}) => {
+  const id = `rayo-${semillaDe(caminos.join('|')).toString(36)}`;
+  return `<svg data-rayos viewBox="0 0 ${ancho} ${alto}" style="position:absolute;inset:0;width:100%;height:100%;overflow:visible;pointer-events:none">` +
+    `<defs><filter id="${id}" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="${n1(grosor * 0.9)}"/></filter></defs>` +
+    caminos.map((d) => `<g data-rayo><path d="${d}" fill="none" stroke="${color}" stroke-width="${n1(grosor * 3.2)}" stroke-linecap="round" filter="url(#${id})" opacity=".9"/>` +
+      `<path d="${d}" fill="none" stroke="${color}" stroke-width="${grosor}" stroke-linecap="round"/>` +
+      `<path d="${d}" fill="none" stroke="#FFFFFF" stroke-width="${n1(grosor * 0.4)}" stroke-linecap="round"/></g>`).join('') + '</svg>';
+};
+
+/** «QUADRA KILL» estampado en oro (receta 'multikill', variante del sello):
+ *  degradado de oro, filo oscuro y un brillo enmascarado por las letras. */
+const multikill = (texto = 'QUADRA KILL', { ancho = 900, alto = 230, oro = ['#FFF1B8', '#F5C042', '#B8791F'], filo = '#2A1606', rotacion = -6, fuente = "'Anton', 'Bebas Neue', Impact, sans-serif" } = {}) => {
+  const id = `mk-${semillaDe(texto + ancho).toString(36)}`, fs = alto * 0.72;
+  const letras = `<text x="${ancho / 2}" y="${n1(alto / 2)}" text-anchor="middle" dominant-baseline="central" font-family="${fuente}" font-size="${n1(fs)}" textLength="${ancho - 40}" lengthAdjust="spacingAndGlyphs">${texto}</text>`;
+  return `<svg data-sello data-multikill viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="${texto}" style="display:block;width:${ancho}px;max-width:100%;height:auto;overflow:visible;transform:rotate(${rotacion}deg)">` +
+    `<defs><linearGradient id="${id}-o" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${oro[0]}"/><stop offset=".52" stop-color="${oro[1]}"/><stop offset="1" stop-color="${oro[2]}"/></linearGradient>` +
+    `<linearGradient id="${id}-b" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#FFFFFF" stop-opacity="0"/><stop offset=".5" stop-color="#FFFFFF" stop-opacity=".85"/><stop offset="1" stop-color="#FFFFFF" stop-opacity="0"/></linearGradient>` +
+    `<mask id="${id}-m" maskUnits="userSpaceOnUse" x="0" y="0" width="${ancho}" height="${alto}"><g fill="#FFFFFF">${letras}</g></mask></defs>` +
+    `<g fill="none" stroke="${filo}" stroke-width="${n1(fs * 0.09)}" stroke-linejoin="round">${letras}</g>` +
+    `<g fill="url(#${id}-o)">${letras}</g>` +
+    `<g mask="url(#${id}-m)"><rect data-brillo-mk x="${ancho}" y="0" width="${n1(ancho * 0.35)}" height="${alto}" fill="url(#${id}-b)" transform="skewX(-18)"/></g></svg>`;
+};
+
+/** Letrero de kill (receta 'letrero'): NOMBRE grande y campeón chico debajo,
+ *  con retrato opcional. Las dos líneas van centradas por la ALTURA DE LAS
+ *  MAYÚSCULAS (text-box: trim-both cap alphabetic), no por la caja: en Anton
+ *  la caja deja las letras ~25 px más abajo y el retrato quedaba desfasado. */
+const letrero = ({ nombre, campeon = '', retrato = null, color = '#FF6A3D', tinta = '#FFFFFF', tam = 150, fuente = "'Anton', Impact, sans-serif",
+  sombra = '0 6px 28px rgba(0,0,0,.6)' } = {}) => {
+  // La sombra separa el letrero del video que lleva debajo (va encima del gameplay).
+  const recorte = `text-box: trim-both cap alphabetic;${sombra ? `text-shadow:${sombra};` : ''}`;
+  const foto = retrato ? `<div data-retrato style="flex:none;width:${n1(tam * 1.25)}px;height:${n1(tam * 1.25)}px;border-radius:50%;overflow:hidden;border:${n1(tam * 0.045)}px solid ${color};box-sizing:border-box;background:#000">` +
+    `<img src="${retrato}" alt="" style="width:100%;height:100%;object-fit:cover;display:block"></div>` : '';
+  return `<div data-letrero style="display:inline-flex;align-items:center;gap:${n1(tam * 0.2)}px">${foto}` +
+    `<div style="display:flex;flex-direction:column;align-items:flex-start;gap:${n1(tam * 0.16)}px">` +
+    `<div data-nombre style="font:400 ${tam}px/1 ${fuente};color:${tinta};letter-spacing:${n1(tam * 0.01)}px;white-space:nowrap;${recorte}">${nombre}</div>` +
+    `<div data-barra style="width:100%;height:${n1(tam * 0.06)}px;background:${color}"></div>` +
+    (campeon ? `<div data-campeon style="font:400 ${n1(tam * 0.36)}px/1 ${fuente};color:${color};letter-spacing:${n1(tam * 0.02)}px;white-space:nowrap;${recorte}">${campeon}</div>` : '') +
+    '</div></div>';
+};
+
+// ── Piezas de P5 (dona y radar) ─────────────────────────────────────────
+
+/** Dona (receta 'dona'): un arco por parte, con pathLength = 1 para que el
+ *  trazo vaya en fracciones, un hueco entre arcos y la cifra del centro.
+ *  partes = [{ valor, color }]; centro = { texto, cuenta, sufijo, color, tam }. */
+const dona = (partes, { tam = 520, grosor = 70, hueco = 0.008, fondo = 'rgba(255,255,255,.08)', centro = null, fuente = "'Bebas Neue', Impact, sans-serif" } = {}) => {
+  const total = partes.reduce((a, p) => a + p.valor, 0) || 1, c = tam / 2, r = (tam - grosor) / 2;
+  let ini = 0;
+  const arcos = partes.map((p) => {
+    const f = p.valor / total, largo = Math.max(0.001, f - hueco);
+    const s = `<circle data-arco data-frac="${f.toFixed(4)}" cx="${c}" cy="${c}" r="${n1(r)}" fill="none" stroke="${p.color}" stroke-width="${grosor}" pathLength="1" ` +
+      `stroke-dasharray="${largo.toFixed(4)} 1" stroke-dashoffset="${(-ini - hueco / 2).toFixed(4)}" transform="rotate(-90 ${c} ${c})"/>`;
+    ini += f;
+    return s;
+  }).join('');
+  const txt = centro ? `<text data-dona-valor${centro.cuenta != null ? ` data-cuenta="${centro.cuenta}"` : ''}${centro.sufijo ? ` data-sufijo="${centro.sufijo}"` : ''} x="${c}" y="${c}" text-anchor="middle" dominant-baseline="central" ` +
+    `font-family="${fuente}" font-size="${n1(centro.tam || tam * 0.26)}" fill="${centro.color || '#FFFFFF'}">${centro.texto}</text>` : '';
+  return `<svg data-dona viewBox="0 0 ${tam} ${tam}" style="display:block;width:${tam}px;height:${tam}px;overflow:visible">` +
+    `<circle cx="${c}" cy="${c}" r="${n1(r)}" fill="none" stroke="${fondo}" stroke-width="${grosor}"/>${arcos}${txt}</svg>`;
+};
+
+/** Radar (receta 'radar'): red de `niveles` polígonos, ejes y una figura por
+ *  serie; la segunda se transforma desde la primera (antes → después).
+ *  series = [{ valores, color }]; ejes = nombres en el orden de los valores. */
+const radar = (series, { ejes = [], max = null, tam = 760, niveles = 4, tinta = 'rgba(255,255,255,.22)', texto = '#F2EFE8', tamTexto = 26, margen = 110, fuente = "'Barlow', system-ui, sans-serif" } = {}) => {
+  const n = series[0].valores.length, M = max || Math.max(...series.flatMap((s) => s.valores)), c = tam / 2, R = c - margen;
+  const pt = (i, v) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; return [n1(c + Math.cos(a) * R * v), n1(c + Math.sin(a) * R * v)]; };
+  const red = Array.from({ length: niveles }, (_, k) => `<polygon data-red points="${Array.from({ length: n }, (_, i) => pt(i, (k + 1) / niveles).join(',')).join(' ')}" fill="none" stroke="${tinta}" stroke-width="1.5"/>`).join('') +
+    Array.from({ length: n }, (_, i) => `<line data-red x1="${c}" y1="${c}" x2="${pt(i, 1)[0]}" y2="${pt(i, 1)[1]}" stroke="${tinta}" stroke-width="1.5"/>`).join('');
+  const etiquetas = ejes.map((e, i) => { const [x, y] = pt(i, 1 + 44 / R); return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="${fuente}" font-size="${tamTexto}" font-weight="600" fill="${texto}">${e}</text>`; }).join('');
+  const figuras = series.map((s) => `<polygon data-serie points="${s.valores.map((v, i) => pt(i, v / M).join(',')).join(' ')}" fill="${s.color}" fill-opacity="${s.relleno == null ? 0.28 : s.relleno}" stroke="${s.color}" stroke-width="4" stroke-linejoin="round"/>`).join('');
+  return `<svg data-radar data-centro="${c} ${c}" viewBox="0 0 ${tam} ${tam}" style="display:block;width:${tam}px;height:${tam}px;overflow:visible">${red}${figuras}${etiquetas}</svg>`;
+};
+
+module.exports = { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar };

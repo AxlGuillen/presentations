@@ -29,6 +29,8 @@
 // su contenido (el de Diamante solo existe a 320 px de contenido).
 const fs = require('fs');
 const kit = require('../tools/kit.cjs');
+// Los fondos (copia desenfocada, lavados, rayos o humo) llevan data-fondo: en
+// `laminas.mjs --alfa` se apagan y la lámina sale transparente sobre el gameplay.
 
 // ── Paleta: la luz de Lux sobre azul demaciano ───────────────────────────
 const BG = '#0B1530';        // azul de Demacia
@@ -56,18 +58,18 @@ const SECCION = `background: ${BG}; color: ${HUESO}; font-family: ${DISPLAY}; po
 
 // Copia desenfocada del arte a todo el lienzo (archivo propio de 360 px).
 const borroso = (src, brillo = 0.5) => `
-    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+    <div data-fondo style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
       <div data-borroso style="position: absolute; inset: -80px; background-image: url('assets/${src}'); background-size: cover; background-position: center; filter: blur(48px) saturate(1.15) brightness(${brillo});"></div>
     </div>`;
 
 // Lavado de luz desde arriba y viñeta: el fondo nunca es plano ni negro.
 const ambiente = (x = 50, y = 18) => `
-    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 45% at ${x}% ${y}%, ${a(LUZ, 0.22)}, ${a(LUZ, 0)} 70%), radial-gradient(120% 80% at 50% 110%, ${a(PRISMA, 0.16)}, ${a(PRISMA, 0)} 60%);"></div>
-    <div style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 55%, rgba(4,8,20,0.65) 100%);"></div>`;
+    <div data-fondo style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(70% 45% at ${x}% ${y}%, ${a(LUZ, 0.22)}, ${a(LUZ, 0)} 70%), radial-gradient(120% 80% at 50% 110%, ${a(PRISMA, 0.16)}, ${a(PRISMA, 0)} 60%);"></div>
+    <div data-fondo style="position: absolute; inset: 0; pointer-events: none; background: radial-gradient(130% 90% at 50% 50%, rgba(0,0,0,0) 55%, rgba(4,8,20,0.65) 100%);"></div>`;
 
 // Rayos de luz en abanico desde un punto (coordenadas del lienzo).
 const rayos = (x, y, fuerza = 0.16, tam = 2400) => `
-    <div style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;"><div data-rayos style="position: absolute; left: ${x - tam / 2}px; top: ${y - tam / 2}px; width: ${tam}px; height: ${tam}px; pointer-events: none; mix-blend-mode: screen; opacity: 0.9;
+    <div data-fondo style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;"><div data-rayos style="position: absolute; left: ${x - tam / 2}px; top: ${y - tam / 2}px; width: ${tam}px; height: ${tam}px; pointer-events: none; mix-blend-mode: screen; opacity: 0.9;
       background: repeating-conic-gradient(from 0deg at 50% 50%, ${a(LUZ, fuerza)} 0deg 3deg, ${a(LUZ, 0)} 6deg 15deg);
       -webkit-mask-image: radial-gradient(closest-side, #000 0%, rgba(0,0,0,0.5) 35%, transparent 75%); mask-image: radial-gradient(closest-side, #000 0%, rgba(0,0,0,0.5) 35%, transparent 75%);"></div></div>`;
 
@@ -242,7 +244,7 @@ slides.push(lamina('lux-familia', 'Su abuelo le salvo la vida al rey en una bata
 // El buscamagos a la puerta, que se apaga a un duotono frío.
 slides.push(lamina('lux-prohibido', 'El problema es que en Demacia la magia esta prohibida. A los magos los encarcelan o los exilian, y a su propio tio lo habia matado un mago unos anos antes.', `
     ${borroso('cartas/01DE023-fondo.jpg', 0.4)}
-    <div data-frio style="position: absolute; inset: 0; background: ${a('#0A1F4A', 0.35)}; mix-blend-mode: multiply; pointer-events: none;"></div>
+    <div data-fondo data-frio style="position: absolute; inset: 0; background: ${a('#0A1F4A', 0.35)}; mix-blend-mode: multiply; pointer-events: none;"></div>
     ${panel(`
       ${arteAncho('cartas/01DE023.jpg', 'Investigador buscamagos, carta de Legends of Runeterra', {
         alto: 720,
@@ -320,7 +322,7 @@ function bento(expandida, splash, alt) {
     piezas.elegida = `<div data-elegida data-x="${r.x}" data-y="${r.y}" data-w="${r.w}" data-h="${r.h}" style="position: absolute; left: 0; top: 0; width: ${PANEL.w}px; height: ${PANEL.h}px; border-radius: 0; overflow: hidden; border: ${borde}; box-sizing: border-box; z-index: 5; ${brillo}">
           <img data-carga src="assets/skins/Lux_${n}.jpg" alt="" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; opacity: 0;">
           <div data-splash style="position: absolute; inset: 0;">
-            <div style="position: absolute; inset: -80px; background-image: url('assets/${splash.replace('.jpg', '-fondo.jpg')}'); background-size: cover; background-position: center; filter: blur(46px) brightness(0.55) saturate(1.2);"></div>
+            <div data-fondo style="position: absolute; inset: -80px; background-image: url('assets/${splash.replace('.jpg', '-fondo.jpg')}'); background-size: cover; background-position: center; filter: blur(46px) brightness(0.55) saturate(1.2);"></div>
             <img data-splash-img src="assets/${splash}" alt="${alt}" style="position: absolute; left: 0; top: ${(PANEL.h - 637) / 2}px; width: 1080px; height: 637px; object-fit: cover; display: block; box-shadow: 0 40px 100px rgba(2,6,18,0.7);">
           </div>
           <div data-barrido style="position: absolute; top: -10%; bottom: -10%; left: -70%; width: 45%; background: linear-gradient(100deg, rgba(255,255,255,0), ${a(LUZ, 0.6)}, rgba(255,255,255,0)); transform: rotate(10deg);"></div>

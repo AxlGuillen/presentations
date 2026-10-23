@@ -237,7 +237,7 @@ const corte = (A, B, C, D) => {
 const dibujar = (objetos, {
   camara: opCam = {}, ancho = 800, alto = 800, margen = 24,
   tinta = '#F2EFE8', acento = tinta, grosor = 2.2, fino = 1.2,
-  umbral = 30, sombra = null, encima = [], estilo = '', titulo = 'Dibujo a líneas', tamTexto = 14,
+  umbral = 30, sombra = null, encima = [], estilo = '', titulo = 'Dibujo a líneas', tamTexto = 14, escala = null,
 } = {}) => {
   const cam = hacerCamara(opCam), caras = aplanar(objetos);
   // 1 · caras: normal, si da a la cámara, plano en coordenadas de cámara
@@ -308,8 +308,11 @@ const dibujar = (objetos, {
   Object.values(visibles).flat().forEach((q) => { xs.push(q[0], q[2]); ys.push(q[1], q[3]); });
   notas.forEach((e) => e.P.forEach((p) => { xs.push(p[0]); ys.push(p[1]); }));
   const x0 = Math.min(...xs), x1 = Math.max(...xs), y0 = Math.min(...ys), y1 = Math.max(...ys);
-  const k = Math.min((ancho - 2 * margen) / (x1 - x0 || 1), (alto - 2 * margen) / (y1 - y0 || 1));
-  const ox = (ancho - (x1 - x0) * k) / 2 - x0 * k, oy = (alto - (y1 - y0) * k) / 2 - y0 * k;
+  // Con `escala` el encuadre es fijo (el centro de la cámara al centro del
+  // lienzo, `escala` píxeles por unidad proyectada): es lo que hace falta para
+  // girar un objeto cuadro a cuadro sin que se acerque y se aleje.
+  const k = escala || Math.min((ancho - 2 * margen) / (x1 - x0 || 1), (alto - 2 * margen) / (y1 - y0 || 1));
+  const ox = escala ? ancho / 2 : (ancho - (x1 - x0) * k) / 2 - x0 * k, oy = escala ? alto / 2 : (alto - (y1 - y0) * k) / 2 - y0 * k;
   const X = (v) => v * k + ox, Y = (v) => v * k + oy;
   // 6 · achurado, ya en píxeles: se raya el polígono proyectado de cada cara,
   // se corta en las siluetas y cada tramo se prueba con la profundidad de su cara
@@ -349,11 +352,26 @@ const dibujar = (objetos, {
       cotas += `<text x="${n1(X(mx) + px * tamTexto * 1.1)}" y="${n1(Y(my) + py * tamTexto * 1.1)}" fill="${acento}" stroke="none" font-family="'Geist Mono', 'JetBrains Mono', ui-monospace, monospace" font-size="${tamTexto}" text-anchor="middle" dominant-baseline="central">${e.texto}</text>`;
     }
   }
-  return `<svg data-lineas viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="${titulo}" style="display:block;overflow:visible;${estilo}">` +
+  return `<svg data-lineas data-escala="${k.toFixed(3)}" viewBox="0 0 ${ancho} ${alto}" role="img" aria-label="${titulo}" style="display:block;overflow:visible;${estilo}">` +
     `<g fill="none" stroke="${tinta}" stroke-linecap="round" stroke-linejoin="round">` +
     capa('silueta', visibles.silueta, grosor) + capa('pliegue', visibles.pliegue, grosor * 0.85) +
     capa('detalle', visibles.detalle, fino) + capa('achurado', achurado, fino * 0.8, true) + '</g>' +
     (cotas ? `<g data-capa="cota" fill="none" stroke="${acento}" stroke-width="${fino}" stroke-linecap="round">${cotas}</g>` : '') + '</svg>';
 };
 
-module.exports = { caja, extruir, revolucion, cilindro, poliedro, cara, mover, rotar, escalar, en, rect, circulo, linea, cota, dibujar, aplanar };
+/** Un dibujo «vivo» (P6): el SVG de siempre más el modelo en data-modelo, para
+ *  que la página lo vuelva a proyectar en cada cuadro (kit.lineasRuntime() y
+ *  las recetas 'gira' y continua «gira»). El encuadre queda FIJO: si no se
+ *  pasa `escala`, se toma la del ajuste automático por `holgura` (0,85), que
+ *  deja aire para que el objeto quepa al girar. */
+const vivo = (objetos, { holgura = 0.85, ...op } = {}) => {
+  const escala = op.escala || +String(dibujar(objetos, op).match(/data-escala="([\d.]+)"/)[1]) * holgura;
+  const opciones = { ...op, escala };
+  delete opciones.camara;
+  const r2 = (k, v) => (typeof v === 'number' ? Math.round(v * 100) / 100 : v);
+  const modelo = JSON.stringify({ objetos: aplanar(objetos), opciones, camara: op.camara || {} }, r2)
+    .replace(/&/g, '&amp;').replace(/'/g, '&#39;').replace(/</g, '&lt;');
+  return `<div data-lineas-vivo data-modelo='${modelo}' style="width:100%;height:100%">${dibujar(objetos, opciones.estilo ? { ...op, escala } : { ...op, escala, estilo: 'width:100%;height:100%' })}</div>`;
+};
+
+module.exports = { caja, extruir, revolucion, cilindro, poliedro, cara, mover, rotar, escalar, en, rect, circulo, linea, cota, dibujar, aplanar, vivo };
