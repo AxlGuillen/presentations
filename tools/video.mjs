@@ -313,6 +313,13 @@ if (cfgSfx && animMeta) {
   if (!animMeta.clips.some(x => x.sfx)) console.log('Sin etiquetas sfx en anim.json: si el deck usa recetas, regenera el deck y borra video-out/anim para que cuadros.mjs las lea.');
 }
 fs.writeFileSync(path.join(out, 'tiempos.json'), JSON.stringify(tiempos, null, 2));
+// Tiempos de cada palabra narrada, en segundos desde el arranque de su lámina
+// (el mismo reloj que su timeline): kit.voz() y kit.golpe() los leen para que
+// la receta 'golpe' vaya palabra por palabra con la voz.
+fs.writeFileSync(path.join(out, 'palabras.json'), JSON.stringify(clips.map(c => ({
+  slide: c.slide,
+  palabras: c.palabras.filter(p => !/^\s*[\[\(][^\]\)]*[\]\)]\s*$/.test(p.t)).map(p => ({ t: p.t, ini: +(LEAD + p.ini).toFixed(3), fin: +(LEAD + p.fin).toFixed(3) })),
+})), null, 2));
 
 // ── 3 · Segmentos de video y concatenación ───────────────────────────────
 const dirSeg = path.join(out, 'seg');

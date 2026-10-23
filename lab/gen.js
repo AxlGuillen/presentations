@@ -43,10 +43,10 @@ const imagen = (src, alt, pos = '50% 30%', attrs = '') =>
 
 let n = 0;
 const slides = [];
-const lamina = ({ grupo, nombre, uso, cuerpo, alto = 960, notas = '', fondo = BG }) => {
+const lamina = ({ grupo, nombre, uso, cuerpo, alto = 960, notas = '', fondo = BG, attrs = '' }) => {
   n++;
   slides.push(`
-  <section data-label="${nombre}" data-screen-label="${String(n).padStart(2, '0')} · ${grupo} · ${nombre}" data-speaker-notes="${esc(notas)}" style="${SECCION.replace(BG, fondo)}">
+  <section data-label="${nombre}" ${attrs} data-screen-label="${String(n).padStart(2, '0')} · ${grupo} · ${nombre}" data-speaker-notes="${esc(notas)}" style="${SECCION.replace(BG, fondo)}">
     <header data-a="up" style="margin-bottom: 34px;">
       <div style="font: 700 24px/1 ${BODY}; letter-spacing: 4px; text-transform: uppercase; color: ${CORAL};">${String(n).padStart(2, '0')} · ${grupo}</div>
       <h2 style="margin: 12px 0 0; font: 400 112px/0.9 ${DISPLAY}; color: ${BONE};">${nombre}</h2>
@@ -356,11 +356,50 @@ lamina({ grupo: ED, nombre: 'rayo', uso: "${kit.rayo([d, …], { ancho, alto, co
 lamina({ grupo: ED, nombre: 'impacto', uso: "${kit.impacto({ ancho, alto, n, hueco })}  dentro de  data-efecto=\"impacto\"  · data-queda=\"si\" las deja puestas",
   cuerpo: `<div data-efecto="impacto" data-en="0.3" data-queda="si" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Vi_0.jpg', 'Vi', '50% 30%')}${kit.impacto({ ancho: 912, alto: 960, n: 70, hueco: 0.42, centro: [0.5, 0.36] })}</div>` });
 
+// ── ACABADO (docs/mejoras-oct-2026.md, P7 y P5) ──────────────────────────
+const AC = 'Acabado';
+const CURVAS = [['entrada', 'llega rápido y frena suave'], ['salida', 'arranca lento y se va'], ['golpe', 'llega de golpe y rebota apenas'], ['asentar', 'se pasa un poco y se asienta'], ['deriva', 'va y viene despacio']];
+lamina({ grupo: AC, nombre: 'curvas', uso: "ease: 'entrada' | 'salida' | 'golpe' | 'asentar' | 'deriva'  · con CustomEase si el deck lo carga",
+  cuerpo: `<div data-lab="curvas" style="width:100%;display:flex;flex-direction:column;gap:56px">${CURVAS.map(([n, d]) => `<div>
+    <div style="display:flex;justify-content:space-between;font:500 24px/1 ${MONO};color:${MUTED};margin-bottom:18px"><span style="color:${BONE}">${n}</span><span>${d}</span></div>
+    <div style="position:relative;height:56px;border-radius:28px;background:${PANEL}"><div data-curva="${n}" style="position:absolute;left:${912 - 56}px;top:0;width:56px;height:56px;border-radius:50%;background:${n === 'golpe' || n === 'asentar' ? CORAL : VIOLETA}"></div></div></div>`).join('')}</div>` });
+lamina({ grupo: AC, nombre: 'desenfoque', attrs: 'data-blur="6"', uso: 'data-blur="6" en la <section>  · cuadros.mjs mezcla 6 subcuadros por cuadro (solo se ve en el video)',
+  notas: 'En el navegador se ve nítido: el desenfoque lo arma cuadros.mjs con tmix. No se combina con --alfa.',
+  cuerpo: `<div data-lab="desenfoque" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${[0, 1, 2].map((i) => `<div data-barra-rapida style="position:absolute;left:${156 + i * 230}px;top:${180 + i * 230}px;width:140px;height:140px;border-radius:24px;background:${[CORAL, VIOLETA, BONE][i]}"></div>`).join('')}</div>` });
+const FRASE = 'Once horas en dieciséis tareas y catorce cerradas';
+// Tiempos como los que deja video.mjs en palabras.json (aquí simulados).
+const VOZ_EJEMPLO = FRASE.split(' ').map((t, i) => ({ t, ini: +(0.4 + i * 0.32 + (i > 3 ? 0.25 : 0)).toFixed(2) }));
+lamina({ grupo: AC, nombre: 'golpe', uso: 'data-efecto="golpe" data-tiempos="${kit.golpe(texto, kit.voz(__dirname, n))}" data-acento="#FF6A3D"',
+  notas: 'Los tiempos de esta lámina son de ejemplo; en un deck narrado salen de video-out/palabras.json, que escribe video.mjs.',
+  cuerpo: `<div data-efecto="golpe" data-tiempos="${kit.golpe(FRASE, VOZ_EJEMPLO)}" data-acento="${CORAL}" style="font:400 128px/1.05 ${DISPLAY};color:${BONE};text-align:center">${FRASE}</div>` });
+lamina({ grupo: AC, nombre: 'dona', uso: "${kit.dona([{ valor, color }, …], { tam, grosor, centro: { texto, cuenta, sufijo } })}  +  data-efecto=\"dona\"",
+  cuerpo: `<div data-efecto="dona" data-en="0.25">${kit.dona([{ valor: 66, color: CORAL }, { valor: 18, color: VIOLETA }, { valor: 10, color: BONE }, { valor: 6, color: MUTED }], { tam: 660, grosor: 92, centro: { texto: '66%', cuenta: 66, sufijo: '%', color: BONE } })}</div>` });
+lamina({ grupo: AC, nombre: 'radar', uso: "${kit.radar([antes, después], { ejes, max })}  +  data-efecto=\"radar\"  · la segunda serie sale de la primera",
+  cuerpo: `<div data-efecto="radar" data-en="0.2">${kit.radar([{ valores: [6, 5, 7, 4, 6, 5], color: MUTED, relleno: 0.12 }, { valores: [8, 4, 9, 6, 7, 3], color: CORAL }], { ejes: ['DAÑO', 'AGUANTE', 'MOVILIDAD', 'CONTROL', 'ALCANCE', 'UTILIDAD'], max: 10, tam: 860, texto: BONE })}</div>` });
+lamina({ grupo: AC, nombre: 'pixelado', uso: 'data-efecto="pixelado" data-desde="80" data-pasos="6"  · «adivina la skin»: de bloques a nítido, con el recorte de object-fit',
+  cuerpo: `<div data-efecto="pixelado" data-en="0.3" data-dur="3.2" data-desde="96" data-pasos="6" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden">${imagen('Jinx_0.jpg', 'Jinx', '62% 30%')}</div>` });
+lamina({ grupo: AC, nombre: 'derrumbe', uso: 'data-efecto="derrumbe" data-en="0.8" data-semilla="…"  · la salida: las letras caen con giro y deriva',
+  cuerpo: `<div data-efecto="derrumbe" data-en="0.9" data-semilla="lab" style="font:400 230px/0.9 ${ANTON};color:${BONE};text-align:center">GAME<br>OVER</div>` });
+
 // ── Coreografías propias (las que no basta declarar) ─────────────────────
 const coreografias = `<script>
 (function () {
   if (!window.animar) return;
   function cabecera(tl, s) { tl.from(s.querySelector('header'), { y: 26, opacity: 0, duration: 0.5 }, 0); }
+  // curvas: la misma distancia con cada curva con nombre.
+  animar('curvas', function (tl, s) {
+    cabecera(tl, s);
+    s.querySelectorAll('[data-curva]').forEach(function (b, i) {
+      tl.from(b, { x: -(912 - 56), duration: 1.6, ease: b.getAttribute('data-curva') }, 0.4 + i * 0.12);
+    });
+  });
+  // desenfoque: tres bloques que cruzan rápido (para ver el data-blur en el video).
+  animar('desenfoque', function (tl, s) {
+    cabecera(tl, s);
+    s.querySelectorAll('[data-barra-rapida]').forEach(function (b, i) {
+      tl.from(b, { x: i % 2 ? 900 : -900, rotation: i % 2 ? 90 : -90, duration: 0.55, ease: 'entrada' }, 0.3 + i * 0.18);
+    });
+  });
   // ritmo: cada círculo golpea en su beat (los segundos vienen de kit.ritmo en
   // build-time), la palabra en r.palabra() y las chispas en el drop.
   animar('ritmo', function (tl, s) {
@@ -408,7 +447,7 @@ ${kit.og({ titulo: 'Laboratorio de efectos', descripcion: 'El catálogo vivo del
 <deck-stage width="1080" height="1920">
 ${slides.join('\n')}
 </deck-stage>
-${kit.gsap(__dirname, ['SplitText', 'DrawSVG', 'MorphSVG', 'MotionPath'])}
+${kit.gsap(__dirname, ['SplitText', 'DrawSVG', 'MorphSVG', 'MotionPath', 'CustomEase'])}
 ${kit.efectos()}
 ${kit.animador()}
 ${coreografias}

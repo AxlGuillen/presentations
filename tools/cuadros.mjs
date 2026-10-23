@@ -50,6 +50,13 @@ const FPS = Math.max(1, parseInt(args.find(a => /^\d+$/.test(a)) || '30', 10));
 const pedido = args.find(a => a.startsWith('--paralelo='));
 const PARALELO = Math.max(1, pedido ? parseInt(pedido.split('=')[1], 10) : Math.min(6, Math.floor(os.cpus().length / 2)));
 const pideAlfa = args.find(a => a === '--alfa' || a.startsWith('--alfa='));
+// Desenfoque de movimiento (P7): data-blur="N" en la lámina, o --blur=N para
+// todas. Cada cuadro sale de N subcuadros repartidos en medio cuadro (un
+// obturador de 180°) y mezclados con tmix. Cuesta N veces más, así que se pide
+// donde hay movimiento rápido. No se combina con --alfa: tmix promedia también
+// el alfa y los bordes de una capa dejarían de ser nítidos.
+const BLUR_GLOBAL = Math.max(1, parseInt((args.find(a => a.startsWith('--blur=')) || '--blur=1').split('=')[1], 10) || 1);
+const OBTURADOR = 0.5;
 const ALFA = pideAlfa ? (pideAlfa === '--alfa=webm' ? 'webm' : 'mov') : null;
 const EXT = ALFA || 'mp4';
 // ProRes 4444 es lo que ya lee ReelForge; VP9 con alfa pesa menos. Nada de qtrle:
@@ -145,7 +152,7 @@ async function renderizar(t, i) {
     if (typeof ds._go === 'function') ds._go(idx);
     else location.hash = '#' + (idx + 1);
   }, i);
-  const { dur, sfx } = await pagina.evaluate(async idx => {
+  const { dur, sfx, blur: blurLamina = 0 } = await pagina.evaluate(async idx => {
     const s = document.querySelectorAll('deck-stage section')[idx];
     // el video muestra la slide completa: todos los pasos revelados
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
@@ -178,7 +185,7 @@ async function renderizar(t, i) {
       for (const h of tl.getChildren(false, false, true)) juntar(h, base + h.startTime());
     })(s.__tl, 0);
     sfx.sort((a, b) => a.t - b.t);
-    return { dur: s.__tl.duration(), sfx };
+    return { dur: s.__tl.duration(), sfx, blur: parseInt(s.dataset.blur || '0', 10) || 0 };
   }, i);
   const num = String(i + 1).padStart(2, '0');
   // Sin timeline: en modo normal se salta (video.mjs usa su PNG); en modo alfa
@@ -188,22 +195,31 @@ async function renderizar(t, i) {
 
   const tPrep = performance.now() - tIni;
   const clip = path.join(dirAnim, `anim-${num}.${EXT}`);
-  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(FPS), '-c:v', 'png', '-i', '-',
-    ...CODEC, clip], { stdio: ['pipe', 'ignore', 'inherit'] });
+  let N = sinTimeline ? 1 : (blurLamina || BLUR_GLOBAL);
+  if (N > 1 && ALFA) { console.warn(`  ⚠ slide ${num}: data-blur no se combina con --alfa (tmix promedia el alfa); sale sin desenfoque`); N = 1; }
+  // Con desenfoque entran N subcuadros por cuadro: tmix promedia cada grupo y
+  // select se queda con el último de cada grupo (el que ya los mezcló todos).
+  const mezcla = N > 1 ? ['-vf', `tmix=frames=${N},select=eq(mod(n\\,${N})\\,${N - 1}),setpts=N/${FPS}/TB`, '-r', String(FPS)] : [];
+  const ff = spawn('ffmpeg', ['-y', '-v', 'error', '-f', 'image2pipe', '-framerate', String(FPS * N), '-c:v', 'png', '-i', '-',
+    ...mezcla, ...CODEC, clip], { stdio: ['pipe', 'ignore', 'inherit'] });
   ff.stdin.on('error', () => {});   // si ffmpeg muere, el error real llega por 'close'
   const terminado = new Promise((ok, mal) => ff.on('close', c => (c === 0 ? ok() : mal(new Error(`ffmpeg salió con ${c} en la slide ${num}`)))));
   const cuadros = sinTimeline ? 1 : Math.ceil(dur * FPS) + 1; // el último cuadro cae exacto en t = dur
   for (let f = 0; f < cuadros; f++) {
-    const tt = Math.min(f / FPS, Math.max(dur, 0));
-    // cuerpo con llaves a propósito: si la flecha devolviera la timeline,
-    // puppeteer la serializaría entera (cuesta ~0,8 s por cuadro)
-    if (!sinTimeline) await pagina.evaluate((idx, x) => { document.querySelectorAll('deck-stage section')[idx].__tl.time(x, false); }, i, tt);
-    const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
-    await escribir(ff.stdin, Buffer.from(data, 'base64'));
+    for (let k = 0; k < N; k++) {
+      // Subcuadros centrados en el tiempo del cuadro; al final se recortan a
+      // dur, así que el último cuadro (todos en t = dur) queda nítido.
+      const tt = Math.max(0, Math.min(f / FPS + (N > 1 ? ((k + 0.5) / N - 0.5) * OBTURADOR / FPS : 0), Math.max(dur, 0)));
+      // cuerpo con llaves a propósito: si la flecha devolviera la timeline,
+      // puppeteer la serializaría entera (cuesta ~0,8 s por cuadro)
+      if (!sinTimeline) await pagina.evaluate((idx, x) => { document.querySelectorAll('deck-stage section')[idx].__tl.time(x, false); }, i, tt);
+      const { data } = await cdp.send('Page.captureScreenshot', { format: 'png', optimizeForSpeed: true });
+      await escribir(ff.stdin, Buffer.from(data, 'base64'));
+    }
   }
   ff.stdin.end();
   await terminado;
-  return { i, num, dur: +Math.max(dur, 0).toFixed(3), cuadros, sinTimeline, sfx, prep: tPrep, total: performance.now() - tIni };
+  return { i, num, dur: +Math.max(dur, 0).toFixed(3), cuadros, sinTimeline, sfx, blur: N, prep: tPrep, total: performance.now() - tIni };
 }
 
 // ── Reparto: cada trabajador toma la siguiente lámina libre ──────────────
@@ -234,7 +250,7 @@ servidor.closeAllConnections();
 servidor.close();
 
 const meta = resultados.filter(r => !r.estatica).sort((a, b) => a.i - b.i)
-  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}), ...(r.sfx.length ? { sfx: r.sfx } : {}) }));
+  .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}), ...(r.blur > 1 ? { blur: r.blur } : {}), ...(r.sfx.length ? { sfx: r.sfx } : {}) }));
 fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, alfa: ALFA || false, ext: EXT, clips: meta }, null, 2));
 const total = meta.reduce((a, c) => a + c.cuadros, 0);
 console.log(`\nListo: ${meta.length} clips (${total} cuadros) en ${path.relative(raiz, dirAnim)} · ${((performance.now() - t0) / 1000).toFixed(1)} s`);

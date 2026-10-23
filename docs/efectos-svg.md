@@ -3,7 +3,8 @@
 > Estado: **los 8 recomendados están implementados** (15/oct/2026, ver «Lo que
 > cambió al implementarlo» al final), y **chispas y destello** entraron el
 > 22/oct/2026 con el kit de edit (sin Physics2D: las chispas son una fórmula
-> cerrada con roce y gravedad). Los otros 15 siguen en propuesta.
+> cerrada con roce y gravedad), y **golpe, dona, radar, pixelado y derrumbe**
+> el mismo día con la fase de acabado. Los otros 10 siguen en propuesta.
 > Investigación del 15/oct/2026, sobre
 > el catálogo que ya existe en `tools/kit-efectos.cjs` (las 27 recetas del deck
 > `lab/`). Los efectos marcados «probado» se armaron como prototipo en Chrome

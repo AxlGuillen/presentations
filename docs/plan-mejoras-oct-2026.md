@@ -224,6 +224,14 @@ Las recetas están en el catálogo de `CLAUDE.md` y en `lab/`, y un deck de prue
    - `radar`, `pixelado` y `derrumbe`.
    - El resto, cuando lo pida un deck.
 
+### Resultado (22/oct, hecho en stg)
+
+- **Curvas:** si no hay CustomEase, cada curva cae a la estándar más parecida, registrada con `gsap.registerEase` y el mismo nombre. Así las recetas las piden por nombre en cualquier deck, incluso en los que traen la 3.12.5. Las recetas de edit de la fase 3 se migraron; las viejas, no.
+- **Desenfoque:** se probó con `tools/pruebas/deck-blur.cjs` (`prueba-blur/`, ignorada en git). La estela mide 154 px contra 155 esperados y el cuadro final sale idéntico al nítido. Con `--alfa` avisa y no se aplica.
+- **`golpe` necesita los tiempos de la voz en build-time**, y la voz se pide en `video.mjs`. Por eso `video.mjs` escribe `video-out/palabras.json`, y `kit.voz()` y `kit.golpe()` lo leen. Hay que regenerar el deck después de la primera voz; la segunda pasada sale de la caché.
+- Las cinco recetas tienen su lámina en el grupo «Acabado» de `lab/` y salen deterministas en la ida y vuelta (de 77 dB a idéntico).
+- Al armar `derrumbe` apareció que partir el texto con `textContent` borraba los `<br>`. Ahora `golpe` y `derrumbe` recorren los nodos de texto.
+
 ---
 
 ## Fase 5 · Exploración (2 sesiones, con prueba antes)
@@ -252,8 +260,8 @@ Estado de cada mejora. Se actualiza en el mismo commit que la cierra.
 | P3 · `kit.ritmo` | 3 | Hecho (22/oct) | stg | ver fase 3 |
 | P4 · Recetas de edit | 3 | Hecho (22/oct) | stg | ver fase 3 |
 | P5 · Chispas y destello | 3 | Hecho (22/oct) | stg | ver fase 3 |
-| P7 · Easing y desenfoque | 4 | Pendiente | | |
-| P5 · Golpe, dona, radar, pixelado, derrumbe | 4 | Pendiente | | |
+| P7 · Easing y desenfoque | 4 | Hecho (22/oct) | stg | ver fase 4 |
+| P5 · Golpe, dona, radar, pixelado, derrumbe | 4 | Hecho (22/oct) | stg | ver fase 4 |
 | P6 · Objetos que giran | 5 | Pendiente, con prueba | | |
 | P11 · Lottie y Three.js | 5 | Pendiente, con prueba | | |
 

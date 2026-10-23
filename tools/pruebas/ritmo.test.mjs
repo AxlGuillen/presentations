@@ -49,3 +49,23 @@ test('kit.ritmo: los errores se leen', () => {
   assert.throws(() => r.b(40), /después del final de la canción/);
   assert.throws(() => r.seccion('bridge'), /no hay sección «bridge»/);
 });
+
+test('kit.golpe: empareja el texto con las palabras de la voz', () => {
+  const voz = [{ t: 'Once', ini: 0.4 }, { t: 'horas', ini: 0.8 }, { t: 'con', ini: 1.3 }, { t: 'cuarenta', ini: 1.5 }, { t: 'y', ini: 2 }, { t: 'nueve', ini: 2.2 }];
+  // La puntuación y las mayúsculas no estorban; la «y» que no está en el texto se salta.
+  assert.equal(kit.golpe('Once horas, con cuarenta nueve', voz), '0.4,0.8,1.3,1.5,2.2');
+  // Una palabra que la voz no dijo cae 0,25 s después de la anterior.
+  assert.equal(kit.golpe('Once horas largas con', voz), '0.4,0.8,1.05,1.3');
+  assert.equal(kit.golpe('Once horas', voz, { desfase: 0.1 }), '0.5,0.9');
+  assert.equal(kit.golpe('lo que sea', null), '');
+});
+
+test('kit.voz: lee los tiempos que deja video.mjs, o null si no hay voz', async () => {
+  const fs = await import('node:fs'), os = await import('node:os'), path = await import('node:path');
+  const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'voz-'));
+  assert.equal(kit.voz(dir, 1), null);
+  fs.mkdirSync(path.join(dir, 'video-out'));
+  fs.writeFileSync(path.join(dir, 'video-out', 'palabras.json'), JSON.stringify([{ slide: 2, palabras: [{ t: 'hola', ini: 0.35, fin: 0.6 }] }]));
+  assert.deepEqual(kit.voz(dir, 2), [{ t: 'hola', ini: 0.35, fin: 0.6 }]);
+  assert.equal(kit.voz(dir, 1), null);
+});

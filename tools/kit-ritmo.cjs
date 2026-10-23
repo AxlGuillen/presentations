@@ -74,4 +74,37 @@ function ritmo(mapa, { desde = 0 } = {}) {
   };
 }
 
-module.exports = { ritmo };
+// ── La voz como ritmo (receta 'golpe') ─────────────────────────────────
+// video.mjs deja en <deck>/video-out/palabras.json los tiempos de cada palabra
+// narrada, en segundos desde el arranque de su lámina (lo mismo que la
+// timeline). El flujo: video.mjs una vez (pide la voz), regenerar el deck para
+// que kit.golpe() escriba los tiempos, borrar video-out/anim y video.mjs otra
+// vez (la voz ya sale de la caché).
+
+/** Las palabras narradas de una lámina ([{ t, ini, fin }]) o null si todavía
+ *  no hay voz generada. */
+function voz(dirDeck, slide) {
+  const ruta = require('path').join(dirDeck, 'video-out', 'palabras.json');
+  if (!require('fs').existsSync(ruta)) return null;
+  const s = JSON.parse(require('fs').readFileSync(ruta, 'utf8')).find((x) => x.slide === slide);
+  return s ? s.palabras : null;
+}
+
+/** Los segundos de cada palabra de `texto` según la voz, para data-tiempos.
+ *  Empareja por la palabra normalizada (sin mayúsculas, acentos ni signos),
+ *  buscando hacia adelante; la que no aparece en la voz cae 0,25 s después de
+ *  la anterior. Sin voz devuelve '' y la receta usa su escalón. */
+function golpe(texto, palabras, { desfase = 0 } = {}) {
+  if (!palabras || !palabras.length) return '';
+  const voces = palabras.map((p) => ({ n: norm(p.t), ini: p.ini }));
+  let j = 0, prev = null;
+  return texto.split(' ').filter(Boolean).map((w) => {
+    const n = norm(w), k = voces.slice(j, j + 8).findIndex((v) => v.n === n);
+    let t;
+    if (k >= 0) { t = voces[j + k].ini; j += k + 1; } else t = prev == null ? (voces[j] ? voces[j].ini : 0) : prev + 0.25;
+    prev = t;
+    return (Math.round((t + desfase) * 1000) / 1000).toString();
+  }).join(',');
+}
+
+module.exports = { ritmo, voz, golpe };

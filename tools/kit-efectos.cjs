@@ -41,6 +41,25 @@ const efectos = () => `<script>
     '.efx-linea-mask{padding-top:.18em;margin-top:-.18em}';
   document.head.appendChild(css);
 
+  // Curvas con nombre (P7). entrada: llega rápido y frena suave · salida:
+  // arranca lento y se va · golpe: llega de golpe y rebota apenas · asentar:
+  // se pasa un poco y se asienta · deriva: va y viene despacio. Si el deck
+  // cargó CustomEase (kit.gsap(dir, ['CustomEase'])) salen de estos trazos; si
+  // no, de la curva estándar más parecida. Las dos son deterministas, y las
+  // recetas nuevas las piden por nombre: ease: 'golpe'.
+  var CURVAS = {
+    entrada: ['M0,0 C0.12,0.72 0.28,1 1,1', 'expo.out'],
+    salida: ['M0,0 C0.55,0 0.85,0.38 1,1', 'power2.in'],
+    golpe: ['M0,0 C0.06,0.78 0.14,1.12 0.3,1.07 C0.46,1.02 0.62,0.99 1,1', 'back.out(2)'],
+    asentar: ['M0,0 C0.2,0.86 0.34,1.1 0.52,1.03 C0.68,0.98 0.82,1 1,1', 'back.out(1.3)'],
+    deriva: ['M0,0 C0.4,0 0.6,1 1,1', 'sine.inOut']
+  };
+  Object.keys(CURVAS).forEach(function (n) {
+    if (window.CustomEase) window.CustomEase.create(n, CURVAS[n][0]);
+    else G.registerEase(n, G.parseEase(CURVAS[n][1]));
+  });
+  window.curvas = Object.keys(CURVAS);
+
   function seccionDe(el) { return el.closest ? (el.closest('section') || el) : el; }
   function deshacer(el, fn) { var s = seccionDe(el); (s.__deshacer = s.__deshacer || []).push(fn); }
   function guardaEstilo(el) { var c = el.getAttribute('style'); deshacer(el, function () { if (c == null) el.removeAttribute('style'); else el.setAttribute('style', c); }); }
@@ -720,12 +739,12 @@ const efectos = () => `<script>
     if (!svg) return;
     var c = svg.getAttribute('data-centro') || '0 0', r = prng(o.semilla || svg.getAttribute('data-semilla') || 'destello'), en = o.en || 0;
     var halo = svg.querySelector('[data-halo]'), brillo = svg.querySelector('[data-brillo]'), grupo = svg.querySelector('[data-rayos]');
-    if (halo) tl.from(halo, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45, ease: 'power2.out' }, en);
+    if (halo) tl.from(halo, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45, ease: 'entrada' }, en);
     lista(svg.querySelectorAll('[data-rayo]')).forEach(function (x) {
-      tl.from(x, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45 + r() * 0.35, ease: 'expo.out' }, en + r() * 0.14);
+      tl.from(x, { scale: 0, opacity: 0, svgOrigin: c, duration: 0.45 + r() * 0.35, ease: 'entrada' }, en + r() * 0.14);
     });
-    if (grupo) tl.from(grupo, { rotation: o.giro == null ? -24 : o.giro, svgOrigin: c, duration: o.dur || 1.8, ease: 'power2.out' }, en);
-    if (brillo) tl.from(brillo, { scale: 0, rotation: -60, svgOrigin: c, duration: 0.5, ease: 'back.out(2.2)' }, en + 0.04);
+    if (grupo) tl.from(grupo, { rotation: o.giro == null ? -24 : o.giro, svgOrigin: c, duration: o.dur || 1.8, ease: 'deriva' }, en);
+    if (brillo) tl.from(brillo, { scale: 0, rotation: -60, svgOrigin: c, duration: 0.5, ease: 'golpe' }, en + 0.04);
   };
 
   // Palabra: gigante, entra con golpe (de 125 % a 100 % en 80 ms) y un
@@ -764,12 +783,12 @@ const efectos = () => `<script>
       var ts = o.tiempos ? String(o.tiempos).split(',').map(parseFloat) : null, esc = o.escalon == null ? 0.07 : o.escalon;
       spans.forEach(function (s, i) {
         var t = ts ? (ts[Math.min(i, ts.length - 1)] || 0) : en + i * esc;
-        tl.from(s, { scale: golpe, opacity: 0, transformOrigin: '50% 60%', duration: dg, ease: 'power2.out' }, t);
+        tl.from(s, { scale: golpe, opacity: 0, transformOrigin: '50% 60%', duration: dg, ease: 'entrada' }, t);
       });
     } else {
-      tl.from(el, { scale: golpe, opacity: 0, transformOrigin: '50% 55%', duration: dg, ease: 'power2.out' }, en);
+      tl.from(el, { scale: golpe, opacity: 0, transformOrigin: '50% 55%', duration: dg, ease: 'entrada' }, en);
     }
-    if (o.fogonazo !== 'no') tl.from(el, { filter: 'brightness(2.6)', duration: 0.35, ease: 'power2.out' }, porLetra && ts ? ts[0] : en);
+    if (o.fogonazo !== 'no') tl.from(el, { filter: 'brightness(2.6)', duration: 0.35, ease: 'entrada' }, porLetra && ts ? ts[0] : en);
   };
 
   // Multikill: el sello en oro de kit.multikill(): cae y golpea como el sello y
@@ -777,7 +796,7 @@ const efectos = () => `<script>
   R.multikill = function (tl, el, o) {
     R.sello(tl, el, o);
     var b = el.querySelector('[data-brillo-mk]');
-    if (b) tl.from(b, { attr: { x: -(+b.getAttribute('width') || 300) }, duration: 0.6, ease: 'power2.inOut' }, (o.en || 0) + (o.dur || 0.42) + 0.12);
+    if (b) tl.from(b, { attr: { x: -(+b.getAttribute('width') || 300) }, duration: 0.6, ease: 'deriva' }, (o.en || 0) + (o.dur || 0.42) + 0.12);
   };
 
   // Letrero de kill (kit.letrero): el retrato salta, la barra se tiende, el
@@ -785,10 +804,10 @@ const efectos = () => `<script>
   R.letrero = function (tl, el, o) {
     var en = o.en || 0, q = function (s) { return el.querySelector(s); };
     var foto = q('[data-retrato]'), barra = q('[data-barra]'), nom = q('[data-nombre]'), camp = q('[data-campeon]');
-    if (foto) tl.from(foto, { scale: 0, opacity: 0, duration: 0.45, ease: 'back.out(1.8)' }, en);
-    if (barra) tl.from(barra, { scaleX: 0, transformOrigin: '0% 50%', duration: 0.4, ease: 'power3.out' }, en + 0.1);
-    if (nom) tl.fromTo(nom, { clipPath: 'inset(-20% 100% -20% 0%)' }, { clipPath: 'inset(-20% 0% -20% 0%)', duration: 0.45, ease: 'power3.out', immediateRender: true }, en + 0.16);
-    if (camp) tl.from(camp, { y: 26, opacity: 0, duration: 0.4, ease: 'power2.out' }, en + 0.42);
+    if (foto) tl.from(foto, { scale: 0, opacity: 0, duration: 0.45, ease: 'asentar' }, en);
+    if (barra) tl.from(barra, { scaleX: 0, transformOrigin: '0% 50%', duration: 0.4, ease: 'entrada' }, en + 0.1);
+    if (nom) tl.fromTo(nom, { clipPath: 'inset(-20% 100% -20% 0%)' }, { clipPath: 'inset(-20% 0% -20% 0%)', duration: 0.45, ease: 'entrada', immediateRender: true }, en + 0.16);
+    if (camp) tl.from(camp, { y: 26, opacity: 0, duration: 0.4, ease: 'entrada' }, en + 0.42);
   };
 
   // Rayo: por cada trazo de kit.rayo() cruza una estela, un tramo corto del
@@ -802,7 +821,7 @@ const efectos = () => `<script>
         var L = c.getTotalLength(), largo = L * (o.largo || 0.34), est = { p: 0 };
         c.style.strokeDasharray = largo + ' ' + (L + largo * 2);
         var pinta = function () { c.style.strokeDashoffset = largo - est.p * (L + largo); };
-        tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 0.55, ease: o.ease || 'power2.in', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta },
+        tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 0.55, ease: o.ease || 'salida', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta },
           (o.en || 0) + k * (o.escalon == null ? 0.09 : o.escalon));
         pinta();
       });
@@ -817,13 +836,140 @@ const efectos = () => `<script>
     var ls = svg ? lista(svg.querySelectorAll('[data-linea]')) : [];
     if (!ls.length) return;
     var r = prng(o.semilla || svg.getAttribute('data-semilla') || 'impacto'), en = o.en || 0, dur = o.dur || 0.6;
-    tl.from(svg, { scale: o.desde || 1.3, transformOrigin: '50% 50%', duration: dur, ease: 'power3.out' }, en);
+    tl.from(svg, { scale: o.desde || 1.3, transformOrigin: '50% 50%', duration: dur, ease: 'entrada' }, en);
     ls.forEach(function (l) {
       var a = +(l.getAttribute('opacity') || 1), t = en + r() * 0.1;
       tl.from(l, { opacity: 0, duration: 0.03, ease: 'none' }, t);
       tl.to(l, { keyframes: [{ opacity: a * 0.3, duration: 0.05 }, { opacity: a, duration: 0.05 }], ease: 'none' }, t + 0.08 + r() * 0.08);
     });
-    if (o.queda !== 'si') tl.to(svg, { opacity: 0, duration: 0.25, ease: 'power1.in' }, en + dur);
+    if (o.queda !== 'si') tl.to(svg, { opacity: 0, duration: 0.25, ease: 'salida' }, en + dur);
+  };
+
+  // ── ACABADO (P5: golpe, dona, radar, pixelado, derrumbe) ──────────────
+
+  // Parte el texto de el en <span> por palabra (o por letra), con su deshacer.
+  // Recorre los nodos de texto y deja los elementos donde están: un <br> o un
+  // <span> de color siguen en su lugar.
+  function trozos(el, porLetra) {
+    var orig = el.innerHTML, out = [], nodos = [];
+    deshacer(el, function () { el.innerHTML = orig; });
+    var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT);
+    while (w.nextNode()) nodos.push(w.currentNode);
+    nodos.forEach(function (nodo) {
+      var frag = document.createDocumentFragment(), partes = porLetra ? Array.from(nodo.nodeValue) : nodo.nodeValue.split(' ');
+      partes.forEach(function (t, i) {
+        if (!porLetra && i) frag.appendChild(document.createTextNode(' '));
+        if (!t) return;
+        if (!porLetra && !t.trim()) { frag.appendChild(document.createTextNode(t)); return; }
+        var s = document.createElement('span');
+        s.textContent = t;
+        s.style.display = 'inline-block';
+        if (t === ' ') s.style.whiteSpace = 'pre';
+        frag.appendChild(s); out.push(s);
+      });
+      nodo.parentNode.replaceChild(frag, nodo);
+    });
+    return out;
+  }
+
+  // Golpe: palabra por palabra al ritmo de la voz. data-tiempos trae un
+  // segundo por palabra (kit.golpe() los saca de los tiempos de Fish que deja
+  // video.mjs); sin ellos, cada data-escalon. data-acento pinta la palabra
+  // al entrar y la devuelve a su color.
+  R.golpe = function (tl, el, o) {
+    var ps = trozos(el, false), ts = o.tiempos ? String(o.tiempos).split(',').map(parseFloat) : null;
+    var esc = o.escalon == null ? 0.28 : o.escalon, en = o.en || 0;
+    ps.forEach(function (w, i) {
+      var t = ts && Number.isFinite(ts[i]) ? ts[i] : en + i * esc;
+      tl.from(w, { scale: o.golpe || 1.22, yPercent: 18, opacity: 0, transformOrigin: '50% 70%', duration: 0.14, ease: 'golpe' }, t);
+      if (o.acento) tl.from(w, { color: o.acento, duration: 0.45, ease: 'deriva' }, t + 0.06);
+    });
+  };
+
+  // Dona: cada arco de kit.dona() se traza en orden (pathLength = 1, así el
+  // dasharray va en fracciones) y la cifra del centro cuenta.
+  R.dona = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg[data-dona]');
+    if (!svg) return;
+    var en = o.en || 0, dur = o.dur || 1.1, arcos = lista(svg.querySelectorAll('[data-arco]')), t = en;
+    tl.from(svg, { rotation: -30, transformOrigin: '50% 50%', duration: dur + 0.3, ease: 'entrada' }, en);
+    arcos.forEach(function (a) {
+      var f = +a.getAttribute('data-frac'), d = Math.max(0.18, dur * f);
+      tl.fromTo(a, { attr: { 'stroke-dasharray': '0 1' } }, { attr: { 'stroke-dasharray': a.getAttribute('stroke-dasharray') }, duration: d, ease: 'power1.inOut', immediateRender: true }, t);
+      t += d * 0.92;
+    });
+    var v = svg.querySelector('[data-dona-valor]');
+    if (v && v.hasAttribute('data-cuenta')) R.contador(tl, v, { en: en, dur: t - en, cuenta: v.getAttribute('data-cuenta'), sufijo: v.getAttribute('data-sufijo') || '', decimales: +(v.getAttribute('data-decimales') || 0) });
+  };
+
+  // Radar: la red de kit.radar() se dibuja, la primera serie crece desde el
+  // centro y las siguientes se transforman desde la anterior (antes → después
+  // de un parche). Los vértices se interpolan a mano: seek exacto.
+  R.radar = function (tl, el, o) {
+    var svg = el.tagName === 'svg' ? el : el.querySelector('svg[data-radar]');
+    if (!svg) return;
+    var en = o.en || 0, c = svg.getAttribute('data-centro').split(' ').map(parseFloat);
+    dibujar(tl, svg.querySelectorAll('[data-red]'), { en: en, dur: 0.8, escalon: 0.05, ease: 'entrada' });
+    var series = lista(svg.querySelectorAll('[data-serie]')), previo = null, t = en + 0.5;
+    var leerPts = function (p) { return p.getAttribute('points').split(' ').map(function (q) { return q.split(',').map(parseFloat); }); };
+    series.forEach(function (p, k) {
+      var fin = leerPts(p), ini = previo || fin.map(function () { return c.slice(); }), est = { p: 0 }, orig = p.getAttribute('points');
+      deshacer(el, function () { p.setAttribute('points', orig); });
+      var pinta = function () {
+        p.setAttribute('points', fin.map(function (q, i) { return (ini[i][0] + (q[0] - ini[i][0]) * est.p).toFixed(1) + ',' + (ini[i][1] + (q[1] - ini[i][1]) * est.p).toFixed(1); }).join(' '));
+      };
+      tl.fromTo(est, { p: 0 }, { p: 1, duration: o.dur || 0.9, ease: k ? 'asentar' : 'entrada', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, t);
+      if (k) tl.from(p, { opacity: 0, duration: 0.2 }, t);
+      pinta();
+      previo = fin; t += (o.dur || 0.9) + (o.pausa == null ? 0.35 : o.pausa);
+    });
+  };
+
+  // Pixelado: «adivina la skin». Un canvas encima del <img> lo pinta en
+  // bloques que se hacen chicos por pasos (data-desde px → nítido en
+  // data-pasos), con el mismo recorte que object-fit: cover y object-position.
+  R.pixelado = function (tl, el, o) {
+    var img = imagenDe(el);
+    if (!img) return;
+    var cv = document.createElement('canvas'), W = img.offsetWidth, H = img.offsetHeight;
+    cv.width = W; cv.height = H;
+    cv.style.cssText = 'position:absolute;left:' + img.offsetLeft + 'px;top:' + img.offsetTop + 'px;width:' + W + 'px;height:' + H + 'px;pointer-events:none';
+    img.parentNode.insertBefore(cv, img.nextSibling);
+    deshacer(el, function () { cv.remove(); });
+    var ctx = cv.getContext('2d'), chico = document.createElement('canvas'), cc = chico.getContext('2d');
+    var desde = o.desde || 72, pasos = o.pasos || 6, est = { k: 0 }, ultimo = -1;
+    var pinta = function () {
+      var k = Math.min(pasos, Math.floor(est.k * pasos + 1e-6));
+      if (k === ultimo && img.complete) return;
+      ultimo = k;
+      if (k >= pasos || !img.complete || !img.naturalWidth) { cv.style.visibility = 'hidden'; return; }
+      cv.style.visibility = 'visible';
+      var b = Math.max(2, desde / Math.pow(2, k * Math.log2(desde / 2) / Math.max(1, pasos - 1)));
+      var sw = Math.max(1, Math.round(W / b)), sh = Math.max(1, Math.round(H / b));
+      chico.width = sw; chico.height = sh;
+      var nw = img.naturalWidth, nh = img.naturalHeight, esc = Math.max(W / nw, H / nh);
+      var pos = getComputedStyle(img).objectPosition.split(' ').map(parseFloat), cw = W / esc, ch = H / esc;
+      var sx = (nw - cw) * (pos[0] / 100), sy = (nh - ch) * ((pos.length > 1 ? pos[1] : 50) / 100);
+      cc.imageSmoothingEnabled = true;
+      cc.drawImage(img, sx, sy, cw, ch, 0, 0, sw, sh);
+      ctx.imageSmoothingEnabled = false;
+      ctx.clearRect(0, 0, W, H);
+      ctx.drawImage(chico, 0, 0, sw, sh, 0, 0, W, H);
+    };
+    tl.fromTo(est, { k: 0 }, { k: 1, duration: o.dur || 3, ease: 'none', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, o.en || 0);
+    pinta();
+  };
+
+  // Derrumbe: la salida que le faltaba al catálogo. Las letras caen con
+  // gravedad (ease 'salida'), giro y deriva de la semilla, en un orden también
+  // de la semilla. Termina vacío, como toda salida.
+  R.derrumbe = function (tl, el, o) {
+    var ls = trozos(el, true).filter(function (s) { return s.textContent !== ' '; });
+    var r = prng(o.semilla || el.getAttribute('data-semilla') || 'derrumbe'), en = o.en || 0, dur = o.dur || 0.95;
+    var caida = o.caida || 1500, abanico = o.abanico == null ? 0.35 : o.abanico;
+    ls.forEach(function (s) {
+      tl.to(s, { y: caida * (0.8 + r() * 0.4), x: (r() - 0.5) * 160, rotation: (r() - 0.5) * 220, opacity: 0, duration: dur, ease: 'salida' }, en + r() * abanico);
+    });
   };
 
   // ── CONTINUIDAD ────────────────────────────────────────────────────────
@@ -980,7 +1126,7 @@ const efectos = () => `<script>
   // ticks o pop) donde la timeline lleva la etiqueta sfx:<receta>. El momento
   // es el primer cuadro en que se ve lo que suena: el arranque de la receta,
   // salvo el sello, que suena al caer. data-sfx="no" la deja muda.
-  var SFX = { cortinilla: 0, lineas: 0, contador: 0, bento: 0, piezas: 0, palabra: 0, rayo: 0, impacto: 0, letrero: 0.16,
+  var SFX = { cortinilla: 0, lineas: 0, contador: 0, bento: 0, piezas: 0, palabra: 0, rayo: 0, impacto: 0, letrero: 0.16, dona: 0, derrumbe: 0,
     sello: function (o) { return o.dur || 0.42; }, multikill: function (o) { return o.dur || 0.42; } };
   window.sfx = function (tl, nombre, pos) {
     var base = 'sfx:' + nombre, n = 1, k = base;
@@ -1286,4 +1432,38 @@ const letrero = ({ nombre, campeon = '', retrato = null, color = '#FF6A3D', tint
     '</div></div>';
 };
 
-module.exports = { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero };
+// ── Piezas de P5 (dona y radar) ─────────────────────────────────────────
+
+/** Dona (receta 'dona'): un arco por parte, con pathLength = 1 para que el
+ *  trazo vaya en fracciones, un hueco entre arcos y la cifra del centro.
+ *  partes = [{ valor, color }]; centro = { texto, cuenta, sufijo, color, tam }. */
+const dona = (partes, { tam = 520, grosor = 70, hueco = 0.008, fondo = 'rgba(255,255,255,.08)', centro = null, fuente = "'Bebas Neue', Impact, sans-serif" } = {}) => {
+  const total = partes.reduce((a, p) => a + p.valor, 0) || 1, c = tam / 2, r = (tam - grosor) / 2;
+  let ini = 0;
+  const arcos = partes.map((p) => {
+    const f = p.valor / total, largo = Math.max(0.001, f - hueco);
+    const s = `<circle data-arco data-frac="${f.toFixed(4)}" cx="${c}" cy="${c}" r="${n1(r)}" fill="none" stroke="${p.color}" stroke-width="${grosor}" pathLength="1" ` +
+      `stroke-dasharray="${largo.toFixed(4)} 1" stroke-dashoffset="${(-ini - hueco / 2).toFixed(4)}" transform="rotate(-90 ${c} ${c})"/>`;
+    ini += f;
+    return s;
+  }).join('');
+  const txt = centro ? `<text data-dona-valor${centro.cuenta != null ? ` data-cuenta="${centro.cuenta}"` : ''}${centro.sufijo ? ` data-sufijo="${centro.sufijo}"` : ''} x="${c}" y="${c}" text-anchor="middle" dominant-baseline="central" ` +
+    `font-family="${fuente}" font-size="${n1(centro.tam || tam * 0.26)}" fill="${centro.color || '#FFFFFF'}">${centro.texto}</text>` : '';
+  return `<svg data-dona viewBox="0 0 ${tam} ${tam}" style="display:block;width:${tam}px;height:${tam}px;overflow:visible">` +
+    `<circle cx="${c}" cy="${c}" r="${n1(r)}" fill="none" stroke="${fondo}" stroke-width="${grosor}"/>${arcos}${txt}</svg>`;
+};
+
+/** Radar (receta 'radar'): red de `niveles` polígonos, ejes y una figura por
+ *  serie; la segunda se transforma desde la primera (antes → después).
+ *  series = [{ valores, color }]; ejes = nombres en el orden de los valores. */
+const radar = (series, { ejes = [], max = null, tam = 760, niveles = 4, tinta = 'rgba(255,255,255,.22)', texto = '#F2EFE8', tamTexto = 26, margen = 110, fuente = "'Barlow', system-ui, sans-serif" } = {}) => {
+  const n = series[0].valores.length, M = max || Math.max(...series.flatMap((s) => s.valores)), c = tam / 2, R = c - margen;
+  const pt = (i, v) => { const a = -Math.PI / 2 + (i / n) * Math.PI * 2; return [n1(c + Math.cos(a) * R * v), n1(c + Math.sin(a) * R * v)]; };
+  const red = Array.from({ length: niveles }, (_, k) => `<polygon data-red points="${Array.from({ length: n }, (_, i) => pt(i, (k + 1) / niveles).join(',')).join(' ')}" fill="none" stroke="${tinta}" stroke-width="1.5"/>`).join('') +
+    Array.from({ length: n }, (_, i) => `<line data-red x1="${c}" y1="${c}" x2="${pt(i, 1)[0]}" y2="${pt(i, 1)[1]}" stroke="${tinta}" stroke-width="1.5"/>`).join('');
+  const etiquetas = ejes.map((e, i) => { const [x, y] = pt(i, 1 + 44 / R); return `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="${fuente}" font-size="${tamTexto}" font-weight="600" fill="${texto}">${e}</text>`; }).join('');
+  const figuras = series.map((s) => `<polygon data-serie points="${s.valores.map((v, i) => pt(i, v / M).join(',')).join(' ')}" fill="${s.color}" fill-opacity="${s.relleno == null ? 0.28 : s.relleno}" stroke="${s.color}" stroke-width="4" stroke-linejoin="round"/>`).join('');
+  return `<svg data-radar data-centro="${c} ${c}" viewBox="0 0 ${tam} ${tam}" style="display:block;width:${tam}px;height:${tam}px;overflow:visible">${red}${figuras}${etiquetas}</svg>`;
+};
+
+module.exports = { efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar };
