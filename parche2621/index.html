@@ -541,6 +541,12 @@
     var o = { v: 0 };
     tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
       onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+    // Suena como la receta contador (ticks en el video), en el arranque real
+    // del tween: pos puede ser relativa ('<', '+=0.2'). Sin kit.efectos() no
+    // hay window.sfx y la etiqueta se pone aquí mismo.
+    var en = tl.recent().startTime();
+    if (window.sfx) window.sfx(tl, 'contador', en);
+    else if (tl.labels['sfx:contador'] == null) tl.addLabel('sfx:contador', en);
   };
   function porDefecto(tl, s) {
     ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
@@ -590,6 +596,12 @@
     var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
     if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
   });
+  // Reconstruye la timeline de la lámina activa: lo usa el arranque de
+  // three.js (kit.threeScript), que es un módulo y carga después.
+  window.relanzar = function () {
+    var a = document.querySelector('deck-stage > section[data-deck-active]');
+    if (a) lanzar(a);
+  };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
 })();
