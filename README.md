@@ -64,7 +64,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /ultracode/          Charla: Ultracode en la práctica (caso Minuto Dulce) · 16:9 · 15 slides
 /seating3dmap/       seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
 /dra/                Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
-/musk/               Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA) · 16:9 · 14 slides
+/musk/               Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA, con video narrado y música) · 16:9 · 14 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features

@@ -156,7 +156,7 @@
     <div data-fuente style="position: absolute; left: 100px; right: 100px; bottom: 30px; font-size: 15.5px; font-weight: 500; color: #64618A; line-height: 1.35; letter-spacing: 0.1px;">Musk con Tim Dodd (Everyday Astronaut), 30-jul-2021: InsideEVs, Hacker News · Isaacson, «Elon Musk» (2023): Corporate Rebels.</div>
   </section>
 
-  <section data-label="Model 3" data-screen-label="04 · Model 3" data-speaker-notes="Esto no nació como teoría. En 2018 la línea del Model 3 se automatizó antes de entenderse, y Tesla producía algo más de 2,000 por semana contra una meta de 5,000. Musk lo admitió: «my mistake», «humans are underrated», y retiró por completo la red de bandas transportadoras. Su frase: automatizó, aceleró, simplificó y al final borró. Es decir, los cinco pasos al revés. El algoritmo es una lección aprendida por las malas. Y el paso que más tienta saltarse es el último." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 78px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Model 3" data-screen-label="04 · Model 3" data-speaker-notes="Esto no nació como teoría. En 2018 la línea del Model 3 se automatizó antes de entenderse, y Tesla producía algo más de 2,000 por semana contra una meta de 5,000. Musk lo admitió: «my mistake», «humans are underrated», y retiró por completo la red de bandas transportadoras. Su frase: automatizó, aceleró, simplificó y al final borró. Es decir, los cinco pasos al revés. El algoritmo es una lección aprendida por las malas. Y el paso que más tienta adelantar es el último: automatizar." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 78px; box-sizing: border-box; overflow: hidden;">
     
     <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
       <div style="display: flex; align-items: center; gap: 14px;">
@@ -2136,6 +2136,117 @@
   };
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
   else arrancar();
+})();
+</script>
+<script>
+(function () {
+  var SRC = "video.mp4", TECLA = "v".toLowerCase();
+  var abierto = false, btn, capa, video;
+
+  function montar() {
+    btn = document.createElement('button');
+    btn.id = 'ver-video';
+    btn.type = 'button';
+    btn.textContent = '▶ Reproducir · ' + TECLA.toUpperCase();
+    btn.style.cssText = 'position:fixed;top:16px;right:150px;z-index:2147483000;' +
+      'padding:9px 18px;border:1px solid #4B3BD6;border-radius:999px;' +
+      'background:#4B3BD6;color:#FFFFFF;cursor:pointer;' +
+      'font:600 13px/1 inherit;letter-spacing:.6px;opacity:.85;transition:opacity 160ms ease';
+    btn.addEventListener('mouseenter', function () { btn.style.opacity = '1'; });
+    btn.addEventListener('mouseleave', function () { btn.style.opacity = abierto ? '1' : '.85'; });
+    btn.addEventListener('click', function () { alternar(); btn.blur(); });
+    document.body.appendChild(btn);
+
+    capa = document.createElement('div');
+    capa.id = 'capa-video';
+    // OJO: la capa se oculta con display:none, no con el atributo hidden. hidden
+    // pone display:none desde la hoja del navegador, y el display:flex en línea
+    // le ganaba: la capa salía abierta al cargar y tapaba el deck entero.
+    capa.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(9,13,24,.92);' +
+      'display:none;align-items:center;justify-content:center;padding:3vh 3vw';
+    video = document.createElement('video');
+    // Sin src hasta que se abre: con src y preload el navegador bajaba ~10 s de
+    // video al entrar al deck aunque nadie le diera play.
+    video.preload = 'none';
+    video.controls = true;
+    video.playsInline = true;
+    video.style.cssText = 'max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.55)';
+    var cerrar = document.createElement('button');
+    cerrar.type = 'button';
+    cerrar.setAttribute('aria-label', 'Cerrar el video');
+    cerrar.textContent = '✕ Cerrar · Esc';
+    cerrar.style.cssText = 'position:absolute;top:18px;right:18px;padding:9px 18px;' +
+      'border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(0,0,0,.45);' +
+      'color:#FFF;cursor:pointer;font:600 13px/1 inherit;letter-spacing:.6px;z-index:2';
+    cerrar.addEventListener('click', function (e) { e.stopPropagation(); alternar(false); });
+    capa.addEventListener('click', function (e) { if (e.target === capa) alternar(false); });
+    capa.appendChild(video);
+    capa.appendChild(cerrar);
+    document.body.appendChild(capa);
+    colocar();
+    window.addEventListener('resize', colocar);
+    if (document.fonts) document.fonts.ready.then(colocar);
+  }
+
+  // El botón va a la izquierda de «Presentar · P», midiendo su ancho real: con
+  // un right fijo de 150px los dos se enciman en cuanto el texto mide más.
+  function colocar() {
+    var p = document.getElementById('modo-presentacion');
+    var r = p && p.getBoundingClientRect();
+    btn.style.right = (r && r.width ? Math.round(window.innerWidth - r.left + 10) : 150) + 'px';
+  }
+
+  function alternar(forzar) {
+    if (!btn) return;
+    abierto = forzar === undefined ? !abierto : forzar;
+    capa.style.display = abierto ? 'flex' : 'none';
+    btn.style.opacity = abierto ? '1' : '.85';
+    if (abierto && !video.getAttribute('src')) video.src = SRC;
+    if (abierto) video.play().catch(function () {});   // si el navegador lo bloquea, quedan los controles
+    else {
+      video.pause();
+      if (document.fullscreenElement) document.exitFullscreen().catch(function () {});
+    }
+  }
+
+  // El botón nativo de pantalla completa pone en fullscreen el <video>, y
+  // entonces el navegador solo pinta ese elemento: el botón «Cerrar», que vive
+  // en la capa, desaparece y el video se queda sin salida. Se reconduce el
+  // fullscreen a la capa, que sí lo lleva dentro.
+  document.addEventListener('fullscreenchange', function () {
+    if (!video || document.fullscreenElement !== video) return;
+    document.exitFullscreen()
+      .then(function () { return capa.requestFullscreen(); })
+      .catch(function () {});
+  });
+
+  // Con la capa abierta, el teclado es del video: se corta antes de deck-stage.
+  window.addEventListener('keydown', function (e) {
+    if (!btn) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (abierto) {
+      if (e.key === 'Escape' || e.key.toLowerCase() === TECLA) { alternar(false); e.preventDefault(); e.stopPropagation(); return; }
+      if (['ArrowLeft', 'ArrowRight', ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End'].indexOf(e.key) >= 0) e.stopPropagation();
+      return;
+    }
+    if (e.key.toLowerCase() === TECLA) { alternar(true); e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  // En modo presentación desaparecen los dos, como el botón de presentar.
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!btn || !d || typeof d.__omelette_presenting !== 'boolean') return;
+    btn.style.display = d.__omelette_presenting ? 'none' : '';
+    setTimeout(colocar, 0);   // «Presentar · P» cambia de texto y de ancho
+    if (d.__omelette_presenting) alternar(false);
+  });
+
+  // Sin archivo, no hay botón: mejor eso que un botón que abre una capa vacía.
+  fetch(SRC, { method: 'HEAD' })
+    .then(function (r) { if (r.ok) montar(); })
+    .catch(function () {});
 })();
 </script>
 <script>

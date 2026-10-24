@@ -229,7 +229,7 @@ lamina({
     'Esto no nació como teoría. En 2018 la línea del Model 3 se automatizó antes de entenderse, y Tesla producía algo más de 2,000 por semana contra una meta de 5,000.',
     'Musk lo admitió: «my mistake», «humans are underrated», y retiró por completo la red de bandas transportadoras.',
     'Su frase: automatizó, aceleró, simplificó y al final borró. Es decir, los cinco pasos al revés.',
-    'El algoritmo es una lección aprendida por las malas. Y el paso que más tienta saltarse es el último.',
+    'El algoritmo es una lección aprendida por las malas. Y el paso que más tienta adelantar es el último: automatizar.',
   ],
   fuentes: 'Musk (InsideEVs; CleanTechnica 2021) · tuit del 13-abr-2018 y CBS: GeekWire 2018 · producción: CleanTechnica 2018 · Isaacson vía Corporate Rebels.',
   cuerpo: `
@@ -953,6 +953,7 @@ ${slides.join('\n')}
 ${kit.gsap(__dirname, ['DrawSVG'])}
 ${kit.efectos()}
 ${kit.animador()}
+${kit.reproductor({ src: 'video.mp4', etiqueta: 'Reproducir', tecla: 'v', acento: ACC })}
 ${coreografias}
 <script>
 (function () {

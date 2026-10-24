@@ -339,12 +339,15 @@ const tSeg = performance.now();
 const lista = [], segmentos = [];
 const trabajos = clips.map((c, i) => async () => {
   const png = pngEsperados[i];
-  const seg = path.join(dirSeg, `seg-${String(c.slide).padStart(2, '0')}.mp4`);
+  // Segmento .mov con el audio en PCM: el AAC de cada segmento añadía su relleno
+  // (~35 ms) y, al unirlos con -c copy, la voz se atrasaba una lámina tras otra
+  // (0,5 s al final de 14 láminas). El AAC se codifica una sola vez, al unir.
+  const seg = path.join(dirSeg, `seg-${String(c.slide).padStart(2, '0')}.mov`);
   const total = (LEAD + c.dur + TAIL).toFixed(3);
   const anim = path.join(dirAnim, `anim-${String(c.slide).padStart(2, '0')}.mp4`);
   const audioArgs = ['-af', `adelay=${Math.round(LEAD * 1000)}|${Math.round(LEAD * 1000)},apad`, '-t', total];
   const codecs = ['-c:v', 'libx264', '-preset', segIntermedio ? 'veryfast' : 'medium', '-crf', segIntermedio ? '16' : '18', '-pix_fmt', 'yuv420p',
-                  '-c:a', 'aac', '-b:a', '160k', '-ar', '44100', '-ac', '2'];
+                  '-c:a', 'pcm_s16le', '-ar', '44100', '-ac', '2'];
   if (fs.existsSync(anim)) {
     // clip animado + congelar el último cuadro hasta cubrir la narración
     const durAnim = parseFloat(execFileSync('ffprobe', ['-v', 'quiet', '-show_entries', 'format=duration', '-of', 'csv=p=0', anim]).toString());
@@ -384,7 +387,7 @@ if (hayTransiciones(guion)) {
 } else {
   // +faststart: el índice (moov) al principio, para que el navegador empiece a
   // reproducir sin bajar antes la cola del archivo.
-  ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c', 'copy', '-movflags', '+faststart', sinSubs]);
+  ff(['-f', 'concat', '-safe', '0', '-i', rutaLista, '-c:v', 'copy', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', sinSubs]);
 }
 
 // ── 3b · Sonido: música con ducking, efectos y loudness ──────────────────

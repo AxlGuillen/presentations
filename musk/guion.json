@@ -1,0 +1,69 @@
+{
+  "voz": "9cf64f16ef2b48a5ac2975c00859cd84",
+  "velocidad": 1,
+  "temperatura": 0.4,
+  "subtitulos": "ninguno",
+  "recortar": true,
+  "aire": [0.08, 0.15],
+  "sfx": false,
+  "musica": { "pista": "mixkit-rest-now-584.mp3", "cama": -21, "fadeIn": 2.5, "fadeOut": 4 },
+  "loudness": { "objetivo": -16, "pico": -1 },
+  "slides": [
+    {
+      "slide": 1,
+      "texto": "Hoy no les propongo que copiemos a Musk. Les propongo que nos quedemos con una sola cosa: el orden en el que hace las cosas. Vamos a ver su método, de dónde salió, qué le ha funcionado y qué le ha costado, y al final, qué nos llevamos nosotros. Salimos de aquí con cuatro decisiones. Esto se llama: borrar antes de acelerar."
+    },
+    {
+      "slide": 2,
+      "texto": "¿Por qué nos importa cómo itera Musk? Porque su método tiene un orden muy claro, y ese orden se puede revisar con datos. Pero ojo: nosotros no tenemos su dinero ni su tolerancia al riesgo. Somos tres, sin capital externo, armando el segundo cerebro y el evaluador de ideas. Por eso toda la plática cabe en una frase: tomamos el orden, no la intensidad. Y una cosa más. En cada lámina van a ver una etiqueta. Gris es lo que dice el informe, con su fuente. Índigo con borde punteado es una propuesta nuestra, todavía sin decidir."
+    },
+    {
+      "slide": 3,
+      "texto": "Su algoritmo tiene cinco pasos, y el orden es lo que importa. Primero, cuestionar cada requisito, siempre con el nombre de la persona que lo pidió. Si dice que lo pide Legal, no se puede negociar. Si dice que lo pidió Ana, sí. Segundo, borrar. Y hay una regla: si al final no regresaste al menos el diez por ciento de lo que borraste, borraste poco. Tercero, simplificar solo lo que sobrevivió. Cuarto, acelerar. Y hasta el quinto, automatizar. Según Musk, optimizar algo que no debería existir es el error más común de un ingeniero listo, y acelerar un proceso equivocado es cavar tu tumba más rápido."
+    },
+    {
+      "slide": 4,
+      "texto": "Y esto no nació como teoría. Nació de un error. En dos mil dieciocho, la línea del Model tres se automatizó antes de entenderse. Tesla producía algo más de dos mil unidades por semana, contra una meta de cinco mil. Musk lo admitió: dijo que fue su error, que los humanos están subestimados, y retiró por completo una red de bandas transportadoras que no funcionaba. Su frase lo resume: automaticé, aceleré, simplifiqué y al final borré. Los cinco pasos, al revés. El algoritmo es una lección aprendida por las malas, y el paso que más tienta adelantar es el último: automatizar."
+    },
+    {
+      "slide": 5,
+      "texto": "Detrás del algoritmo hay una idea: razonar desde primeros principios. No preguntes cuánto cuesta algo hoy. Pregunta de qué está hecho y cuánto cuesta eso. El ejemplo clásico son las baterías. Por analogía, costaban unos seiscientos dólares por kilovatio hora. Sumando los materiales, según Musk en dos mil doce, salían unos ochenta. Ojo: son estimaciones suyas, no datos auditados. De ahí sale el llamado idiot index, algo así como el índice del idiota: el costo total de un componente entre el costo de su materia prima. Si el cociente es alto, hay desperdicio escondido. Los primeros principios dicen dónde está el límite, el índice señala qué piezas están lejos de él, y el algoritmo es el camino para cerrar esa distancia."
+    },
+    {
+      "slide": 6,
+      "texto": "SpaceX convirtió el fallo en un dato con precio. Falcon uno falló tres veces antes de llegar a órbita, en el cuarto vuelo, en septiembre de dos mil ocho. El tercer fallo se arregló con un retraso en la separación: un cambio de procedimiento, no un rediseño. Y el dinero de Musk alcanzaba para más o menos un intento más. Con Starship lo llevó al extremo: catorce vuelos en unos tres años y medio, nueve éxitos y cinco fallos según el conteo del informe, hasta la primera órbita en septiembre de dos mil veintiséis. Lo que lo permitió fue el material. El acero cuesta unos tres dólares el kilo, contra unos doscientos de la fibra de carbono, ya con el desperdicio. Unas sesenta y cinco veces menos. Del otro lado está la NASA, con cuatro mil cien millones de dólares por lanzamiento proyectados para su cohete SLS. Cuando cada unidad cuesta eso, fallar no es opción. La lección no es: falla mucho. Es: abarata el fallo hasta que puedas permitirte fallar seguido."
+    },
+    {
+      "slide": 7,
+      "texto": "Tesla, xAI y X muestran el método en versión buena, rápida, mala y cara. La buena: la Giga Press. La parte trasera del Model Y pasó de más de setenta piezas a una sola fundida, y según Musk eso eliminó unos trescientos robots. No aceleraron el ensamblaje: lo borraron. La rápida: Colossus, cien mil procesadores gráficos en ciento veintidós días, también según Musk. El costo apareció afuera, en un conflicto en Memphis por energía e impacto ambiental. La mala: la Cybertruck. Unas veinte mil vendidas en dos mil veinticinco, contra doscientas cincuenta mil proyectadas al año, y esa cifra incluye compras de SpaceX y xAI. Velocidad y audacia de diseño no reemplazan validar con clientes. Y la cara: X. La plantilla bajó casi setenta y cinco por ciento, de siete mil quinientas personas a unas dos mil. La plataforma siguió funcionando, pero hubo más caídas y, según Fidelity, su valor cayó entre setenta y dos y setenta y nueve por ciento. Es una marca contable, no un precio de mercado, y un exempleado dijo que Spaces ya era inestable antes. Aun así: en un negocio que vive de la confianza del cliente, borrar sin medir qué se rompe sale caro."
+    },
+    {
+      "slide": 8,
+      "texto": "Los costos están igual de documentados. Reuters contó al menos seiscientas lesiones en SpaceX desde dos mil catorce. En Starbase, con datos de dos mil veintidós, fueron cuatro punto ocho por cada cien trabajadores, seis veces el promedio de la industria espacial. En producto, Tesla llamó a revisión más de dos millones de vehículos por el piloto automático, y la Cybertruck acumuló ocho recalls en unos quince meses. Y está el llamado Elon time: en dos mil quince dijo que los autos autónomos llegaban en tres años. Pero lo que más nos toca es esto. SpaceX sobrevivió a dos mil ocho gracias a un contrato de la NASA por mil seiscientos millones de dólares, y Tesla, a un préstamo del Departamento de Energía por cuatrocientos sesenta y cinco millones. Fallar rápido funciona si alguien paga el siguiente intento. Y nosotros no tenemos ese alguien."
+    },
+    {
+      "slide": 9,
+      "texto": "Entonces, ¿qué nos llevamos y qué no? Esto ya es propuesta nuestra. Nos llevamos iterar rápido donde fallar es barato, reversible y solo nos cuesta a nosotros. Nos llevamos el orden: cuestionar, borrar, simplificar, acelerar y, al final, automatizar. Entrevistas y concierge antes que software. Borrar con registro, con la regla del diez por ciento. Y un tope de cuatro horas y dos semanas por experimento. No nos llevamos fallar en la operación de la pyme cliente: ahí el presupuesto de fallos es cero. Tampoco la intensidad como culto al sobreesfuerzo, ni las fechas al estilo Elon time, ni borrar sin medir, ni contar con que alguien más pague el siguiente intento. Es la diferencia entre probar un cohete en una zona de exclusión y probar con la gente en la calle."
+    },
+    {
+      "slide": 10,
+      "texto": "Así se vería el algoritmo en DRA. Uno: requisitos con nombre. Cada rubro del evaluador y cada función lleva quién lo pidió. Lo que no tenga nombre va a una lista de requisitos sin dueño. Dos: borrar con registro. Un ejemplo real de Tesla: de sesenta y cuatro a doce clics para comprar un coche en línea, quitando páginas legales que ninguna ley exigía, según Jon McNeill, expresidente de Tesla. Tres: concierge antes que software. Primero a mano, varias veces, con un cliente real. Cuatro: la entrevista es nuestro prototipo de acero, casi gratis y sin riesgo para nadie. Y cinco: un idiot index de mercado, el precio de la competencia entre nuestro costo directo. Esa es una adaptación nuestra: ninguna fuente lo aplica a software."
+    },
+    {
+      "slide": 11,
+      "texto": "El plan sigue el mismo orden, a escala de empresa. Esta semana, del veintiséis al treinta de octubre: el segundo cerebro en su versión mínima, el evaluador versión cero con cinco o seis rubros, y las preguntas para las entrevistas. En noviembre, aprender sin construir: de cinco a ocho entrevistas sin vender, y el cliente misterioso, con cotizaciones a diez o veinte negocios de Morelia. Pasamos de fase si tres dueños describen un dolor con número y aceptan un diagnóstico gratis. En diciembre, concierge: uno o dos diagnósticos y uno o dos pilotos de un reporte semanal, en paralelo a su operación. Y en enero, el primer cobro, y solo entonces automatizar lo que más horas costó. Las metas numéricas son heurísticas: las ajustamos con nuestros propios datos."
+    },
+    {
+      "slide": 12,
+      "texto": "Borrar también es una tarea. Proponemos sacar de la mesa, por ahora, lo siguiente. El SAT y la pasarela de pago, hasta que un cliente piloto los pida. Decidir el stack, que hoy es una propuesta y no una decisión. El sistema genérico como primer entregable, que cambiamos por un diagnóstico más un reporte semanal. Las ideas secundarias. Y recortar el evaluador a cinco o seis rubros. Si dentro de un mes no restauramos nada de lo que borramos, probablemente borramos poco. Esa es la regla del diez por ciento."
+    },
+    {
+      "slide": 13,
+      "texto": "Para que todo esto sea medible, cada experimento es una nota con hipótesis, métrica, resultado y decisión: perseverar, pivotar o descartar. Con topes: cuatro horas por socio y máximo dos semanas, más un tope mensual de gasto en servicios. Si más del setenta u ochenta por ciento de los experimentos sale bien, estamos probando cosas demasiado seguras. Aquí el fallo cuesta horas, no cohetes. Y llevamos una nota de borrados para medir la regla del diez por ciento. Ojo: para que exista el tipo experimento hay que aprobarlo en el vault, y eso lo votamos hoy."
+    },
+    {
+      "slide": 14,
+      "texto": "Cuatro decisiones para hoy. Uno: ¿adoptamos el formato de reunión de cuarenta y cinco minutos? Cinco de métricas, quince de experimentos, diez de qué borrar, diez de qué probar y cinco de tareas. Dos: ¿aprobamos el tipo experimento en el vault? Tres: ¿arrancamos las entrevistas en noviembre? Y cuatro: ¿quién es dueño de cada tarea de esta semana? Les dejo sugerencias, y lo de Rodrigo está por confirmar. Para cerrar, la idea de toda la plática: tomamos el orden de Musk, no su intensidad."
+    }
+  ]
+}
