@@ -1,0 +1,2476 @@
+{
+ "dia": "2026-10-23",
+ "zona": -6,
+ "liga": "worlds",
+ "fuentes": [
+  "feed.lolesports.com",
+  "esports-api.lolesports.com",
+  "lol.fandom.com (Cargo)"
+ ],
+ "juegos": [
+  {
+   "partido": "115660540726095005",
+   "juego": "115660540726095006",
+   "numero": 1,
+   "hora": "2026-10-23T17:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "GEN",
+   "duracionFeed": 1885,
+   "duracion": 1561,
+   "equipos": [
+    {
+     "codigo": "IG",
+     "esportsId": "99566404848691211",
+     "lado": "azul",
+     "oro": 45758,
+     "kills": 10,
+     "torres": 2,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [],
+     "dano": 59835,
+     "jugadores": [
+      {
+       "nombre": "TheShy",
+       "rol": "top",
+       "campeon": "Rumble",
+       "k": 1,
+       "d": 5,
+       "a": 6,
+       "oro": 8044,
+       "cs": 192,
+       "dano": 20966,
+       "danoPct": 0.3504,
+       "kp": 0.7
+      },
+      {
+       "nombre": "Wei",
+       "rol": "jungla",
+       "campeon": "JarvanIV",
+       "k": 0,
+       "d": 3,
+       "a": 8,
+       "oro": 9067,
+       "cs": 175,
+       "dano": 6104,
+       "danoPct": 0.102,
+       "kp": 0.8
+      },
+      {
+       "nombre": "Rookie",
+       "rol": "medio",
+       "campeon": "Aurora",
+       "k": 4,
+       "d": 5,
+       "a": 5,
+       "oro": 10082,
+       "cs": 220,
+       "dano": 18115,
+       "danoPct": 0.3027,
+       "kp": 0.9
+      },
+      {
+       "nombre": "JiaQi",
+       "rol": "tirador",
+       "campeon": "Jhin",
+       "k": 5,
+       "d": 2,
+       "a": 4,
+       "oro": 12359,
+       "cs": 253,
+       "dano": 11842,
+       "danoPct": 0.1979,
+       "kp": 0.9
+      },
+      {
+       "nombre": "Meiko",
+       "rol": "soporte",
+       "campeon": "Alistar",
+       "k": 0,
+       "d": 7,
+       "a": 8,
+       "oro": 6151,
+       "cs": 29,
+       "dano": 2808,
+       "danoPct": 0.0469,
+       "kp": 0.8
+      }
+     ],
+     "gana": false
+    },
+    {
+     "codigo": "GEN",
+     "esportsId": "100205573495116443",
+     "lado": "rojo",
+     "oro": 59149,
+     "kills": 22,
+     "torres": 9,
+     "inhibidores": 1,
+     "barones": 1,
+     "dragones": [
+      "infernal",
+      "ocean",
+      "cloud",
+      "cloud"
+     ],
+     "dano": 71686,
+     "jugadores": [
+      {
+       "nombre": "Kiin",
+       "rol": "top",
+       "campeon": "Ornn",
+       "k": 1,
+       "d": 3,
+       "a": 11,
+       "oro": 9526,
+       "cs": 210,
+       "dano": 9123,
+       "danoPct": 0.1273,
+       "kp": 0.5455
+      },
+      {
+       "nombre": "Canyon",
+       "rol": "jungla",
+       "campeon": "Qiyana",
+       "k": 8,
+       "d": 1,
+       "a": 10,
+       "oro": 14755,
+       "cs": 248,
+       "dano": 19278,
+       "danoPct": 0.2689,
+       "kp": 0.8182
+      },
+      {
+       "nombre": "Chovy",
+       "rol": "medio",
+       "campeon": "Akali",
+       "k": 8,
+       "d": 1,
+       "a": 9,
+       "oro": 14279,
+       "cs": 267,
+       "dano": 20877,
+       "danoPct": 0.2912,
+       "kp": 0.7727
+      },
+      {
+       "nombre": "Ruler",
+       "rol": "tirador",
+       "campeon": "Corki",
+       "k": 5,
+       "d": 2,
+       "a": 12,
+       "oro": 13276,
+       "cs": 244,
+       "dano": 18373,
+       "danoPct": 0.2563,
+       "kp": 0.7727
+      },
+      {
+       "nombre": "Duro",
+       "rol": "soporte",
+       "campeon": "Nautilus",
+       "k": 0,
+       "d": 3,
+       "a": 16,
+       "oro": 6954,
+       "cs": 29,
+       "dano": 4035,
+       "danoPct": 0.0563,
+       "kp": 0.7273
+      }
+     ],
+     "gana": true
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 48
+    },
+    {
+     "min": 2,
+     "dif": 82
+    },
+    {
+     "min": 3,
+     "dif": 81
+    },
+    {
+     "min": 4,
+     "dif": 215
+    },
+    {
+     "min": 5,
+     "dif": 172
+    },
+    {
+     "min": 6,
+     "dif": 326
+    },
+    {
+     "min": 7,
+     "dif": 421
+    },
+    {
+     "min": 8,
+     "dif": 310
+    },
+    {
+     "min": 9,
+     "dif": 2076
+    },
+    {
+     "min": 10,
+     "dif": 2161
+    },
+    {
+     "min": 11,
+     "dif": 1135
+    },
+    {
+     "min": 12,
+     "dif": 1879
+    },
+    {
+     "min": 13,
+     "dif": 1428
+    },
+    {
+     "min": 14,
+     "dif": 1482
+    },
+    {
+     "min": 15,
+     "dif": 1196
+    },
+    {
+     "min": 16,
+     "dif": 304
+    },
+    {
+     "min": 17,
+     "dif": -467
+    },
+    {
+     "min": 18,
+     "dif": -1444
+    },
+    {
+     "min": 19,
+     "dif": -1586
+    },
+    {
+     "min": 20,
+     "dif": -3097
+    },
+    {
+     "min": 21,
+     "dif": -4201
+    },
+    {
+     "min": 22,
+     "dif": -4408
+    },
+    {
+     "min": 23,
+     "dif": -6977
+    },
+    {
+     "min": 24,
+     "dif": -7937
+    },
+    {
+     "min": 25,
+     "dif": -10962
+    },
+    {
+     "min": 26,
+     "dif": -13441
+    },
+    {
+     "min": 26.02,
+     "dif": -13441
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095013",
+   "juego": "115660540726095014",
+   "numero": 1,
+   "hora": "2026-10-23T18:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "HLE",
+   "duracionFeed": 1435,
+   "duracion": 1431,
+   "equipos": [
+    {
+     "codigo": "TES",
+     "esportsId": "99566404854685458",
+     "lado": "azul",
+     "oro": 37745,
+     "kills": 7,
+     "torres": 0,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [
+      "mountain"
+     ],
+     "dano": 58490,
+     "jugadores": [
+      {
+       "nombre": "369",
+       "rol": "top",
+       "campeon": "KSante",
+       "k": 1,
+       "d": 6,
+       "a": 1,
+       "oro": 7031,
+       "cs": 166,
+       "dano": 8638,
+       "danoPct": 0.1477,
+       "kp": 0.2857
+      },
+      {
+       "nombre": "Tian",
+       "rol": "jungla",
+       "campeon": "LeeSin",
+       "k": 2,
+       "d": 6,
+       "a": 3,
+       "oro": 8064,
+       "cs": 163,
+       "dano": 10555,
+       "danoPct": 0.1805,
+       "kp": 0.7143
+      },
+      {
+       "nombre": "Creme",
+       "rol": "medio",
+       "campeon": "Orianna",
+       "k": 2,
+       "d": 4,
+       "a": 5,
+       "oro": 8852,
+       "cs": 192,
+       "dano": 22128,
+       "danoPct": 0.3783,
+       "kp": 1
+      },
+      {
+       "nombre": "JackeyLove",
+       "rol": "tirador",
+       "campeon": "Ezreal",
+       "k": 2,
+       "d": 5,
+       "a": 2,
+       "oro": 8310,
+       "cs": 188,
+       "dano": 13010,
+       "danoPct": 0.2224,
+       "kp": 0.5714
+      },
+      {
+       "nombre": "Zhuo",
+       "rol": "soporte",
+       "campeon": "Alistar",
+       "k": 0,
+       "d": 3,
+       "a": 4,
+       "oro": 5477,
+       "cs": 37,
+       "dano": 4159,
+       "danoPct": 0.0711,
+       "kp": 0.5714
+      }
+     ],
+     "gana": false
+    },
+    {
+     "codigo": "HLE",
+     "esportsId": "100205573496804586",
+     "lado": "rojo",
+     "oro": 53446,
+     "kills": 24,
+     "torres": 9,
+     "inhibidores": 2,
+     "barones": 1,
+     "dragones": [
+      "hextech",
+      "ocean"
+     ],
+     "dano": 82936,
+     "jugadores": [
+      {
+       "nombre": "Zeus",
+       "rol": "top",
+       "campeon": "Ambessa",
+       "k": 1,
+       "d": 0,
+       "a": 16,
+       "oro": 9282,
+       "cs": 199,
+       "dano": 19845,
+       "danoPct": 0.2393,
+       "kp": 0.7083
+      },
+      {
+       "nombre": "Kanavi",
+       "rol": "jungla",
+       "campeon": "Nocturne",
+       "k": 2,
+       "d": 4,
+       "a": 13,
+       "oro": 10311,
+       "cs": 184,
+       "dano": 9564,
+       "danoPct": 0.1153,
+       "kp": 0.625
+      },
+      {
+       "nombre": "Zeka",
+       "rol": "medio",
+       "campeon": "Locke",
+       "k": 17,
+       "d": 1,
+       "a": 5,
+       "oro": 13241,
+       "cs": 184,
+       "dano": 28111,
+       "danoPct": 0.3389,
+       "kp": 0.9167
+      },
+      {
+       "nombre": "Gumayusi",
+       "rol": "tirador",
+       "campeon": "Jhin",
+       "k": 4,
+       "d": 0,
+       "a": 13,
+       "oro": 13815,
+       "cs": 249,
+       "dano": 19886,
+       "danoPct": 0.2398,
+       "kp": 0.7083
+      },
+      {
+       "nombre": "Delight",
+       "rol": "soporte",
+       "campeon": "Shen",
+       "k": 0,
+       "d": 2,
+       "a": 17,
+       "oro": 6785,
+       "cs": 39,
+       "dano": 5530,
+       "danoPct": 0.0667,
+       "kp": 0.7083
+      }
+     ],
+     "gana": true
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 5
+    },
+    {
+     "min": 2,
+     "dif": 88
+    },
+    {
+     "min": 3,
+     "dif": 66
+    },
+    {
+     "min": 4,
+     "dif": -85
+    },
+    {
+     "min": 5,
+     "dif": -8
+    },
+    {
+     "min": 6,
+     "dif": -152
+    },
+    {
+     "min": 7,
+     "dif": -244
+    },
+    {
+     "min": 8,
+     "dif": -436
+    },
+    {
+     "min": 9,
+     "dif": -531
+    },
+    {
+     "min": 10,
+     "dif": -1289
+    },
+    {
+     "min": 11,
+     "dif": -1410
+    },
+    {
+     "min": 12,
+     "dif": -1956
+    },
+    {
+     "min": 13,
+     "dif": -1677
+    },
+    {
+     "min": 14,
+     "dif": -219
+    },
+    {
+     "min": 15,
+     "dif": -883
+    },
+    {
+     "min": 16,
+     "dif": -2893
+    },
+    {
+     "min": 17,
+     "dif": -3028
+    },
+    {
+     "min": 18,
+     "dif": -6828
+    },
+    {
+     "min": 19,
+     "dif": -7953
+    },
+    {
+     "min": 20,
+     "dif": -8867
+    },
+    {
+     "min": 21,
+     "dif": -9202
+    },
+    {
+     "min": 22,
+     "dif": -11215
+    },
+    {
+     "min": 23,
+     "dif": -12996
+    },
+    {
+     "min": 23.85,
+     "dif": -15702
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095019",
+   "juego": "115660540726095020",
+   "numero": 1,
+   "hora": "2026-10-23T19:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "MKOI",
+   "duracionFeed": 2324,
+   "duracion": 2321,
+   "equipos": [
+    {
+     "codigo": "MKOI",
+     "esportsId": "103461966965149786",
+     "lado": "azul",
+     "oro": 76152,
+     "kills": 18,
+     "torres": 11,
+     "inhibidores": 2,
+     "barones": 2,
+     "dragones": [
+      "ocean",
+      "infernal",
+      "mountain",
+      "mountain"
+     ],
+     "dano": 114015,
+     "jugadores": [
+      {
+       "nombre": "Myrwn",
+       "rol": "top",
+       "campeon": "Renekton",
+       "k": 2,
+       "d": 5,
+       "a": 7,
+       "oro": 13718,
+       "cs": 286,
+       "dano": 21662,
+       "danoPct": 0.19,
+       "kp": 0.5
+      },
+      {
+       "nombre": "Elyoya",
+       "rol": "jungla",
+       "campeon": "JarvanIV",
+       "k": 2,
+       "d": 3,
+       "a": 14,
+       "oro": 15577,
+       "cs": 290,
+       "dano": 19114,
+       "danoPct": 0.1676,
+       "kp": 0.8889
+      },
+      {
+       "nombre": "Jojopyun",
+       "rol": "medio",
+       "campeon": "Sylas",
+       "k": 9,
+       "d": 3,
+       "a": 4,
+       "oro": 16291,
+       "cs": 292,
+       "dano": 21385,
+       "danoPct": 0.1876,
+       "kp": 0.7222
+      },
+      {
+       "nombre": "Supa",
+       "rol": "tirador",
+       "campeon": "Ezreal",
+       "k": 4,
+       "d": 2,
+       "a": 8,
+       "oro": 19841,
+       "cs": 393,
+       "dano": 42717,
+       "danoPct": 0.3747,
+       "kp": 0.6667
+      },
+      {
+       "nombre": "Alvaro",
+       "rol": "soporte",
+       "campeon": "Karma",
+       "k": 1,
+       "d": 1,
+       "a": 17,
+       "oro": 10662,
+       "cs": 41,
+       "dano": 9137,
+       "danoPct": 0.0801,
+       "kp": 1
+      }
+     ],
+     "gana": true
+    },
+    {
+     "codigo": "BLG",
+     "esportsId": "99566404853854212",
+     "lado": "rojo",
+     "oro": 68652,
+     "kills": 14,
+     "torres": 3,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [
+      "elder"
+     ],
+     "dano": 95065,
+     "jugadores": [
+      {
+       "nombre": "Bin",
+       "rol": "top",
+       "campeon": "Ambessa",
+       "k": 2,
+       "d": 1,
+       "a": 6,
+       "oro": 13554,
+       "cs": 317,
+       "dano": 22406,
+       "danoPct": 0.2357,
+       "kp": 0.5714
+      },
+      {
+       "nombre": "Xun",
+       "rol": "jungla",
+       "campeon": "Pantheon",
+       "k": 3,
+       "d": 3,
+       "a": 7,
+       "oro": 13857,
+       "cs": 233,
+       "dano": 14750,
+       "danoPct": 0.1552,
+       "kp": 0.7143
+      },
+      {
+       "nombre": "Knight",
+       "rol": "medio",
+       "campeon": "Akali",
+       "k": 6,
+       "d": 4,
+       "a": 6,
+       "oro": 15727,
+       "cs": 308,
+       "dano": 29337,
+       "danoPct": 0.3086,
+       "kp": 0.8571
+      },
+      {
+       "nombre": "Viper",
+       "rol": "tirador",
+       "campeon": "Ashe",
+       "k": 3,
+       "d": 5,
+       "a": 8,
+       "oro": 16212,
+       "cs": 353,
+       "dano": 21618,
+       "danoPct": 0.2274,
+       "kp": 0.7857
+      },
+      {
+       "nombre": "ON",
+       "rol": "soporte",
+       "campeon": "Seraphine",
+       "k": 0,
+       "d": 5,
+       "a": 11,
+       "oro": 9270,
+       "cs": 37,
+       "dano": 6954,
+       "danoPct": 0.0732,
+       "kp": 0.7857
+      }
+     ],
+     "gana": false
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": -5
+    },
+    {
+     "min": 2,
+     "dif": 644
+    },
+    {
+     "min": 3,
+     "dif": 894
+    },
+    {
+     "min": 4,
+     "dif": 966
+    },
+    {
+     "min": 5,
+     "dif": 1071
+    },
+    {
+     "min": 6,
+     "dif": 1204
+    },
+    {
+     "min": 7,
+     "dif": 1967
+    },
+    {
+     "min": 8,
+     "dif": 1831
+    },
+    {
+     "min": 9,
+     "dif": 1404
+    },
+    {
+     "min": 10,
+     "dif": 1742
+    },
+    {
+     "min": 11,
+     "dif": 1729
+    },
+    {
+     "min": 12,
+     "dif": 1283
+    },
+    {
+     "min": 13,
+     "dif": 1685
+    },
+    {
+     "min": 14,
+     "dif": 1236
+    },
+    {
+     "min": 15,
+     "dif": 1146
+    },
+    {
+     "min": 16,
+     "dif": 1443
+    },
+    {
+     "min": 17,
+     "dif": 2403
+    },
+    {
+     "min": 18,
+     "dif": 2923
+    },
+    {
+     "min": 19,
+     "dif": 2917
+    },
+    {
+     "min": 20,
+     "dif": 2807
+    },
+    {
+     "min": 21,
+     "dif": 2857
+    },
+    {
+     "min": 22,
+     "dif": 2934
+    },
+    {
+     "min": 23,
+     "dif": 1273
+    },
+    {
+     "min": 24,
+     "dif": 1024
+    },
+    {
+     "min": 25,
+     "dif": 1744
+    },
+    {
+     "min": 26,
+     "dif": 1667
+    },
+    {
+     "min": 27,
+     "dif": 2980
+    },
+    {
+     "min": 28,
+     "dif": 4015
+    },
+    {
+     "min": 29,
+     "dif": 6050
+    },
+    {
+     "min": 30,
+     "dif": 3539
+    },
+    {
+     "min": 31,
+     "dif": 3548
+    },
+    {
+     "min": 32,
+     "dif": 2968
+    },
+    {
+     "min": 33,
+     "dif": 2231
+    },
+    {
+     "min": 34,
+     "dif": 2081
+    },
+    {
+     "min": 35,
+     "dif": 3574
+    },
+    {
+     "min": 36,
+     "dif": 3719
+    },
+    {
+     "min": 37,
+     "dif": 4010
+    },
+    {
+     "min": 38,
+     "dif": 4559
+    },
+    {
+     "min": 38.68,
+     "dif": 7549
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095009",
+   "juego": "115660540726095010",
+   "numero": 1,
+   "hora": "2026-10-23T20:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "KC",
+   "duracionFeed": 2048,
+   "duracion": 1996,
+   "equipos": [
+    {
+     "codigo": "KC",
+     "esportsId": "111692118851466302",
+     "lado": "azul",
+     "oro": 64703,
+     "kills": 12,
+     "torres": 8,
+     "inhibidores": 1,
+     "barones": 2,
+     "dragones": [
+      "mountain",
+      "infernal",
+      "infernal"
+     ],
+     "dano": 56151,
+     "jugadores": [
+      {
+       "nombre": "Canna",
+       "rol": "top",
+       "campeon": "Jax",
+       "k": 5,
+       "d": 2,
+       "a": 1,
+       "oro": 12972,
+       "cs": 283,
+       "dano": 13606,
+       "danoPct": 0.2441,
+       "kp": 0.5
+      },
+      {
+       "nombre": "Yike",
+       "rol": "jungla",
+       "campeon": "JarvanIV",
+       "k": 3,
+       "d": 1,
+       "a": 9,
+       "oro": 13399,
+       "cs": 265,
+       "dano": 10920,
+       "danoPct": 0.1959,
+       "kp": 1
+      },
+      {
+       "nombre": "kyeahoo",
+       "rol": "medio",
+       "campeon": "Orianna",
+       "k": 1,
+       "d": 1,
+       "a": 9,
+       "oro": 12626,
+       "cs": 291,
+       "dano": 13590,
+       "danoPct": 0.2438,
+       "kp": 0.8333
+      },
+      {
+       "nombre": "Caliste",
+       "rol": "tirador",
+       "campeon": "Kalista",
+       "k": 3,
+       "d": 0,
+       "a": 6,
+       "oro": 16434,
+       "cs": 364,
+       "dano": 13361,
+       "danoPct": 0.2323,
+       "kp": 0.75
+      },
+      {
+       "nombre": "Busio",
+       "rol": "soporte",
+       "campeon": "Renata",
+       "k": 0,
+       "d": 0,
+       "a": 11,
+       "oro": 8701,
+       "cs": 36,
+       "dano": 4674,
+       "danoPct": 0.0839,
+       "kp": 0.9167
+      }
+     ],
+     "gana": true
+    },
+    {
+     "codigo": "AL",
+     "esportsId": "99566404856367466",
+     "lado": "rojo",
+     "oro": 56676,
+     "kills": 4,
+     "torres": 3,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [
+      "ocean",
+      "infernal"
+     ],
+     "dano": 48501,
+     "jugadores": [
+      {
+       "nombre": "Breathe",
+       "rol": "top",
+       "campeon": "Olaf",
+       "k": 1,
+       "d": 2,
+       "a": 1,
+       "oro": 11383,
+       "cs": 279,
+       "dano": 9862,
+       "danoPct": 0.2058,
+       "kp": 0.5
+      },
+      {
+       "nombre": "Tarzan",
+       "rol": "jungla",
+       "campeon": "Nocturne",
+       "k": 0,
+       "d": 2,
+       "a": 3,
+       "oro": 10810,
+       "cs": 223,
+       "dano": 6776,
+       "danoPct": 0.1414,
+       "kp": 0.75
+      },
+      {
+       "nombre": "Shanks",
+       "rol": "medio",
+       "campeon": "Akali",
+       "k": 1,
+       "d": 2,
+       "a": 2,
+       "oro": 11851,
+       "cs": 269,
+       "dano": 14613,
+       "danoPct": 0.2927,
+       "kp": 0.75
+      },
+      {
+       "nombre": "Hope",
+       "rol": "tirador",
+       "campeon": "MissFortune",
+       "k": 2,
+       "d": 3,
+       "a": 1,
+       "oro": 14878,
+       "cs": 307,
+       "dano": 11540,
+       "danoPct": 0.2408,
+       "kp": 0.75
+      },
+      {
+       "nombre": "Kael",
+       "rol": "soporte",
+       "campeon": "Neeko",
+       "k": 0,
+       "d": 3,
+       "a": 3,
+       "oro": 7682,
+       "cs": 41,
+       "dano": 5710,
+       "danoPct": 0.1192,
+       "kp": 0.75
+      }
+     ],
+     "gana": false
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 307
+    },
+    {
+     "min": 2,
+     "dif": 106
+    },
+    {
+     "min": 3,
+     "dif": 432
+    },
+    {
+     "min": 4,
+     "dif": 143
+    },
+    {
+     "min": 5,
+     "dif": 445
+    },
+    {
+     "min": 6,
+     "dif": 226
+    },
+    {
+     "min": 7,
+     "dif": 353
+    },
+    {
+     "min": 8,
+     "dif": 246
+    },
+    {
+     "min": 9,
+     "dif": -795
+    },
+    {
+     "min": 10,
+     "dif": 549
+    },
+    {
+     "min": 11,
+     "dif": 645
+    },
+    {
+     "min": 12,
+     "dif": 478
+    },
+    {
+     "min": 13,
+     "dif": 31
+    },
+    {
+     "min": 14,
+     "dif": -594
+    },
+    {
+     "min": 15,
+     "dif": 38
+    },
+    {
+     "min": 16,
+     "dif": 192
+    },
+    {
+     "min": 17,
+     "dif": 226
+    },
+    {
+     "min": 18,
+     "dif": 10
+    },
+    {
+     "min": 19,
+     "dif": 128
+    },
+    {
+     "min": 20,
+     "dif": 37
+    },
+    {
+     "min": 21,
+     "dif": -107
+    },
+    {
+     "min": 22,
+     "dif": -117
+    },
+    {
+     "min": 23,
+     "dif": -578
+    },
+    {
+     "min": 24,
+     "dif": 142
+    },
+    {
+     "min": 25,
+     "dif": 3183
+    },
+    {
+     "min": 26,
+     "dif": 3396
+    },
+    {
+     "min": 27,
+     "dif": 3874
+    },
+    {
+     "min": 28,
+     "dif": 4166
+    },
+    {
+     "min": 29,
+     "dif": 4354
+    },
+    {
+     "min": 30,
+     "dif": 4749
+    },
+    {
+     "min": 31,
+     "dif": 5058
+    },
+    {
+     "min": 32,
+     "dif": 4948
+    },
+    {
+     "min": 33,
+     "dif": 7401
+    },
+    {
+     "min": 33.27,
+     "dif": 8078
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095011",
+   "juego": "115660540726095012",
+   "numero": 1,
+   "hora": "2026-10-23T21:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "DK",
+   "duracionFeed": 1959,
+   "duracion": 1958,
+   "equipos": [
+    {
+     "codigo": "DK",
+     "esportsId": "100725845018863243",
+     "lado": "azul",
+     "oro": 60849,
+     "kills": 8,
+     "torres": 8,
+     "inhibidores": 1,
+     "barones": 0,
+     "dragones": [
+      "chemtech",
+      "hextech"
+     ],
+     "dano": 82888,
+     "jugadores": [
+      {
+       "nombre": "Siwoo",
+       "rol": "top",
+       "campeon": "Olaf",
+       "k": 1,
+       "d": 2,
+       "a": 3,
+       "oro": 12629,
+       "cs": 324,
+       "dano": 21441,
+       "danoPct": 0.2485,
+       "kp": 0.5714
+      },
+      {
+       "nombre": "Lucid",
+       "rol": "jungla",
+       "campeon": "Vi",
+       "k": 2,
+       "d": 3,
+       "a": 4,
+       "oro": 12330,
+       "cs": 254,
+       "dano": 8961,
+       "danoPct": 0.1141,
+       "kp": 0.8571
+      },
+      {
+       "nombre": "ShowMaker",
+       "rol": "medio",
+       "campeon": "Syndra",
+       "k": 2,
+       "d": 1,
+       "a": 5,
+       "oro": 12811,
+       "cs": 310,
+       "dano": 22059,
+       "danoPct": 0.2502,
+       "kp": 1
+      },
+      {
+       "nombre": "Smash",
+       "rol": "tirador",
+       "campeon": "Ziggs",
+       "k": 0,
+       "d": 1,
+       "a": 6,
+       "oro": 13855,
+       "cs": 355,
+       "dano": 26845,
+       "danoPct": 0.3417,
+       "kp": 0.8571
+      },
+      {
+       "nombre": "Career",
+       "rol": "soporte",
+       "campeon": "Poppy",
+       "k": 2,
+       "d": 1,
+       "a": 3,
+       "oro": 7943,
+       "cs": 29,
+       "dano": 3582,
+       "danoPct": 0.0455,
+       "kp": 0.7143
+      }
+     ],
+     "gana": true
+    },
+    {
+     "codigo": "G2",
+     "esportsId": "98767991926151025",
+     "lado": "rojo",
+     "oro": 57485,
+     "kills": 8,
+     "torres": 3,
+     "inhibidores": 0,
+     "barones": 1,
+     "dragones": [
+      "ocean",
+      "ocean",
+      "ocean"
+     ],
+     "dano": 66015,
+     "jugadores": [
+      {
+       "nombre": "BrokenBlade",
+       "rol": "top",
+       "campeon": "KSante",
+       "k": 1,
+       "d": 1,
+       "a": 1,
+       "oro": 10968,
+       "cs": 269,
+       "dano": 9322,
+       "danoPct": 0.1493,
+       "kp": 0.25
+      },
+      {
+       "nombre": "SkewMond",
+       "rol": "jungla",
+       "campeon": "JarvanIV",
+       "k": 3,
+       "d": 2,
+       "a": 5,
+       "oro": 12499,
+       "cs": 229,
+       "dano": 10226,
+       "danoPct": 0.1638,
+       "kp": 1
+      },
+      {
+       "nombre": "Caps",
+       "rol": "medio",
+       "campeon": "Viktor",
+       "k": 1,
+       "d": 2,
+       "a": 4,
+       "oro": 11152,
+       "cs": 287,
+       "dano": 15449,
+       "danoPct": 0.2475,
+       "kp": 0.625
+      },
+      {
+       "nombre": "Hans Sama",
+       "rol": "tirador",
+       "campeon": "Kalista",
+       "k": 3,
+       "d": 1,
+       "a": 2,
+       "oro": 14519,
+       "cs": 327,
+       "dano": 23665,
+       "danoPct": 0.3285,
+       "kp": 0.625
+      },
+      {
+       "nombre": "Labrov",
+       "rol": "soporte",
+       "campeon": "Renata",
+       "k": 0,
+       "d": 1,
+       "a": 7,
+       "oro": 8176,
+       "cs": 28,
+       "dano": 7353,
+       "danoPct": 0.1109,
+       "kp": 0.875
+      }
+     ],
+     "gana": false
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 0
+    },
+    {
+     "min": 2,
+     "dif": -88
+    },
+    {
+     "min": 3,
+     "dif": -45
+    },
+    {
+     "min": 4,
+     "dif": 98
+    },
+    {
+     "min": 5,
+     "dif": 444
+    },
+    {
+     "min": 6,
+     "dif": -231
+    },
+    {
+     "min": 7,
+     "dif": -1165
+    },
+    {
+     "min": 8,
+     "dif": -906
+    },
+    {
+     "min": 9,
+     "dif": -750
+    },
+    {
+     "min": 10,
+     "dif": -934
+    },
+    {
+     "min": 11,
+     "dif": -954
+    },
+    {
+     "min": 12,
+     "dif": -1279
+    },
+    {
+     "min": 13,
+     "dif": -1318
+    },
+    {
+     "min": 14,
+     "dif": -979
+    },
+    {
+     "min": 15,
+     "dif": -2258
+    },
+    {
+     "min": 16,
+     "dif": -2088
+    },
+    {
+     "min": 17,
+     "dif": -2198
+    },
+    {
+     "min": 18,
+     "dif": -2765
+    },
+    {
+     "min": 19,
+     "dif": -2838
+    },
+    {
+     "min": 20,
+     "dif": -3211
+    },
+    {
+     "min": 21,
+     "dif": -3878
+    },
+    {
+     "min": 22,
+     "dif": -3899
+    },
+    {
+     "min": 23,
+     "dif": -3660
+    },
+    {
+     "min": 24,
+     "dif": -3554
+    },
+    {
+     "min": 25,
+     "dif": -2815
+    },
+    {
+     "min": 26,
+     "dif": -3130
+    },
+    {
+     "min": 27,
+     "dif": -2354
+    },
+    {
+     "min": 28,
+     "dif": -1608
+    },
+    {
+     "min": 29,
+     "dif": -1756
+    },
+    {
+     "min": 30,
+     "dif": -1782
+    },
+    {
+     "min": 31,
+     "dif": -1645
+    },
+    {
+     "min": 32,
+     "dif": 150
+    },
+    {
+     "min": 32.63,
+     "dif": 3414
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095007",
+   "juego": "115660540726095008",
+   "numero": 1,
+   "hora": "2026-10-23T22:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "CFO",
+   "duracionFeed": 2252,
+   "duracion": 2252,
+   "equipos": [
+    {
+     "codigo": "TLAW",
+     "esportsId": "98926509885559666",
+     "lado": "azul",
+     "oro": 65345,
+     "kills": 11,
+     "torres": 3,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [
+      "mountain"
+     ],
+     "dano": 75590,
+     "jugadores": [
+      {
+       "nombre": "Morgan",
+       "rol": "top",
+       "campeon": "Galio",
+       "k": 0,
+       "d": 2,
+       "a": 7,
+       "oro": 12175,
+       "cs": 309,
+       "dano": 11559,
+       "danoPct": 0.1545,
+       "kp": 0.6364
+      },
+      {
+       "nombre": "Josedeodo",
+       "rol": "jungla",
+       "campeon": "LeeSin",
+       "k": 3,
+       "d": 4,
+       "a": 7,
+       "oro": 13502,
+       "cs": 254,
+       "dano": 12457,
+       "danoPct": 0.1665,
+       "kp": 0.9091
+      },
+      {
+       "nombre": "Quid",
+       "rol": "medio",
+       "campeon": "Syndra",
+       "k": 3,
+       "d": 3,
+       "a": 6,
+       "oro": 13605,
+       "cs": 283,
+       "dano": 22520,
+       "danoPct": 0.3009,
+       "kp": 0.8182
+      },
+      {
+       "nombre": "Yeon",
+       "rol": "tirador",
+       "campeon": "Jhin",
+       "k": 5,
+       "d": 0,
+       "a": 4,
+       "oro": 16828,
+       "cs": 384,
+       "dano": 23824,
+       "danoPct": 0.3082,
+       "kp": 0.8182
+      },
+      {
+       "nombre": "CoreJJ",
+       "rol": "soporte",
+       "campeon": "Rakan",
+       "k": 0,
+       "d": 3,
+       "a": 9,
+       "oro": 9183,
+       "cs": 42,
+       "dano": 5230,
+       "danoPct": 0.0699,
+       "kp": 0.8182
+      }
+     ],
+     "gana": false
+    },
+    {
+     "codigo": "CFO",
+     "esportsId": "107700199633958891",
+     "lado": "rojo",
+     "oro": 74120,
+     "kills": 12,
+     "torres": 8,
+     "inhibidores": 1,
+     "barones": 1,
+     "dragones": [
+      "hextech",
+      "ocean",
+      "mountain",
+      "mountain",
+      "elder"
+     ],
+     "dano": 79985,
+     "jugadores": [
+      {
+       "nombre": "Rest",
+       "rol": "top",
+       "campeon": "Rumble",
+       "k": 4,
+       "d": 3,
+       "a": 3,
+       "oro": 14791,
+       "cs": 313,
+       "dano": 15323,
+       "danoPct": 0.199,
+       "kp": 0.5833
+      },
+      {
+       "nombre": "Shad0w",
+       "rol": "jungla",
+       "campeon": "Qiyana",
+       "k": 5,
+       "d": 2,
+       "a": 5,
+       "oro": 17205,
+       "cs": 310,
+       "dano": 20782,
+       "danoPct": 0.2471,
+       "kp": 0.8333
+      },
+      {
+       "nombre": "POUT",
+       "rol": "medio",
+       "campeon": "Viktor",
+       "k": 1,
+       "d": 1,
+       "a": 6,
+       "oro": 13537,
+       "cs": 332,
+       "dano": 15903,
+       "danoPct": 0.2066,
+       "kp": 0.5833
+      },
+      {
+       "nombre": "Doggo",
+       "rol": "tirador",
+       "campeon": "Aphelios",
+       "k": 2,
+       "d": 1,
+       "a": 7,
+       "oro": 18567,
+       "cs": 385,
+       "dano": 25216,
+       "danoPct": 0.3115,
+       "kp": 0.75
+      },
+      {
+       "nombre": "Kino",
+       "rol": "soporte",
+       "campeon": "Alistar",
+       "k": 0,
+       "d": 4,
+       "a": 12,
+       "oro": 9968,
+       "cs": 33,
+       "dano": 2761,
+       "danoPct": 0.0359,
+       "kp": 1
+      }
+     ],
+     "gana": true
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": -15
+    },
+    {
+     "min": 2,
+     "dif": -201
+    },
+    {
+     "min": 3,
+     "dif": -360
+    },
+    {
+     "min": 4,
+     "dif": -315
+    },
+    {
+     "min": 5,
+     "dif": -471
+    },
+    {
+     "min": 6,
+     "dif": -503
+    },
+    {
+     "min": 7,
+     "dif": -461
+    },
+    {
+     "min": 8,
+     "dif": -456
+    },
+    {
+     "min": 9,
+     "dif": -566
+    },
+    {
+     "min": 10,
+     "dif": -1643
+    },
+    {
+     "min": 11,
+     "dif": -1496
+    },
+    {
+     "min": 12,
+     "dif": -1376
+    },
+    {
+     "min": 13,
+     "dif": -845
+    },
+    {
+     "min": 14,
+     "dif": 106
+    },
+    {
+     "min": 15,
+     "dif": 205
+    },
+    {
+     "min": 16,
+     "dif": 1388
+    },
+    {
+     "min": 17,
+     "dif": 1118
+    },
+    {
+     "min": 18,
+     "dif": 1112
+    },
+    {
+     "min": 19,
+     "dif": 1144
+    },
+    {
+     "min": 20,
+     "dif": 1481
+    },
+    {
+     "min": 21,
+     "dif": 371
+    },
+    {
+     "min": 22,
+     "dif": 414
+    },
+    {
+     "min": 23,
+     "dif": 496
+    },
+    {
+     "min": 24,
+     "dif": 553
+    },
+    {
+     "min": 25,
+     "dif": 290
+    },
+    {
+     "min": 26,
+     "dif": 563
+    },
+    {
+     "min": 27,
+     "dif": 369
+    },
+    {
+     "min": 28,
+     "dif": 956
+    },
+    {
+     "min": 29,
+     "dif": 1161
+    },
+    {
+     "min": 30,
+     "dif": 1453
+    },
+    {
+     "min": 31,
+     "dif": 783
+    },
+    {
+     "min": 32,
+     "dif": 435
+    },
+    {
+     "min": 33,
+     "dif": -338
+    },
+    {
+     "min": 34,
+     "dif": -1360
+    },
+    {
+     "min": 35,
+     "dif": -2196
+    },
+    {
+     "min": 36,
+     "dif": -3335
+    },
+    {
+     "min": 37,
+     "dif": -5794
+    },
+    {
+     "min": 37.53,
+     "dif": -8825
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095015",
+   "juego": "115660540726095016",
+   "numero": 1,
+   "hora": "2026-10-23T23:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "T1",
+   "duracionFeed": 1467,
+   "duracion": 1466,
+   "equipos": [
+    {
+     "codigo": "LOS",
+     "esportsId": "109480204628225868",
+     "lado": "azul",
+     "oro": 41374,
+     "kills": 3,
+     "torres": 0,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [],
+     "dano": 47994,
+     "jugadores": [
+      {
+       "nombre": "Zest",
+       "rol": "top",
+       "campeon": "KSante",
+       "k": 1,
+       "d": 5,
+       "a": 1,
+       "oro": 8093,
+       "cs": 195,
+       "dano": 9710,
+       "danoPct": 0.2096,
+       "kp": 0.6667
+      },
+      {
+       "nombre": "Curse",
+       "rol": "jungla",
+       "campeon": "Pantheon",
+       "k": 0,
+       "d": 5,
+       "a": 2,
+       "oro": 7815,
+       "cs": 163,
+       "dano": 8119,
+       "danoPct": 0.1753,
+       "kp": 0.6667
+      },
+      {
+       "nombre": "Feisty",
+       "rol": "medio",
+       "campeon": "Syndra",
+       "k": 2,
+       "d": 3,
+       "a": 1,
+       "oro": 9204,
+       "cs": 240,
+       "dano": 15914,
+       "danoPct": 0.3223,
+       "kp": 1
+      },
+      {
+       "nombre": "Duduhh",
+       "rol": "tirador",
+       "campeon": "Tristana",
+       "k": 0,
+       "d": 2,
+       "a": 2,
+       "oro": 10261,
+       "cs": 239,
+       "dano": 10267,
+       "danoPct": 0.2068,
+       "kp": 0.6667
+      },
+      {
+       "nombre": "Ackerman",
+       "rol": "soporte",
+       "campeon": "Rakan",
+       "k": 0,
+       "d": 3,
+       "a": 3,
+       "oro": 5885,
+       "cs": 37,
+       "dano": 3984,
+       "danoPct": 0.086,
+       "kp": 1
+      }
+     ],
+     "gana": false
+    },
+    {
+     "codigo": "T1",
+     "esportsId": "98767991853197861",
+     "lado": "rojo",
+     "oro": 55189,
+     "kills": 19,
+     "torres": 10,
+     "inhibidores": 2,
+     "barones": 1,
+     "dragones": [
+      "chemtech",
+      "ocean",
+      "cloud"
+     ],
+     "dano": 77444,
+     "jugadores": [
+      {
+       "nombre": "Doran",
+       "rol": "top",
+       "campeon": "Jayce",
+       "k": 4,
+       "d": 0,
+       "a": 9,
+       "oro": 12137,
+       "cs": 254,
+       "dano": 27398,
+       "danoPct": 0.3616,
+       "kp": 0.7222
+      },
+      {
+       "nombre": "Oner",
+       "rol": "jungla",
+       "campeon": "LeeSin",
+       "k": 8,
+       "d": 0,
+       "a": 5,
+       "oro": 11982,
+       "cs": 200,
+       "dano": 12341,
+       "danoPct": 0.1576,
+       "kp": 0.7222
+      },
+      {
+       "nombre": "Faker",
+       "rol": "medio",
+       "campeon": "Leblanc",
+       "k": 6,
+       "d": 0,
+       "a": 6,
+       "oro": 12381,
+       "cs": 248,
+       "dano": 21173,
+       "danoPct": 0.2674,
+       "kp": 0.6667
+      },
+      {
+       "nombre": "Peyz",
+       "rol": "tirador",
+       "campeon": "Jhin",
+       "k": 0,
+       "d": 1,
+       "a": 9,
+       "oro": 10353,
+       "cs": 224,
+       "dano": 11754,
+       "danoPct": 0.1489,
+       "kp": 0.5
+      },
+      {
+       "nombre": "Keria",
+       "rol": "soporte",
+       "campeon": "Alistar",
+       "k": 0,
+       "d": 2,
+       "a": 14,
+       "oro": 7202,
+       "cs": 18,
+       "dano": 4778,
+       "danoPct": 0.0645,
+       "kp": 0.7778
+      }
+     ],
+     "gana": true
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 10
+    },
+    {
+     "min": 2,
+     "dif": -234
+    },
+    {
+     "min": 3,
+     "dif": -258
+    },
+    {
+     "min": 4,
+     "dif": -434
+    },
+    {
+     "min": 5,
+     "dif": -340
+    },
+    {
+     "min": 6,
+     "dif": -476
+    },
+    {
+     "min": 7,
+     "dif": -798
+    },
+    {
+     "min": 8,
+     "dif": -660
+    },
+    {
+     "min": 9,
+     "dif": -788
+    },
+    {
+     "min": 10,
+     "dif": -801
+    },
+    {
+     "min": 11,
+     "dif": -1210
+    },
+    {
+     "min": 12,
+     "dif": -2034
+    },
+    {
+     "min": 13,
+     "dif": -1842
+    },
+    {
+     "min": 14,
+     "dif": -1615
+    },
+    {
+     "min": 15,
+     "dif": -2373
+    },
+    {
+     "min": 16,
+     "dif": -2839
+    },
+    {
+     "min": 17,
+     "dif": -3815
+    },
+    {
+     "min": 18,
+     "dif": -4252
+    },
+    {
+     "min": 19,
+     "dif": -3590
+    },
+    {
+     "min": 20,
+     "dif": -6366
+    },
+    {
+     "min": 21,
+     "dif": -6112
+    },
+    {
+     "min": 22,
+     "dif": -8399
+    },
+    {
+     "min": 23,
+     "dif": -10627
+    },
+    {
+     "min": 24,
+     "dif": -12529
+    },
+    {
+     "min": 24.43,
+     "dif": -13815
+    }
+   ]
+  },
+  {
+   "partido": "115660540726095017",
+   "juego": "115660540726095018",
+   "numero": 1,
+   "hora": "2026-10-24T00:00:00Z",
+   "bloque": "Sistema Suizo",
+   "ganador": "LYON",
+   "duracionFeed": 1610,
+   "duracion": null,
+   "equipos": [
+    {
+     "codigo": "LYON",
+     "esportsId": "99566405941863385",
+     "lado": "azul",
+     "oro": 57600,
+     "kills": 22,
+     "torres": 9,
+     "inhibidores": 1,
+     "barones": 1,
+     "dragones": [
+      "cloud",
+      "chemtech"
+     ],
+     "dano": null,
+     "jugadores": [
+      {
+       "nombre": "Dhokla",
+       "rol": "top",
+       "campeon": "KSante",
+       "k": 2,
+       "d": 1,
+       "a": 7,
+       "oro": 10735,
+       "cs": 222,
+       "dano": null,
+       "danoPct": 0.1508,
+       "kp": 0.4286
+      },
+      {
+       "nombre": "Inspired",
+       "rol": "jungla",
+       "campeon": "Nocturne",
+       "k": 2,
+       "d": 2,
+       "a": 11,
+       "oro": 11056,
+       "cs": 212,
+       "dano": null,
+       "danoPct": 0.2094,
+       "kp": 0.619
+      },
+      {
+       "nombre": "Saint",
+       "rol": "medio",
+       "campeon": "Anivia",
+       "k": 2,
+       "d": 0,
+       "a": 10,
+       "oro": 12334,
+       "cs": 274,
+       "dano": null,
+       "danoPct": 0.2408,
+       "kp": 0.5714
+      },
+      {
+       "nombre": "Berserker",
+       "rol": "tirador",
+       "campeon": "Ezreal",
+       "k": 12,
+       "d": 1,
+       "a": 5,
+       "oro": 14604,
+       "cs": 268,
+       "dano": null,
+       "danoPct": 0.3427,
+       "kp": 0.8095
+      },
+      {
+       "nombre": "Isles",
+       "rol": "soporte",
+       "campeon": "Alistar",
+       "k": 3,
+       "d": 2,
+       "a": 17,
+       "oro": 8149,
+       "cs": 30,
+       "dano": null,
+       "danoPct": 0.0562,
+       "kp": 0.9524
+      }
+     ],
+     "gana": true
+    },
+    {
+     "codigo": "TSW",
+     "esportsId": "113661839307879869",
+     "lado": "rojo",
+     "oro": 46262,
+     "kills": 6,
+     "torres": 1,
+     "inhibidores": 0,
+     "barones": 0,
+     "dragones": [
+      "infernal"
+     ],
+     "dano": null,
+     "jugadores": [
+      {
+       "nombre": "Pun",
+       "rol": "top",
+       "campeon": "Rumble",
+       "k": 0,
+       "d": 4,
+       "a": 2,
+       "oro": 8499,
+       "cs": 225,
+       "dano": null,
+       "danoPct": 0.3474,
+       "kp": 0.3333
+      },
+      {
+       "nombre": "Hizto",
+       "rol": "jungla",
+       "campeon": "LeeSin",
+       "k": 0,
+       "d": 4,
+       "a": 3,
+       "oro": 8680,
+       "cs": 179,
+       "dano": null,
+       "danoPct": 0.1291,
+       "kp": 0.5
+      },
+      {
+       "nombre": "Dire",
+       "rol": "medio",
+       "campeon": "Ryze",
+       "k": 4,
+       "d": 2,
+       "a": 1,
+       "oro": 10761,
+       "cs": 257,
+       "dano": null,
+       "danoPct": 0.2359,
+       "kp": 0.8333
+      },
+      {
+       "nombre": "Eddie",
+       "rol": "tirador",
+       "campeon": "Kaisa",
+       "k": 2,
+       "d": 4,
+       "a": 3,
+       "oro": 12079,
+       "cs": 252,
+       "dano": null,
+       "danoPct": 0.2348,
+       "kp": 0.8333
+      },
+      {
+       "nombre": "Bie",
+       "rol": "soporte",
+       "campeon": "Nautilus",
+       "k": 0,
+       "d": 7,
+       "a": 3,
+       "oro": 6133,
+       "cs": 30,
+       "dano": null,
+       "danoPct": 0.0528,
+       "kp": 0.5
+      }
+     ],
+     "gana": false
+    }
+   ],
+   "curva": [
+    {
+     "min": 0,
+     "dif": 0
+    },
+    {
+     "min": 1,
+     "dif": 0
+    },
+    {
+     "min": 2,
+     "dif": 11
+    },
+    {
+     "min": 3,
+     "dif": 186
+    },
+    {
+     "min": 4,
+     "dif": 380
+    },
+    {
+     "min": 5,
+     "dif": 391
+    },
+    {
+     "min": 6,
+     "dif": 440
+    },
+    {
+     "min": 7,
+     "dif": 1438
+    },
+    {
+     "min": 8,
+     "dif": 1372
+    },
+    {
+     "min": 9,
+     "dif": 1299
+    },
+    {
+     "min": 10,
+     "dif": 1726
+    },
+    {
+     "min": 11,
+     "dif": 1900
+    },
+    {
+     "min": 12,
+     "dif": 1946
+    },
+    {
+     "min": 13,
+     "dif": 1873
+    },
+    {
+     "min": 14,
+     "dif": 1665
+    },
+    {
+     "min": 15,
+     "dif": -363
+    },
+    {
+     "min": 16,
+     "dif": -526
+    },
+    {
+     "min": 17,
+     "dif": 1391
+    },
+    {
+     "min": 18,
+     "dif": 1753
+    },
+    {
+     "min": 19,
+     "dif": 2328
+    },
+    {
+     "min": 20,
+     "dif": 3931
+    },
+    {
+     "min": 21,
+     "dif": 4846
+    },
+    {
+     "min": 22,
+     "dif": 5333
+    },
+    {
+     "min": 23,
+     "dif": 4912
+    },
+    {
+     "min": 24,
+     "dif": 6248
+    },
+    {
+     "min": 25,
+     "dif": 6119
+    },
+    {
+     "min": 26,
+     "dif": 7290
+    },
+    {
+     "min": 27,
+     "dif": 11322
+    },
+    {
+     "min": 27.07,
+     "dif": 11338
+    }
+   ]
+  }
+ ]
+}

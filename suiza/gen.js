@@ -57,15 +57,18 @@ const EQ = {
 };
 
 // Ronda 1, en el orden del calendario (hora CDMX, todos el viernes 23).
+// ⚠️ Corregido el 23/10 con el calendario de la API de lolesports: el orden de
+// la nota de investigación del 18/10 no fue el que se jugó (BLG–MKOI era el
+// último y fue el tercero; el último fue TSW–LYON).
 const R1 = [
   ['GEN', 'IG', '11:00', 'Chovy contra los campeones de 2018'],
-  ['TL', 'CFO', '12:00', 'Josedeodo, el latino del Mundial'],
-  ['AL', 'KC', '13:00', 'Debuta el campeón del Play-In'],
-  ['G2', 'DK', '14:00', 'Caps contra ShowMaker'],
-  ['HLE', 'TES', '15:00', 'El MVP de la final 2025 contra JackeyLove'],
-  ['LOS', 'T1', '16:00', 'Debuta el tricampeón'],
-  ['TSW', 'LYON', '17:00', 'Vietnam contra Norteamérica'],
-  ['BLG', 'MKOI', '18:00', 'Viper contra Elyoya'],
+  ['HLE', 'TES', '12:00', 'El MVP de la final 2025 contra JackeyLove'],
+  ['BLG', 'MKOI', '13:00', 'Viper contra Elyoya'],
+  ['AL', 'KC', '14:00', 'Debuta el campeón del Play-In'],
+  ['G2', 'DK', '15:00', 'Caps contra ShowMaker'],
+  ['TL', 'CFO', '16:00', 'Josedeodo, el latino del Mundial'],
+  ['LOS', 'T1', '17:00', 'Debuta el tricampeón'],
+  ['TSW', 'LYON', '18:00', 'Vietnam contra Norteamérica'],
 ];
 
 const logo = (t) => `assets/logos/${t}.png`;
