@@ -4,7 +4,7 @@ Portafolio de presentaciones web (decks HTML) servido como sitio estático en Ve
 
 ## Arquitectura
 
-Sin build, sin dependencias, sin framework. Una carpeta por presentación, autocontenida, **dentro de su escritorio**: `work/` (UrVenue), `personal/` (lo propio y los clientes propios) y `creator/` (LoL y esports). La URL sigue a la carpeta (`/work/seating3dmap/`, `/creator/ornn/`). Desde el 26/oct/2026; antes todas vivían en la raíz, y **solo `/seating3dmap/` redirige** a su ruta nueva (en `vercel.json`), porque era el único enlace compartido: las demás URL viejas dan 404 a propósito. Los decks de prueba del kit se generan en `tools/pruebas/salida/` (ignorada).
+Sin build, sin dependencias, sin framework. Una carpeta por presentación, autocontenida, **dentro de su escritorio**: `work/` (UrVenue), `personal/` (lo propio y los clientes propios) y `creator/` (LoL y esports). La URL sigue a la carpeta (`/work/seating3dmap/`, `/creator/ornn/`). Desde el 26/oct/2026; antes todas vivían en la raíz, y **solo `/seating3dmap/` redirige** a su ruta nueva (en `vercel.json`), porque era el único enlace compartido: las demás URL viejas dan 404 a propósito. ⚠️ La redirección lleva **dos reglas**: con `trailingSlash`, `/seating3dmap` se vuelve `/seating3dmap/` antes de los redirects, y en Vercel el patrón `/seating3dmap/:path*` **no cubre `/seating3dmap/`** con la barra final (en producción daba 404). Va una regla exacta para esa ruta y otra con `:path*` para sus assets. Los decks de prueba del kit se generan en `tools/pruebas/salida/` (ignorada).
 
 ```
 personal/tabletas/      index.html + deck-stage.js + support.js + assets/

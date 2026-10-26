@@ -1,6 +1,7 @@
 {
   "trailingSlash": true,
   "redirects": [
+    { "source": "/seating3dmap/", "destination": "/work/seating3dmap/", "permanent": true },
     { "source": "/seating3dmap/:path*", "destination": "/work/seating3dmap/:path*", "permanent": true }
   ]
 }

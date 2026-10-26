@@ -17,11 +17,14 @@ if (!process.env.GALERIA_CLAVE && fs.existsSync(path.join(raiz, '.env'))) {
 }
 const { default: middleware, config } = await import(path.join(raiz, 'middleware.ts'));
 const { redirects = [] } = JSON.parse(fs.readFileSync(path.join(raiz, 'vercel.json'), 'utf8'));
-/** El resto de la ruta si `patron` la cubre ('' si es exacta), o null. */
+/** El resto de la ruta si `patron` la cubre ('' si es exacta), o null.
+ *  Como en Vercel, '/x/:path*' NO cubre '/x/' (con la barra final): en
+ *  producción la regla de seating3dmap dejaba esa ruta en 404 y hizo falta
+ *  una regla exacta para '/seating3dmap/'. */
 const cubre = (patron, ruta) => {
   if (!patron.endsWith('/:path*')) return patron === ruta ? '' : null;
   const base = patron.slice(0, -'/:path*'.length);
-  return ruta === base || ruta === base + '/' ? '' : ruta.startsWith(base + '/') ? ruta.slice(base.length + 1) : null;
+  return ruta === base ? '' : ruta.startsWith(base + '/') && ruta !== base + '/' ? ruta.slice(base.length + 1) : null;
 };
 const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
