@@ -1,6 +1,6 @@
 // Captura SOLO la primera diapositiva de cada deck y la deja en /portadas/
 // como JPG optimizado para la pantalla de proyección de la galería.
-// Uso: node tools/portadas.mjs [deck ...]   (sin args: todos los decks)
+// Uso: node tools/portadas.mjs [work/deck ...]   (sin args: todos los decks)
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
@@ -8,8 +8,13 @@ import { execFileSync } from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const TODOS = ['tabletas', 'estancia', 'soloq', 'lowelo', 'ornn', 'urgot', 'talon', 'blitzcrank', 'malphite', 'skins', 'caras', 'semana34', 'semana35'];
-const decks = process.argv.slice(2).length ? process.argv.slice(2) : TODOS;
+// Los decks viven en work/, personal/ y creator/; sin argumentos, todos. La
+// portada se nombra con el último tramo de la ruta (portadas/ornn.jpg), que es
+// lo que busca la galería.
+const ESCRITORIOS = ['work', 'personal', 'creator'];
+const TODOS = ESCRITORIOS.flatMap((e) => fs.existsSync(path.join(raiz, e))
+  ? fs.readdirSync(path.join(raiz, e)).filter((d) => fs.existsSync(path.join(raiz, e, d, 'index.html'))).map((d) => `${e}/${d}`) : []);
+const decks = (process.argv.slice(2).length ? process.argv.slice(2) : TODOS).map((a) => a.replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''));
 
 const CHROME = [
   // macOS
@@ -55,11 +60,12 @@ for (const deck of decks) {
   await pagina.evaluate(() => document.fonts.ready);
   // GSAP y animaciones de entrada: esperar al estado final (ver CLAUDE.md)
   await new Promise(r => setTimeout(r, 2200));
-  const tmp = path.join(raiz, 'portadas', `${deck}.tmp.png`);
+  const nombre = path.basename(deck);
+  const tmp = path.join(raiz, 'portadas', `${nombre}.tmp.png`);
   await pagina.screenshot({ path: tmp });
   await pagina.close();
   // reescalar a ancho máx 900 y comprimir a JPG con Pillow
-  const destino = path.join(raiz, 'portadas', `${deck}.jpg`);
+  const destino = path.join(raiz, 'portadas', `${nombre}.jpg`);
   execFileSync(PY, ['-c', `
 from PIL import Image
 im = Image.open(r'''${tmp}''').convert('RGB')
@@ -68,7 +74,7 @@ im.save(r'''${destino}''', quality=82, optimize=True)
 `]);
   fs.unlinkSync(tmp);
   const kb = Math.round(fs.statSync(destino).size / 1024);
-  console.log(`  ✓ portadas/${deck}.jpg (${w}×${h} → ${kb} KB)`);
+  console.log(`  ✓ portadas/${nombre}.jpg (${w}×${h} → ${kb} KB)`);
 }
 
 await navegador.close();

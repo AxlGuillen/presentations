@@ -1,18 +1,18 @@
 // Deck de prueba del kit de edit: tres láminas para montar encima de un clip
 // (partículas, palabra y letrero), en el panel de 1080×1370 del montaje.
-// No es un deck del sitio: se genera en prueba-edit/ (ignorada en git) y sirve
+// No es un deck del sitio: se genera en tools/pruebas/salida/prueba-edit/ (ignorada en git) y sirve
 // para comprobar que las capas salen con alfa y sin rectángulos.
 //   node tools/pruebas/deck-edit.cjs
-//   node tools/laminas.mjs prueba-edit --alfa
+//   node tools/laminas.mjs tools/pruebas/salida/prueba-edit --alfa
 const fs = require('fs');
 const path = require('path');
 const kit = require('../kit.cjs');
 
 const raiz = path.resolve(__dirname, '..', '..');
-const dir = path.join(raiz, 'prueba-edit');
+const dir = path.join(raiz, 'tools', 'pruebas', 'salida', 'prueba-edit');
 fs.mkdirSync(path.join(dir, 'assets'), { recursive: true });
-fs.copyFileSync(path.join(raiz, 'lab', 'deck-stage.js'), path.join(dir, 'deck-stage.js'));
-fs.copyFileSync(path.join(raiz, 'lab', 'assets', 'Jinx_0.jpg'), path.join(dir, 'assets', 'Jinx_0.jpg'));
+fs.copyFileSync(path.join(raiz, 'personal', 'lab', 'deck-stage.js'), path.join(dir, 'deck-stage.js'));
+fs.copyFileSync(path.join(raiz, 'personal', 'lab', 'assets', 'Jinx_0.jpg'), path.join(dir, 'assets', 'Jinx_0.jpg'));
 
 const r = kit.ritmo(require('./beatmap.json'), { desde: 4 });
 const ANTON = `'Anton', Impact, sans-serif`;

@@ -4,14 +4,35 @@
     {
       "name": "presentacion",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "3123", "."],
+      "runtimeArgs": [
+        "-y",
+        "serve",
+        "-l",
+        "3123",
+        "."
+      ],
       "port": 3123
     },
     {
       "name": "soloq",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["-y", "serve", "-l", "3124", "../presentacion-soloq"],
+      "runtimeArgs": [
+        "-y",
+        "serve",
+        "-l",
+        "3124",
+        "../presentacion-soloq"
+      ],
       "port": 3124
+    },
+    {
+      "name": "sitio",
+      "runtimeExecutable": "node",
+      "runtimeArgs": [
+        "tools/servidor-local.mjs",
+        "3125"
+      ],
+      "port": 3125
     }
   ]
 }

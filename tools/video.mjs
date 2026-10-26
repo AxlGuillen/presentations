@@ -13,7 +13,7 @@ import { enlazadas, hayTransiciones, leerTransicion, unir as unirConTransiciones
 import { EFECTO_DE, bus, escribirWav, mezclar, resolverPista } from './audio.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const deck = (process.argv[2] || '').replace(/[\\/]/g, '');
+const deck = (process.argv[2] || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const dirDeck = path.join(raiz, deck);
 const rutaGuion = path.join(dirDeck, 'guion.json');
 if (!deck || !fs.existsSync(rutaGuion)) {

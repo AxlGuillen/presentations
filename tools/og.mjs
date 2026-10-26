@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const objetivos = process.argv.slice(2).map(a => a.replace(/[\\/]/g, ''));
+const objetivos = process.argv.slice(2).map(a => a.replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''));
 if (!objetivos.length) {
   console.error('Uso: node tools/og.mjs <carpeta|raiz> [<carpeta> …]');
   process.exit(1);
@@ -72,7 +72,19 @@ for (const deck of objetivos) {
     s.querySelectorAll('[data-step-hidden]').forEach(el => el.removeAttribute('data-step-hidden'));
   });
   await pagina.evaluate(() => document.fonts.ready);
-  await new Promise(r => setTimeout(r, 2000)); // entradas GSAP en estado final
+  await new Promise(r => setTimeout(r, 700)); // que el animador arme la timeline de la portada
+  // Como capturar.mjs: la timeline salta a su final en vez de esperar un tiempo
+  // fijo (con 2 s una portada larga salía a media animación, el logo de
+  // urvenue-video sin su título), y las animaciones CSS de los decks viejos
+  // se terminan.
+  await pagina.evaluate(() => {
+    const s = document.querySelector('deck-stage section');
+    if (s.__tl) { s.__tl.pause(); s.__tl.progress(1); }
+    for (const a of document.getAnimations()) {
+      try { a.finish(); } catch { a.currentTime = 2600; a.pause(); }
+    }
+  });
+  await new Promise(r => setTimeout(r, 300));
   await pagina.screenshot({ path: tmp });
 
   fs.mkdirSync(path.join(raiz, deck, 'assets'), { recursive: true });

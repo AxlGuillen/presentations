@@ -122,6 +122,18 @@
   .cabecera .sub { font-size: 10px; letter-spacing: 1.5px; color: var(--humo); }
   .cabecera .cuenta { font-size: 11px; color: var(--humo); white-space: nowrap; }
 
+  /* Los tres escritorios: Work · Personal · Content creator */
+  .desks { display: flex; gap: 6px; padding: 14px 0 6px; flex-wrap: wrap; }
+  .desks button {
+    display: inline-flex; align-items: baseline; gap: 8px; cursor: pointer;
+    font-family: 'Spline Sans Mono', monospace; font-size: 11px; letter-spacing: 1.5px; text-transform: uppercase;
+    padding: 9px 14px; border-radius: 999px; border: 1px solid var(--linea); background: transparent; color: var(--humo);
+    transition: border-color 150ms ease, color 150ms ease, background 150ms ease;
+  }
+  .desks button .n { font-size: 10px; opacity: 0.7; }
+  .desks button:hover { color: var(--papel); border-color: #4A4238; }
+  .desks button[aria-selected="true"] { color: var(--tinta); background: var(--lampara); border-color: var(--lampara); }
+
   .filas { flex: 1; display: flex; flex-direction: column; }
   .grupo {
     display: flex; align-items: baseline; gap: 12px; padding: 16px 8px 7px;
@@ -216,6 +228,7 @@
       </div>
       <span class="cuenta mono" id="cuenta">10 PRESENTACIONES</span>
     </header>
+    <nav class="desks" id="desks" role="tablist" aria-label="Escritorios"></nav>
 
     <div class="filas" id="filas"></div>
 
@@ -231,153 +244,184 @@
 // ── El programa: datos reales de cada deck ─────────────────────────
 // acento/glow: la paleta del deck tiñe la página cuando está en pantalla.
 const DECKS = [
-  { grupo: 'Profesional', ruta: 'tabletas/', titulo: 'Comparativo Tabletas Rugged', serie: 'COMERCIAL · DYMMSA', datos: 'COMERCIAL · 16:9 · 22 DIAP · JUL 26', meta: '16:9 · 22 DIAPOSITIVAS · JUL 2026',
+  { desk: 'personal', grupo: 'Clientes', ruta: 'personal/tabletas/', titulo: 'Comparativo Tabletas Rugged', serie: 'COMERCIAL · DYMMSA', datos: 'COMERCIAL · 16:9 · 22 DIAP · JUL 26', meta: '16:9 · 22 DIAPOSITIVAS · JUL 2026',
     desc: '14 tabletas rugged en tres rangos de precio, con puntuaciones para público no técnico y recomendación final.', acento: '#E05A64', glow: '195, 23, 34' },
-    { grupo: 'Profesional', ruta: 'estancia/', titulo: 'Propuesta · La Casita Feliz', serie: 'COMERCIAL · CAI', datos: 'COMERCIAL · 16:9 · 10 DIAP · AGO 26', meta: '16:9 · 10 DIAPOSITIVAS · AGO 2026',
+    { desk: 'personal', grupo: 'Clientes', ruta: 'personal/estancia/', titulo: 'Propuesta · La Casita Feliz', serie: 'COMERCIAL · CAI', datos: 'COMERCIAL · 16:9 · 10 DIAP · AGO 26', meta: '16:9 · 10 DIAPOSITIVAS · AGO 2026',
     desc: 'Web, redes sociales y sistema de administración para una estancia infantil — propuesta integral de dos especialistas.', acento: '#E94B85', glow: '233, 75, 133' },
-    { grupo: 'Profesional', ruta: 'seating3dmap/', titulo: 'seating3dmap · The new 3D seating map', serie: 'URVENUE · UWSCORE', datos: 'EN · 16:9 · 19 SLIDES · GSAP', meta: '16:9 · 19 DIAPOSITIVAS · OCT 2026',
+    { desk: 'work', grupo: 'Proyectos', ruta: 'work/seating3dmap/', titulo: 'seating3dmap · The new 3D seating map', serie: 'URVENUE · UWSCORE', datos: 'EN · 16:9 · 19 SLIDES · GSAP', meta: '16:9 · 19 DIAPOSITIVAS · OCT 2026',
     desc: 'How the new 3D seating map for UrVenue microsites evolved in five phases: from a three.js demo to two layouts on one engine and the design the product owner chose.', acento: '#2563EB', glow: '37, 99, 235' },
-    { grupo: 'Reportes semanales', ruta: 'semana34/', titulo: 'Semana 34 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 8 DIAP · GSAP', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
+    { desk: 'work', grupo: 'Reportes semanales', ruta: 'work/semana34/', titulo: 'Semana 34 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 8 DIAP · GSAP', meta: '16:9 · 8 DIAPOSITIVAS · AGO 2026',
     desc: 'El reporte semanal del equipo con animación GSAP renderizable cuadro a cuadro.', acento: '#4C9AFF', glow: '76, 154, 255' },
-    { grupo: 'Reportes semanales', ruta: 'semana35/', titulo: 'Semana 35 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 10 DIAP · GSAP', meta: '16:9 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'work', grupo: 'Reportes semanales', ruta: 'work/semana35/', titulo: 'Semana 35 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 10 DIAP · GSAP', meta: '16:9 · 10 DIAPOSITIVAS · SEP 2026',
     desc: 'Coreografía v2.0: titulares partidos en palabras, dona SVG y la curva de la semana que se dibuja.', acento: '#2684FF', glow: '38, 132, 255' },
-    { grupo: 'Reportes semanales', ruta: 'semana36/', titulo: 'Semana 36 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
+    { desk: 'work', grupo: 'Reportes semanales', ruta: 'work/semana36/', titulo: 'Semana 36 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
     desc: 'El techo de la serie: 20 h 48 m, con una página construida de cero y el tracking hecho rutina.', acento: '#0065FF', glow: '0, 101, 255' },
-    { grupo: 'Reportes semanales', ruta: 'semana38/', titulo: 'Semana 38 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
+    { desk: 'work', grupo: 'Reportes semanales', ruta: 'work/semana38/', titulo: 'Semana 38 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 11 DIAP · GSAP', meta: '16:9 · 11 DIAPOSITIVAS · SEP 2026',
     desc: 'Menos horas que nunca y más cierres que nunca: 14 de 16 issues en tres días.', acento: '#00875A', glow: '0, 135, 90',
-    video: 'VIDEO 1:50', videoSrc: 'semana38/video.mp4' },
-    { grupo: 'Reportes semanales', ruta: 'semana42/', titulo: 'Semana 42 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 12 DIAP · GSAP', meta: '16:9 · 12 DIAPOSITIVAS · OCT 2026',
+    video: 'VIDEO 1:50', videoSrc: 'work/semana38/video.mp4' },
+    { desk: 'work', grupo: 'Reportes semanales', ruta: 'work/semana42/', titulo: 'Semana 42 · Reporte semanal Jira', serie: 'INTERNO · DATA', datos: 'INTERNO · DATA · 16:9 · 12 DIAP · GSAP', meta: '16:9 · 12 DIAPOSITIVAS · OCT 2026',
     desc: 'La semana con más horas de la serie: el nuevo mapa 3D de demo a opción elegida en cuatro días, más las novedades de presentations y walkthrough.', acento: '#0052CC', glow: '0, 82, 204' },
-    { grupo: 'Charlas', ruta: 'ultracode/', titulo: 'Ultracode en la práctica', serie: 'CHARLA · CLAUDE CODE', datos: 'CHARLA · 16:9 · 15 DIAP · GSAP', meta: '16:9 · 15 DIAPOSITIVAS · OCT 2026',
+    { desk: 'work', grupo: 'Charlas', ruta: 'work/ultracode/', titulo: 'Ultracode en la práctica', serie: 'CHARLA · CLAUDE CODE', datos: 'CHARLA · 16:9 · 15 DIAP · GSAP', meta: '16:9 · 15 DIAPOSITIVAS · OCT 2026',
     desc: 'Cómo construí una app dirigiendo agentes: 6 h 26 min al primer entregable, 156 subagentes, el plan de orquestación que salió y lo que costó.', acento: '#F7B7BA', glow: '247, 183, 186' },
-    { grupo: 'Charlas', ruta: 'dra/', titulo: 'DRA · Del pizarrón a la evidencia', serie: 'CHARLA · EQUIPO DRA', datos: 'CHARLA · 16:9 · 18 DIAP · GSAP', meta: '16:9 · 18 DIAPOSITIVAS · OCT 2026',
+    { desk: 'personal', grupo: 'Charlas · DRA', ruta: 'personal/dra/', titulo: 'DRA · Del pizarrón a la evidencia', serie: 'CHARLA · EQUIPO DRA', datos: 'CHARLA · 16:9 · 18 DIAP · GSAP', meta: '16:9 · 18 DIAPOSITIVAS · OCT 2026',
     desc: 'Un método común para evaluar ideas en equipo: filtros, Lean Canvas, ICE, mapa de supuestos y Test Cards, con Notion, Miro y el ejemplo de Pádel SoloQ.', acento: '#4B3BD6', glow: '75, 59, 214' },
-    { grupo: 'Charlas', ruta: 'musk/', titulo: 'Borrar antes de acelerar', serie: 'CHARLA · EQUIPO DRA', datos: 'CHARLA · 16:9 · 14 DIAP · GSAP', meta: '16:9 · 14 DIAPOSITIVAS · OCT 2026',
+    { desk: 'personal', grupo: 'Charlas · DRA', ruta: 'personal/musk/', titulo: 'Borrar antes de acelerar', serie: 'CHARLA · EQUIPO DRA', datos: 'CHARLA · 16:9 · 14 DIAP · GSAP', meta: '16:9 · 14 DIAPOSITIVAS · OCT 2026',
     desc: 'Cómo iterar como Musk sin quemarnos: su algoritmo de cinco pasos, lo que le funcionó, lo que le costó y qué se lleva DRA.', acento: '#4B3BD6', glow: '75, 59, 214' },
-    { grupo: 'Creador de contenido', ruta: 'guerras/', titulo: 'Guerras Rúnicas · assets del episodio', serie: 'LORE · 01', datos: 'LORE 01 · 9:16 · 18 DIAP · GSAP', meta: '9:16 · 18 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Lore', ruta: 'creator/guerras/', titulo: 'Guerras Rúnicas · assets del episodio', serie: 'LORE · 01', datos: 'LORE 01 · 9:16 · 18 DIAP · GSAP', meta: '9:16 · 18 DIAPOSITIVAS · SEP 2026',
     desc: 'Material gráfico del episodio: una lámina por bloque del guion, con el arte oficial que sí existe y los huecos declarados donde no lo hay.', acento: '#41C4E8', glow: '65, 196, 232' },
-    { grupo: 'Creador de contenido', ruta: 'helia/', titulo: 'La Ruina de Helia · assets del episodio', serie: 'LORE · 02', datos: 'LORE 02 · 9:16 · 18 DIAP · GSAP', meta: '9:16 · 18 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Lore', ruta: 'creator/helia/', titulo: 'La Ruina de Helia · assets del episodio', serie: 'LORE · 02', datos: 'LORE 02 · 9:16 · 18 DIAP · GSAP', meta: '9:16 · 18 DIAPOSITIVAS · SEP 2026',
     desc: 'La precuela de las Guerras Rúnicas: una isla cayó porque un hombre no quiso enterrar a su esposa. Con Isolde cosiendo la muñeca que sería Gwen.', acento: '#4FE3C1', glow: '79, 227, 193' },
-    { grupo: 'Creador de contenido', ruta: 'soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Esports y datos', ruta: 'creator/soloq/', titulo: 'SoloQ Challenge · Premios vs salario mínimo', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 28 DIAP · AGO 26', meta: '9:16 · 28 DIAPOSITIVAS · AGO 2026',
     desc: '125 000 € en premios traducidos a días de salario mínimo en México, Chile, Colombia y Argentina.', acento: '#53FC18', glow: '83, 252, 24' },
-    { grupo: 'Creador de contenido', ruta: 'lowelo/', titulo: 'Low Elo vs High Elo · El corte por LP', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Esports y datos', ruta: 'creator/lowelo/', titulo: 'Low Elo vs High Elo · El corte por LP', serie: 'ESPORTS · DATA', datos: 'ESPORTS · DATA · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
     desc: 'La distribución de rangos como campana y como edificio, y el camino Hierro→Challenger a escala real.', acento: '#C89B3C', glow: '200, 155, 60' },
-    { grupo: 'Creador de contenido', ruta: 'caps/', titulo: 'Caps · el jugador con más títulos del planeta', serie: 'ESPORTS · TRIBUTO', datos: 'ESPORTS · TRIBUTO · 9:16 · 12 DIAP · GSAP', meta: '9:16 · 12 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Esports y datos', ruta: 'creator/caps/', titulo: 'Caps · el jugador con más títulos del planeta', serie: 'ESPORTS · TRIBUTO', datos: 'ESPORTS · TRIBUTO · 9:16 · 12 DIAP · GSAP', meta: '9:16 · 12 DIAPOSITIVAS · SEP 2026',
     desc: 'Dieciocho campeonatos de liga —más que cualquier jugador de cualquier región—, primer occidental en el Hall of Legends, y dos finales de mundial perdidas 0–3.', acento: '#FF2D55', glow: '255, 45, 85' },
-    { grupo: 'Creador de contenido', ruta: 'ornn/', titulo: 'Ornn cumple 9 años', serie: 'CUMPLELOLERO · 01', datos: 'CUMPLELOLERO 01 · 9:16 · 8 DIAP · AGO 26', meta: '9:16 · 8 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/ornn/', titulo: 'Ornn cumple 9 años', serie: 'CUMPLELOLERO · 01', datos: 'CUMPLELOLERO 01 · 9:16 · 8 DIAP · AGO 26', meta: '9:16 · 8 DIAPOSITIVAS · AGO 2026',
     desc: 'El one trick de 7 millones de puntos, la sequía de skins y la forja de Hefesto — apoyo visual para video vertical.', acento: '#FF6B1A', glow: '255, 107, 26' },
-    { grupo: 'Creador de contenido', ruta: 'urgot/', titulo: 'Urgot cumple 16 años', serie: 'CUMPLELOLERO · 02', datos: 'CUMPLELOLERO 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/urgot/', titulo: 'Urgot cumple 16 años', serie: 'CUMPLELOLERO · 02', datos: 'CUMPLELOLERO 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
     desc: 'El rework que lo salvó, la sequía de seis años y medio sin skins y el verdugo que acabó del lado del condenado.', acento: '#96E32E', glow: '150, 227, 46' },
-    { grupo: 'Creador de contenido', ruta: 'talon/', titulo: 'Talon cumple 15 años', serie: 'CUMPLELOLERO · 03', datos: 'CUMPLELOLERO 03 · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/talon/', titulo: 'Talon cumple 15 años', serie: 'CUMPLELOLERO · 03', datos: 'CUMPLELOLERO 03 · 9:16 · 7 DIAP · AGO 26', meta: '9:16 · 7 DIAPOSITIVAS · AGO 2026',
     desc: 'El top mundial lleno de latinos y el salto de paredes que lo define desde 2017.', acento: '#6FC7F0', glow: '111, 199, 240' },
-    { grupo: 'Creador de contenido', ruta: 'blitzcrank/', titulo: 'Blitzcrank cumple 17 años', serie: 'CUMPLELOLERO · 04', datos: 'CUMPLELOLERO 04 · 9:16 · 9 DIAP · SEP 26', meta: '9:16 · 9 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/blitzcrank/', titulo: 'Blitzcrank cumple 17 años', serie: 'CUMPLELOLERO · 04', datos: 'CUMPLELOLERO 04 · 9:16 · 9 DIAP · SEP 26', meta: '9:16 · 9 DIAPOSITIVAS · SEP 2026',
     desc: 'El one trick coreano de 8,4 millones de puntos y el robot que salió de la basura para salvar a Viktor.', acento: '#8F6DFF', glow: '143, 109, 255' },
-    { grupo: 'Creador de contenido', ruta: 'malphite/', titulo: 'Malphite cumple 17 años', serie: 'CUMPLELOLERO · 05', datos: 'CUMPLELOLERO 05 · 9:16 · 8 DIAP · SEP 26', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/malphite/', titulo: 'Malphite cumple 17 años', serie: 'CUMPLELOLERO · 05', datos: 'CUMPLELOLERO 05 · 9:16 · 8 DIAP · SEP 26', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
     desc: 'Once millones de puntos atorados en Bronce, el arma que falló contra el Vacío y la piedra que siempre pierde.', acento: '#E08A72', glow: '224, 138, 114' },
-    { grupo: 'Creador de contenido', ruta: 'mundo/', titulo: 'Dr. Mundo cumple 17 años', serie: 'CUMPLELOLERO · 06', datos: 'CUMPLELOLERO 06 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/mundo/', titulo: 'Dr. Mundo cumple 17 años', serie: 'CUMPLELOLERO · 06', datos: 'CUMPLELOLERO 06 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
     desc: 'Casi 18 millones de puntos y sigue en Plata, siete años sin skin comprable, y el matón que confundió su camisa de fuerza con una bata.', acento: '#C455E0', glow: '196, 85, 224' },
-    { grupo: 'Creador de contenido', ruta: 'janna/', titulo: 'Janna cumple 17 años', serie: 'CUMPLELOLERO · 07', datos: 'CUMPLELOLERO 07 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/janna/', titulo: 'Janna cumple 17 años', serie: 'CUMPLELOLERO · 07', datos: 'CUMPLELOLERO 07 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · SEP 2026',
     desc: 'El mejor Janna del mundo no juega ranked, la skin que solo se gana compitiendo, y la diosa a la que dejaron de rezarle.', acento: '#69E8C8', glow: '105, 232, 200' },
-    { grupo: 'Creador de contenido', ruta: 'ivern/', titulo: 'Ivern cumple 10 años', serie: 'CUMPLELOLERO · 08', datos: 'CUMPLELOLERO 08 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/ivern/', titulo: 'Ivern cumple 10 años', serie: 'CUMPLELOLERO · 08', datos: 'CUMPLELOLERO 08 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
     desc: 'Diez años en el juego y casi diez mil en el lore: el señor de la guerra que taló el Sauce Dios y el one trick que menos puntos tiene y es el único Challenger.', acento: '#7DD66B', glow: '125, 214, 107' },
-    { grupo: 'Creador de contenido', ruta: 'missfortune/', titulo: 'Miss Fortune cumple 16 años', serie: 'CUMPLELOLERO · 09', datos: 'CUMPLELOLERO 09 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/missfortune/', titulo: 'Miss Fortune cumple 16 años', serie: 'CUMPLELOLERO · 09', datos: 'CUMPLELOLERO 09 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
     desc: 'Mata con las pistolas que su madre le fabricó a Gangplank, y el mejor Miss Fortune del planeta es latino y nunca ha salido de Plata.', acento: '#E8552E', glow: '232, 85, 46' },
-    { grupo: 'Creador de contenido', ruta: 'syndra/', titulo: 'Syndra cumple 14 años', serie: 'CUMPLELOLERO · 10', datos: 'CUMPLELOLERO 10 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/syndra/', titulo: 'Syndra cumple 14 años', serie: 'CUMPLELOLERO · 10', datos: 'CUMPLELOLERO 10 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · SEP 2026',
     desc: 'Su nombre significa Destrucción, la castigaron toda la vida por tener demasiado poder, y mañana Riot le hace exactamente lo mismo que su maestro.', acento: '#C9A7FF', glow: '201, 167, 255' },
-    { grupo: 'Creador de contenido', ruta: 'riven/', titulo: 'Riven cumple 15 años', serie: 'CUMPLELOLERO · 11', datos: 'CUMPLELOLERO 11 · 9:16 · 4 DIAP · GSAP', meta: '9:16 · 4 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/riven/', titulo: 'Riven cumple 15 años', serie: 'CUMPLELOLERO · 11', datos: 'CUMPLELOLERO 11 · 9:16 · 4 DIAP · GSAP', meta: '9:16 · 4 DIAPOSITIVAS · SEP 2026',
     desc: 'El one trick con más puntos de toda la serie está en Platino con 997 victorias y 998 derrotas, y Riot lleva dos años y ocho meses sin sacarle skin.', acento: '#3FDE6A', glow: '63, 222, 106' },
-    { grupo: 'Creador de contenido', ruta: 'kindred/', titulo: 'Kindred cumple 11 años', serie: 'CUMPLELOLERO · 12', datos: 'CUMPLELOLERO 12 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/kindred/', titulo: 'Kindred cumple 11 años', serie: 'CUMPLELOLERO · 12', datos: 'CUMPLELOLERO 12 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
     desc: 'El dios de la muerte que se partió con un hacha para tener un amigo, y el one trick con diecisiete millones de puntos que nunca ha salido de Hierro.', acento: '#4D9EE6', glow: '77, 158, 230' },
-    { grupo: 'Creador de contenido', ruta: 'briar/', titulo: 'Briar cumple 3 años', serie: 'CUMPLELOLERO · 13', datos: 'CUMPLELOLERO 13 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/briar/', titulo: 'Briar cumple 3 años', serie: 'CUMPLELOLERO · 13', datos: 'CUMPLELOLERO 13 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
     desc: 'Un gólem de sangre que salió defectuoso, el one trick que acumula más rápido de toda la serie, y el catálogo de skins más barato del Cumplelolero.', acento: '#E4224A', glow: '228, 34, 74' },
-    { grupo: 'Creador de contenido', ruta: 'azir/', titulo: 'Azir cumple 12 años', serie: 'CUMPLELOLERO · 14', datos: 'CUMPLELOLERO 14 · 9:16 · 4 DIAP · GSAP', meta: '9:16 · 4 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/azir/', titulo: 'Azir cumple 12 años', serie: 'CUMPLELOLERO · 14', datos: 'CUMPLELOLERO 14 · 9:16 · 4 DIAP · GSAP', meta: '9:16 · 4 DIAPOSITIVAS · SEP 2026',
     desc: 'El one trick más puro de la serie juega Azir en 999 de 1 011 partidas, y la skin de SKT T1 no es de Faker: la eligió Easyhoon.', acento: '#EFAE3A', glow: '239, 174, 58' },
-    { grupo: 'Creador de contenido', ruta: 'katarina/', titulo: 'Katarina cumple 17 años', serie: 'CUMPLELOLERO · 15', datos: 'CUMPLELOLERO 15 · 9:16 · 6 DIAP · GSAP', meta: '9:16 · 6 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/katarina/', titulo: 'Katarina cumple 17 años', serie: 'CUMPLELOLERO · 15', datos: 'CUMPLELOLERO 15 · 9:16 · 6 DIAP · GSAP', meta: '9:16 · 6 DIAPOSITIVAS · SEP 2026',
     desc: 'El mejor Katarina del planeta es latino, del servidor del sur, y nunca ha salido de Hierro — con doce millones de puntos encima.', acento: '#E8365F', glow: '232, 54, 95' },
-    { grupo: 'Creador de contenido', ruta: 'corki/', titulo: 'Corki cumple 17 años', serie: 'CUMPLELOLERO · 16', datos: 'CUMPLELOLERO 16 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/corki/', titulo: 'Corki cumple 17 años', serie: 'CUMPLELOLERO · 16', datos: 'CUMPLELOLERO 16 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
     desc: 'Su helicóptero se llama Reconnaissance Operations Front-Line Copter: R-O-F-L. Riot le metió un meme de 2004 al lore oficial y ahí sigue.', acento: '#5FA8CE', glow: '95, 168, 206' },
-    { grupo: 'Creador de contenido', ruta: 'samira/', titulo: 'Samira cumple 6 años', serie: 'CUMPLELOLERO · 17', datos: 'CUMPLELOLERO 17 · 9:16 · 7 DIAP · GSAP', meta: '9:16 · 7 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/samira/', titulo: 'Samira cumple 6 años', serie: 'CUMPLELOLERO · 17', datos: 'CUMPLELOLERO 17 · 9:16 · 7 DIAP · GSAP', meta: '9:16 · 7 DIAPOSITIVAS · SEP 2026',
     desc: 'Perdió el ojo salvando a la única persona que creyó en ella, y esa persona desde entonces la manda sola. Con arte de Legends of Runeterra.', acento: '#E62740', glow: '230, 39, 64' },
-    { grupo: 'Creador de contenido', ruta: 'sona/', titulo: 'Sona cumple 16 años', serie: 'CUMPLELOLERO · 18', datos: 'CUMPLELOLERO 18 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/sona/', titulo: 'Sona cumple 16 años', serie: 'CUMPLELOLERO · 18', datos: 'CUMPLELOLERO 18 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
     desc: 'La campeona más musical del juego no puede hablar, y su instrumento es justo lo que la delataría en el país que caza magos.', acento: '#5CCFC8', glow: '92, 207, 200' },
-    { grupo: 'Creador de contenido', ruta: 'vex/', titulo: 'Vex cumple 5 años', serie: 'CUMPLELOLERO · 19', datos: 'CUMPLELOLERO 19 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/vex/', titulo: 'Vex cumple 5 años', serie: 'CUMPLELOLERO · 19', datos: 'CUMPLELOLERO 19 · 9:16 · 8 DIAP · GSAP', meta: '9:16 · 8 DIAPOSITIVAS · SEP 2026',
     desc: 'Su mejor amiga era su sombra, fue a casa a que sus papás la rechazaran y la aceptaron, y Riot le compró un guardarropa de niña feliz.', acento: '#D8409E', glow: '216, 64, 158' },
-    { grupo: 'Creador de contenido', ruta: 'khazix/', titulo: "Kha'Zix cumple 14 años", serie: 'CUMPLELOLERO · 20', datos: 'CUMPLELOLERO 20 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/khazix/', titulo: "Kha'Zix cumple 14 años", serie: 'CUMPLELOLERO · 20', datos: 'CUMPLELOLERO 20 · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · SEP 2026',
     desc: "Llegó buffeado porque Riot lo tenía olvidado, su lore es una sola noche contra Rengar, y el ojo que Rengar trae tapado se lo dejó él.", acento: '#86EE5A', glow: '134, 238, 90' },
-    { grupo: 'Creador de contenido', ruta: 'nasus/', titulo: 'Nasus cumple 17 años', serie: 'CUMPLELOLERO · 21', datos: 'CUMPLELOLERO 21 · 9:16 · 12 DIAP · GSAP', meta: '9:16 · 12 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/nasus/', titulo: 'Nasus cumple 17 años', serie: 'CUMPLELOLERO · 21', datos: 'CUMPLELOLERO 21 · 9:16 · 12 DIAP · GSAP', meta: '9:16 · 12 DIAPOSITIVAS · OCT 2026',
     desc: 'Doce millones de puntos no sacan de Bronce a su mejor one trick, y su hermano lo cargó en brazos creyendo que iba a morir por él para terminar encerrado.', acento: '#D08B4F', glow: '208, 139, 79' },
-    { grupo: 'Creador de contenido', ruta: 'swain/', titulo: 'Swain cumple 16 años', serie: 'CUMPLELOLERO · 22', datos: 'CUMPLELOLERO 22 · 9:16 · 14 DIAP · GSAP', meta: '9:16 · 14 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/swain/', titulo: 'Swain cumple 16 años', serie: 'CUMPLELOLERO · 22', datos: 'CUMPLELOLERO 22 · 9:16 · 14 DIAP · GSAP', meta: '9:16 · 14 DIAPOSITIVAS · OCT 2026',
     desc: 'Ejecutó a sus padres para salvar a Noxus y la camarilla lo traicionó igual: los mató para nada. Un cuervo de tres ojos le enseñó la verdad.', acento: '#C85BF5', glow: '200, 91, 245' },
-    { grupo: 'Creador de contenido', ruta: 'xerath/', titulo: 'Xerath cumple 15 años', serie: 'CUMPLELOLERO · 23', datos: 'CUMPLELOLERO 23 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/xerath/', titulo: 'Xerath cumple 15 años', serie: 'CUMPLELOLERO · 23', datos: 'CUMPLELOLERO 23 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
     desc: 'Azir lo liberó, liberó a todos los esclavos de Shurima y lo nombró su hermano eterno. Y lo mató de todos modos. Es el mago de la tumba de Renekton.', acento: '#58B9FF', glow: '88, 185, 255' },
-    { grupo: 'Creador de contenido', ruta: 'parche2620/', titulo: 'Parche 26.20', serie: 'PARCHES · 01', datos: 'PARCHES 01 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Parches', ruta: 'creator/parche2620/', titulo: 'Parche 26.20', serie: 'PARCHES · 01', datos: 'PARCHES 01 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
     desc: 'El parche de Worlds contado con recortes de las notas oficiales: buff a Smolder y Mordekaiser, el buff a Lucian que nadie pidió y las repeticiones privadas.', acento: '#FFD640', glow: '255, 214, 64' },
-    { grupo: 'Creador de contenido', ruta: 'parche2621/', titulo: 'Parche 26.21', serie: 'PARCHES · 02', datos: 'PARCHES 02 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Parches', ruta: 'creator/parche2621/', titulo: 'Parche 26.21', serie: 'PARCHES · 02', datos: 'PARCHES 02 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
     desc: 'El parche después de Worlds en recortes de las notas oficiales con el marcatextos animado: nerf a Jinx, Caitlyn, Viktor y Qiyana, buff a los magos de pro y el «sorry, Master Yi».', acento: '#FFD640', glow: '255, 214, 64' },
-    { grupo: 'Creador de contenido', ruta: 'jinx/', titulo: 'Jinx cumple 13 años', serie: 'CUMPLELOLERO · 24', datos: 'CUMPLELOLERO 24 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/jinx/', titulo: 'Jinx cumple 13 años', serie: 'CUMPLELOLERO · 24', datos: 'CUMPLELOLERO 24 · 9:16 · 17 DIAP · GSAP', meta: '9:16 · 17 DIAPOSITIVAS · OCT 2026',
     desc: 'Todos los que la quisieron, contados solo con arte oficial de Arcane, y la número uno del mundo en Hierro sin jugar Jinx.', acento: '#FF4FA8', glow: '255, 79, 168' },
-    { grupo: 'Creador de contenido', ruta: 'suiza/', titulo: 'Worlds 2026 · Fase suiza', serie: 'ESPORTS · WORLDS 2026', datos: 'ESPORTS · WORLDS · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Esports y datos', ruta: 'creator/suiza/', titulo: 'Worlds 2026 · Fase suiza', serie: 'ESPORTS · WORLDS 2026', datos: 'ESPORTS · WORLDS · 9:16 · 10 DIAP · GSAP', meta: '9:16 · 10 DIAPOSITIVAS · OCT 2026',
     desc: 'Los ocho partidos de la ronda 1 de la fase suiza como flyers de función estelar, con las estrellas de cada equipo frente a frente, y su cuadro.', acento: '#7CC4FF', glow: '124, 196, 255' },
-    { grupo: 'Creador de contenido', ruta: 'suiza-r1/', titulo: 'Worlds 2026 · Ronda 1 en números', serie: 'ESPORTS · WORLDS 2026', datos: 'ESPORTS · WORLDS · 9:16 · 26 DIAP · GSAP', meta: '9:16 · 26 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Esports y datos', ruta: 'creator/suiza-r1/', titulo: 'Worlds 2026 · Ronda 1 en números', serie: 'ESPORTS · WORLDS 2026', datos: 'ESPORTS · WORLDS · 9:16 · 26 DIAP · GSAP', meta: '9:16 · 26 DIAPOSITIVAS · OCT 2026',
     desc: 'Oro, kills y daño de cada partido de la ronda 1 de la fase suiza: el marcador por equipo, la curva del oro minuto a minuto y el cara a cara por rol.', acento: '#7CC4FF', glow: '124, 196, 255' },
-    { grupo: 'Creador de contenido', ruta: 'lux/', titulo: 'Lux cumple 16 años', serie: 'CUMPLELOLERO · 25', datos: 'CUMPLELOLERO 25 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/lux/', titulo: 'Lux cumple 16 años', serie: 'CUMPLELOLERO · 25', datos: 'CUMPLELOLERO 25 · 9:16 · 11 DIAP · GSAP', meta: '9:16 · 11 DIAPOSITIVAS · OCT 2026',
     desc: 'El OTP europeo que sí sabe jugar, el número dos de LAN, el lore de la Dama Luminosa y sus 22 skins en un bento que se abre. Primer episodio del montaje automático.', acento: '#FFE9A8', glow: '255, 233, 168' },
-    { grupo: 'Creador de contenido', ruta: 'graves/', titulo: 'Graves cumple 15 años', serie: 'CUMPLELOLERO · 26', datos: 'CUMPLELOLERO 26 · 9:16 · 13 DIAP · GSAP', meta: '9:16 · 13 DIAPOSITIVAS · OCT 2026',
+    { desk: 'creator', grupo: 'Cumplelolero', ruta: 'creator/graves/', titulo: 'Graves cumple 15 años', serie: 'CUMPLELOLERO · 26', datos: 'CUMPLELOLERO 26 · 9:16 · 13 DIAP · GSAP', meta: '9:16 · 13 DIAPOSITIVAS · OCT 2026',
     desc: 'El OTP que se llama TOP 1 GRAVES y está en Oro, la sociedad y la traición con Twisted Fate, dos años y ocho meses sin skins y el puro censurado.', acento: '#D9773B', glow: '217, 119, 59' },
-    { grupo: 'Creador de contenido', ruta: 'skins/', titulo: 'Los campeones con más skins', serie: 'DATOS CURIOSOS · 01', datos: 'DATOS CURIOSOS 01 · 9:16 · 4 DIAP · AGO 26', meta: '9:16 · 4 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Datos curiosos', ruta: 'creator/skins/', titulo: 'Los campeones con más skins', serie: 'DATOS CURIOSOS · 01', datos: 'DATOS CURIOSOS 01 · 9:16 · 4 DIAP · AGO 26', meta: '9:16 · 4 DIAPOSITIVAS · AGO 2026',
     desc: 'El triple empate que se rompe al descontar bóveda y prestigio, con los collages completos de Lux, Ahri y MF.', acento: '#E75FB4', glow: '231, 95, 180' },
-    { grupo: 'Creador de contenido', ruta: 'caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
+    { desk: 'creator', grupo: 'Datos curiosos', ruta: 'creator/caras/', titulo: 'Las skins más caras del LoL', serie: 'DATOS CURIOSOS · 02', datos: 'DATOS CURIOSOS 02 · 9:16 · 5 DIAP · AGO 26', meta: '9:16 · 5 DIAPOSITIVAS · AGO 2026',
     desc: 'De 25 a 450 dólares en un solo año: exaltadas, trascendentes y el tarjetazo del Hall of Legends.', acento: '#F5C042', glow: '245, 192, 66' },
-    { grupo: 'Laboratorio', ruta: 'novedades/', titulo: 'Lo nuevo del kit', serie: 'KIT · NOVEDADES', datos: 'KIT · 16:9 · 27 DIAP · OCT 26', meta: '16:9 · 27 DIAPOSITIVAS · OCT 2026',
+    { desk: 'personal', grupo: 'Kit', ruta: 'personal/novedades/', titulo: 'Lo nuevo del kit', serie: 'KIT · NOVEDADES', datos: 'KIT · 16:9 · 27 DIAP · OCT 26', meta: '16:9 · 27 DIAPOSITIVAS · OCT 2026',
     desc: 'Cuaderno de novedades: GSAP 3.15, las recetas de animación, ocho efectos SVG nuevos, continuidad entre láminas, objetos dibujados a líneas y un video hasta veinte veces más rápido, cada uno con su demo viva.', acento: '#8C98FF', glow: '140, 152, 255' },
-    { grupo: 'Laboratorio', ruta: 'lab/', titulo: 'Laboratorio de efectos', serie: 'KIT · CATÁLOGO', datos: 'KIT · 9:16 · 60 DIAP · GSAP 3.15', meta: '9:16 · 60 DIAPOSITIVAS · OCT 2026',
+    { desk: 'personal', grupo: 'Kit', ruta: 'personal/lab/', titulo: 'Laboratorio de efectos', serie: 'KIT · CATÁLOGO', datos: 'KIT · 9:16 · 60 DIAP · GSAP 3.15', meta: '9:16 · 60 DIAPOSITIVAS · OCT 2026',
     desc: 'El catálogo vivo del kit: recetas para texto, imagen, contenedores y transiciones, los efectos SVG de la segunda tanda, la continuidad entre láminas, el dibujo a líneas y los patrones generativos con semilla.', acento: '#FF6A3D', glow: '255, 106, 61' },
 ];
 
-const portada = d => 'portadas/' + d.ruta.replace('/', '') + '.jpg';
+// La portada se llama como el deck, sin su escritorio: creator/ornn/ → portadas/ornn.jpg
+const portada = d => 'portadas/' + d.ruta.split('/').filter(Boolean).pop() + '.jpg';
 const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-// precarga suave de portadas
-DECKS.forEach(d => { const im = new Image(); im.src = portada(d); });
-
-// ── construir el índice ────────────────────────────────────────────
+// ── los tres escritorios ───────────────────────────────────────────
+// Cada deck dice su `desk`; dentro de cada uno las filas se agrupan por
+// `grupo`, en el orden en que aparece cada grupo por primera vez en DECKS.
+const DESKS = [
+  { id: 'work', nombre: 'Work' },
+  { id: 'personal', nombre: 'Personal' },
+  { id: 'creator', nombre: 'Content creator' },
+];
 const filas = document.getElementById('filas');
-const filasDeck = [];   // solo las filas de deck: los encabezados de grupo NO cuentan
-let grupoActual = null;
-DECKS.forEach((d, i) => {
-  if (d.grupo !== grupoActual) {
-    grupoActual = d.grupo;
-    const n = DECKS.filter(x => x.grupo === d.grupo).length;
-    const h = document.createElement('div');
-    h.className = 'grupo mono';
-    h.innerHTML = '<span class="nombre">' + d.grupo.toUpperCase() + '</span><span class="regla"></span><span class="n">' + n + '</span>';
-    filas.appendChild(h);
-  }
-  const a = document.createElement('a');
-  a.className = 'fila';
-  a.href = d.ruta;
-  a.style.animationDelay = (i * 45) + 'ms';
-  a.innerHTML =
-    '<span class="linea1"><span class="titulo">' + d.titulo + '</span>' +
-    (d.video ? '<span class="extra mono">' + d.video + '</span>' : '<span class="en-pantalla mono">EN PANTALLA ◄</span>') +
-    '</span>' +
-    '<span class="datos mono">' + d.datos + '</span>';
-  a.addEventListener('mouseenter', () => proyectar(i, true));
-  a.addEventListener('focus', () => proyectar(i, true));
-  filas.appendChild(a);
-  filasDeck.push(a);
+const progreso = document.getElementById('progreso');
+const nav = document.getElementById('desks');
+let lista = [];         // los decks del escritorio en pantalla, en el orden del índice
+let filasDeck = [];     // solo las filas de deck: los encabezados de grupo NO cuentan
+let deskActual = null;
+
+DESKS.forEach(k => {
+  const b = document.createElement('button');
+  b.type = 'button';
+  b.setAttribute('role', 'tab');
+  b.dataset.desk = k.id;
+  b.innerHTML = k.nombre + '<span class="n">' + DECKS.filter(d => d.desk === k.id).length + '</span>';
+  b.addEventListener('click', () => elegirDesk(k.id, true));
+  nav.appendChild(b);
 });
 
-// Etiqueta corta para la cabecera; un grupo que no esté aquí sale con su
-// nombre completo, así el contador nunca se queda mudo al agregar categorías.
-const CORTO = { 'Profesional': 'PROFESIONAL', 'Reportes semanales': 'REPORTES', 'Charlas': 'CHARLAS', 'Creador de contenido': 'CONTENIDO', 'Laboratorio': 'LAB' };
-document.getElementById('cuenta').textContent =
-  [...new Set(DECKS.map(d => d.grupo))]
-    .map(g => DECKS.filter(d => d.grupo === g).length + ' ' + (CORTO[g] || g.toUpperCase()))
-    .join(' · ');
+function elegirDesk(id, manual) {
+  if (!DESKS.some(k => k.id === id)) id = DESKS[0].id;
+  deskActual = id;
+  [...nav.children].forEach(b => b.setAttribute('aria-selected', String(b.dataset.desk === id)));
+  try { localStorage.setItem('galeria-desk', id); } catch (e) {}
+  if (manual) history.replaceState(null, '', '#' + id);
 
-const progreso = document.getElementById('progreso');
-DECKS.forEach(() => progreso.appendChild(document.createElement('span')));
+  const delDesk = DECKS.filter(d => d.desk === id);
+  const grupos = [...new Set(delDesk.map(d => d.grupo))];
+  lista = grupos.flatMap(g => delDesk.filter(d => d.grupo === g));
+
+  filas.innerHTML = '';
+  filasDeck = [];
+  let grupoActual = null;
+  lista.forEach((d, i) => {
+    if (d.grupo !== grupoActual) {
+      grupoActual = d.grupo;
+      const h = document.createElement('div');
+      h.className = 'grupo mono';
+      h.innerHTML = '<span class="nombre">' + d.grupo.toUpperCase() + '</span><span class="regla"></span><span class="n">' + lista.filter(x => x.grupo === d.grupo).length + '</span>';
+      filas.appendChild(h);
+    }
+    const a = document.createElement('a');
+    a.className = 'fila';
+    a.href = d.ruta;
+    a.style.animationDelay = (i * 35) + 'ms';
+    a.innerHTML =
+      '<span class="linea1"><span class="titulo">' + d.titulo + '</span>' +
+      (d.video ? '<span class="extra mono">' + d.video + '</span>' : '<span class="en-pantalla mono">EN PANTALLA ◄</span>') +
+      '</span>' +
+      '<span class="datos mono">' + d.datos + '</span>';
+    a.addEventListener('mouseenter', () => proyectar(i, true));
+    a.addEventListener('focus', () => proyectar(i, true));
+    filas.appendChild(a);
+    filasDeck.push(a);
+  });
+
+  document.getElementById('cuenta').textContent = lista.length + ' PRESENTACIONES';
+  progreso.innerHTML = '';
+  lista.forEach(() => progreso.appendChild(document.createElement('span')));
+  lista.forEach(d => { const im = new Image(); im.src = portada(d); });   // precarga suave
+
+  actual = -1;
+  proyectar(0, false);
+  reiniciarRotacion();
+}
 
 // ── la proyección ──────────────────────────────────────────────────
 const fondos = [document.getElementById('fondo-a'), document.getElementById('fondo-b')];
@@ -388,7 +432,7 @@ let temporizador = null;
 function proyectar(i, manual) {
   if (i === actual) { if (manual) reiniciarRotacion(); return; }
   actual = i;
-  const d = DECKS[i];
+  const d = lista[i];
 
   // crossfade de portada entre dos capas
   const entra = fondos[1 - fondoVisible], sale = fondos[fondoVisible];
@@ -409,7 +453,7 @@ function proyectar(i, manual) {
   btnVideo.hidden = !d.videoSrc;
   if (d.videoSrc) btnVideo.href = d.videoSrc;
   document.getElementById('meta-pantalla').textContent = d.meta;
-  document.getElementById('contador').textContent = String(i + 1).padStart(2, '0') + ' / ' + DECKS.length;
+  document.getElementById('contador').textContent = String(i + 1).padStart(2, '0') + ' / ' + String(lista.length).padStart(2, '0');
 
   [...progreso.children].forEach((s, j) => s.classList.toggle('activa', j === i));
   filasDeck.forEach((f, j) => f.classList.toggle('activa', j === i));
@@ -417,7 +461,7 @@ function proyectar(i, manual) {
   if (manual) reiniciarRotacion();
 }
 
-function siguiente(paso) { proyectar((actual + paso + DECKS.length) % DECKS.length, false); }
+function siguiente(paso) { proyectar((actual + paso + lista.length) % lista.length, false); }
 document.getElementById('siguiente').addEventListener('click', () => { siguiente(1); reiniciarRotacion(); });
 document.getElementById('anterior').addEventListener('click', () => { siguiente(-1); reiniciarRotacion(); });
 
@@ -427,8 +471,10 @@ function reiniciarRotacion() {
   temporizador = setInterval(() => siguiente(1), 7000);
 }
 
-proyectar(0, false);
-reiniciarRotacion();
+let guardado = null;
+try { guardado = localStorage.getItem('galeria-desk'); } catch (e) {}
+elegirDesk(location.hash.slice(1) || guardado || 'work', false);
+window.addEventListener('hashchange', () => elegirDesk(location.hash.slice(1), false));
 document.addEventListener('visibilitychange', () => {
   if (document.hidden) { if (temporizador) clearInterval(temporizador); }
   else reiniciarRotacion();
