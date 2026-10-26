@@ -1,0 +1,1585 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DRA · Del pizarrón a la evidencia</title>
+<meta name="description" content="Un método común para evaluar ideas en equipo: un embudo de cinco pasos (filtros, Lean Canvas, ICE, mapa de supuestos y Test Cards), Notion y Miro, una reunión de propuestas y el ejemplo de Pádel SoloQ.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="DRA · Del pizarrón a la evidencia">
+<meta property="og:description" content="Un método común para evaluar ideas en equipo: un embudo de cinco pasos (filtros, Lean Canvas, ICE, mapa de supuestos y Test Cards), Notion y Miro, una reunión de propuestas y el ejemplo de Pádel SoloQ.">
+<meta property="og:url" content="https://presentations-three-phi.vercel.app/personal/dra/">
+<meta property="og:image" content="https://presentations-three-phi.vercel.app/personal/dra/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="../../favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;600;700;800&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #4B3BD6; }
+  /* Las entradas las orquesta GSAP; nada se oculta en CSS a propósito:
+     sin JS el deck se ve completo y la impresión a PDF funciona. */
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(255,255,255,0.35); border-radius: 999px;
+    background: rgba(28,26,58,0.85); color: #FFFFFF; cursor: pointer;
+    font: 600 13px/1 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Tenemos muchas ideas y poco tiempo. Esta es la propuesta de un metodo comun para decidir cuales explorar, con evidencia y no por quien habla mas fuerte." style="background: #4B3BD6; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(85% 75% at 88% 10%, rgba(122,107,255,0.55) 0%, rgba(122,107,255,0) 62%), radial-gradient(70% 60% at 8% 95%, rgba(28,26,58,0.35) 0%, rgba(28,26,58,0) 55%); background-size: 30px 30px, 100% 100%, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <div data-orbe style="position: absolute; right: -110px; bottom: -170px; width: 640px; height: 640px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
+      <div data-orbe style="position: absolute; right: 240px; top: -120px; width: 330px; height: 330px; border-radius: 50%; background: rgba(255,255,255,0.08);"></div>
+      <div data-orbe style="position: absolute; left: -180px; top: 30%; width: 420px; height: 420px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.10);"></div>
+    </div>
+    <div data-a="up" style="display: flex; align-items: center; gap: 16px;">
+      <span data-sello style="width: 86px; height: 74px; border-radius: 18px; background: #FFFFFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+      <div style="display: flex; flex-direction: column; gap: 4px;">
+        <span style="font-size: 30px; font-weight: 700; letter-spacing: -0.3px;">Cómo vamos a evaluar nuestras ideas</span>
+        <span style="font-size: 19px; font-weight: 600; letter-spacing: 2.5px; text-transform: uppercase; color: rgba(255,255,255,0.7);">Propuesta de método para el equipo</span>
+      </div>
+    </div>
+    <h1 data-split style="margin: 38px 0 0; font-size: 104px; font-weight: 800; letter-spacing: -3.6px; line-height: 1.02; max-width: 1560px;">Del pizarrón<br>a la evidencia</h1>
+    <p data-a="up3" style="margin: 28px 0 0; font-size: 28px; font-weight: 400; color: rgba(255,255,255,0.84); line-height: 1.5; max-width: 1180px;">Tenemos muchas ideas y poco tiempo. Un método común para decidir cuáles explorar con evidencia, no por quien habla más fuerte.</p>
+    <div data-a="up3" style="margin-top: 40px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Un embudo de 5 pasos</span>
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Notion + Miro</span>
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Una reunión de 90 min</span>
+      <span style="background: #FFFFFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Pruebas de 2 semanas</span>
+    </div>
+  </section>
+
+  <section data-label="En resumen" data-screen-label="En resumen" data-speaker-notes="Cuatro piezas: un embudo por el que pasa toda idea, dos plataformas, una reunion con agenda fija y experimentos baratos antes de construir nada." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">En resumen</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Cuatro piezas para decidir juntos</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #64618A; line-height: 1.5; max-width: 1400px;">Que cualquier idea se pueda describir, comparar y probar de la misma forma, sin importar de quién venga.</p>
+    <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; flex: 1;">
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 36px 34px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; border-top: 5px solid #4B3BD6; background-image: radial-gradient(120% 70% at 100% 0%, rgba(75,59,214,0.08) 0%, transparent 60%);">
+          <span data-cuenta="5" style="font-size: 170px; font-weight: 800; color: #4B3BD6; letter-spacing: -7px; line-height: 0.9; font-variant-numeric: tabular-nums;">5</span>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; line-height: 1.15; letter-spacing: -0.6px;">pasos de un embudo</span>
+            <span style="font-size: 21px; font-weight: 400; color: #64618A; line-height: 1.45;">Toda idea pasa por los mismos filtros, la misma ficha y la misma calificación.</span>
+          </div>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 36px 34px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; border-top: 5px solid #4B3BD6; background-image: radial-gradient(120% 70% at 100% 0%, rgba(75,59,214,0.08) 0%, transparent 60%);">
+          <span data-cuenta="2" style="font-size: 170px; font-weight: 800; color: #4B3BD6; letter-spacing: -7px; line-height: 0.9; font-variant-numeric: tabular-nums;">2</span>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; line-height: 1.15; letter-spacing: -0.6px;">plataformas</span>
+            <span style="font-size: 21px; font-weight: 400; color: #64618A; line-height: 1.45;">Notion para documentar y Miro para visualizar. Claude ayuda en las dos.</span>
+          </div>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 36px 34px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; border-top: 5px solid #4B3BD6; background-image: radial-gradient(120% 70% at 100% 0%, rgba(75,59,214,0.08) 0%, transparent 60%);">
+          <span data-cuenta="90" style="font-size: 170px; font-weight: 800; color: #4B3BD6; letter-spacing: -7px; line-height: 0.9; font-variant-numeric: tabular-nums;">90</span>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; line-height: 1.15; letter-spacing: -0.6px;">minutos de reunión</span>
+            <span style="font-size: 21px; font-weight: 400; color: #64618A; line-height: 1.45;">Una reunión de propuestas con agenda fija para decidir juntos.</span>
+          </div>
+        </div>
+      
+        <div data-stat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 36px 34px 34px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; border-top: 5px solid #00875A; background-image: radial-gradient(120% 70% at 100% 0%, rgba(0,135,90,0.08) 0%, transparent 60%);">
+          <span data-cuenta="2" style="font-size: 170px; font-weight: 800; color: #00875A; letter-spacing: -7px; line-height: 0.9; font-variant-numeric: tabular-nums;">2</span>
+          <div style="display: flex; flex-direction: column; gap: 10px;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; line-height: 1.15; letter-spacing: -0.6px;">semanas por prueba</span>
+            <span style="font-size: 21px; font-weight: 400; color: #64618A; line-height: 1.45;">Experimentos baratos antes de construir cualquier cosa.</span>
+          </div>
+        </div>
+    </div>
+  </section>
+
+  <section data-label="El problema" data-screen-label="El problema" data-speaker-notes="En la primera reunion salieron seis ideas en el pizarron. Sin un metodo, esto es lo que suele pasar." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">El problema</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Seis ideas en el pizarrón<br>y ninguna forma de compararlas</h2>
+    <div data-a="up2" style="margin-top: 38px; display: grid; grid-template-columns: 440px 1fr; gap: 34px; flex: 1;">
+      <div data-panel style="background: #4B3BD6; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(85% 75% at 85% 8%, rgba(122,107,255,0.55) 0%, rgba(122,107,255,0) 62%), radial-gradient(70% 60% at 10% 100%, rgba(28,26,58,0.35) 0%, rgba(28,26,58,0) 55%); background-size: 30px 30px, 100% 100%, 100% 100%; border-radius: 26px; padding: 40px 38px; display: flex; flex-direction: column; color: #FFFFFF; box-shadow: 0 2px 4px rgba(28,26,58,0.14), 0 18px 40px rgba(75,59,214,0.3);">
+        <span data-cuenta="6" style="font-size: 170px; font-weight: 800; letter-spacing: -6px; line-height: 1; font-variant-numeric: tabular-nums;">6</span>
+        <span style="font-size: 27px; font-weight: 600; margin-top: 8px; line-height: 1.3;">ideas en la primera reunión</span>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 20px; color: rgba(255,255,255,0.85); line-height: 1.5;">Sin método, lo normal es que gane la que más ruido hace.</span>
+      </div>
+      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+        
+        <div data-riesgo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <span style="font-size: 17px; font-weight: 800; color: #DE350B; letter-spacing: 1.5px; font-variant-numeric: tabular-nums;">01</span>
+          <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.7px; line-height: 1.15;">Discutir en círculos</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.45;">Sin poder comparar ideas distintas entre sí.</span>
+        </div>
+        <div data-riesgo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <span style="font-size: 17px; font-weight: 800; color: #DE350B; letter-spacing: 1.5px; font-variant-numeric: tabular-nums;">02</span>
+          <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.7px; line-height: 1.15;">Elegir la más emocionante</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.45;">Y no la más viable.</span>
+        </div>
+        <div data-riesgo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <span style="font-size: 17px; font-weight: 800; color: #DE350B; letter-spacing: 1.5px; font-variant-numeric: tabular-nums;">03</span>
+          <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.7px; line-height: 1.15;">Construir antes de tiempo</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.45;">Sin saber si alguien la quiere.</span>
+        </div>
+        <div data-riesgo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 30px; display: flex; flex-direction: column; gap: 12px; border-top: 5px solid #DE350B;">
+          <span style="font-size: 17px; font-weight: 800; color: #DE350B; letter-spacing: 1.5px; font-variant-numeric: tabular-nums;">04</span>
+          <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.7px; line-height: 1.15;">Perder lo que se habló</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.45;">Porque nada quedó registrado.</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 26px;">
+    <div data-nota style="background: #ECEAFF; border-left: 5px solid #4B3BD6; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);"><strong style="font-weight: 700;">Lo que buscamos:</strong> que cualquier idea se pueda describir, comparar y probar de la misma forma.</div></div>
+  </section>
+
+  <section data-label="Principios" data-screen-label="Principios" data-speaker-notes="Cinco principios que sostienen todo lo demas. Si en algun momento dudamos, regresamos aqui." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Principios</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Cinco reglas que sostienen todo lo demás</h2>
+    <div data-a="up2" style="margin-top: 44px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; flex: 1;">
+      
+      <div data-principio style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 34px 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border-top: 5px solid #4B3BD6;">
+        <span style="font-size: 150px; font-weight: 800; color: #4B3BD6; opacity: 0.16; letter-spacing: -6px; line-height: 0.85; font-variant-numeric: tabular-nums;">1</span>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 34px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px; line-height: 1.12;">Lo que no está escrito no existe</span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Toda idea se registra.</span>
+        </div>
+      </div>
+      <div data-principio style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 34px 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border-top: 5px solid #4B3BD6;">
+        <span style="font-size: 150px; font-weight: 800; color: #4B3BD6; opacity: 0.16; letter-spacing: -6px; line-height: 0.85; font-variant-numeric: tabular-nums;">2</span>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 34px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px; line-height: 1.12;">Decidimos con evidencia</span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Las opiniones se convierten en supuestos que se prueban.</span>
+        </div>
+      </div>
+      <div data-principio style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 34px 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border-top: 5px solid #4B3BD6;">
+        <span style="font-size: 150px; font-weight: 800; color: #4B3BD6; opacity: 0.16; letter-spacing: -6px; line-height: 0.85; font-variant-numeric: tabular-nums;">3</span>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 34px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px; line-height: 1.12;">Probar barato antes de construir</span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Primero entrevistas o pruebas manuales; el código al final.</span>
+        </div>
+      </div>
+      <div data-principio style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 34px 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border-top: 5px solid #4B3BD6;">
+        <span style="font-size: 150px; font-weight: 800; color: #4B3BD6; opacity: 0.16; letter-spacing: -6px; line-height: 0.85; font-variant-numeric: tabular-nums;">4</span>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 34px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px; line-height: 1.12;">Foco</span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Máximo 3 ideas en validación al mismo tiempo.</span>
+        </div>
+      </div>
+      <div data-principio style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 34px 30px; display: flex; flex-direction: column; justify-content: space-between; gap: 16px; border-top: 5px solid #00875A;">
+        <span style="font-size: 150px; font-weight: 800; color: #00875A; opacity: 0.16; letter-spacing: -6px; line-height: 0.85; font-variant-numeric: tabular-nums;">5</span>
+        <div style="display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 34px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px; line-height: 1.12;">Descartar también es avanzar</span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Siempre que quede escrito por qué.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El embudo" data-screen-label="El embudo" data-speaker-notes="Toda idea pasa por el mismo embudo de cinco pasos. Cada paso responde una pregunta, y al final solo hay tres salidas: validada, pivote o descartada." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">El método</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Un embudo de cinco pasos<br>por el que pasa toda idea</h2>
+    <div data-a="up2" style="margin-top: 40px; display: grid; grid-template-columns: 1260px 1fr; gap: 40px; align-items: center; flex: 1;">
+      <div style="position: relative; width: 1260px; height: 430px;">
+        <svg data-silueta viewBox="0 0 1260 430" style="position: absolute; left: 0; top: 0; width: 1260px; height: 430px; overflow: visible;">
+      <defs><linearGradient id="g-emb" x1="0" x2="1" y1="0" y2="0"><stop offset="0" stop-color="#ECEAFF"/><stop offset="1" stop-color="rgba(75,59,214,0.22)"/></linearGradient></defs>
+      <path d="M 0 0 L 1260 155 L 1260 275 L 0 430 Z" fill="url(#g-emb)"></path>
+    </svg>
+        <div style="position: absolute; inset: 0; display: grid; grid-template-columns: 150px repeat(5, 1fr); align-items: center; padding: 0 10px 0 22px; gap: 14px;">
+          <div data-nodo style="display: flex; flex-direction: column; gap: 8px; align-items: flex-start;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Entra</span>
+            <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px;">Idea</span>
+          </div>
+          
+          <div data-nodo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">1</span>
+            <span style="font-size: 22px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Filtros</span>
+            <span style="font-size: 16.5px; font-weight: 600; color: #4B3BD6;">¿Entra?</span>
+          </div>
+          <div data-nodo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">2</span>
+            <span style="font-size: 22px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Lean Canvas</span>
+            <span style="font-size: 16.5px; font-weight: 600; color: #4B3BD6;">¿Qué es?</span>
+          </div>
+          <div data-nodo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">3</span>
+            <span style="font-size: 22px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">ICE</span>
+            <span style="font-size: 16.5px; font-weight: 600; color: #4B3BD6;">¿Cuál primero?</span>
+          </div>
+          <div data-nodo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">4</span>
+            <span style="font-size: 22px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Supuestos</span>
+            <span style="font-size: 16.5px; font-weight: 600; color: #4B3BD6;">¿Qué la tumba?</span>
+          </div>
+          <div data-nodo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 16px; display: flex; flex-direction: column; gap: 8px; align-items: center; text-align: center;">
+            <span style="width: 40px; height: 40px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;">5</span>
+            <span style="font-size: 22px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Tarjetas</span>
+            <span style="font-size: 16.5px; font-weight: 600; color: #4B3BD6;">¿Funciona?</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Sale como</span>
+        
+        <div data-salida style="background: #E3FCEF; border-left: 5px solid #00875A; border-radius: 0 16px 16px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 16px rgba(28,26,58,0.07);">
+          <span style="font-size: 25px; font-weight: 800; color: #00875A;">Validada</span>
+          <span style="font-size: 18px; color: #1C1A3A; line-height: 1.35;">Pasa a planear el MVP</span>
+        </div>
+        <div data-salida style="background: #FFF0B3; border-left: 5px solid #974F0C; border-radius: 0 16px 16px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 16px rgba(28,26,58,0.07);">
+          <span style="font-size: 25px; font-weight: 800; color: #974F0C;">Pivote</span>
+          <span style="font-size: 18px; color: #1C1A3A; line-height: 1.35;">Regresa al Lean Canvas</span>
+        </div>
+        <div data-salida style="background: #FFEBE6; border-left: 5px solid #DE350B; border-radius: 0 16px 16px 0; padding: 18px 22px; display: flex; flex-direction: column; gap: 4px; box-shadow: 0 6px 16px rgba(28,26,58,0.07);">
+          <span style="font-size: 25px; font-weight: 800; color: #DE350B;">Descartada</span>
+          <span style="font-size: 18px; color: #1C1A3A; line-height: 1.35;">Se archiva con el motivo</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Paso 1 · Filtros" data-screen-label="1 · Filtros" data-speaker-notes="Los filtros son las reglas que acordamos en la primera sesion. Si una idea no pasa alguno, se descarta sin mas analisis. El ultimo depende de nuestra capacidad, que todavia hay que confirmar." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">1 Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">2 Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">3 ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">4 Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 1</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Si no pasa un filtro,<br>se descarta sin más análisis</h2>
+    <div data-a="up2" style="margin-top: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Las reglas que acordamos</span>
+        
+        <div data-filtro style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 22px 26px; display: flex; align-items: center; gap: 20px; ">
+          <span style="flex: none; width: 46px; height: 46px; border-radius: 13px; background: #FFEBE6; color: #DE350B; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">✕</span>
+          <span style="font-size: 27px; font-weight: 700; color: #1C1A3A; letter-spacing: -0.4px; line-height: 1.2;">No lugares físicos</span>
+        </div>
+        <div data-filtro style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 22px 26px; display: flex; align-items: center; gap: 20px; ">
+          <span style="flex: none; width: 46px; height: 46px; border-radius: 13px; background: #FFEBE6; color: #DE350B; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">✕</span>
+          <span style="font-size: 27px; font-weight: 700; color: #1C1A3A; letter-spacing: -0.4px; line-height: 1.2;">Nada ilegal</span>
+        </div>
+        <div data-filtro style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 22px 26px; display: flex; align-items: center; gap: 20px; ">
+          <span style="flex: none; width: 46px; height: 46px; border-radius: 13px; background: #FFEBE6; color: #DE350B; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">✕</span>
+          <span style="font-size: 27px; font-weight: 700; color: #1C1A3A; letter-spacing: -0.4px; line-height: 1.2;">Nada polémico ni político</span>
+        </div>
+        <div data-filtro style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 22px 26px; display: flex; align-items: center; gap: 20px; border: 2px solid #4B3BD6;">
+          <span style="flex: none; width: 46px; height: 46px; border-radius: 13px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 800;">⌛</span>
+          <span style="font-size: 27px; font-weight: 700; color: #1C1A3A; letter-spacing: -0.4px; line-height: 1.2;">La primera prueba cabe en nuestra capacidad</span>
+        </div>
+      </div>
+      <div data-capacidad style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 30px 34px; display: flex; flex-direction: column; gap: 18px;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Nuestra capacidad</span><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #974F0C; background: #FFF0B3; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">a confirmar</span>
+        </div>
+        <div style="display: flex; align-items: baseline; gap: 14px;">
+          <span style="font-size: 76px; font-weight: 800; color: #4B3BD6; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">22–36 h</span>
+          <span style="font-size: 22px; font-weight: 600; color: #1C1A3A;">por semana, entre los tres</span>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 30px; margin-top: 22px;">
+          
+          <div data-socio style="display: grid; grid-template-columns: 210px 1fr 150px; gap: 16px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 27px; font-weight: 800; color: #1C1A3A;">Axl</span>
+              <span style="font-size: 18px; color: #64618A;">Busca: Currículum</span>
+            </div>
+            <div style="position: relative; height: 22px; background: #F6F5FB; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(28,26,58,0.12);">
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 23.8%; border-radius: 6px; background: rgba(75,59,214,0.25);"></div>
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 23.8%; border-radius: 6px; background: linear-gradient(90deg, #4B3BD6, #7A6BFF);"></div>
+            </div>
+            <span style="font-size: 20px; font-weight: 700; color: #4B3BD6; text-align: right; font-variant-numeric: tabular-nums;">5 h por semana</span>
+          </div>
+          <div data-socio style="display: grid; grid-template-columns: 210px 1fr 150px; gap: 16px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 27px; font-weight: 800; color: #1C1A3A;">Rodri</span>
+              <span style="font-size: 18px; color: #64618A;">Busca: Experiencia</span>
+            </div>
+            <div style="position: relative; height: 22px; background: #F6F5FB; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(28,26,58,0.12);">
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 100.0%; border-radius: 6px; background: rgba(75,59,214,0.25);"></div>
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 47.6%; border-radius: 6px; background: linear-gradient(90deg, #4B3BD6, #7A6BFF);"></div>
+            </div>
+            <span style="font-size: 20px; font-weight: 700; color: #4B3BD6; text-align: right; font-variant-numeric: tabular-nums;">2 a 3 h diarias</span>
+          </div>
+          <div data-socio style="display: grid; grid-template-columns: 210px 1fr 150px; gap: 16px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 2px;">
+              <span style="font-size: 27px; font-weight: 800; color: #1C1A3A;">Diego</span>
+              <span style="font-size: 18px; color: #64618A;">Busca: Ingreso secundario</span>
+            </div>
+            <div style="position: relative; height: 22px; background: #F6F5FB; border-radius: 6px; box-shadow: inset 0 1px 3px rgba(28,26,58,0.12);">
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 50.0%; border-radius: 6px; background: rgba(75,59,214,0.25);"></div>
+              <div data-barra style="position: absolute; left: 0; top: 0; bottom: 0; width: 35.7%; border-radius: 6px; background: linear-gradient(90deg, #4B3BD6, #7A6BFF);"></div>
+            </div>
+            <span style="font-size: 20px; font-weight: 700; color: #4B3BD6; text-align: right; font-variant-numeric: tabular-nums;">1.5 h diarias</span>
+          </div>
+        </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 17.5px; color: #64618A; line-height: 1.45;">El rango depende de si «diario» incluye fines de semana. Las aportaciones de cada quien se confirman en la reunión.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Paso 2 · Lean Canvas" data-screen-label="2 · Lean Canvas" data-speaker-notes="El Lean Canvas, de Ash Maurya, resume una idea en nueve bloques en una sola pagina. Se llena en el orden de los numeros, empezando por el cliente y el problema. Maximo 45 minutos, y lo que no sabemos se escribe como no sabemos." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">2 Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">3 ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">4 Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 2</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Lean Canvas: la idea<br>en una sola página</h2>
+    <div data-a="up2" style="margin-top: 30px; display: grid; grid-template-columns: 1fr 380px; gap: 30px; flex: 1;">
+      <div data-canvas style="display: grid; grid-template-columns: repeat(10, 1fr); grid-template-rows: 1fr 1fr 0.8fr; gap: 12px;
+        grid-template-areas: 'pr pr so so pv pv ve ve se se' 'pr pr me me pv pv ca ca se se' 'co co co co co in in in in in';">
+        
+        <div data-bloque data-orden="2" style="grid-area: pr; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">2</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Problema</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Qué les duele y cómo lo resuelven hoy?</span>
+        </div>
+        
+        <div data-bloque data-orden="4" style="grid-area: so; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">4</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Solución</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">Las 3 funciones mínimas</span>
+        </div>
+        
+        <div data-bloque data-orden="8" style="grid-area: me; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">8</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Métricas clave</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Qué número dice que va bien?</span>
+        </div>
+        
+        <div data-bloque data-orden="3" style="grid-area: pv; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; border: 2px solid #4B3BD6; background: linear-gradient(180deg, #ECEAFF 0%, #FFFFFF 100%);">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">3</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Propuesta de valor única</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Por qué nos elegirían?</span>
+        </div>
+        
+        <div data-bloque data-orden="9" style="grid-area: ve; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">9</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Ventaja injusta</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Qué no se puede copiar?</span>
+        </div>
+        
+        <div data-bloque data-orden="5" style="grid-area: ca; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">5</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Canales</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Cómo llegamos a ellos?</span>
+        </div>
+        
+        <div data-bloque data-orden="1" style="grid-area: se; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">1</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Segmento de clientes</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Para quién es?</span>
+        </div>
+        
+        <div data-bloque data-orden="7" style="grid-area: co; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">7</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Estructura de costos</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Qué nos cuesta operarla?</span>
+        </div>
+        
+        <div data-bloque data-orden="6" style="grid-area: in; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 16px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; ">
+          <div style="display: flex; align-items: center; gap: 10px;">
+            <span style="flex: none; width: 30px; height: 30px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800;">6</span>
+            <span style="font-size: 20px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.3px; line-height: 1.15;">Fuentes de ingreso</span>
+          </div>
+          <span style="font-size: 16.5px; color: #64618A; line-height: 1.35;">¿Quién paga y cuánto?</span>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 18px;">
+        <div data-regla style="background: #4B3BD6; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px); background-size: 26px 26px; border-radius: 22px; padding: 28px 28px; color: #FFFFFF; display: flex; flex-direction: column; gap: 6px; box-shadow: 0 18px 40px rgba(75,59,214,0.28);">
+          <span data-cuenta="45" data-sufijo=" min" style="font-size: 78px; font-weight: 800; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">45 min</span>
+          <span style="font-size: 21px; font-weight: 600; line-height: 1.35;">como máximo por idea</span>
+        </div>
+        <div data-regla style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 26px 26px; display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Si algo no se sabe</span>
+          <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.5px;">se escribe «no sabemos»</span>
+          <span style="font-size: 19px; color: #64618A; line-height: 1.45;">Cada hueco se vuelve un supuesto por probar en el paso 4.</span>
+        </div>
+        <span data-regla style="font-size: 17px; color: #64618A; line-height: 1.45;">Creado por Ash Maurya para startups: pone el foco en el problema y en lo que todavía no sabemos.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Paso 3 · ICE" data-screen-label="3 · ICE" data-speaker-notes="ICE califica cada idea del uno al diez en tres criterios. El puntaje es el promedio de los tres, y luego el promedio entre socios. Avanzan las de seis o mas, hasta llenar los tres lugares de validacion." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">3 ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">4 Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 3</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">ICE: tres calificaciones<br>del 1 al 10 por idea</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px;">
+      
+      <div data-letra style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 26px 28px; display: grid; grid-template-columns: 92px 1fr; gap: 20px; align-items: center; border-top: 5px solid #4B3BD6;">
+        <span style="width: 92px; height: 92px; border-radius: 22px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 800;">I</span>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.5px;">Impacto</span>
+          <span style="font-size: 19px; color: #64618A; line-height: 1.4;">Si funciona, ¿qué tan grande es?</span>
+        </div>
+      </div>
+      <div data-letra style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 26px 28px; display: grid; grid-template-columns: 92px 1fr; gap: 20px; align-items: center; border-top: 5px solid #0E8C7A;">
+        <span style="width: 92px; height: 92px; border-radius: 22px; background: #E0F5F1; color: #0E8C7A; display: inline-flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 800;">C</span>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.5px;">Confianza</span>
+          <span style="font-size: 19px; color: #64618A; line-height: 1.4;">¿Qué evidencia tenemos?</span>
+        </div>
+      </div>
+      <div data-letra style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 26px 28px; display: grid; grid-template-columns: 92px 1fr; gap: 20px; align-items: center; border-top: 5px solid #C2399B;">
+        <span style="width: 92px; height: 92px; border-radius: 22px; background: #FBE6F4; color: #C2399B; display: inline-flex; align-items: center; justify-content: center; font-size: 60px; font-weight: 800;">E</span>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.5px;">Facilidad</span>
+          <span style="font-size: 19px; color: #64618A; line-height: 1.4;">¿Qué tan rápido y barato lo probamos?</span>
+        </div>
+      </div>
+    </div>
+    <div data-a="up3" style="margin-top: 26px; display: grid; grid-template-columns: 1.05fr 1fr; gap: 26px; flex: 1;">
+      <div data-formula style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 28px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 14px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">El puntaje</span>
+        <div style="display: flex; align-items: center; gap: 14px; font-size: 44px; font-weight: 800; color: #1C1A3A; flex-wrap: wrap; letter-spacing: -1px;">
+          <span>(</span><span style="color: #4B3BD6;">I</span><span style="color: #64618A;">+</span><span style="color: #0E8C7A;">C</span><span style="color: #64618A;">+</span><span style="color: #C2399B;">E</span><span>) ÷ 3</span>
+          <span style="color: #64618A; font-weight: 600;">→</span>
+          <span style="font-size: 30px; letter-spacing: -0.4px;">promedio entre socios</span>
+        </div>
+        
+        <div data-escala style="position: relative; padding-top: 34px;">
+          <div style="display: grid; grid-template-columns: repeat(10, 1fr); gap: 6px;">
+            <div data-celda style="height: 44px; border-radius: 9px; background: #F6F5FB; color: #64618A; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; box-shadow: inset 0 1px 3px rgba(28,26,58,0.1); font-variant-numeric: tabular-nums;">1</div><div data-celda style="height: 44px; border-radius: 9px; background: #F6F5FB; color: #64618A; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; box-shadow: inset 0 1px 3px rgba(28,26,58,0.1); font-variant-numeric: tabular-nums;">2</div><div data-celda style="height: 44px; border-radius: 9px; background: #F6F5FB; color: #64618A; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; box-shadow: inset 0 1px 3px rgba(28,26,58,0.1); font-variant-numeric: tabular-nums;">3</div><div data-celda style="height: 44px; border-radius: 9px; background: #F6F5FB; color: #64618A; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; box-shadow: inset 0 1px 3px rgba(28,26,58,0.1); font-variant-numeric: tabular-nums;">4</div><div data-celda style="height: 44px; border-radius: 9px; background: #F6F5FB; color: #64618A; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800; box-shadow: inset 0 1px 3px rgba(28,26,58,0.1); font-variant-numeric: tabular-nums;">5</div><div data-celda style="height: 44px; border-radius: 9px; background: linear-gradient(180deg, #7A6BFF, #4B3BD6); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;  font-variant-numeric: tabular-nums;">6</div><div data-celda style="height: 44px; border-radius: 9px; background: linear-gradient(180deg, #7A6BFF, #4B3BD6); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;  font-variant-numeric: tabular-nums;">7</div><div data-celda style="height: 44px; border-radius: 9px; background: linear-gradient(180deg, #7A6BFF, #4B3BD6); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;  font-variant-numeric: tabular-nums;">8</div><div data-celda style="height: 44px; border-radius: 9px; background: linear-gradient(180deg, #7A6BFF, #4B3BD6); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;  font-variant-numeric: tabular-nums;">9</div><div data-celda style="height: 44px; border-radius: 9px; background: linear-gradient(180deg, #7A6BFF, #4B3BD6); color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 19px; font-weight: 800;  font-variant-numeric: tabular-nums;">10</div>
+          </div>
+          <div data-umbral style="position: absolute; top: 0; left: calc(50% + 3px); display: flex; align-items: center; gap: 8px;">
+            <span style="width: 3px; height: 92px; background: #1C1A3A; border-radius: 2px; position: absolute; top: 0; left: -2px;"></span>
+            <span style="margin-left: 12px; font-size: 17px; font-weight: 800; color: #1C1A3A; white-space: nowrap;">avanza con 6 o más</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Las reglas</span>
+        
+        <div data-reglaice style="display: flex; gap: 14px; align-items: baseline; padding: 14px 20px; border-radius: 14px; background: #F6F5FB;">
+          <span style="flex: none; width: 9px; height: 9px; border-radius: 50%; background: #4B3BD6; transform: translateY(-3px);"></span>
+          <span style="font-size: 20.5px; color: #64618A; line-height: 1.4;"><strong style="font-weight: 700;"><span style="color: #1C1A3A;">Se califica en secreto</span></strong> y se revela al mismo tiempo, para no influirnos.</span>
+        </div>
+        <div data-reglaice style="display: flex; gap: 14px; align-items: baseline; padding: 14px 20px; border-radius: 14px; background: #F6F5FB;">
+          <span style="flex: none; width: 9px; height: 9px; border-radius: 50%; background: #4B3BD6; transform: translateY(-3px);"></span>
+          <span style="font-size: 20.5px; color: #64618A; line-height: 1.4;"><strong style="font-weight: 700;"><span style="color: #1C1A3A;">4 puntos o más de diferencia</span></strong> en un criterio: se discute antes de promediar.</span>
+        </div>
+        <div data-reglaice style="display: flex; gap: 14px; align-items: baseline; padding: 14px 20px; border-radius: 14px; background: #F6F5FB;">
+          <span style="flex: none; width: 9px; height: 9px; border-radius: 50%; background: #4B3BD6; transform: translateY(-3px);"></span>
+          <span style="font-size: 20.5px; color: #64618A; line-height: 1.4;"><strong style="font-weight: 700;"><span style="color: #1C1A3A;">Siempre la misma rúbrica</span></strong> para que un «7» signifique lo mismo para todos.</span>
+        </div>
+        <div data-reglaice style="display: flex; gap: 14px; align-items: baseline; padding: 14px 20px; border-radius: 14px; background: #F6F5FB;">
+          <span style="flex: none; width: 9px; height: 9px; border-radius: 50%; background: #4B3BD6; transform: translateY(-3px);"></span>
+          <span style="font-size: 20.5px; color: #64618A; line-height: 1.4;"><strong style="font-weight: 700;"><span style="color: #1C1A3A;">Hasta 3 lugares de validación</span></strong> avanzan las mejores de 6 o más hasta llenarlos.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="La rúbrica" data-screen-label="3 · Rúbrica" data-speaker-notes="La rubrica es lo que hace que un siete signifique lo mismo para los tres. Fijense en confianza: para pasar de seis hacen falta entrevistas, no opiniones." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">3 ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">4 Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 3</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">La rúbrica: qué significa<br>cada calificación</h2>
+    <div data-a="up2" style="margin-top: 32px; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; overflow: hidden; flex: 1; display: flex; flex-direction: column;">
+      <div style="display: grid; grid-template-columns: 150px repeat(3, 1fr); background: #F6F5FB; border-bottom: 1px solid #E2E0EE;">
+        <span style="padding: 20px 26px; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Puntaje</span>
+        <span style="padding: 20px 26px; font-size: 22px; font-weight: 800; color: #4B3BD6; display: flex; align-items: center; gap: 10px;"><span style="font-size: 16px; width: 30px; height: 30px; border-radius: 9px; background: rgba(75,59,214,0.12); display: inline-flex; align-items: center; justify-content: center;">I</span>Impacto</span><span style="padding: 20px 26px; font-size: 22px; font-weight: 800; color: #0E8C7A; display: flex; align-items: center; gap: 10px;"><span style="font-size: 16px; width: 30px; height: 30px; border-radius: 9px; background: rgba(14,140,122,0.12); display: inline-flex; align-items: center; justify-content: center;">C</span>Confianza</span><span style="padding: 20px 26px; font-size: 22px; font-weight: 800; color: #C2399B; display: flex; align-items: center; gap: 10px;"><span style="font-size: 16px; width: 30px; height: 30px; border-radius: 9px; background: rgba(194,57,155,0.12); display: inline-flex; align-items: center; justify-content: center;">E</span>Facilidad</span>
+      </div>
+      
+      <div data-fila-r style="flex: 1; display: grid; grid-template-columns: 150px repeat(3, 1fr); align-items: center; border-bottom: 1px solid #E2E0EE; ">
+        <span style="padding: 0 26px; font-size: 36px; font-weight: 800; color: #64618A; letter-spacing: -1px; font-variant-numeric: tabular-nums;">1–3</span>
+        <span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Problema menor o mercado pequeño</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Solo intuición</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Más de 6 meses o mucho capital</span>
+      </div>
+      <div data-fila-r style="flex: 1; display: grid; grid-template-columns: 150px repeat(3, 1fr); align-items: center; border-bottom: 1px solid #E2E0EE; ">
+        <span style="padding: 0 26px; font-size: 36px; font-weight: 800; color: #64618A; letter-spacing: -1px; font-variant-numeric: tabular-nums;">4–6</span>
+        <span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Problema real pero no urgente</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Opiniones o competencia que lo valida</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">De 3 a 6 meses o inversión moderada</span>
+      </div>
+      <div data-fila-r style="flex: 1; display: grid; grid-template-columns: 150px repeat(3, 1fr); align-items: center; border-bottom: 1px solid #E2E0EE; background: rgba(75,59,214,0.035);">
+        <span style="padding: 0 26px; font-size: 36px; font-weight: 800; color: #4B3BD6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">7–8</span>
+        <span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Problema doloroso: ya pagan por resolverlo</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">5 o más entrevistas lo confirman</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Un MVP en menos de un mes</span>
+      </div>
+      <div data-fila-r style="flex: 1; display: grid; grid-template-columns: 150px repeat(3, 1fr); align-items: center;  background: rgba(75,59,214,0.07);">
+        <span style="padding: 0 26px; font-size: 36px; font-weight: 800; color: #4B3BD6; letter-spacing: -1px; font-variant-numeric: tabular-nums;">9–10</span>
+        <span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Problema urgente en un mercado grande</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Alguien ya pagó o se registró</span><span style="padding: 0 26px; font-size: 21px; color: #1C1A3A; line-height: 1.4;">Se prueba esta semana, sin dinero</span>
+      </div>
+    </div>
+    <div style="margin-top: 22px;">
+    <div data-nota style="background: rgba(14,140,122,0.08); border-left: 5px solid #0E8C7A; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);">Para pasar de 6 en <strong style="font-weight: 700;">Confianza</strong> hacen falta entrevistas, no opiniones: <strong style="font-weight: 700;">la evidencia sube la nota, el entusiasmo no</strong>.</div></div>
+  </section>
+
+  <section data-label="Paso 4 · Supuestos" data-screen-label="4 · Supuestos" data-speaker-notes="El mapa de supuestos hace explicito lo que estamos dando por hecho. Se acomodan por importancia y evidencia, y se prueban primero los muy importantes con poca evidencia: si son falsos, la idea se cae." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">4 Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: transparent; color: #64618A; border: 1.5px solid #E2E0EE;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 4</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Mapa de supuestos: probar primero<br>lo que puede tumbar la idea</h2>
+    <div data-a="up2" style="margin-top: 34px; display: grid; grid-template-columns: 470px 1fr; gap: 40px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 16px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">1 · Escribir los supuestos en tres tipos</span>
+        
+        <div data-tipo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; border-left: 5px solid #4B3BD6;">
+          <span style="flex: none; width: 14px; height: 14px; border-radius: 4px; background: #4B3BD6;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 26px; font-weight: 800; color: #1C1A3A;">Deseabilidad</span>
+            <span style="font-size: 20px; font-weight: 600; color: #4B3BD6;">¿Lo quieren?</span>
+          </div>
+        </div>
+        <div data-tipo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; border-left: 5px solid #0E8C7A;">
+          <span style="flex: none; width: 14px; height: 14px; border-radius: 4px; background: #0E8C7A;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 26px; font-weight: 800; color: #1C1A3A;">Viabilidad</span>
+            <span style="font-size: 20px; font-weight: 600; color: #0E8C7A;">¿Es negocio?</span>
+          </div>
+        </div>
+        <div data-tipo style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 20px 24px; display: flex; align-items: center; gap: 18px; border-left: 5px solid #C2399B;">
+          <span style="flex: none; width: 14px; height: 14px; border-radius: 4px; background: #C2399B;"></span>
+          <div style="display: flex; flex-direction: column; gap: 2px;">
+            <span style="font-size: 26px; font-weight: 800; color: #1C1A3A;">Factibilidad</span>
+            <span style="font-size: 20px; font-weight: 600; color: #C2399B;">¿Podemos hacerlo?</span>
+          </div>
+        </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 17px; color: #64618A; line-height: 1.45;">Técnica de Lean UX (Gothelf y Seiden), refinada por David Bland de Strategyzer.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 12px;">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">2 · Ubicarlos en la matriz</span>
+        <div style="flex: 1; display: grid; grid-template-columns: 54px 1fr 1fr; grid-template-rows: 1fr 1fr 40px; gap: 14px;">
+          <span style="writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; align-self: center; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Muy importante</span>
+          <div data-cuadrante style="border-radius: 20px; padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; background: linear-gradient(135deg, #4B3BD6, #7A6BFF); color: #FFFFFF; box-shadow: 0 18px 40px rgba(75,59,214,0.32); position: relative;"><span data-pulso style="position: absolute; inset: -6px; border-radius: 24px; border: 3px solid rgba(75,59,214,0.45);"></span>
+          <span style="font-size: 34px; font-weight: 800; letter-spacing: -0.8px;">Probar ya</span>
+          <span style="font-size: 19px; line-height: 1.4; opacity: 0.85;">Si son falsos, la idea se cae. Van primero.</span>
+        </div>
+          <div data-cuadrante style="border-radius: 20px; padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); color: #1C1A3A;">
+          <span style="font-size: 34px; font-weight: 800; letter-spacing: -0.8px;">Planear</span>
+          <span style="font-size: 19px; line-height: 1.4; opacity: 0.85;">Ya hay evidencia: se toman en cuenta al diseñar.</span>
+        </div>
+          <span style="writing-mode: vertical-rl; transform: rotate(180deg); justify-self: center; align-self: center; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Poco importante</span>
+          <div data-cuadrante style="border-radius: 20px; padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; background: #F6F5FB; color: #1C1A3A; border: 1px dashed #E2E0EE;">
+          <span style="font-size: 34px; font-weight: 800; letter-spacing: -0.8px;">Después</span>
+          <span style="font-size: 19px; line-height: 1.4; opacity: 0.85;">No urgen: se revisan cuando avance la idea.</span>
+        </div>
+          <div data-cuadrante style="border-radius: 20px; padding: 26px 28px; display: flex; flex-direction: column; justify-content: center; gap: 8px; background: #F6F5FB; color: #64618A; border: 1px dashed #E2E0EE;">
+          <span style="font-size: 34px; font-weight: 800; letter-spacing: -0.8px;">Ignorar</span>
+          <span style="font-size: 19px; line-height: 1.4; opacity: 0.85;">Ni importan ni hay duda.</span>
+        </div>
+          <span></span>
+          <span style="text-align: center; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Poca evidencia</span>
+          <span style="text-align: center; font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #64618A;">Mucha evidencia</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Paso 5 · Tarjetas" data-screen-label="5 · Tarjetas" data-speaker-notes="Las tarjetas del libro Testing Business Ideas. La Test Card obliga a escribir el criterio de exito antes de ver los resultados, y la Learning Card registra que aprendimos y que decidimos." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <div style="display: flex; align-items: center; gap: 6px;">
+          <span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Filtros</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Lean Canvas</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ ICE</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #ECEAFF; color: #4B3BD6; border: 1.5px solid #ECEAFF;">✓ Supuestos</span><span data-mini style="display: inline-flex; align-items: center; gap: 7px; font-size: 15px; font-weight: 700; padding: 7px 13px; border-radius: 999px; white-space: nowrap;
+              background: #4B3BD6; color: #FFFFFF; border: 1.5px solid #4B3BD6;">5 Tarjetas</span>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Paso 5</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">El criterio de éxito se escribe<br>antes de ver los resultados</h2>
+    <div data-a="up2" style="margin-top: 32px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px;">
+      
+        <div data-tarjeta style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 30px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #4B3BD6; background-image: repeating-linear-gradient(180deg, transparent 0 47px, rgba(75,59,214,0.07) 47px 48px); background-color: #FFFFFF;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px;">Test Card</span>
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #4B3BD6; background: rgba(75,59,214,0.1); border-radius: 7px; padding: 4px 11px; white-space: nowrap;">antes</span>
+          </div>
+          <span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Creemos que <span style="color: #4B3BD6; font-weight: 700; border-bottom: 2.5px solid rgba(75,59,214,0.45); padding: 0 2px;">[supuesto]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Para verificarlo haremos <span style="color: #4B3BD6; font-weight: 700; border-bottom: 2.5px solid rgba(75,59,214,0.45); padding: 0 2px;">[experimento]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Mediremos <span style="color: #4B3BD6; font-weight: 700; border-bottom: 2.5px solid rgba(75,59,214,0.45); padding: 0 2px;">[métrica]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Tenemos razón si <span style="color: #4B3BD6; font-weight: 700; border-bottom: 2.5px solid rgba(75,59,214,0.45); padding: 0 2px;">[criterio con número]</span>.</span>
+        </div>
+      
+        <div data-tarjeta style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 30px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #0E8C7A; background-image: repeating-linear-gradient(180deg, transparent 0 47px, rgba(14,140,122,0.07) 47px 48px); background-color: #FFFFFF;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;">
+            <span style="font-size: 32px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px;">Learning Card</span>
+            <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0E8C7A; background: rgba(14,140,122,0.1); border-radius: 7px; padding: 4px 11px; white-space: nowrap;">después</span>
+          </div>
+          <span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Creíamos que <span style="color: #0E8C7A; font-weight: 700; border-bottom: 2.5px solid rgba(14,140,122,0.45); padding: 0 2px;">[supuesto]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Observamos <span style="color: #0E8C7A; font-weight: 700; border-bottom: 2.5px solid rgba(14,140,122,0.45); padding: 0 2px;">[resultado]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Aprendimos que <span style="color: #0E8C7A; font-weight: 700; border-bottom: 2.5px solid rgba(14,140,122,0.45); padding: 0 2px;">[conclusión]</span>.</span><span data-frase style="font-size: 26px; color: #1C1A3A; line-height: 1.55;">Por lo tanto <span style="color: #0E8C7A; font-weight: 700; border-bottom: 2.5px solid rgba(14,140,122,0.45); padding: 0 2px;">[continuar / pivotar / descartar]</span>.</span>
+        </div>
+    </div>
+    <div data-a="up3" style="margin-top: 26px; display: flex; flex-direction: column; gap: 12px;">
+      <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #4B3BD6;">Experimentos baratos</span>
+      <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+        <span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Entrevistas</span><span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Landing con lista de espera</span><span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Preventa</span><span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Servicio manual</span><span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Anuncio pequeño en redes</span><span data-exp style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 999px; padding: 12px 24px; font-size: 20px; font-weight: 700; color: #1C1A3A;">Prototipo en papel o Figma</span>
+      </div>
+    </div>
+    <div style="flex: 1;"></div>
+    
+    <div data-nota style="background: rgba(14,140,122,0.08); border-left: 5px solid #0E8C7A; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);">Fuente: <strong style="font-weight: 700;">Testing Business Ideas</strong> (Strategyzer). La decisión al final es una de tres: <strong style="font-weight: 700;">validada</strong>, <strong style="font-weight: 700;">pivote</strong> o <strong style="font-weight: 700;">descartada</strong>.</div>
+  </section>
+
+  <section data-label="Plataformas" data-screen-label="Plataformas" data-speaker-notes="Notion es donde escribimos, Miro es donde vemos. Las herramientas de gestion de ideas del mercado estan pensadas para empresas grandes; estas son flexibles, tienen plan gratuito y se pueden operar desde Claude." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Plataformas</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Notion es donde escribimos,<br>Miro es donde vemos</h2>
+    <div data-a="up2" style="margin-top: 38px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 22px; flex: 1;">
+      
+      <div data-plat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-top: 5px solid #4B3BD6; border-radius: 24px; padding: 34px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
+        <span style="width: 96px; height: 96px; border-radius: 26px; background: rgba(75,59,214,0.12); color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 800; ">N</span>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 42px; font-weight: 800; color: #1C1A3A; letter-spacing: -1px; line-height: 1.08;">Notion</span>
+          <span style="font-size: 19px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: #4B3BD6;">El expediente</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.5;">Una página por idea con la plantilla de propuesta, la guía del método y la de reuniones. Todo dentro del espacio DRA.</span>
+        </div>
+      </div>
+      <div data-plat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-top: 5px solid #0E8C7A; border-radius: 24px; padding: 34px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
+        <span style="width: 96px; height: 96px; border-radius: 26px; background: rgba(14,140,122,0.12); color: #0E8C7A; display: inline-flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 800; ">M</span>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 42px; font-weight: 800; color: #1C1A3A; letter-spacing: -1px; line-height: 1.08;">Miro</span>
+          <span style="font-size: 19px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: #0E8C7A;">El tablero visual</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.5;">El pipeline con un sticky por idea, el Lean Canvas, la rúbrica ICE, el mapa de supuestos y las tarjetas.</span>
+        </div>
+      </div>
+      <div data-plat style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-top: 5px solid #C2399B; border-radius: 24px; padding: 34px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
+        <span style="width: 96px; height: 96px; border-radius: 26px; background: rgba(194,57,155,0.12); color: #C2399B; display: inline-flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 800; ">C</span>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 42px; font-weight: 800; color: #1C1A3A; letter-spacing: -1px; line-height: 1.08;">Claude</span>
+          <span style="font-size: 19px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: #C2399B;">El asistente</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.5;">Conectado a los dos: redacta propuestas, investiga mercado y competencia y actualiza ambos tableros.</span>
+        </div>
+      </div>
+      <div data-plat style="background: #F6F5FB; border: 2px dashed #E2E0EE; border-radius: 24px; padding: 34px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px;">
+        <span style="width: 96px; height: 96px; border-radius: 26px; background: #FFFFFF; color: #64618A; display: inline-flex; align-items: center; justify-content: center; font-size: 50px; font-weight: 800; border: 2px dashed #E2E0EE;">P</span>
+        <div style="display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 42px; font-weight: 800; color: #64618A; letter-spacing: -1px; line-height: 1.08;">Plataforma propia</span>
+          <span style="font-size: 19px; font-weight: 700; letter-spacing: 1.8px; text-transform: uppercase; color: #64618A;">Más adelante</span>
+          <span style="font-size: 21px; color: #64618A; line-height: 1.5;">Cuando el proceso esté probado, la construimos con lo aprendido, con su propia conexión a IA.</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 26px;">
+    <div data-nota style="background: #ECEAFF; border-left: 5px solid #4B3BD6; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);"><strong style="font-weight: 700;">Por qué estas y no otras:</strong> Brightidea, Qmarkets o IdeaScale están pensadas para empresas grandes. Notion y Miro son flexibles, tienen plan gratuito y se pueden operar desde Claude.</div></div>
+  </section>
+
+  <section data-label="Registro" data-screen-label="Registro" data-speaker-notes="Asi viaja una idea: nace como sticky en Miro, se documenta en Notion y avanza por las columnas del pipeline hasta que se valida o se descarta." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Registro</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Así viaja una idea por el pipeline</h2>
+    <div data-a="up2" data-pipeline style="position: relative; margin-top: 34px; display: grid; grid-template-columns: repeat(6, 262px); gap: 16px; height: 360px;">
+      
+      <div data-col style="background: #F6F5FB; border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #64618A;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #64618A;">Idea cruda</span>
+        <div style="height: 64px; border-radius: 6px; background: #FFF6B8; opacity: 0.55; transform: rotate(2deg);"></div><div style="height: 64px; border-radius: 6px; background: #FFF6B8; opacity: 0.4; transform: rotate(-1.5deg);"></div>
+        
+        
+      </div>
+      <div data-col style="background: #F6F5FB; border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #4B3BD6;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #4B3BD6;">Lean Canvas</span>
+        
+        
+        
+      </div>
+      <div data-col style="background: #F6F5FB; border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #4B3BD6;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #4B3BD6;">Priorizada</span>
+        
+        <div style="height: 64px; border-radius: 6px; background: #FFF6B8; opacity: 0.5; transform: rotate(-2deg);"></div>
+        
+      </div>
+      <div data-col style="background: #F6F5FB; border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #4B3BD6;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #4B3BD6;">En validación</span>
+        
+        
+        
+      </div>
+      <div data-col style="background: rgba(0,135,90,0.07); border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #00875A;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #00875A;">Validada</span>
+        
+        
+        
+      </div>
+      <div data-col style="background: rgba(222,53,11,0.07); border-radius: 18px; padding: 18px 18px; display: flex; flex-direction: column; gap: 12px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.7), 0 6px 16px rgba(28,26,58,0.06); border-top: 4px solid #DE350B;">
+        <span style="font-size: 17px; font-weight: 800; letter-spacing: 1.4px; text-transform: uppercase; color: #DE350B;">Descartada</span>
+        
+        
+        <div style="height: 64px; border-radius: 6px; background: #EDEDED; opacity: 0.8; transform: rotate(1.5deg); display: flex; align-items: center; justify-content: center; font-size: 15px; color: #64618A; font-weight: 700;">con el motivo</div>
+      </div>
+      <div data-sticky data-paso-col="834" style="position: absolute; left: 852px; top: 70px; width: 226px; height: 170px; border-radius: 8px; background: linear-gradient(180deg, #FFF07A, #FFE34D); box-shadow: 0 2px 3px rgba(28,26,58,0.18), 0 16px 28px rgba(28,26,58,0.18); transform: rotate(-2deg); padding: 16px 18px; box-sizing: border-box; display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 15px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; color: rgba(28,26,58,0.6);">Tu idea</span>
+        <span style="font-size: 21px; font-weight: 800; color: #1C1A3A; line-height: 1.2;">con dueño y Test Card con fecha</span>
+      </div>
+    </div>
+    <div data-a="up3" style="margin-top: 30px; display: grid; grid-template-columns: repeat(6, 1fr); gap: 16px; flex: 1;">
+      
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">1</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">Se captura</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">como sticky en «Idea cruda» del pipeline en Miro.</span>
+      </div>
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">2</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">Se revisa contra los filtros</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">si no pasa, va a «Descartada» con el motivo.</span>
+      </div>
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">3</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">El responsable llena la plantilla</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">en Notion: ficha, filtros, mercado, competencia, Canvas, supuestos y Test Card.</span>
+      </div>
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">4</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">En la reunión</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">se califica con ICE.</span>
+      </div>
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">5</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">El sticky avanza</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">en Miro conforme pasa cada etapa.</span>
+      </div>
+      <div data-reg style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 18px; padding: 24px 22px; display: flex; flex-direction: column; gap: 12px;">
+        <span style="width: 46px; height: 46px; border-radius: 50%; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 800;">6</span>
+        <span style="font-size: 24px; font-weight: 800; color: #1C1A3A; line-height: 1.2; letter-spacing: -0.4px;">Cada prueba deja su Learning Card</span>
+        <span style="font-size: 19px; color: #64618A; line-height: 1.45;">en la página de Notion de la idea.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="La reunión" data-screen-label="La reunión" data-speaker-notes="La reunion de propuestas dura noventa minutos. Se sale con cada idea calificada y maximo tres en validacion, cada una con dueno y Test Card con fecha. Lo importante es lo que pasa antes: todos leen las propuestas 48 horas antes." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        <span style="background: #ECEAFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">90 min</span>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Ritmo de trabajo</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">La reunión de propuestas: se sale con<br>máximo 3 ideas, cada una con dueño</h2>
+    <div data-a="up2" data-agenda style="margin-top: 40px; position: relative; height: 150px;">
+      
+      <div data-bloque-ag style="position: absolute; left: 0.0px; top: 0; width: 89.6px; height: 96px; border-radius: 16px; background: rgba(75,59,214,0.18); color: #1C1A3A; display: flex; flex-direction: column; justify-content: center; padding: 0 8px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 17px; font-weight: 800; white-space: nowrap; text-align: center;">Inicio</span>
+        
+      </div>
+      <span style="position: absolute; left: 0.0px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">0′</span>
+      <div data-bloque-ag style="position: absolute; left: 95.6px; top: 0; width: 854.0px; height: 96px; border-radius: 16px; background: linear-gradient(90deg, #4B3BD6, #7A6BFF); color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 24px; font-weight: 800; white-space: nowrap; ">Rondas</span>
+        <span style="font-size: 17px; font-weight: 600; opacity: 0.85; white-space: nowrap;">5 min de presentación + 4 de preguntas por idea</span>
+      </div>
+      <span style="position: absolute; left: 95.6px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">5′</span>
+      <div data-bloque-ag style="position: absolute; left: 955.6px; top: 0; width: 185.1px; height: 96px; border-radius: 16px; background: #0E8C7A; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 24px; font-weight: 800; white-space: nowrap; ">ICE</span>
+        <span style="font-size: 17px; font-weight: 600; opacity: 0.85; white-space: nowrap;">En secreto</span>
+      </div>
+      <span style="position: absolute; left: 955.6px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">50′</span>
+      <div data-bloque-ag style="position: absolute; left: 1146.7px; top: 0; width: 280.7px; height: 96px; border-radius: 16px; background: rgba(75,59,214,0.3); color: #1C1A3A; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 24px; font-weight: 800; white-space: nowrap; ">Supuestos</span>
+        <span style="font-size: 17px; font-weight: 600; opacity: 0.85; white-space: nowrap;">De las 3 mejores</span>
+      </div>
+      <span style="position: absolute; left: 1146.7px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">60′</span>
+      <div data-bloque-ag style="position: absolute; left: 1433.3px; top: 0; width: 185.1px; height: 96px; border-radius: 16px; background: #C2399B; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 18px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 24px; font-weight: 800; white-space: nowrap; ">Test Cards</span>
+        <span style="font-size: 17px; font-weight: 600; opacity: 0.85; white-space: nowrap;">Con dueño y fecha</span>
+      </div>
+      <span style="position: absolute; left: 1433.3px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">75′</span>
+      <div data-bloque-ag style="position: absolute; left: 1624.4px; top: 0; width: 89.6px; height: 96px; border-radius: 16px; background: rgba(75,59,214,0.38); color: #1C1A3A; display: flex; flex-direction: column; justify-content: center; padding: 0 8px; box-sizing: border-box; overflow: hidden; box-shadow: 0 8px 18px rgba(28,26,58,0.1);">
+        <span style="font-size: 17px; font-weight: 800; white-space: nowrap; text-align: center;">Cierre</span>
+        
+      </div>
+      <span style="position: absolute; left: 1624.4px; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">85′</span>
+      <span style="position: absolute; right: 0; top: 110px; font-size: 16px; font-weight: 700; color: #64618A; font-variant-numeric: tabular-nums;">90′</span>
+    </div>
+    <div data-a="up3" style="margin-top: 14px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 22px; flex: 1;">
+      
+      <div data-momento style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 32px; display: flex; flex-direction: column; gap: 18px; border-top: 5px solid #4B3BD6;">
+        <div style="display: flex; align-items: baseline; gap: 12px;">
+          <span style="font-size: 36px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px;">Antes</span>
+          <span style="font-size: 19px; font-weight: 600; color: #4B3BD6;">cada quien, en casa</span>
+        </div>
+        
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #4B3BD6;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Cada socio toma 2 ideas del pizarrón.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #4B3BD6;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">Llena una propuesta de una página: unos 60 min más 30 de investigación.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #4B3BD6;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">La publica en Notion <strong style="font-weight: 700;">48 horas antes</strong>. Todos leen antes de llegar.</span>
+        </div>
+      </div>
+      <div data-momento style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 32px; display: flex; flex-direction: column; gap: 18px; border-top: 5px solid #0E8C7A;">
+        <div style="display: flex; align-items: baseline; gap: 12px;">
+          <span style="font-size: 36px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px;">Durante</span>
+          <span style="font-size: 19px; font-weight: 600; color: #0E8C7A;">roles que rotan</span>
+        </div>
+        
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #0E8C7A;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;"><strong style="font-weight: 700;">Facilitador:</strong> cuida el tiempo.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #0E8C7A;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;"><strong style="font-weight: 700;">Escriba:</strong> actualiza Notion y Miro en vivo.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #0E8C7A;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;"><strong style="font-weight: 700;">Guion de 5 min:</strong> problema, idea, mercado, diferenciador, supuestos y qué le pido al equipo.</span>
+        </div>
+      </div>
+      <div data-momento style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 22px; padding: 30px 32px; display: flex; flex-direction: column; gap: 18px; border-top: 5px solid #C2399B;">
+        <div style="display: flex; align-items: baseline; gap: 12px;">
+          <span style="font-size: 36px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.8px;">Después</span>
+          <span style="font-size: 19px; font-weight: 600; color: #C2399B;">para no perder nada</span>
+        </div>
+        
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #C2399B;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">En <strong style="font-weight: 700;">24 horas</strong>: pipeline e ICE actualizados.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #C2399B;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">En <strong style="font-weight: 700;">máximo 2 semanas</strong>: cada dueño corre su prueba.</span>
+        </div>
+        <div style="display: flex; gap: 12px; align-items: flex-start;">
+          <span style="flex: none; margin-top: 12px; width: 8px; height: 8px; border-radius: 50%; background: #C2399B;"></span>
+          <span style="font-size: 22px; color: #64618A; line-height: 1.45;">En la siguiente reunión: Learning Cards y decisiones.</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Pádel · lo que encontramos" data-screen-label="Pádel · investigación" data-speaker-notes="La idea mas desarrollada del pizarron: una web tipo SoloQ para padel. Al investigar salieron dos cosas: el mercado crece, pero la idea ya existe. Playtomic ya hace ranking y nivel de jugador." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        <span style="background: #ECEAFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Pádel SoloQ</span>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Ejemplo</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Pádel SoloQ: el mercado crece,<br>pero la idea ya existe</h2>
+    <p data-a="up2" style="margin: 18px 0 0; font-size: 26px; font-weight: 400; color: #64618A; line-height: 1.5; max-width: 1400px;">Una web tipo SoloQ para pádel, con ranking, torneos y highlights. Es la idea más desarrollada del pizarrón.</p>
+    <div data-a="up3" style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; flex: 1;">
+      <div data-lado style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 28px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 22px; border-top: 5px solid #00875A;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #00875A;">El mercado crece</span><span style="font-size: 16px; color: #64618A;">Federación Internacional de Pádel</span></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px 20px;">
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #00875A; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">320+</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">clubes en México</span>
+          </div>
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #00875A; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">~1,500</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">canchas</span>
+          </div>
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #00875A; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">300 mil+</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">jugadores amateurs</span>
+          </div>
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #00875A; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">1 millón+</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">practicantes en 2025</span>
+          </div>
+        </div>
+      </div>
+      <div data-lado style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 28px 32px; display: flex; flex-direction: column; justify-content: space-between; gap: 18px; border-top: 5px solid #DE350B;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #DE350B;">Pero ya existe</span><span style="font-size: 16px; color: #64618A;">Playtomic, el líder</span></div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px 20px;">
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #DE350B; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">6,000</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">clubes</span>
+          </div>
+          
+          <div data-dato style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 76px; font-weight: 800; color: #DE350B; letter-spacing: -3px; line-height: 1; font-variant-numeric: tabular-nums;">1.5 M</span>
+            <span style="font-size: 21px; color: #64618A; line-height: 1.35;">jugadores activos al mes</span>
+          </div>
+        </div>
+        <span style="font-size: 22px; color: #1C1A3A; line-height: 1.45;">Ya calcula el nivel de cada jugador. Y hay más con ranking y torneos:</span>
+        <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+          <span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #DE350B; background: #FFEBE6; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">MatchBall (mexicana)</span><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #DE350B; background: #FFEBE6; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">PADELBLAST</span><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #DE350B; background: #FFEBE6; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">SliceWin</span>
+        </div>
+      </div>
+    </div>
+    <div style="margin-top: 22px;">
+    <div data-nota style="background: #ECEAFF; border-left: 5px solid #4B3BD6; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);"><strong style="font-weight: 700;">Lo que eso significa:</strong> la idea solo tiene sentido si encontramos un diferenciador. Y lo descubrimos <strong style="font-weight: 700;">antes de escribir una línea de código</strong>.</div></div>
+  </section>
+
+  <section data-label="Pádel · cómo lo probamos" data-screen-label="Pádel · prueba" data-speaker-notes="La hipotesis de diferenciador y dos pruebas baratas para el riesgo principal. Primero entrevistas, luego una liga manual con una hoja de calculo y el chat del grupo, sin programar nada." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        <span style="background: #ECEAFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Pádel SoloQ</span>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Ejemplo</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">En vez de programar,<br>dos pruebas baratas</h2>
+    <div data-a="up2" style="margin-top: 32px; display: grid; grid-template-columns: 460px 1fr 1fr; gap: 24px; flex: 1;">
+      <div data-hipo style="background: #4B3BD6; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(90% 70% at 85% 8%, rgba(122,107,255,0.6) 0%, rgba(122,107,255,0) 60%); background-size: 26px 26px, 100% 100%; border-radius: 24px; padding: 32px 30px; color: #FFFFFF; display: flex; flex-direction: column; gap: 18px; box-shadow: 0 18px 40px rgba(75,59,214,0.3);">
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: rgba(255,255,255,0.75);">Hipótesis de diferenciador</span>
+        
+        <div data-hip style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.16); display: inline-flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800;">1</span>
+          <span style="font-size: 22px; font-weight: 600; line-height: 1.4;">Temporadas y divisiones visibles, como en los videojuegos competitivos.</span>
+        </div>
+        <div data-hip style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.16); display: inline-flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800;">2</span>
+          <span style="font-size: 22px; font-weight: 600; line-height: 1.4;">Ligas pensadas para grupos de amigos, no para clubes.</span>
+        </div>
+        <div data-hip style="display: flex; gap: 14px; align-items: flex-start;">
+          <span style="flex: none; width: 34px; height: 34px; border-radius: 10px; background: rgba(255,255,255,0.16); display: inline-flex; align-items: center; justify-content: center; font-size: 17px; font-weight: 800;">3</span>
+          <span style="font-size: 22px; font-weight: 600; line-height: 1.4;">Perfil del jugador compartible y, más adelante, highlights.</span>
+        </div>
+      </div>
+      <div data-prueba style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 30px 30px; display: flex; flex-direction: column; gap: 16px; border-top: 5px solid #0E8C7A;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #0E8C7A;">Prueba 1 · Entrevistas</span><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #0E8C7A; background: #E0F5F1; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">2 semanas</span></div>
+        <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; line-height: 1.25; letter-spacing: -0.5px;">10 jugadores y 5 organizadores</span>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #64618A;">Éxito si dicen que lo usarían</span>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 18px; font-weight: 700; color: #1C1A3A;">6 de 10 jugadores</span>
+          
+            <div style="display: flex; gap: 8px;">
+              <span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span>
+            </div>
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="font-size: 18px; font-weight: 700; color: #1C1A3A;">3 de 5 organizadores</span>
+          
+            <div style="display: flex; gap: 8px;">
+              <span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #0E8C7A; "></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span><span data-punto style="width: 30px; height: 30px; border-radius: 50%; background: #F6F5FB; box-shadow: inset 0 1px 3px rgba(28,26,58,0.15);"></span>
+            </div>
+        </div>
+      </div>
+      <div data-prueba style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 24px; padding: 30px 30px; display: flex; flex-direction: column; gap: 16px; border-top: 5px solid #C2399B;">
+        <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #C2399B;">Prueba 2 · Liga manual</span><span style="font-size: 16px; font-weight: 700; letter-spacing: 0.3px; color: #C2399B; background: #FBE6F4; border-radius: 7px; padding: 4px 11px; white-space: nowrap;">4 semanas</span></div>
+        <span style="font-size: 30px; font-weight: 800; color: #1C1A3A; line-height: 1.25; letter-spacing: -0.5px;">Un grupo real, una hoja de cálculo y el ranking semanal en su chat</span>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 17px; font-weight: 700; letter-spacing: 2.2px; text-transform: uppercase; color: #64618A;">Éxito si</span>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <div style="display: flex; justify-content: space-between; align-items: baseline;"><span style="font-size: 18px; font-weight: 700; color: #1C1A3A;">Reportan sus partidos</span><span data-cuenta="70" data-sufijo=" %" style="font-size: 26px; font-weight: 800; color: #C2399B; font-variant-numeric: tabular-nums;">70 %</span></div>
+          <div style="height: 16px; background: #F6F5FB; border-radius: 6px; overflow: hidden; box-shadow: inset 0 1px 3px rgba(28,26,58,0.12);"><div data-barra style="width: 70%; height: 100%; border-radius: 6px; background: linear-gradient(90deg, #C2399B, #E06BBF);"></div></div>
+        </div>
+        <span style="font-size: 18px; font-weight: 700; color: #1C1A3A;">y piden una segunda temporada</span>
+      </div>
+    </div>
+    <div style="margin-top: 22px;">
+    <div data-nota style="background: rgba(0,135,90,0.08); border-left: 5px solid #00875A; border-radius: 0 14px 14px 0; padding: 22px 30px; font-size: 22.5px; font-weight: 400; color: #1C1A3A; line-height: 1.5; box-shadow: 0 8px 20px rgba(28,26,58,0.08);">Ese es el valor del método: <strong style="font-weight: 700;">descubrimos la competencia y diseñamos una prueba barata para el riesgo principal</strong>, sin escribir código.</div></div>
+  </section>
+
+  <section data-label="Lo que necesitamos acordar" data-screen-label="Acuerdos" data-speaker-notes="Cinco preguntas para cerrar hoy. Se revelan una por una con la flecha." style="background: #FFFFFF; background-image: radial-gradient(rgba(75,59,214,0.13) 1.9px, transparent 1.9px), radial-gradient(72% 56% at 100% 0%, rgba(236,234,255,0.7) 0%, rgba(236,234,255,0) 62%); background-size: 26px 26px, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #1C1A3A; display: flex; flex-direction: column; padding: 164px 100px 66px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 112px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #E2E0EE; background: rgba(255,255,255,0.74);">
+      <div style="display: flex; align-items: center; gap: 14px;">
+        <span style="width: 46px; height: 40px; border-radius: 10px; background: #4B3BD6; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; letter-spacing: 0.5px;">DRA</span>
+        <span style="font-size: 20px; font-weight: 600; color: #1C1A3A; letter-spacing: -0.2px;">Cómo evaluamos ideas</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 22px;">
+        <span style="background: #ECEAFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">5 preguntas</span>
+        <span style="font-size: 18px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #4B3BD6;">Acuerdos</span>
+      </div>
+    </header>
+    <h2 data-split style="margin: 0; font-size: 62px; font-weight: 800; color: #1C1A3A; letter-spacing: -1.8px; line-height: 1.06;">Lo que necesitamos acordar hoy</h2>
+    <div data-a="up2" style="margin-top: 36px; display: flex; flex-direction: column; gap: 14px; flex: 1;">
+      
+      <div data-acuerdo data-step="1" style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 20px; padding: 22px 30px; display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center;">
+        <span style="width: 64px; height: 64px; border-radius: 18px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">1</span>
+        <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px; line-height: 1.2;">¿Adoptamos este método como estándar?</span>
+        <span style="font-size: 18px; font-weight: 600; color: #64618A; text-align: right; max-width: 520px; line-height: 1.4;">El método</span>
+      </div>
+      <div data-acuerdo data-step="2" style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 20px; padding: 22px 30px; display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center;">
+        <span style="width: 64px; height: 64px; border-radius: 18px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">2</span>
+        <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px; line-height: 1.2;">¿Están bien los números iniciales?</span>
+        <span style="font-size: 18px; font-weight: 600; color: #64618A; text-align: right; max-width: 520px; line-height: 1.4;">ICE de 6 o más · máximo 3 ideas en validación · pruebas de máximo 2 semanas</span>
+      </div>
+      <div data-acuerdo data-step="3" style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 20px; padding: 22px 30px; display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center;">
+        <span style="width: 64px; height: 64px; border-radius: 18px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">3</span>
+        <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px; line-height: 1.2;">¿Los montos del pizarrón eran aportación mensual?</span>
+        <span style="font-size: 18px; font-weight: 600; color: #64618A; text-align: right; max-width: 520px; line-height: 1.4;">La capacidad</span>
+      </div>
+      <div data-acuerdo data-step="4" style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 20px; padding: 22px 30px; display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center;">
+        <span style="width: 64px; height: 64px; border-radius: 18px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">4</span>
+        <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px; line-height: 1.2;">¿Quién toma cada una de las 6 ideas?</span>
+        <span style="font-size: 18px; font-weight: 600; color: #64618A; text-align: right; max-width: 520px; line-height: 1.4;">Los dueños</span>
+      </div>
+      <div data-acuerdo data-step="5" style="background: linear-gradient(180deg, #FFFFFF 0%, #FCFBFF 100%); border: 1px solid #E2E0EE; box-shadow: 0 1px 2px rgba(28,26,58,0.07), 0 10px 24px rgba(28,26,58,0.08), 0 26px 52px rgba(75,59,214,0.07); border-radius: 20px; padding: 22px 30px; display: grid; grid-template-columns: 64px 1fr auto; gap: 24px; align-items: center;">
+        <span style="width: 64px; height: 64px; border-radius: 18px; background: #ECEAFF; color: #4B3BD6; display: inline-flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800;">5</span>
+        <span style="font-size: 31px; font-weight: 800; color: #1C1A3A; letter-spacing: -0.6px; line-height: 1.2;">¿Cuándo es la reunión de propuestas?</span>
+        <span style="font-size: 18px; font-weight: 600; color: #64618A; text-align: right; max-width: 520px; line-height: 1.4;">La fecha</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Cierre" data-screen-label="Cierre" data-speaker-notes="En una frase: toda idea se escribe, se compara con la misma regla y se prueba barato antes de construir. El siguiente paso es la reunion de propuestas." style="background: #4B3BD6; background-image: radial-gradient(rgba(255,255,255,0.13) 1.9px, transparent 1.9px), radial-gradient(85% 75% at 15% 90%, rgba(122,107,255,0.55) 0%, rgba(122,107,255,0) 62%), radial-gradient(70% 60% at 90% 5%, rgba(28,26,58,0.35) 0%, rgba(28,26,58,0) 55%); background-size: 30px 30px, 100% 100%, 100% 100%; font-family: 'Figtree', 'Segoe UI', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    
+    <div aria-hidden="true" style="position: absolute; inset: 0; overflow: hidden; pointer-events: none;">
+      <div data-orbe style="position: absolute; right: -90px; top: -90px; width: 540px; height: 540px; border-radius: 50%; background: rgba(255,255,255,0.06);"></div>
+      <div data-orbe style="position: absolute; left: 40%; bottom: -260px; width: 520px; height: 520px; border-radius: 50%; border: 2px solid rgba(255,255,255,0.09);"></div>
+    </div>
+    <span data-a="up" style="font-size: 21px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: rgba(255,255,255,0.75);">En una frase</span>
+    <h2 data-split style="margin: 26px 0 0; font-size: 84px; font-weight: 800; letter-spacing: -3px; line-height: 1.05; max-width: 1560px;">Toda idea se escribe, se compara<br>igual y se prueba barato</h2>
+    <p data-a="up3" style="margin: 32px 0 0; font-size: 28px; font-weight: 400; color: rgba(255,255,255,0.84); line-height: 1.55; max-width: 1200px;">Descartar también es avanzar, siempre que quede escrito por qué. El siguiente paso es la reunión de propuestas.</p>
+    <div data-a="up3" style="margin-top: 44px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Filtros</span><span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Lean Canvas</span><span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">ICE</span><span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Supuestos</span><span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Tarjetas</span><span style="background: #FFFFFF; color: #4B3BD6; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 9px 22px; letter-spacing: 0.3px; white-space: nowrap; font-variant-numeric: tabular-nums;">Siguiente: reunión de propuestas</span>
+    </div>
+  </section>
+</deck-stage>
+<script src="./gsap.min.js"></script>
+<script>
+(function () {
+  if (!window.gsap) return;
+  var reducido = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var registro = {};
+  window.animar = function (etiqueta, fn) { registro[etiqueta] = fn; };
+  window.cuenta = function (tl, el, pos) {
+    if (!el) return;
+    var fin = parseFloat(el.dataset.cuenta), suf = el.dataset.sufijo || '';
+    var o = { v: 0 };
+    tl.to(o, { v: fin, duration: 1, ease: 'power2.out',
+      onUpdate: function () { el.textContent = Math.round(o.v) + suf; } }, pos || 0);
+  };
+  function porDefecto(tl, s) {
+    ['ghost', 'up', 'up2', 'up3'].forEach(function (n, i) {
+      var els = s.querySelectorAll('[data-a="' + n + '"]');
+      if (!els.length) return;
+      if (n === 'ghost') tl.from(els, { scale: 0.88, opacity: 0, duration: 1 }, 0);
+      else tl.from(els, { y: 26, opacity: 0, duration: 0.65 }, (i - 1) * 0.13);
+    });
+    // Recetas declaradas en el HTML (data-efecto), si el deck carga kit.efectos().
+    if (window.efectosDeclarados) window.efectosDeclarados(tl, s);
+  }
+  function lanzar(s) {
+    if (s.__tl) s.__tl.revert();
+    // Lo que las recetas cambiaron del DOM (SplitText, cortinas, rebanadas…)
+    // se deshace antes de reconstruir; si no, se partiría el texto dos veces.
+    (s.__deshacer || []).reverse().forEach(function (f) { try { f(); } catch (e) {} });
+    s.__deshacer = [];
+    var tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    (registro[s.dataset.label] || porDefecto)(tl, s);
+    if (reducido) tl.progress(1);
+    s.__tl = tl;
+  }
+  function arrancar() {
+    var ds = document.querySelector('deck-stage');
+    if (!ds) return;
+    var obs = new MutationObserver(function (ms) {
+      ms.forEach(function (m) {
+        if (m.target.hasAttribute('data-deck-active')) lanzar(m.target);
+      });
+    });
+    ds.querySelectorAll(':scope > section').forEach(function (s) {
+      obs.observe(s, { attributes: true, attributeFilter: ['data-deck-active'] });
+    });
+    // La primera lámina espera a las fuentes: SplitText mide las líneas, y con
+    // la tipografía de respaldo saldrían cortes de línea distintos.
+    var activa = ds.querySelector('section[data-deck-active]');
+    if (activa) (document.fonts ? document.fonts.ready : Promise.resolve()).then(function () {
+      if (activa.hasAttribute('data-deck-active') && !activa.__tl) lanzar(activa);
+    });
+  }
+  // Pasos (data-step de deck-stage): al revelar un paso hacia adelante, los
+  // elementos recién visibles entran animados; ocultar o revelar de golpe
+  // (llegar en reversa) no anima nada.
+  document.addEventListener('stepchange', function (e) {
+    var d = e.detail;
+    if (reducido || !d || d.step !== d.previousStep + 1) return;
+    var els = d.slide.querySelectorAll('[data-step="' + d.step + '"]');
+    if (els.length) gsap.from(els, { y: 18, opacity: 0, duration: 0.45, stagger: 0.06, ease: 'power3.out', clearProps: 'opacity,transform' });
+  });
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrancar);
+  else arrancar();
+})();
+</script>
+<script>
+(function () {
+  var SRC = "video.mp4", TECLA = "v".toLowerCase();
+  var abierto = false, btn, capa, video;
+
+  function montar() {
+    btn = document.createElement('button');
+    btn.id = 'ver-video';
+    btn.type = 'button';
+    btn.textContent = '▶ Reproducir · ' + TECLA.toUpperCase();
+    btn.style.cssText = 'position:fixed;top:16px;right:150px;z-index:2147483000;' +
+      'padding:9px 18px;border:1px solid #4B3BD6;border-radius:999px;' +
+      'background:#4B3BD6;color:#FFFFFF;cursor:pointer;' +
+      'font:600 13px/1 inherit;letter-spacing:.6px;opacity:.85;transition:opacity 160ms ease';
+    btn.addEventListener('mouseenter', function () { btn.style.opacity = '1'; });
+    btn.addEventListener('mouseleave', function () { btn.style.opacity = abierto ? '1' : '.85'; });
+    btn.addEventListener('click', function () { alternar(); btn.blur(); });
+    document.body.appendChild(btn);
+
+    capa = document.createElement('div');
+    capa.id = 'capa-video';
+    // OJO: la capa se oculta con display:none, no con el atributo hidden. hidden
+    // pone display:none desde la hoja del navegador, y el display:flex en línea
+    // le ganaba: la capa salía abierta al cargar y tapaba el deck entero.
+    capa.style.cssText = 'position:fixed;inset:0;z-index:2147483100;background:rgba(9,13,24,.92);' +
+      'display:none;align-items:center;justify-content:center;padding:3vh 3vw';
+    video = document.createElement('video');
+    // Sin src hasta que se abre: con src y preload el navegador bajaba ~10 s de
+    // video al entrar al deck aunque nadie le diera play.
+    video.preload = 'none';
+    video.controls = true;
+    video.playsInline = true;
+    video.style.cssText = 'max-width:100%;max-height:100%;border-radius:10px;box-shadow:0 24px 70px rgba(0,0,0,.55)';
+    var cerrar = document.createElement('button');
+    cerrar.type = 'button';
+    cerrar.setAttribute('aria-label', 'Cerrar el video');
+    cerrar.textContent = '✕ Cerrar · Esc';
+    cerrar.style.cssText = 'position:absolute;top:18px;right:18px;padding:9px 18px;' +
+      'border:1px solid rgba(255,255,255,.35);border-radius:999px;background:rgba(0,0,0,.45);' +
+      'color:#FFF;cursor:pointer;font:600 13px/1 inherit;letter-spacing:.6px;z-index:2';
+    cerrar.addEventListener('click', function (e) { e.stopPropagation(); alternar(false); });
+    capa.addEventListener('click', function (e) { if (e.target === capa) alternar(false); });
+    capa.appendChild(video);
+    capa.appendChild(cerrar);
+    document.body.appendChild(capa);
+    colocar();
+    window.addEventListener('resize', colocar);
+    if (document.fonts) document.fonts.ready.then(colocar);
+  }
+
+  // El botón va a la izquierda de «Presentar · P», midiendo su ancho real: con
+  // un right fijo de 150px los dos se enciman en cuanto el texto mide más.
+  function colocar() {
+    var p = document.getElementById('modo-presentacion');
+    var r = p && p.getBoundingClientRect();
+    btn.style.right = (r && r.width ? Math.round(window.innerWidth - r.left + 10) : 150) + 'px';
+  }
+
+  function alternar(forzar) {
+    if (!btn) return;
+    abierto = forzar === undefined ? !abierto : forzar;
+    capa.style.display = abierto ? 'flex' : 'none';
+    btn.style.opacity = abierto ? '1' : '.85';
+    if (abierto && !video.getAttribute('src')) video.src = SRC;
+    if (abierto) video.play().catch(function () {});   // si el navegador lo bloquea, quedan los controles
+    else {
+      video.pause();
+      if (document.fullscreenElement) document.exitFullscreen().catch(function () {});
+    }
+  }
+
+  // El botón nativo de pantalla completa pone en fullscreen el <video>, y
+  // entonces el navegador solo pinta ese elemento: el botón «Cerrar», que vive
+  // en la capa, desaparece y el video se queda sin salida. Se reconduce el
+  // fullscreen a la capa, que sí lo lleva dentro.
+  document.addEventListener('fullscreenchange', function () {
+    if (!video || document.fullscreenElement !== video) return;
+    document.exitFullscreen()
+      .then(function () { return capa.requestFullscreen(); })
+      .catch(function () {});
+  });
+
+  // Con la capa abierta, el teclado es del video: se corta antes de deck-stage.
+  window.addEventListener('keydown', function (e) {
+    if (!btn) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (abierto) {
+      if (e.key === 'Escape' || e.key.toLowerCase() === TECLA) { alternar(false); e.preventDefault(); e.stopPropagation(); return; }
+      if (['ArrowLeft', 'ArrowRight', ' ', 'Spacebar', 'PageUp', 'PageDown', 'Home', 'End'].indexOf(e.key) >= 0) e.stopPropagation();
+      return;
+    }
+    if (e.key.toLowerCase() === TECLA) { alternar(true); e.preventDefault(); e.stopPropagation(); }
+  }, true);
+
+  // En modo presentación desaparecen los dos, como el botón de presentar.
+  window.addEventListener('message', function (e) {
+    var d = e.data;
+    if (!btn || !d || typeof d.__omelette_presenting !== 'boolean') return;
+    btn.style.display = d.__omelette_presenting ? 'none' : '';
+    setTimeout(colocar, 0);   // «Presentar · P» cambia de texto y de ancho
+    if (d.__omelette_presenting) alternar(false);
+  });
+
+  // Sin archivo, no hay botón: mejor eso que un botón que abre una capa vacía.
+  fetch(SRC, { method: 'HEAD' })
+    .then(function (r) { if (r.ok) montar(); })
+    .catch(function () {});
+})();
+</script>
+<script>
+// ── Coreografía ──────────────────────────────────────────────────────────
+// La familia de los reportes semanales: titulares partidos en palabras con
+// entrada 3D, tarjetas que caen con giro, contadores y barras. Lo propio de
+// este deck: el embudo que se estrecha, el Lean Canvas que se enciende en
+// orden de llenado, el sticky que recorre el pipeline y la agenda de 90 min
+// que se llena de izquierda a derecha. Todo con tl.from().
+(function () {
+  if (!window.animar || !window.gsap) return;
+
+  function partir(el) {
+    if (!el || el.dataset.partido) return [];
+    var salida = [];
+    Array.prototype.slice.call(el.childNodes).forEach(function (n) {
+      if (n.nodeType !== 3) return;
+      var frag = document.createDocumentFragment();
+      n.textContent.split(/(\s+)/).forEach(function (parte) {
+        if (!parte) return;
+        if (/^\s+$/.test(parte)) { frag.appendChild(document.createTextNode(parte)); return; }
+        var s = document.createElement('span');
+        s.textContent = parte;
+        s.style.display = 'inline-block';
+        frag.appendChild(s);
+        salida.push(s);
+      });
+      el.replaceChild(frag, n);
+    });
+    el.dataset.partido = '1';
+    return salida;
+  }
+  function titular(tl, el, pos) {
+    if (!el) return;
+    var ps = el.dataset.partido ? el.querySelectorAll('span') : partir(el);
+    if (ps.length) tl.from(ps, { y: 40, opacity: 0, rotationX: -55, transformPerspective: 900,
+      transformOrigin: '50% 100%', duration: 0.7, stagger: 0.045, ease: 'power3.out' }, pos || 0);
+  }
+  var Q = function (s, sel) { return s.querySelectorAll(sel); };
+  var q = function (s, sel) { return s.querySelector(sel); };
+  var cuentas = function (tl, s, pos) { Q(s, '[data-cuenta]').forEach(function (el) { cuenta(tl, el, pos); }); };
+  var caer = { y: 40, opacity: 0, rotationX: -24, transformPerspective: 1200, transformOrigin: '50% 0%', duration: 0.6 };
+  function mini(tl, s) {
+    var m = Q(s, '[data-mini]');
+    if (m.length) tl.from(m, { y: -10, opacity: 0, duration: 0.35, stagger: 0.05 }, 0.05);
+  }
+  function conNota(tl, s, pos) {
+    var n = q(s, '[data-nota]');
+    if (n) tl.from(n, { y: 22, opacity: 0, duration: 0.55 }, pos);
+  }
+
+  function portada(tl, s) {
+    tl.from(Q(s, '[data-orbe]'), { scale: 0.8, opacity: 0, duration: 1.2, stagger: 0.12, ease: 'power2.out' }, 0);
+    var sello = q(s, '[data-sello]');
+    if (sello) tl.from(sello, { scale: 0, rotation: -90, duration: 0.7, ease: 'back.out(1.7)' }, 0.1)
+      .from(q(s, '[data-a="up"] div'), { x: -22, opacity: 0, duration: 0.55 }, 0.25);
+    else tl.from(q(s, '[data-a="up"]'), { y: 20, opacity: 0, duration: 0.5 }, 0.1);
+    titular(tl, q(s, 'h1, h2'), 0.3);
+    tl.from(q(s, 'p'), { y: 22, opacity: 0, duration: 0.55 }, 0.75)
+      .from(Q(s, 'div[data-a="up3"] span'), { y: 18, opacity: 0, scale: 0.94, duration: 0.5, stagger: 0.06 }, 0.85);
+  }
+  animar('Portada', portada);
+  animar('Cierre', portada);
+
+  animar('En resumen', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.55 }, 0.2)
+      .from(Q(s, '[data-stat]'), Object.assign({ stagger: 0.09 }, caer), 0.3);
+    cuentas(tl, s, 0.45);
+  });
+
+  animar('El problema', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-panel]'), { x: -50, opacity: 0, rotationY: 14, transformPerspective: 1100, transformOrigin: '0% 50%', duration: 0.8 }, 0.2)
+      .from(Q(s, '[data-riesgo]'), Object.assign({ stagger: 0.09 }, caer), 0.35);
+    cuentas(tl, s, 0.3);
+    conNota(tl, s, 1.0);
+  });
+
+  animar('Principios', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-principio]'), Object.assign({ stagger: 0.1 }, caer), 0.25);
+  });
+
+  animar('El embudo', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    // la silueta se abre de izquierda a derecha y los pasos caen en orden
+    tl.from(q(s, '[data-silueta]'), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.9, ease: 'power2.inOut' }, 0.2)
+      .from(Q(s, '[data-nodo]'), { y: 26, opacity: 0, scale: 0.92, duration: 0.45, stagger: 0.1 }, 0.4)
+      .from(Q(s, '[data-salida]'), { x: 30, opacity: 0, duration: 0.45, stagger: 0.1 }, 1.0);
+  });
+
+  animar('Paso 1 · Filtros', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-filtro]'), { x: -36, opacity: 0, duration: 0.45, stagger: 0.08 }, 0.25)
+      .from(q(s, '[data-capacidad]'), { x: 40, opacity: 0, duration: 0.6 }, 0.35)
+      .from(Q(s, '[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.6, ease: 'power2.out', stagger: 0.07 }, 0.7);
+  });
+
+  animar('Paso 2 · Lean Canvas', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    // los nueve bloques se encienden en orden de llenado, no de lectura
+    var bloques = Array.prototype.slice.call(Q(s, '[data-bloque]'))
+      .sort(function (a, b) { return a.dataset.orden - b.dataset.orden; });
+    tl.from(bloques, { scale: 0.86, opacity: 0, duration: 0.35, ease: 'back.out(1.6)', stagger: 0.09 }, 0.25)
+      .from(Q(s, '[data-regla]'), { x: 30, opacity: 0, duration: 0.5, stagger: 0.12 }, 0.6);
+    cuentas(tl, s, 0.65);
+  });
+
+  animar('Paso 3 · ICE', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-letra]'), Object.assign({ stagger: 0.1 }, caer), 0.2)
+      .from(q(s, '[data-formula]'), { y: 26, opacity: 0, duration: 0.5 }, 0.5)
+      .from(Q(s, '[data-celda]'), { scaleY: 0, transformOrigin: '50% 100%', duration: 0.3, stagger: 0.04 }, 0.7)
+      .from(q(s, '[data-umbral]'), { y: -16, opacity: 0, duration: 0.4, ease: 'back.out(2)' }, 1.1)
+      .from(Q(s, '[data-reglaice]'), { x: 30, opacity: 0, duration: 0.4, stagger: 0.08 }, 0.6);
+  });
+
+  animar('La rúbrica', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 26, opacity: 0, duration: 0.5 }, 0.2)
+      .from(Q(s, '[data-fila-r]'), { x: -24, opacity: 0, duration: 0.4, stagger: 0.1 }, 0.4);
+    conNota(tl, s, 1.0);
+  });
+
+  animar('Paso 4 · Supuestos', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-tipo]'), { x: -36, opacity: 0, duration: 0.45, stagger: 0.09 }, 0.25)
+      .from(Q(s, '[data-cuadrante]'), { scale: 0.88, opacity: 0, duration: 0.45, stagger: 0.09, ease: 'back.out(1.5)' }, 0.45)
+      .from(q(s, '[data-pulso]'), { scale: 1.12, opacity: 0, duration: 0.6, ease: 'power2.out' }, 1.0);
+  });
+
+  animar('Paso 5 · Tarjetas', function (tl, s) {
+    mini(tl, s);
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-tarjeta]'), { y: 40, opacity: 0, rotation: -1.5, duration: 0.6, stagger: 0.14 }, 0.2)
+      .from(Q(s, '[data-frase]'), { x: -14, opacity: 0, duration: 0.35, stagger: 0.06 }, 0.45)
+      .from(Q(s, '[data-exp]'), { y: 14, opacity: 0, scale: 0.94, duration: 0.35, stagger: 0.05 }, 0.9);
+    conNota(tl, s, 1.15);
+  });
+
+  animar('Plataformas', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-plat]'), Object.assign({ stagger: 0.1 }, caer), 0.25);
+    conNota(tl, s, 0.95);
+  });
+
+  animar('Registro', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(Q(s, '[data-col]'), { y: 24, opacity: 0, duration: 0.4, stagger: 0.06 }, 0.15);
+    // el sticky entra en «Idea cruda» y avanza hasta «En validación»
+    var st = q(s, '[data-sticky]');
+    if (st) tl.from(st, { x: -parseFloat(st.dataset.pasoCol), duration: 1.0, ease: 'power2.inOut' }, 0.6)
+      .from(st, { opacity: 0, y: -30, duration: 0.3 }, 0.45);
+    tl.from(Q(s, '[data-reg]'), { y: 26, opacity: 0, duration: 0.4, stagger: 0.07 }, 0.5);
+  });
+
+  animar('La reunión', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    // los 90 minutos se llenan de izquierda a derecha, bloque por bloque
+    tl.from(Q(s, '[data-bloque-ag]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.32, ease: 'power2.out', stagger: 0.13 }, 0.25)
+      .from(Q(s, '[data-momento]'), Object.assign({ stagger: 0.1 }, caer), 0.75);
+  });
+
+  animar('Pádel · lo que encontramos', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-a="up2"]'), { y: 20, opacity: 0, duration: 0.5 }, 0.2)
+      .from(Q(s, '[data-lado]'), { y: 36, opacity: 0, duration: 0.6, stagger: 0.2 }, 0.3)
+      .from(Q(s, '[data-dato]'), { y: 16, opacity: 0, duration: 0.4, stagger: 0.07 }, 0.5);
+    conNota(tl, s, 1.1);
+  });
+
+  animar('Pádel · cómo lo probamos', function (tl, s) {
+    titular(tl, q(s, 'h2'), 0);
+    tl.from(q(s, '[data-hipo]'), { x: -50, opacity: 0, rotationY: 14, transformPerspective: 1100, transformOrigin: '0% 50%', duration: 0.7 }, 0.2)
+      .from(Q(s, '[data-hip]'), { x: -16, opacity: 0, duration: 0.35, stagger: 0.08 }, 0.4)
+      .from(Q(s, '[data-prueba]'), Object.assign({ stagger: 0.12 }, caer), 0.35)
+      .from(Q(s, '[data-punto]'), { scale: 0, transformOrigin: '50% 50%', duration: 0.25, ease: 'back.out(2.4)', stagger: 0.035 }, 0.7)
+      .from(Q(s, '[data-barra]'), { scaleX: 0, transformOrigin: '0 50%', duration: 0.7, ease: 'power2.out' }, 0.8);
+    cuentas(tl, s, 0.8);
+    conNota(tl, s, 1.15);
+  });
+
+  animar('Lo que necesitamos acordar', function (tl, s) {
+    // las preguntas llevan data-step: las revela la navegación
+    titular(tl, q(s, 'h2'), 0);
+  });
+})();
+</script>
+<script>
+(function () {
+  var on = false, btn = document.createElement('button');
+  btn.id = 'modo-presentacion'; btn.type = 'button';
+  function pinta() { btn.textContent = on ? 'Salir · Esc' : 'Presentar · P'; if (on) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on'); }
+  function poner(v) {
+    if (v === on) return; on = v;
+    window.postMessage({ __omelette_presenting: v }, '*');
+    if (v) { if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {}); }
+    else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    pinta();
+  }
+  btn.addEventListener('click', function () { poner(!on); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target; if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { poner(!on); e.preventDefault(); }
+    else if (e.key === 'Escape' && on && !document.fullscreenElement) poner(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && on) poner(false); });
+  pinta(); document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>

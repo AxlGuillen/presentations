@@ -1,7 +1,7 @@
 // Deck de prueba del desenfoque de movimiento (data-blur en cuadros.mjs): un
 // bloque blanco cruza a velocidad fija, con y sin desenfoque. Se genera en
 // prueba-blur/ (ignorada en git).
-//   node tools/pruebas/deck-blur.cjs && node tools/cuadros.mjs prueba-blur
+//   node tools/pruebas/deck-blur.cjs && node tools/cuadros.mjs tools/pruebas/salida/prueba-blur
 // La estela debe medir velocidad × obturador / fps a cada lado del bloque
 // (2400 px/s × 0,5 / 30 = 40 px) y el último cuadro, quieto, debe quedar nítido.
 const fs = require('fs');
@@ -9,9 +9,9 @@ const path = require('path');
 const kit = require('../kit.cjs');
 
 const raiz = path.resolve(__dirname, '..', '..');
-const dir = path.join(raiz, 'prueba-blur');
+const dir = path.join(raiz, 'tools', 'pruebas', 'salida', 'prueba-blur');
 fs.mkdirSync(dir, { recursive: true });
-fs.copyFileSync(path.join(raiz, 'lab', 'deck-stage.js'), path.join(dir, 'deck-stage.js'));
+fs.copyFileSync(path.join(raiz, 'personal', 'lab', 'deck-stage.js'), path.join(dir, 'deck-stage.js'));
 
 const lamina = (id, blur) => `<section data-label="${id}" ${blur ? `data-blur="${blur}"` : ''} style="background:#000;position:relative;overflow:hidden">
   <div data-bloque style="position:absolute;left:0;top:900px;width:120px;height:120px;background:#FFF"></div></section>`;

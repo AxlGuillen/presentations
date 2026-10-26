@@ -16,6 +16,10 @@
 
 declare const process: { env: Record<string, string | undefined> };
 
+// Para proteger un deck (por ejemplo uno de Work), se agrega su ruta aquí,
+// como '/work/semana42/:path*': pide la misma clave y con la misma cookie, así
+// que quien ya entró a la galería no la vuelve a escribir. Por ahora no hay
+// ninguno (decisión de Axl, 26/oct/2026).
 export const config = { matcher: ['/', '/index.html'] };
 
 const COOKIE = 'galeria';
@@ -53,8 +57,11 @@ export default async function middleware(request: Request): Promise<Response | u
   const url = new URL(request.url);
   const seguro = url.protocol === 'https:' ? '; Secure' : '';
 
+  // Al entrar o salir se vuelve a la misma ruta (la galería o el deck protegido).
+  const destino = url.pathname === '/index.html' ? '/' : url.pathname;
+
   if (url.searchParams.has('salir')) {
-    return new Response(null, { status: 303, headers: { Location: '/', 'Set-Cookie': `${COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${seguro}`, 'Cache-Control': 'no-store' } });
+    return new Response(null, { status: 303, headers: { Location: destino, 'Set-Cookie': `${COOKIE}=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax${seguro}`, 'Cache-Control': 'no-store' } });
   }
 
   const sesion = clave ? await firma(clave, 'galeria-v1') : '';
@@ -67,17 +74,17 @@ export default async function middleware(request: Request): Promise<Response | u
     if (clave && intento && iguales(await firma(clave, intento), await firma(clave, clave))) {
       return new Response(null, {
         status: 303,
-        headers: { Location: '/', 'Set-Cookie': `${COOKIE}=${sesion}; Path=/; Max-Age=${DURA}; HttpOnly; SameSite=Lax${seguro}`, 'Cache-Control': 'no-store' },
+        headers: { Location: destino, 'Set-Cookie': `${COOKIE}=${sesion}; Path=/; Max-Age=${DURA}; HttpOnly; SameSite=Lax${seguro}`, 'Cache-Control': 'no-store' },
       });
     }
-    return acceso(401, clave ? 'Esa no es la contraseña.' : 'La galería todavía no tiene contraseña configurada.');
+    return acceso(401, clave ? 'Esa no es la contraseña.' : 'La galería todavía no tiene contraseña configurada.', destino);
   }
 
-  return acceso(clave ? 401 : 503, clave ? '' : 'La galería todavía no tiene contraseña configurada.');
+  return acceso(clave ? 401 : 503, clave ? '' : 'La galería todavía no tiene contraseña configurada.', destino);
 }
 
 /** La puerta, con la identidad de La cartelera (carbón, hueso y ámbar). */
-function acceso(status: number, error: string): Response {
+function acceso(status: number, error: string, destino: string): Response {
   const html = `<!DOCTYPE html>
 <html lang="es">
 <head>
@@ -108,7 +115,7 @@ function acceso(status: number, error: string): Response {
 </style>
 </head>
 <body>
-  <form class="puerta" method="post" action="/">
+  <form class="puerta" method="post" action="${destino}">
     <svg class="marca" viewBox="0 0 104 92" fill="currentColor" aria-hidden="true"><path d="M0 52 H104 V66 H0 Z"></path><path d="M66 0 H80 V78 H104 V92 H66 V20 L26 60 H6 Z"></path></svg>
     <div class="senal"><i></i>ACCESO PRIVADO</div>
     <h1>El programa</h1>

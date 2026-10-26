@@ -54,3 +54,16 @@ test('middleware: sin GALERIA_CLAVE la galería queda cerrada', () => conClave('
   assert.equal((await middleware(post(''))).status, 401);
   assert.equal((await middleware(new Request(URL_, { headers: { cookie: 'galeria=' } }))).status, 503);
 }));
+
+test('middleware: en un deck protegido, la puerta regresa al mismo deck', () => conClave('cartelera', async () => {
+  const deck = 'https://ejemplo.vercel.app/work/semana42/';
+  const puerta = await middleware(new Request(deck));
+  assert.match(await puerta.text(), /action="\/work\/semana42\/"/);
+  const r = await middleware(new Request(deck, { method: 'POST', body: new URLSearchParams({ clave: 'cartelera' }) }));
+  assert.equal(r.status, 303);
+  assert.equal(r.headers.get('location'), '/work/semana42/');
+  // la misma cookie abre el deck y la galería
+  const sesion = r.headers.get('set-cookie').split(';')[0];
+  assert.equal(await middleware(new Request(deck, { headers: { cookie: sesion } })), undefined);
+  assert.equal(await middleware(new Request(URL_, { headers: { cookie: sesion } })), undefined);
+}));

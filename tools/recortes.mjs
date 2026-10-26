@@ -28,7 +28,7 @@ import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
-const deck = (args.find(a => !a.startsWith('--')) || '').replace(/[\\/]/g, '');
+const deck = (args.find(a => !a.startsWith('--')) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const solo = (args.find(a => a.startsWith('--solo=')) || '').slice(7).split(',').filter(Boolean);
 const listar = args.includes('--listar');
 const specPath = path.join(raiz, deck, 'recortes.json');

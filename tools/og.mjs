@@ -13,7 +13,7 @@ import { execFileSync } from 'node:child_process';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const objetivos = process.argv.slice(2).map(a => a.replace(/[\\/]/g, ''));
+const objetivos = process.argv.slice(2).map(a => a.replace(/\\/g, '/').replace(/^\/+|\/+$/g, ''));
 if (!objetivos.length) {
   console.error('Uso: node tools/og.mjs <carpeta|raiz> [<carpeta> …]');
   process.exit(1);

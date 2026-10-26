@@ -14,9 +14,5 @@ node_modules/
 .DS_Store
 Thumbs.db
 
-# Deck de prueba del kit de edit (tools/pruebas/deck-edit.cjs)
-/prueba-edit/
-/prueba-blur/
-/prueba-gira/
-/prueba-lottie/
-/prueba-three/
+# Decks de prueba del kit (tools/pruebas/deck-*.cjs)
+/tools/pruebas/salida/

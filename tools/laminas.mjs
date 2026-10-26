@@ -32,7 +32,7 @@ import { spawnSync } from 'node:child_process';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
-const deck = (args.find(a => !a.startsWith('--')) || '').replace(/[\\/]/g, '');
+const deck = (args.find(a => !a.startsWith('--')) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const opcion = (n, def) => { const a = args.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=')[1] : def; };
 const CROP = opcion('crop', '1080:1370:0:275');
 const QUIETO = parseFloat(opcion('quieto', '1'));

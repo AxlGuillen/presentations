@@ -45,7 +45,7 @@ import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
-const deck = (args.find(a => !a.startsWith('--') && !/^\d+$/.test(a)) || '').replace(/[\\/]/g, '');
+const deck = (args.find(a => !a.startsWith('--') && !/^\d+$/.test(a)) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const FPS = Math.max(1, parseInt(args.find(a => /^\d+$/.test(a)) || '30', 10));
 const pedido = args.find(a => a.startsWith('--paralelo='));
 const PARALELO = Math.max(1, pedido ? parseInt(pedido.split('=')[1], 10) : Math.min(6, Math.floor(os.cpus().length / 2)));

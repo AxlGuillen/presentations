@@ -1,6 +1,8 @@
 // Servidor local que imita a Vercel para este sitio: sirve los estáticos con
-// barra final (trailingSlash) y pasa por middleware.ts las rutas de su
-// matcher, para probar la contraseña de la galería sin desplegar. La clave
+// barra final (trailingSlash), aplica los redirects de vercel.json y pasa por
+// middleware.ts las rutas de su matcher, para probar la contraseña sin
+// desplegar. De los patrones solo entiende lo que usa el sitio: rutas exactas
+// y un ':path*' al final. La clave
 // sale de GALERIA_CLAVE (entorno o .env, que está ignorado).
 // Uso: node tools/servidor-local.mjs [puerto]   → http://localhost:3125/
 import http from 'node:http';
@@ -14,13 +16,26 @@ if (!process.env.GALERIA_CLAVE && fs.existsSync(path.join(raiz, '.env'))) {
   if (m) process.env.GALERIA_CLAVE = m[1].trim();
 }
 const { default: middleware, config } = await import(path.join(raiz, 'middleware.ts'));
+const { redirects = [] } = JSON.parse(fs.readFileSync(path.join(raiz, 'vercel.json'), 'utf8'));
+/** El resto de la ruta si `patron` la cubre ('' si es exacta), o null. */
+const cubre = (patron, ruta) => {
+  if (!patron.endsWith('/:path*')) return patron === ruta ? '' : null;
+  const base = patron.slice(0, -'/:path*'.length);
+  return ruta === base || ruta === base + '/' ? '' : ruta.startsWith(base + '/') ? ruta.slice(base.length + 1) : null;
+};
 const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '.mjs': 'text/javascript', '.css': 'text/css', '.json': 'application/json',
   '.png': 'image/png', '.jpg': 'image/jpeg', '.jpeg': 'image/jpeg', '.webp': 'image/webp', '.svg': 'image/svg+xml', '.ico': 'image/x-icon',
   '.mp4': 'video/mp4', '.mp3': 'audio/mpeg', '.woff2': 'font/woff2' };
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${puerto}`);
-  if (config.matcher.includes(url.pathname)) {
+  for (const r of redirects) {
+    const resto = cubre(r.source, url.pathname);
+    if (resto == null) continue;
+    res.writeHead(r.permanent ? 308 : 307, { Location: r.destination.replace(':path*', resto) + url.search });
+    return res.end();
+  }
+  if (config.matcher.some((m) => cubre(m, url.pathname) != null)) {
     const cuerpo = req.method === 'POST' ? await new Promise((ok) => { const t = []; req.on('data', (c) => t.push(c)); req.on('end', () => ok(Buffer.concat(t))); }) : undefined;
     const r = await middleware(new Request(url, { method: req.method, headers: req.headers, body: cuerpo }));
     if (r) {

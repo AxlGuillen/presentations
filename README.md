@@ -1,6 +1,6 @@
 # Presentaciones con IA
 
-Portafolio de presentaciones web interactivas generadas con IA. La raíz es una galería con cards de preview; cada presentación vive en su propia subruta con sus propios assets. Sitio 100% estático, sin build ni dependencias.
+Portafolio de presentaciones web interactivas generadas con IA. La raíz es una galería con cards de preview, protegida con contraseña; cada presentación vive en su propia subruta dentro de su escritorio (`/work/`, `/personal/` o `/creator/`) con sus propios assets. Sitio 100% estático, sin build ni dependencias.
 
 **En vivo:** https://presentations-three-phi.vercel.app
 
@@ -8,63 +8,63 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 
 ```
 /                    galería «La cartelera»        index.html + portadas/
-/tabletas/           Comparativo Tabletas Rugged DYMMSA   · 16:9 · 22 slides
-/soloq/              SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
-/lowelo/             Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
-/estancia/           Propuesta: web, redes y administración para estancia infantil · 16:9 · 10 slides
-/ornn/               Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
-/urgot/              Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
-/talon/              Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
-/blitzcrank/         Blitzcrank cumple 17 años (apoyo visual para TikTok) · 9:16 · 9 slides
-/malphite/           Malphite cumple 17 años (apoyo visual para TikTok) · 9:16 · 8 slides
-/mundo/              Dr. Mundo cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
-/janna/              Janna cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
-/ivern/              Ivern cumple 10 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
-/missfortune/        Miss Fortune cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
-/syndra/             Syndra cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
-/riven/              Riven cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
-/kindred/            Kindred cumple 11 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
-/briar/              Briar cumple 3 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
-/azir/               Azir cumple 12 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
-/katarina/           Katarina cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 6 slides
-/corki/              Corki cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
-/samira/             Samira cumple 6 años (apoyo visual para TikTok, animado) · 9:16 · 7 slides
+/personal/tabletas/  Comparativo Tabletas Rugged DYMMSA   · 16:9 · 22 slides
+/creator/soloq/      SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
+/creator/lowelo/     Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
+/personal/estancia/  Propuesta: web, redes y administración para estancia infantil · 16:9 · 10 slides
+/creator/ornn/       Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
+/creator/urgot/      Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
+/creator/talon/      Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
+/creator/blitzcrank/ Blitzcrank cumple 17 años (apoyo visual para TikTok) · 9:16 · 9 slides
+/creator/malphite/   Malphite cumple 17 años (apoyo visual para TikTok) · 9:16 · 8 slides
+/creator/mundo/      Dr. Mundo cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
+/creator/janna/      Janna cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
+/creator/ivern/      Ivern cumple 10 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
+/creator/missfortune/ Miss Fortune cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
+/creator/syndra/     Syndra cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 11 slides
+/creator/riven/      Riven cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
+/creator/kindred/    Kindred cumple 11 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
+/creator/briar/      Briar cumple 3 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/creator/azir/       Azir cumple 12 años (apoyo visual para TikTok, animado) · 9:16 · 4 slides
+/creator/katarina/   Katarina cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 6 slides
+/creator/corki/      Corki cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/creator/samira/     Samira cumple 6 años (apoyo visual para TikTok, animado) · 9:16 · 7 slides
                      · el bloque de lore usa arte de Legends of Runeterra, no splashes
-/sona/               Sona cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
-/vex/                Vex cumple 5 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
-/khazix/             Kha'Zix cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
-/nasus/              Nasus cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 12 slides
-/swain/              Swain cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 14 slides
-/xerath/             Xerath cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 17 slides
-/jinx/               Jinx cumple 13 años (apoyo visual para TikTok, animado, solo arte) · 9:16 · 17 slides
-/suiza/              Worlds 2026 · fase suiza: la ronda 1 en flyers y su cuadro (animado) · 9:16 · 10 slides
-/suiza-r1/           Worlds 2026 · la ronda 1 en números: oro, kills y daño por equipo y por rol (montaje automático) · 9:16 · 26 slides
-/lux/                Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
-/graves/             Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
-/parche2620/         Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
-/parche2621/         Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
-/guerras/            Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
+/creator/sona/       Sona cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/creator/vex/        Vex cumple 5 años (apoyo visual para TikTok, animado) · 9:16 · 8 slides
+/creator/khazix/     Kha'Zix cumple 14 años (apoyo visual para TikTok, animado) · 9:16 · 10 slides
+/creator/nasus/      Nasus cumple 17 años (apoyo visual para TikTok, animado) · 9:16 · 12 slides
+/creator/swain/      Swain cumple 16 años (apoyo visual para TikTok, animado) · 9:16 · 14 slides
+/creator/xerath/     Xerath cumple 15 años (apoyo visual para TikTok, animado) · 9:16 · 17 slides
+/creator/jinx/       Jinx cumple 13 años (apoyo visual para TikTok, animado, solo arte) · 9:16 · 17 slides
+/creator/suiza/      Worlds 2026 · fase suiza: la ronda 1 en flyers y su cuadro (animado) · 9:16 · 10 slides
+/creator/suiza-r1/   Worlds 2026 · la ronda 1 en números: oro, kills y daño por equipo y por rol (montaje automático) · 9:16 · 26 slides
+/creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
+/creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
+/creator/parche2620/ Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
+/creator/parche2621/ Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
+/creator/guerras/    Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en guerras/ASSETS.md
-/helia/              La Ruina de Helia · paquete de assets del episodio 2 de lore · 9:16 · 18 slides
+/creator/helia/      La Ruina de Helia · paquete de assets del episodio 2 de lore · 9:16 · 18 slides
                      · el índice de assets por bloque del guion está en helia/ASSETS.md
-/caps/               Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
+/creator/caps/       Caps, el jugador con más títulos del planeta (apoyo visual para TikTok, animado) · 9:16 · 12 slides
                      · fotos de Wikimedia Commons con licencia libre — créditos en caps/CREDITOS.md
-/skins/              Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
-/caras/              Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
-/lab/                Laboratorio de efectos: catálogo vivo del kit (recetas, continuidad, dibujo a líneas, patrones) · 9:16 · 60 slides
+/creator/skins/      Los campeones con más skins (apoyo visual para TikTok) · 9:16 · 4 slides
+/creator/caras/      Las skins más caras del LoL (apoyo visual para TikTok) · 9:16 · 5 slides
+/personal/lab/       Laboratorio de efectos: catálogo vivo del kit (recetas, continuidad, dibujo a líneas, patrones) · 9:16 · 60 slides
                      · créditos de game-icons en lab/CREDITOS.md
-/novedades/          Lo nuevo del kit: cuaderno de novedades con una demo viva por lámina · 16:9 · 27 slides
-/semana34/           Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides
-/semana35/           Reporte semanal Jira: semana 35 (25–31 ago 2026) · 16:9 · 10 slides
-/semana36/           Reporte semanal Jira: semana 36 (1–7 sep 2026) · 16:9 · 11 slides
-/semana38/           Reporte semanal Jira: semana 38 (15–21 sep 2026) · 16:9 · 11 slides
+/personal/novedades/ Lo nuevo del kit: cuaderno de novedades con una demo viva por lámina · 16:9 · 27 slides
+/work/semana34/      Reporte semanal Jira: semana 34 (18–24 ago 2026) · 16:9 · 8 slides
+/work/semana35/      Reporte semanal Jira: semana 35 (25–31 ago 2026) · 16:9 · 10 slides
+/work/semana36/      Reporte semanal Jira: semana 36 (1–7 sep 2026) · 16:9 · 11 slides
+/work/semana38/      Reporte semanal Jira: semana 38 (15–21 sep 2026) · 16:9 · 11 slides
                      · la semana 37 no tuvo reporte: solo 3 h 13 m, todas el martes 8
-/semana42/           Reporte semanal Jira: semana 42 (13–19 oct 2026) · 16:9 · 12 slides
+/work/semana42/      Reporte semanal Jira: semana 42 (13–19 oct 2026) · 16:9 · 12 slides
                      · cierra con las novedades de presentations y walkthrough de la semana
-/ultracode/          Charla: Ultracode en la práctica (caso Minuto Dulce) · 16:9 · 15 slides
-/seating3dmap/       seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
-/dra/                Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
-/musk/               Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA, con video narrado y música) · 16:9 · 14 slides
+/work/ultracode/     Charla: Ultracode en la práctica (caso Minuto Dulce) · 16:9 · 15 slides
+/work/seating3dmap/  seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
+/personal/dra/       Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
+/personal/musk/      Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA, con video narrado y música) · 16:9 · 14 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
@@ -96,7 +96,7 @@ Cada carpeta de presentación es autocontenida: su `index.html`, el runtime del 
 npx serve .
 ```
 
-`soloq/index.html` **se genera** con `node soloq/gen.js` — los datos viven en `gen.js`, no edites el HTML a mano. `tabletas/index.html` sí se edita directamente. Ver [CLAUDE.md](CLAUDE.md) para el detalle.
+`creator/soloq/index.html` **se genera** con `node creator/soloq/gen.js` — los datos viven en `gen.js`, no edites el HTML a mano. `personal/tabletas/index.html` sí se edita directamente. Ver [CLAUDE.md](CLAUDE.md) para el detalle.
 
 ## Roadmap
 

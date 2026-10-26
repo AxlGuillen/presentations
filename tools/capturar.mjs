@@ -9,7 +9,7 @@ import http from 'node:http';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const deck = (process.argv[2] || '').replace(/[\\/]/g, '');
+const deck = (process.argv[2] || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 if (!deck || !fs.existsSync(path.join(raiz, deck, 'index.html'))) {
   console.error('Uso: node tools/capturar.mjs <carpeta>   (debe existir <carpeta>/index.html)');
   process.exit(1);
