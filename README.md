@@ -41,6 +41,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/suiza-r1/   Worlds 2026 · la ronda 1 en números: oro, kills y daño por equipo y por rol (montaje automático) · 9:16 · 26 slides
 /creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
+/creator/elise/      Elise cumple 14 años (láminas para el montaje automático, animado) · 9:16 · 15 slides
 /creator/parche2620/ Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /creator/parche2621/ Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
 /creator/guerras/    Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
