@@ -1,0 +1,1094 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Propuesta · MT Omicron Sigma</title>
+<meta name="description" content="Un sitio web nuevo para vender a dos públicos: hospitales y clínicas con EsteriLife, veterinarios y productores con Zoolubac.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Propuesta · MT Omicron Sigma">
+<meta property="og:description" content="Un sitio web nuevo para vender a dos públicos: hospitales y clínicas con EsteriLife, veterinarios y productores con Zoolubac.">
+<meta property="og:url" content="https://presentations-three-phi.vercel.app/personal/omicron/">
+<meta property="og:image" content="https://presentations-three-phi.vercel.app/personal/omicron/assets/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="./deck-stage.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #06425C; }
+  @keyframes dsUp { from { opacity: 0; transform: translateY(24px); } to { opacity: 1; transform: none; } }
+  @keyframes dsGhost { from { opacity: 0; transform: translateX(60px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: no-preference) {
+    [data-deck-active] [data-a="up"] { animation: dsUp 0.65s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up2"] { animation: dsUp 0.65s 0.13s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="up3"] { animation: dsUp 0.75s 0.26s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+    [data-deck-active] [data-a="ghost"] { animation: dsGhost 0.9s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+  }
+  #modo-presentacion {
+    position: fixed; top: 16px; right: 16px; z-index: 2147483000;
+    padding: 9px 18px; border: 1px solid rgba(255,255,255,0.3); border-radius: 999px;
+    background: rgba(6,66,92,0.9); color: #FFFFFF; cursor: pointer;
+    font: 600 13px/1 'Montserrat', ui-sans-serif, system-ui, sans-serif; letter-spacing: 0.6px;
+    opacity: 0.5; transition: opacity 160ms ease;
+  }
+  #modo-presentacion:hover { opacity: 1; }
+  #modo-presentacion[data-on] { opacity: 0; }
+  #modo-presentacion[data-on]:hover { opacity: 1; }
+</style>
+</head>
+<body>
+<deck-stage width="1920" height="1080">
+
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Primera version. Un solo sitio para dos publicos: hospitales y clinicas por un lado, veterinarios y productores por el otro." style="background: #06425C; background-image: radial-gradient(70% 80% at 12% 10%, rgba(98,199,196,0.30) 0%, rgba(0,0,0,0) 60%); font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: #D35E15; clip-path: polygon(64% 0, 100% 0, 100% 100%, 50% 100%);"></div>
+    <div data-a="ghost" style="position: absolute; inset: 0; background: #E8B857; clip-path: polygon(63.2% 0, 64% 0, 50% 100%, 49.2% 100%);"></div>
+    <div data-a="up3" style="position: absolute; right: 150px; top: 130px; display: flex; gap: 34px;">
+      <div style="width: 330px; height: 720px; border-radius: 28px; background: #FFFFFF; box-shadow: 0 30px 60px rgba(0,0,0,0.32); display: flex; flex-direction: column; overflow: hidden; margin-top: 90px;">
+        <div style="flex: 1; background: url('assets/est-spray.jpg') center/cover no-repeat;"></div>
+        <div style="height: 92px; display: flex; align-items: center; justify-content: center; background: #FFFFFF;"><img src="assets/logo-esterilife.png" alt="EsteriLife" style="height: 40px; width: auto; display: block;"></div>
+      </div>
+      <div style="width: 330px; height: 720px; border-radius: 28px; background: #FFFFFF; box-shadow: 0 30px 60px rgba(0,0,0,0.32); display: flex; flex-direction: column; overflow: hidden;">
+        <div style="flex: 1; background: url('assets/zoo-spray.jpg') center/cover no-repeat;"></div>
+        <div style="height: 92px; display: flex; align-items: center; justify-content: center; background: #FFFFFF;"><img src="assets/logo-zoolubac.png" alt="Zoolubac" style="height: 40px; width: auto; display: block;"></div>
+      </div>
+    </div>
+    <div data-a="up" style="position: relative; display: flex; align-items: center; gap: 22px;">
+      <img src="assets/logo-mt-claro.png" alt="MT Omicron Sigma Technologies" style="height: 150px; width: auto; display: block;">
+    </div>
+    <h1 data-a="up2" style="position: relative; margin: 40px 0 0; font-size: 92px; font-weight: 700; letter-spacing: -3.2px; line-height: 1.04; max-width: 1020px;">Un solo sitio,<br>dos públicos,<br>cada uno por su puerta</h1>
+    <p data-a="up3" style="position: relative; margin: 30px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.82); line-height: 1.5; max-width: 880px;">Propuesta de sitio web nuevo para MT Omicron Sigma Technologies: hospitales y clínicas por EsteriLife, veterinarios y productores por Zoolubac.</p>
+    <div data-a="up3" style="position: relative; margin-top: 44px; display: flex; gap: 14px;">
+      <span style="background: rgba(255,255,255,0.16); color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Primera versión · octubre 2026</span>
+    </div>
+    <div data-a="up3" style="position: relative; margin-top: 30px; display: flex; align-items: center; gap: 26px;">
+      
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 21px; font-weight: 600; color: #FFFFFF;">Axl Guillén</span>
+        <span style="font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.62);">Sitio web y boletín</span>
+      </div><span style="width: 1px; height: 34px; background: rgba(255,255,255,0.25);"></span>
+      <div style="display: flex; flex-direction: column; gap: 2px;">
+        <span style="font-size: 21px; font-weight: 600; color: #FFFFFF;">Andrea Hasly Guillen Luna</span>
+        <span style="font-size: 17px; font-weight: 400; color: rgba(255,255,255,0.62);">Redes sociales y contenido</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El punto de partida" data-screen-label="Punto de partida" data-speaker-notes="La empresa tiene mas de lo que muestra. El problema no es el producto, es la vitrina." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Punto de partida</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Tienen más de lo que se ve</h2>
+    <div data-a="up3" style="margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr 540px; gap: 28px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 38px 34px; display: flex; flex-direction: column; gap: 22px; border-top: 6px solid #1F8F8B;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Lo que ya tienen</span>
+        <div style="display: flex; flex-direction: column; gap: 17px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Producto propio y dos marcas con su catálogo</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Trámites y avisos ante COFEPRIS y SENASICA</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Fichas técnicas y estudios de laboratorio</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Planta y almacén propios en Morelia</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Catálogos y flyers ya diseñados</span>
+          </div>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 38px 34px; display: flex; flex-direction: column; gap: 22px; border-top: 6px solid #D35E15;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #D35E15;">Lo que hoy no se ve</span>
+        <div style="display: flex; flex-direction: column; gap: 17px;">
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">!</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">El sitio actual no menciona ningún producto ni marca</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">!</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">No abre con candado (HTTPS): el navegador lo marca como «no seguro»</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">!</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Al buscar EsteriLife o Zoolubac en Google no aparece la empresa</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">!</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">En el celular se lee como un muro de texto</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">!</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Un formulario y un teléfono: sin catálogo, fichas ni WhatsApp</span>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        
+      <div style="width: 100%; border-radius: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); box-shadow: 0 22px 50px rgba(6,66,92,0.16);">
+        <div style="height: 44px; background: #E9EFF1; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #DCE6E8;">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F0A09B;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F2D27A;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #8FD0A1;"></span>
+          <span style="margin-left: 14px; flex: 1; height: 26px; border-radius: 13px; background: #FFFFFF; font-size: 14px; font-weight: 500; color: #5D6B73; display: flex; align-items: center; padding: 0 16px; letter-spacing: 0.2px;">mtomicronsigma.com.mx</span>
+        </div>
+        <div style="height: 330px; background: url('assets/web-actual.jpg') top center/cover no-repeat;"></div>
+      </div>
+        <span style="font-size: 16px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Así se ve hoy el sitio de la empresa (captura del 29 de octubre de 2026).</span>
+      </div>
+    </div>
+    <div style="height: 28px;"></div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">No es un problema de producto, es de vitrina.</strong> Quien llega al sitio hoy no puede saber qué venden, para quién ni dónde comprarlo. Eso es lo que resuelve esta propuesta.</div>
+  </section>
+
+  <section data-label="Dos públicos" data-screen-label="Dos públicos" data-speaker-notes="Querer venderle a ambos obliga a dos conversaciones distintas. Mismo sitio, dos puertas." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Objetivo</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Vender a ambos es hablar<br>en dos idiomas</h2>
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 30px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; border-top: 6px solid #62C7C4;">
+        <div style="height: 196px; background: url('assets/est-clinica.jpg') center 30%/cover no-repeat; position: relative;">
+          <div style="position: absolute; left: 28px; bottom: -26px; background: #FFFFFF; border-radius: 14px; padding: 12px 22px; box-shadow: 0 8px 22px rgba(6,66,92,0.18);"><img data-src="assets/logo-esterilife.png" alt="EsteriLife" style="height: 38px; width: auto; display: block;"></div>
+        </div>
+        <div style="padding: 48px 36px 30px; display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 30px; font-weight: 700; color: #06425C; letter-spacing: -0.6px; line-height: 1.2;">Hospitales, clínicas y profesionales de la salud</span>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Quieren poder verificar que el producto está registrado</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Buscan la ficha técnica y la presentación para su compra</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Necesitan saber a quién llamar para cotizar</span>
+          </div>
+          <span style="font-size: 21px; font-weight: 600; color: #1F8F8B; line-height: 1.4; margin-top: 8px;">Tono: sobrio, técnico, con datos y documentos a la mano.</span>
+        </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 28px; overflow: hidden; display: flex; flex-direction: column; border-top: 6px solid #D35E15;">
+        <div style="height: 196px; background: url('assets/zoo-perro.jpg') center 62%/cover no-repeat; position: relative;">
+          <div style="position: absolute; left: 28px; bottom: -26px; background: #FFFFFF; border-radius: 14px; padding: 12px 22px; box-shadow: 0 8px 22px rgba(6,66,92,0.18);"><img data-src="assets/logo-zoolubac.png" alt="Zoolubac" style="height: 38px; width: auto; display: block;"></div>
+        </div>
+        <div style="padding: 48px 36px 30px; display: flex; flex-direction: column; gap: 14px;">
+          <span style="font-size: 30px; font-weight: 700; color: #06425C; letter-spacing: -0.6px; line-height: 1.2;">Veterinarios, productores y dueños de mascotas</span>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Quieren saber para qué especie y para qué sirve</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Compran por tamaño: del frasco chico al garrafón</span>
+          </div>
+          
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Buscan dónde conseguirlo cerca de ellos</span>
+          </div>
+          <span style="font-size: 21px; font-weight: 600; color: #D35E15; line-height: 1.4; margin-top: 8px;">Tono: cercano, claro, con fotos reales y pocas palabras técnicas.</span>
+        </div>
+      </div>
+    </div>
+    <div style="height: 24px;"></div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Mismo sitio, dos conversaciones.</strong> Cada visitante entra por su puerta y no tiene que leer lo del otro: así ninguno de los dos se pierde en un catálogo que no es para él.</div>
+  </section>
+
+  <section data-label="Mapa del sitio" data-screen-label="Mapa del sitio" data-speaker-notes="Ocho secciones. Las dos marcas son el centro; lo demas existe para que se confie en ellas y se pueda comprar." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Estructura</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Un sitio, ocho secciones</h2>
+    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1; grid-template-rows: auto auto auto;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 1; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #6E7785;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Inicio</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Las dos puertas: «soy profesional de la salud» y «soy veterinario o productor».</span>
+          
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 1; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #6E7785;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Nosotros</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Quién es MT Omicron Sigma, dónde está la planta y por qué hacen lo que hacen.</span>
+          
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 1; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #6E7785;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Evidencia y registros</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Lo que respalda a cada producto, publicado solo con su visto bueno.</span>
+          
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 1; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #6E7785;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Dónde comprar</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Cotizar, escribir por WhatsApp o encontrar un distribuidor.</span>
+          
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 2; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #62C7C4;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">EsteriLife</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Salud humana. Una ficha por producto, con su presentación, su uso y su descarga.</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;"><span style="background: #62C7C41A; color: #1F8F8B; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Desinfectante de alto nivel</span><span style="background: #62C7C41A; color: #1F8F8B; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Antiséptico</span><span style="background: #62C7C41A; color: #1F8F8B; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Gel</span></div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 2; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #D35E15;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Zoolubac</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Uso veterinario. Una ficha por producto, organizada por tamaño y por especie.</span>
+          <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;"><span style="background: #D35E151A; color: #D35E15; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Solución antiséptica</span><span style="background: #D35E151A; color: #D35E15; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Gel</span><span style="background: #D35E151A; color: #D35E15; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">Garrafones</span></div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 2; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #E8B857;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Boletín</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">Archivo de cada número y suscripción, con dos listas: salud humana y veterinaria.</span>
+          
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); grid-column: span 2; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid #E8B857;">
+          <span style="font-size: 31px; font-weight: 700; color: #06425C; letter-spacing: -0.6px;">Contacto</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.42;">WhatsApp, teléfono, correo y mapa de la planta; aviso de privacidad.</span>
+          
+        </div>
+    </div>
+  </section>
+
+  <section data-label="La puerta de entrada" data-screen-label="Inicio del sitio" data-speaker-notes="Maqueta orientativa del inicio, no el diseno final. La idea: que nadie tenga que adivinar por donde entrar." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #6E7785; color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Maqueta orientativa</span>
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">El inicio</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Que nadie tenga que adivinar<br>por dónde entrar</h2>
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: 1.7fr 1fr; gap: 44px; flex: 1;">
+      
+      <div style="width: 100%; border-radius: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); box-shadow: 0 22px 50px rgba(6,66,92,0.16);">
+        <div style="height: 44px; background: #E9EFF1; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #DCE6E8;">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F0A09B;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F2D27A;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #8FD0A1;"></span>
+          <span style="margin-left: 14px; flex: 1; height: 26px; border-radius: 13px; background: #FFFFFF; font-size: 14px; font-weight: 500; color: #5D6B73; display: flex; align-items: center; padding: 0 16px; letter-spacing: 0.2px;">mtomicronsigma.com.mx</span>
+        </div>
+        
+        <div style="padding: 24px 32px 28px; background: #FFFFFF; display: flex; flex-direction: column; gap: 22px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 54px; width: auto; display: block;">
+            <div style="display: flex; gap: 22px; font-size: 15px; font-weight: 600; color: #5D6B73;"><span>Nosotros</span><span>Evidencia</span><span>Dónde comprar</span><span>Boletín</span><span>Contacto</span></div>
+          </div>
+          <div style="text-align: center; display: flex; flex-direction: column; gap: 8px;">
+            <span style="font-size: 36px; font-weight: 700; color: #06425C; letter-spacing: -1px;">Soluciones para el control de infecciones</span>
+            <span style="font-size: 18px; font-weight: 400; color: #5D6B73;">¿Quién eres? Elige tu camino.</span>
+          </div>
+          <div style="display: flex; gap: 22px;">
+            
+          <div style="flex: 1; border-radius: 16px; overflow: hidden; border: 1px solid #DCE6E8; background: #FFFFFF; display: flex; flex-direction: column;">
+            <div style="height: 240px; background: url('assets/est-clinica.jpg') center 30%/cover no-repeat; border-bottom: 5px solid #1F8F8B;"></div>
+            <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px;">
+              <span style="font-size: 17px; font-weight: 600; color: #5D6B73; line-height: 1.35;">Soy hospital, clínica o profesional de la salud</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <img data-src="assets/logo-esterilife.png" alt="EsteriLife" style="height: 30px; width: auto; display: block;">
+                <span style="background: #1F8F8B; color: #FFFFFF; font-size: 15px; font-weight: 700; border-radius: 999px; padding: 8px 16px; white-space: nowrap;">Entrar</span>
+              </div>
+            </div>
+          </div>
+            
+          <div style="flex: 1; border-radius: 16px; overflow: hidden; border: 1px solid #DCE6E8; background: #FFFFFF; display: flex; flex-direction: column;">
+            <div style="height: 240px; background: url('assets/zoo-perro.jpg') center 62%/cover no-repeat; border-bottom: 5px solid #D35E15;"></div>
+            <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 12px;">
+              <span style="font-size: 17px; font-weight: 600; color: #5D6B73; line-height: 1.35;">Soy veterinario, productor o tengo mascota</span>
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px;">
+                <img data-src="assets/logo-zoolubac.png" alt="Zoolubac" style="height: 30px; width: auto; display: block;">
+                <span style="background: #D35E15; color: #FFFFFF; font-size: 15px; font-weight: 700; border-radius: 999px; padding: 8px 16px; white-space: nowrap;">Entrar</span>
+              </div>
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 22px; padding-top: 6px;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Lo que logra esta pantalla</span>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Quien llega sabe en cinco segundos que es el lugar correcto</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Cada puerta lleva a un catálogo con el tono y las fotos de su público</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Dónde comprar y WhatsApp están siempre a la vista, en cada página</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Pensado primero para el celular, que es donde la van a abrir</span>
+          </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 17px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Es una maqueta para conversar la idea. El diseño final sale de sus fotos, su logo y lo que decidamos en la reunión.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="El catálogo" data-screen-label="Catálogo" data-speaker-notes="Cinco productos, cada uno con su ficha. Las presentaciones salen de los catalogos actuales y se confirman con el cliente antes de publicar." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">El catálogo</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Cada producto, con su ficha</h2>
+    <p data-a="up2" style="margin: 20px 0 0; font-size: 26px; font-weight: 400; color: #5D6B73; line-height: 1.5; max-width: 1500px;">El catálogo en PDF deja de ser un archivo que se manda por mensaje y se vuelve un lugar que se puede buscar, compartir y encontrar.</p>
+    <div data-a="up3" style="margin-top: 30px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border-top: 5px solid #62C7C4;">
+          <div style="height: 330px; background: #EEF3F4 url('assets/est-galon.jpg') center/contain no-repeat;"></div>
+          <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1F8F8B;">EsteriLife</span>
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.4px; line-height: 1.2;">Solución desinfectante de alto nivel</span>
+            <span style="font-size: 18px; font-weight: 400; color: #5D6B73; line-height: 1.4;">1 L · 3,78 L · 20 L</span>
+          </div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border-top: 5px solid #62C7C4;">
+          <div style="height: 330px; background: #EEF3F4 url('assets/est-antiseptico.jpg') center/contain no-repeat;"></div>
+          <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1F8F8B;">EsteriLife</span>
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.4px; line-height: 1.2;">Solución antiséptica</span>
+            <span style="font-size: 18px; font-weight: 400; color: #5D6B73; line-height: 1.4;">60, 120 y 240 mL · 3,78 L</span>
+          </div>
+        </div>
+      <div style="border-radius: 22px; background: #06425C; background-image: radial-gradient(90% 70% at 20% 10%, rgba(98,199,196,0.35) 0%, rgba(0,0,0,0) 60%); color: #FFFFFF; padding: 26px 24px; display: flex; flex-direction: column; justify-content: flex-end; gap: 7px; border-top: 5px solid #62C7C4;">
+        <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #62C7C4;">EsteriLife</span>
+        <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2;">Gel antiséptico</span>
+        <span style="font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.4;">150 · 240 · 500 g<br>Foto de catálogo por recibir</span>
+      </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border-top: 5px solid #D35E15;">
+          <div style="height: 330px; background: #EEF3F4 url('assets/zoo-spray.jpg') center/contain no-repeat;"></div>
+          <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #D35E15;">Zoolubac</span>
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.4px; line-height: 1.2;">Solución antiséptica veterinaria</span>
+            <span style="font-size: 18px; font-weight: 400; color: #5D6B73; line-height: 1.4;">120 mL · 1 L · 5 L · 20 L</span>
+          </div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border-top: 5px solid #D35E15;">
+          <div style="height: 330px; background: #EEF3F4 url('assets/zoo-gel.jpg') center/contain no-repeat;"></div>
+          <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 7px;">
+            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #D35E15;">Zoolubac</span>
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.4px; line-height: 1.2;">Gel antiséptico veterinario</span>
+            <span style="font-size: 18px; font-weight: 400; color: #5D6B73; line-height: 1.4;">150 y 240 g</span>
+          </div>
+        </div>
+    </div>
+    <div style="flex: 1;"></div>
+    <div data-a="up3" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: stretch;">
+      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-content: center;">
+        <span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Para qué sirve</span><span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Presentaciones</span><span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Cómo se usa</span><span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Ficha técnica en PDF</span><span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Hoja de seguridad</span><span style="background: #FFFFFF; border: 1px solid #DCE6E8; color: #06425C; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">Pedir cotización</span>
+      </div>
+      
+    <div data-a="up3" style="background: #D35E150D; border-left: 5px solid #D35E15; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Presentaciones por confirmar.</strong> Las de arriba son las de los catálogos actuales: antes de publicar se revisan una por una con ustedes.</div>
+    </div>
+  </section>
+
+  <section data-label="Evidencia y registros" data-screen-label="Evidencia" data-speaker-notes="En salud se compra confiando. La seccion de evidencia es la que cierra la venta. Se publica solo lo que el cliente apruebe." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Confianza</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">En salud se compra<br>cuando se puede verificar</h2>
+    <div data-a="up3" style="margin-top: 38px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 38px 36px 34px; display: flex; flex-direction: column; gap: 16px;">
+          <span style="width: 64px; height: 64px; border-radius: 18px; background: #1F8F8B1F; color: #1F8F8B; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;">◧</span>
+          <span style="font-size: 32px; font-weight: 700; color: #06425C; letter-spacing: -0.7px; line-height: 1.18;">Registros y avisos</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Qué autoridad lo respalda y bajo qué clave, por producto. Quien compra para un hospital o una clínica lo revisa antes de pedir cotización.</span>
+          <div style="height: 1px; background: #DCE6E8; margin: 6px 0 2px;"></div><div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Autoridad que lo respalda</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Producto al que corresponde</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Vigencia y fecha</span>
+          </div></div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 38px 36px 34px; display: flex; flex-direction: column; gap: 16px;">
+          <span style="width: 64px; height: 64px; border-radius: 18px; background: #1F8F8B1F; color: #1F8F8B; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;">▤</span>
+          <span style="font-size: 32px; font-weight: 700; color: #06425C; letter-spacing: -0.7px; line-height: 1.18;">Fichas técnicas y de seguridad</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Descargables, siempre la versión vigente, con fecha. Una sola fuente en lugar de PDFs que circulan por correo con versiones distintas.</span>
+          <div style="height: 1px; background: #DCE6E8; margin: 6px 0 2px;"></div><div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Ficha técnica en PDF</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Hoja de seguridad</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Versión y fecha de cada una</span>
+          </div></div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 38px 36px 34px; display: flex; flex-direction: column; gap: 16px;">
+          <span style="width: 64px; height: 64px; border-radius: 18px; background: #1F8F8B1F; color: #1F8F8B; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;">◎</span>
+          <span style="font-size: 32px; font-weight: 700; color: #06425C; letter-spacing: -0.7px; line-height: 1.18;">Estudios de laboratorio</span>
+          <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Un resumen claro de cada estudio: qué se midió, en qué condiciones y con qué resultado, con el informe como respaldo.</span>
+          <div style="height: 1px; background: #DCE6E8; margin: 6px 0 2px;"></div><div style="display: flex; flex-direction: column; gap: 12px;">
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Qué se midió</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">En qué condiciones</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.4;">Resultado y documento</span>
+          </div></div>
+        </div>
+    </div>
+    <div style="height: 26px;"></div>
+    <div data-a="up3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px;">
+      
+    <div data-a="up3" style="background: #1F8F8B0D; border-left: 5px solid #1F8F8B; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Se publica solo lo que ustedes aprueben.</strong> Antes de que algo aparezca en el sitio, ustedes eligen qué documento se muestra y cuál se queda para quien lo pida.</div>
+      
+    <div data-a="up3" style="background: #D35E150D; border-left: 5px solid #D35E15; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Resumen en el sitio, informe completo bajo pedido.</strong> Los informes traen datos de personas y de lotes: se muestra lo que sirve para comprar y lo demás se entrega por correo a quien lo solicite.</div>
+    </div>
+  </section>
+
+  <section data-label="Cómo convierte" data-screen-label="De visita a cotización" data-speaker-notes="El sitio arranca como catalogo y generador de contactos, no como tienda. La venta en linea de algunos productos esta regulada, se confirma producto por producto." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Cómo vende</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">De visita a cotización,<br>en cinco pasos</h2>
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+          <span style="width: 46px; height: 46px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">1</span>
+          <span style="font-size: 28px; font-weight: 700; color: #06425C; letter-spacing: -0.5px;">Te encuentra</span>
+          <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">En Google, en redes o en el boletín. Hoy no aparece en ninguno.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+          <span style="width: 46px; height: 46px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">2</span>
+          <span style="font-size: 28px; font-weight: 700; color: #06425C; letter-spacing: -0.5px;">Revisa</span>
+          <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">La ficha del producto y la evidencia que lo respalda.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+          <span style="width: 46px; height: 46px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">3</span>
+          <span style="font-size: 28px; font-weight: 700; color: #06425C; letter-spacing: -0.5px;">Pregunta</span>
+          <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">WhatsApp o formulario, uno para cada público.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+          <span style="width: 46px; height: 46px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">4</span>
+          <span style="font-size: 28px; font-weight: 700; color: #06425C; letter-spacing: -0.5px;">Cotiza</span>
+          <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">Ventas responde con presentación, cantidad y precio.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
+          <span style="width: 46px; height: 46px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">5</span>
+          <span style="font-size: 28px; font-weight: 700; color: #06425C; letter-spacing: -0.5px;">Compra</span>
+          <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">Directo con la empresa o con un distribuidor de su zona.</span>
+        </div>
+    </div>
+    <div data-a="up3" style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 32px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #1F8F8B;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Empezamos así</span>
+        <span style="font-size: 34px; font-weight: 700; color: #06425C; letter-spacing: -0.8px; line-height: 1.2;">Catálogo y generador de contactos</span>
+        <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.5;">El sitio no cobra en línea: junta personas con interés real y se las entrega a ventas con nombre, teléfono y qué producto preguntaron.</span>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 32px 34px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #D35E15;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #D35E15;">Tienda en línea, después</span>
+        <span style="font-size: 34px; font-weight: 700; color: #06425C; letter-spacing: -0.8px; line-height: 1.2;">Producto por producto, si conviene</span>
+        <span style="font-size: 22px; font-weight: 400; color: #5D6B73; line-height: 1.5;">La venta en línea de algunos productos tiene reglas propias de COFEPRIS y SENASICA. Se confirma con su asesor cuáles sí pueden y se agrega cuando haya claridad.</span>
+      </div>
+    </div>
+    <div style="height: 22px;"></div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Qué vamos a medir:</strong> visitas por sección, descargas de ficha, clics a WhatsApp y cotizaciones pedidas — para saber qué público responde y dónde se pierde.</div>
+  </section>
+
+  <section data-label="Lo que se dice" data-screen-label="Afirmaciones aprobadas" data-speaker-notes="En productos de salud un anuncio de mas puede costar mas que no anunciarse. Todo texto sale de una lista aprobada por el cliente." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Cuidado</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">En salud, lo que se dice<br>se tiene que poder probar</h2>
+    <p data-a="up2" style="margin: 20px 0 0; font-size: 26px; font-weight: 400; color: #5D6B73; line-height: 1.5; max-width: 1500px;">COFEPRIS y SENASICA vigilan la publicidad de los productos que regulan, también en internet. Por eso cada frase del sitio y de las redes pasa por tres filtros.</p>
+    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; border-top: 6px solid #1F8F8B;">
+          <span style="font-size: 54px; font-weight: 800; color: #1F8F8B; letter-spacing: -2px; line-height: 1;">1</span>
+          <span style="font-size: 29px; font-weight: 700; color: #06425C; letter-spacing: -0.6px; line-height: 1.2;">Tiene respaldo</span>
+          <span style="font-size: 21px; font-weight: 400; color: #5D6B73; line-height: 1.48;">Cada afirmación lleva al lado el estudio, la ficha o el registro que la sostiene.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; border-top: 6px solid #06425C;">
+          <span style="font-size: 54px; font-weight: 800; color: #06425C; letter-spacing: -2px; line-height: 1;">2</span>
+          <span style="font-size: 29px; font-weight: 700; color: #06425C; letter-spacing: -0.6px; line-height: 1.2;">Coincide con el registro</span>
+          <span style="font-size: 21px; font-weight: 400; color: #5D6B73; line-height: 1.48;">No se dice más —ni distinto— de lo que el producto tiene autorizado.</span>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; border-top: 6px solid #D35E15;">
+          <span style="font-size: 54px; font-weight: 800; color: #D35E15; letter-spacing: -2px; line-height: 1;">3</span>
+          <span style="font-size: 29px; font-weight: 700; color: #06425C; letter-spacing: -0.6px; line-height: 1.2;">La aprueban ustedes</span>
+          <span style="font-size: 21px; font-weight: 400; color: #5D6B73; line-height: 1.48;">Una lista de afirmaciones firmada por la empresa. Nada se publica sin su visto bueno.</span>
+        </div>
+    </div>
+    <div style="height: 24px;"></div>
+    <div data-a="up3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 13px; border-left: 6px solid #1F8F8B;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Sí se publica</span>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Resultados de laboratorio, con el organismo, el tiempo y el informe</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Para qué se usa, tal como dice el registro</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Presentaciones y modo de uso de la etiqueta</span>
+          </div>
+      </div>
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 13px; border-left: 6px solid #D35E15;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #D35E15;">Se queda fuera hasta tener respaldo</span>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">–</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Promesas que todavía no tienen un estudio detrás</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">–</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Usos que no están en el registro del producto</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">–</span>
+            <span style="font-size: 22px; font-weight: 400; color: #17262E; line-height: 1.4;">Comparaciones con otras marcas</span>
+          </div>
+      </div>
+    </div>
+    <div style="height: 20px;"></div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Esto también es un servicio:</strong> la lista de afirmaciones aprobadas es la misma que usa Andrea para las redes y quien lleve las relaciones públicas. Todos dicen lo mismo, y lo que dicen se puede sostener.</div>
+  </section>
+
+  <section data-label="El boletín" data-screen-label="Boletín" data-speaker-notes="El boletin se escribe una vez y vive en tres lugares. Axl lo sube al sitio y mantiene el archivo." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">El boletín</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Un boletín que mantiene<br>vivo al sitio</h2>
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1;">
+      <div style="display: flex; flex-direction: column; gap: 22px;">
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 25px; font-weight: 400; color: #17262E; line-height: 1.4;"><strong style="font-weight: 700; color: #06425C;">Se escribe una vez y vive en tres lugares:</strong> el correo de quien se suscribe, el archivo del sitio y las redes</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 25px; font-weight: 400; color: #17262E; line-height: 1.4;"><strong style="font-weight: 700; color: #06425C;">Dos listas:</strong> salud humana y veterinaria, para que cada quien reciba solo lo suyo</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 25px; font-weight: 400; color: #17262E; line-height: 1.4;"><strong style="font-weight: 700; color: #06425C;">Cada número tiene su propia página:</strong> se puede compartir y, además, es una razón más para aparecer en las búsquedas</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 25px; font-weight: 400; color: #17262E; line-height: 1.4;"><strong style="font-weight: 700; color: #06425C;">Suscripción en el sitio y baja con un clic,</strong> con su aviso de privacidad</span>
+          </div>
+        <div style="flex: 1;"></div>
+        <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Quién redacta cada número se acuerda con el equipo de relaciones públicas y redes. Del lado del sitio, cada número se sube y el archivo se mantiene al día.</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 14px;">
+        
+      <div style="width: 100%; border-radius: 16px; overflow: hidden; background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); box-shadow: 0 22px 50px rgba(6,66,92,0.16);">
+        <div style="height: 44px; background: #E9EFF1; display: flex; align-items: center; gap: 9px; padding: 0 18px; border-bottom: 1px solid #DCE6E8;">
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F0A09B;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #F2D27A;"></span>
+          <span style="width: 12px; height: 12px; border-radius: 50%; background: #8FD0A1;"></span>
+          <span style="margin-left: 14px; flex: 1; height: 26px; border-radius: 13px; background: #FFFFFF; font-size: 14px; font-weight: 500; color: #5D6B73; display: flex; align-items: center; padding: 0 16px; letter-spacing: 0.2px;">mtomicronsigma.com.mx/boletin</span>
+        </div>
+        
+        <div style="padding: 26px 28px 30px; background: #F3F7F7; display: flex; flex-direction: column; gap: 14px;">
+          <div style="display: flex; align-items: center; justify-content: space-between;">
+            <span style="font-size: 30px; font-weight: 700; color: #06425C; letter-spacing: -0.8px;">Boletín</span>
+            <div style="display: flex; gap: 8px;"><span style="background: #1F8F8B; color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Salud humana</span><span style="background: #D35E15; color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Veterinaria</span></div>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE6E8;">
+            <span style="flex: none; width: 54px; height: 54px; border-radius: 14px; background: #1F8F8B; color: #FFFFFF; font-size: 21px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">03</span>
+            <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
+              <span style="font-size: 20px; font-weight: 700; color: #06425C; letter-spacing: -0.2px;">Título del tercer número</span>
+              <span style="font-size: 15px; font-weight: 500; color: #5D6B73;">Fecha de publicación</span>
+            </div>
+            <span style="font-size: 15px; font-weight: 700; color: #1F8F8B; letter-spacing: 0.4px;">Leer →</span>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE6E8;">
+            <span style="flex: none; width: 54px; height: 54px; border-radius: 14px; background: #D35E15; color: #FFFFFF; font-size: 21px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">02</span>
+            <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
+              <span style="font-size: 20px; font-weight: 700; color: #06425C; letter-spacing: -0.2px;">Título del segundo número</span>
+              <span style="font-size: 15px; font-weight: 500; color: #5D6B73;">Fecha de publicación</span>
+            </div>
+            <span style="font-size: 15px; font-weight: 700; color: #D35E15; letter-spacing: 0.4px;">Leer →</span>
+          </div>
+          
+          <div style="display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: 14px; background: #FFFFFF; border: 1px solid #DCE6E8;">
+            <span style="flex: none; width: 54px; height: 54px; border-radius: 14px; background: #1F8F8B; color: #FFFFFF; font-size: 21px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">01</span>
+            <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
+              <span style="font-size: 20px; font-weight: 700; color: #06425C; letter-spacing: -0.2px;">Título del primer número</span>
+              <span style="font-size: 15px; font-weight: 500; color: #5D6B73;">Fecha de publicación</span>
+            </div>
+            <span style="font-size: 15px; font-weight: 700; color: #1F8F8B; letter-spacing: 0.4px;">Leer →</span>
+          </div>
+          <div style="margin-top: 6px; display: flex; gap: 12px;">
+            <span style="flex: 1; height: 50px; border-radius: 12px; background: #FFFFFF; border: 1px solid #DCE6E8; display: flex; align-items: center; padding: 0 18px; font-size: 16px; color: #5D6B73;">tu correo</span>
+            <span style="height: 50px; border-radius: 12px; background: #06425C; color: #FFFFFF; font-size: 16px; font-weight: 700; display: flex; align-items: center; padding: 0 24px;">Suscribirme</span>
+          </div>
+        </div>
+      </div>
+        <span style="font-size: 16px; font-weight: 400; color: #5D6B73; text-align: center;">Maqueta de ejemplo: los títulos y las fechas son de relleno.</span>
+      </div>
+    </div>
+  </section>
+
+  <section data-label="Un equipo, tres frentes" data-screen-label="Equipo" data-speaker-notes="Tres frentes con una sola cara para el cliente. Las relaciones publicas y el relanzamiento de marca los lleva la mama de Andrea; falta alinear con su resumen." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Equipo</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Tres frentes que se<br>refuerzan entre sí</h2>
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #6E7785;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 46px; height: 46px; border-radius: 50%; background: #6E7785; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">1</span>
+            <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #6E7785;">Relaciones públicas</span>
+          </div>
+          <span style="font-size: 34px; font-weight: 700; color: #06425C; letter-spacing: -0.8px; line-height: 1.18;">Marca y relaciones públicas</span>
+          <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
+            
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #6E7785; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Relanzamiento de MT Omicron Sigma como marca madre</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #6E7785; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">EsteriLife y Zoolubac, cada una con su lugar</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #6E7785; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Contacto con hospitales, asociaciones, veterinarios y distribuidores</span>
+          </div>
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="border-top: 1px solid #DCE6E8; padding-top: 16px; font-size: 18px; font-weight: 500; color: #5D6B73; line-height: 1.4;"><span style="font-weight: 700; color: #6E7785;">Entrega:</span> su resumen de relaciones y relanzamiento, por alinear</div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #D35E15;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 46px; height: 46px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">2</span>
+            <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #D35E15;">Andrea Hasly Guillen Luna</span>
+          </div>
+          <span style="font-size: 34px; font-weight: 700; color: #06425C; letter-spacing: -0.8px; line-height: 1.18;">Redes sociales</span>
+          <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
+            
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Contenido para las dos marcas, en el tono de cada público</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Paquete mensual de publicaciones, videos y coberturas</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #D35E15; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Usa la lista de afirmaciones aprobadas</span>
+          </div>
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="border-top: 1px solid #DCE6E8; padding-top: 16px; font-size: 18px; font-weight: 500; color: #5D6B73; line-height: 1.4;"><span style="font-weight: 700; color: #D35E15;">Entrega:</span> el paquete mensual, por definir</div>
+        </div>
+      
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 26px; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid #1F8F8B;">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 46px; height: 46px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">3</span>
+            <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #1F8F8B;">Axl Guillén</span>
+          </div>
+          <span style="font-size: 34px; font-weight: 700; color: #06425C; letter-spacing: -0.8px; line-height: 1.18;">Sitio web y boletín</span>
+          <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
+            
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">El sitio nuevo, en su propio dominio y con HTTPS</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">Catálogo, evidencia y formas de contacto</span>
+          </div>
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 23px; font-weight: 400; color: #17262E; line-height: 1.4;">El boletín: cada número sube al archivo del sitio</span>
+          </div>
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="border-top: 1px solid #DCE6E8; padding-top: 16px; font-size: 18px; font-weight: 500; color: #5D6B73; line-height: 1.4;"><span style="font-weight: 700; color: #1F8F8B;">Entrega:</span> el sitio en línea y el archivo del boletín al día</div>
+        </div>
+    </div>
+    <div style="height: 24px;"></div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Así se conectan:</strong> las relaciones públicas abren puertas, las redes las muestran, el sitio las convierte en cotizaciones y el boletín las mantiene calientes. Una sola cara para ustedes, tres frentes por detrás.</div>
+  </section>
+
+  <section data-label="Plan y tiempos" data-screen-label="Plan" data-speaker-notes="Tiempos por confirmar: dependen de cuando llegue el material y las aprobaciones. El dominio y el correo se migran sin cortar el servicio." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #6E7785; color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Tiempos por confirmar</span>
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Plan</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 58px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">De material a sitio en línea,<br>en unas cuatro semanas</h2>
+    <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 20px; flex: 1;">
+      <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px;">
+        <span></span>
+        <div style="display: grid; grid-template-columns: repeat(5, 1fr); font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: #5D6B73;">
+          <span>Semana 1</span><span>Semana 2</span><span>Semana 3</span><span>Semana 4</span><span>Después</span>
+        </div>
+      </div>
+      
+        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.3px;">Material y mensajes</span>
+            <span style="font-size: 19px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Logos, fotos, fichas y la lista de afirmaciones aprobadas.</span>
+          </div>
+          <div style="position: relative; height: 54px; border-radius: 12px; background: #DCE6E866;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 0%; width: 20%; border-radius: 12px; background: #6E7785;"></div>
+          </div>
+        </div>
+      
+        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.3px;">Diseño</span>
+            <span style="font-size: 19px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Inicio y fichas de producto, con su visto bueno.</span>
+          </div>
+          <div style="position: relative; height: 54px; border-radius: 12px; background: #DCE6E866;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 20%; width: 20%; border-radius: 12px; background: #1F8F8B;"></div>
+          </div>
+        </div>
+      
+        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.3px;">Construcción</span>
+            <span style="font-size: 19px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Contenido real, versión de celular, WhatsApp y formularios.</span>
+          </div>
+          <div style="position: relative; height: 54px; border-radius: 12px; background: #DCE6E866;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 40%; width: 20%; border-radius: 12px; background: #1F8F8B;"></div>
+          </div>
+        </div>
+      
+        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.3px;">Salida</span>
+            <span style="font-size: 19px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Dominio con HTTPS, correo sin cortes y revisión final.</span>
+          </div>
+          <div style="position: relative; height: 54px; border-radius: 12px; background: #DCE6E866;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 60%; width: 20%; border-radius: 12px; background: #D35E15;"></div>
+          </div>
+        </div>
+      
+        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
+          <div style="display: flex; flex-direction: column; gap: 3px;">
+            <span style="font-size: 24px; font-weight: 700; color: #06425C; letter-spacing: -0.3px;">Boletín y mejora</span>
+            <span style="font-size: 19px; font-weight: 400; color: #5D6B73; line-height: 1.4;">Cada número al archivo; ajustes con lo que se mida.</span>
+          </div>
+          <div style="position: relative; height: 54px; border-radius: 12px; background: #DCE6E866;">
+            <div style="position: absolute; top: 0; bottom: 0; left: 80%; width: 20%; border-radius: 12px; background: #E8B857;"></div>
+          </div>
+        </div>
+    </div>
+    
+    <div data-a="up3" style="background: #06425C0D; border-left: 5px solid #06425C; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">Lo que más mueve las fechas es el material y las aprobaciones,</strong> no la construcción. Mientras antes lleguen las fichas, las fotos y la lista de afirmaciones, antes sale el sitio. El dominio y el correo se migran sin cortar el servicio actual.</div>
+  </section>
+
+  <section data-label="Inversión" data-screen-label="Inversión" data-speaker-notes="PRECIO POR DEFINIR. Dos formas de cobro sobre la mesa: proyecto cerrado, o repartida en la primera mensualidad del paquete de redes." style="background: #F3F7F7; font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #17262E; display: flex; flex-direction: column; padding: 168px 100px 64px; box-sizing: border-box; overflow: hidden;">
+    
+    <header style="position: absolute; top: 0; left: 0; right: 0; height: 116px; display: flex; align-items: center; justify-content: space-between; padding: 0 100px; border-bottom: 1px solid #DCE6E8;">
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <img data-src="assets/logo-mt.png" alt="MT Omicron Sigma Technologies" style="height: 64px; width: auto; display: block;">
+        <span style="font-size: 20px; font-weight: 600; color: #06425C; letter-spacing: -0.2px;">Propuesta · MT Omicron Sigma</span>
+      </div>
+      <div style="display: flex; align-items: center; gap: 18px;">
+        <span style="background: #D35E15; color: #FFFFFF; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 8px 22px; letter-spacing: 0.4px; white-space: nowrap;">Por definir</span>
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">Inversión</span>
+      </div>
+    </header>
+    <h2 data-a="up" style="margin: 0; font-size: 62px; font-weight: 700; color: #06425C; letter-spacing: -1.8px; line-height: 1.07;">Qué incluye y cómo se paga</h2>
+    <div data-a="up3" style="margin-top: 38px; display: grid; grid-template-columns: 1fr 1.05fr; gap: 34px; flex: 1;">
+      <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 28px; padding: 42px 40px; display: flex; flex-direction: column; gap: 24px; border-top: 6px solid #1F8F8B;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #1F8F8B;">El sitio incluye</span>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Diseño propio con la identidad de las tres marcas</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Inicio con las dos puertas y una ficha por producto</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Evidencia y registros, con lo que ustedes aprueben</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Dónde comprar, WhatsApp y formularios por público</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Boletín con suscripción y archivo</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Dominio propio con HTTPS, y versión de celular</span>
+          </div>
+        
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #1F8F8B; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #17262E; line-height: 1.4;">Textos y estructura pensados para aparecer en Google</span>
+          </div>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 22px;">
+        <div style="border-radius: 28px; border: 3px dashed #D35E15; background: #D35E150D; padding: 34px 38px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #D35E15;">Inversión del sitio</span>
+            <span style="font-size: 23px; font-weight: 400; color: #5D6B73;">Se presenta en la reunión.</span>
+          </div>
+          <span style="font-size: 76px; font-weight: 800; color: #D35E15; letter-spacing: -2.5px; line-height: 1;">$ —</span>
+        </div>
+        <div style="background: #FFFFFF; border: 1px solid #DCE6E8; box-shadow: 0 10px 28px rgba(6,66,92,0.07); border-radius: 24px; padding: 28px 32px; display: flex; flex-direction: column; gap: 12px;">
+          <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: #06425C;">Dos formas de pagarlo</span>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 23px; font-weight: 700; color: #06425C;">A · Proyecto cerrado</span>
+            <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">Precio y fecha de entrega definidos desde el inicio.</span>
+          </div>
+          <div style="height: 1px; background: #DCE6E8;"></div>
+          <div style="display: flex; flex-direction: column; gap: 4px;">
+            <span style="font-size: 23px; font-weight: 700; color: #06425C;">B · Dentro de la primera mensualidad</span>
+            <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.45;">La primera mensualidad del paquete de redes se extiende para cubrir el sitio, y no se paga como un costo aparte.</span>
+          </div>
+        </div>
+        <span style="font-size: 20px; font-weight: 400; color: #5D6B73; line-height: 1.5;">Redes, boletín y mantenimiento del sitio son un servicio mensual aparte, también por definir.</span>
+      </div>
+    </div>
+    <div style="height: 24px;"></div>
+    
+    <div data-a="up3" style="background: #D35E150D; border-left: 5px solid #D35E15; border-radius: 0 16px 16px 0; padding: 22px 30px; font-size: 21px; font-weight: 400; color: #17262E; line-height: 1.5;"><strong style="font-weight: 700; color: #06425C;">El precio se arma sobre este alcance.</strong> Si más adelante se suma algo —por ejemplo la tienda en línea de algún producto— se cotiza aparte, sin mover lo ya acordado.</div>
+  </section>
+
+  <section data-label="Siguiente paso" data-screen-label="Cierre" data-speaker-notes="Cierre: lo que necesitamos de ellos para arrancar, y una pregunta sobre por que publico empezar." style="background: #06425C; background-image: radial-gradient(80% 70% at 18% 90%, rgba(98,199,196,0.26) 0%, rgba(0,0,0,0) 60%); font-family: 'Montserrat', ui-sans-serif, system-ui, sans-serif; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+    <div data-a="ghost" style="position: absolute; inset: 0; background: #D35E15; clip-path: polygon(78% 0, 100% 0, 100% 100%, 66% 100%);"></div>
+    <div data-a="ghost" style="position: absolute; inset: 0; background: #E8B857; clip-path: polygon(77.3% 0, 78% 0, 66% 100%, 65.3% 100%);"></div>
+    <span data-a="up" style="position: relative; font-size: 22px; font-weight: 700; letter-spacing: 3px; text-transform: uppercase; color: #62C7C4;">Siguiente paso</span>
+    <h2 data-a="up2" style="position: relative; margin: 26px 0 0; font-size: 80px; font-weight: 700; letter-spacing: -2.6px; line-height: 1.05; max-width: 1180px;">Con cinco cosas de su lado,<br>arrancamos</h2>
+    <div data-a="up3" style="position: relative; margin-top: 38px; display: flex; flex-direction: column; gap: 15px; max-width: 1060px;">
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #62C7C4; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">Logos en vectorial y fotos de producto en buena resolución</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #62C7C4; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">Fichas técnicas vigentes y qué registros se pueden publicar</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #62C7C4; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">Presentaciones vigentes de cada producto</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #62C7C4; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">Acceso al dominio y al correo actuales</span>
+          </div>
+      
+          <div style="display: flex; align-items: flex-start; gap: 15px;">
+            <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: #62C7C4; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">✓</span>
+            <span style="font-size: 24px; font-weight: 400; color: #FFFFFF; line-height: 1.4;">Quién aprueba los textos de su lado</span>
+          </div>
+    </div>
+    <p data-a="up3" style="position: relative; margin: 38px 0 0; font-size: 26px; font-weight: 500; color: rgba(255,255,255,0.88); line-height: 1.5; max-width: 980px;">Y una decisión para empezar: ¿por cuál de los dos públicos abrimos primero?</p>
+    <div data-a="up3" style="position: relative; margin-top: 40px; display: flex; align-items: center; gap: 26px;">
+      <img data-src="assets/logo-mt-claro.png" alt="MT Omicron Sigma Technologies" style="height: 96px; width: auto; display: block;">
+      <span style="width: 1px; height: 60px; background: rgba(255,255,255,0.3);"></span>
+      <span style="font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.5;">Axl Guillén · sitio web y boletín</span>
+    </div>
+  </section>
+</deck-stage>
+<script>
+(function () {
+  var presenting = false;
+  var btn = document.createElement('button');
+  btn.id = 'modo-presentacion';
+  btn.type = 'button';
+  function render() {
+    btn.textContent = presenting ? 'Salir · Esc' : 'Presentar · P';
+    if (presenting) btn.setAttribute('data-on', ''); else btn.removeAttribute('data-on');
+  }
+  function setPresenting(on) {
+    if (on === presenting) return;
+    presenting = on;
+    window.postMessage({ __omelette_presenting: on }, '*');
+    if (on) {
+      if (document.documentElement.requestFullscreen && !document.fullscreenElement) document.documentElement.requestFullscreen().catch(function () {});
+    } else if (document.fullscreenElement && document.exitFullscreen) document.exitFullscreen().catch(function () {});
+    render();
+  }
+  btn.addEventListener('click', function () { setPresenting(!presenting); btn.blur(); });
+  window.addEventListener('keydown', function (e) {
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target;
+    if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
+    if (e.key === 'p' || e.key === 'P') { setPresenting(!presenting); e.preventDefault(); }
+    else if (e.key === 'Escape' && presenting && !document.fullscreenElement) setPresenting(false);
+  });
+  document.addEventListener('fullscreenchange', function () { if (!document.fullscreenElement && presenting) setPresenting(false); });
+  render();
+  document.body.appendChild(btn);
+})();
+</script>
+</body>
+</html>
