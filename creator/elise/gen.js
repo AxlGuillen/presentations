@@ -206,7 +206,7 @@ slides.push(lamina('elise-portada', 'Elise cumple catorce años desde que entró
 
 // ── elise-skin-t1 ────────────────────────────────────────────────────────
 // La skin del mejor equipo del mundo, la que escogió Bengi. Foco en Elise.
-slides.push(lamina('elise-skin-t1', 'Y mañana juega T1, que recordemos que esta cachorra tiene skin del mejor equipo del mundo, que la escogió Bengi.', `
+slides.push(lamina('elise-skin-t1', 'Y mañana juega T1, que recordemos que esta arañita tiene skin del mejor equipo del mundo, que la escogió Bengi.', `
     ${borroso('Elise_4-fondo.jpg', 0.5)}
     ${ambiente(50, 25, '#2A8FFF')}
     ${motas(127, 16)}
