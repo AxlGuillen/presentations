@@ -12,6 +12,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/soloq/      SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /creator/lowelo/     Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
 /personal/estancia/  Propuesta: web, redes y administración para estancia infantil · 16:9 · 10 slides
+/personal/omicron/   Propuesta: sitio web para MT Omicron Sigma (EsteriLife y Zoolubac) · 16:9 · 14 slides · primera versión
 /creator/ornn/       Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
 /creator/urgot/      Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
 /creator/talon/      Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
