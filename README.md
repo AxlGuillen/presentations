@@ -40,6 +40,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/jinx/       Jinx cumple 13 años (apoyo visual para TikTok, animado, solo arte) · 9:16 · 17 slides
 /creator/suiza/      Worlds 2026 · fase suiza: la ronda 1 en flyers y su cuadro (animado) · 9:16 · 10 slides
 /creator/suiza-r1/   Worlds 2026 · la ronda 1 en números: oro, kills y daño por equipo y por rol (montaje automático) · 9:16 · 26 slides
+/creator/suiza-r5/   Worlds 2026 · ronda 5, los cruces 2–2 del 31/oct (Bo3, el que pierde se va) y a quién le ha ganado cada equipo · 9:16 · 8 slides
 /creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
 /creator/elise/      Elise cumple 14 años (láminas para el montaje automático, animado) · 9:16 · 15 slides
