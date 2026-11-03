@@ -1,0 +1,57 @@
+{
+  "voz": "9cf64f16ef2b48a5ac2975c00859cd84",
+  "velocidad": 1,
+  "temperatura": 0.4,
+  "subtitulos": "ninguno",
+  "recortar": true,
+  "aire": [0.08, 0.15],
+  "sfx": false,
+  "musica": { "pista": "mixkit-rest-now-584.mp3", "cama": -21, "fadeIn": 2.5, "fadeOut": 4 },
+  "loudness": { "objetivo": -16, "pico": -1 },
+  "slides": [
+    {
+      "slide": 1,
+      "texto": "Esta semana hicimos tres informes, y nos quedan dos ideas por retomar. Hoy les cuento qué encontramos y qué tenemos que decidir. Y quiero que se lleven una sola idea: antes de construir cualquier cosa, medimos, con un tope de tiempo y de dinero. Arriba de cada lámina va a haber una etiqueta. Dice si algo sale de un informe, si es una propuesta, o si todavía no está investigado."
+    },
+    {
+      "slide": 2,
+      "texto": "Primero, lo que quedó abierto de la reunión del veinticinco de octubre. Lo acordado fue que cada quien subiera sus ideas al evaluador, y que hoy las filtráramos. No hubo votación: el acuerdo se infiere de cómo cerramos. Hay cuatro tareas abiertas: desplegar el evaluador, subir dos o tres ideas cada quien, la propuesta de nombre y logo, y decidir si hace falta una empresa fantasma con página. Y cuatro preguntas sin cerrar: el plan de iteración, cuántas ideas en paralelo, doce criterios contra cinco o seis, y el acceso al segundo cerebro. Todo va como por confirmar. Vamos a revisar cuáles ya están hechas."
+    },
+    {
+      "slide": 3,
+      "texto": "La reunión dura unos cuarenta y cinco minutos. Cinco de recap, veinte con esta investigación, quince para cargar ideas al evaluador y filtrarlas, y cinco para las decisiones. Los tiempos son una sugerencia mía. Las cuatro piezas de la investigación son: prospección con proyectos de GitHub, pádel, VetSaaS Morelia, y TikTok Shop, que todavía no está investigado."
+    },
+    {
+      "slide": 4,
+      "texto": "Primera investigación: proyectos de GitHub para prospectar. La conclusión es que el cuello de botella no es la tecnología. Lo que se viraliza ofrece más automatización de la que podemos usar con siete a once horas semanales, una estimación del informe. Lo útil es aburrido. Uno: el directorio gratuito de INEGI, el DENUE, para armar la lista. Dos: un CRM sencillo, Twenty o Atomic, solo para registrar. Tres: trato humano, referidos, visitas, y WhatsApp uno a uno, solo con permiso. Lo que se evita son los agentes que escriben solos, como Harvey, Franco y OpenOutreach, y los WhatsApp no oficiales y scrapers. El riesgo real no es una multa. Es perder el número, la cuenta o la reputación en una ciudad chica. Y ojo: la ley de datos de dos mil veinticinco no trae una excepción para contactos entre empresas. Esto no es asesoría legal."
+    },
+    {
+      "slide": 5,
+      "texto": "Segunda parte: ¿qué pasa con Google Maps? El informe propone tres niveles. Nivel uno, el de por defecto: la lista sale del DENUE, y Maps solo se usa para mirar. Nivel dos: la API oficial, guardando solamente el identificador del lugar, porque los términos de Google no dejan guardar lo demás. Y nivel tres, al final: un scraper. El único motor maduro es gosom, y es casi un proyecto de una sola persona, con un fallo abierto que deja un archivo vacío y avisa que todo salió bien. Esa es la conclusión del informe. El equipo todavía no ha decidido nada sobre el scraper."
+    },
+    {
+      "slide": 6,
+      "texto": "Para decidir con datos, el informe propone un piloto. Una muestra de cincuenta a cien negocios del DENUE, sin contactar a nadie. Se mide cuántos tienen teléfono, correo y sitio, cuántos aparecen en Maps, cuántos ya cerraron, y cuánto tarda cada uno. Y hay dos reglas para parar. Si más del treinta por ciento está cerrado, la lista está vieja y se rehace. Y si la brecha de teléfonos contra Maps es menor a veinte puntos, el scraper no compensa el riesgo. El cálculo es de seis a trece horas por persona, en dos semanas, una estimación propia. Y no contradice la decisión del veinte de octubre, porque no se contacta a nadie."
+    },
+    {
+      "slide": 7,
+      "texto": "Tercera investigación: pádel. La gestión de cuadros y cobro ya tiene dueños: Playtomic, Tournify, Xporty. El hueco está en el marcador por punto para el espectador amateur. Hoy una persona lo captura y la app lo difunde, y ningún producto capta los puntos solo. Seguir la pelota con una cámara es investigación: en una final, solo se ve en el treinta y seis por ciento de los cuadros. Y la pelota con sensor no existe. El mercado es grande, más de seiscientos clubes en México, pero en Morelia son seis clubes y veintinueve canchas. Si solo vendiéramos marcador, el ingreso sería de treinta a cincuenta mil pesos al año. Es una hipótesis, con precios hipotéticos."
+    },
+    {
+      "slide": 8,
+      "texto": "Por eso el plan es un experimento con tope, no una línea nueva. Fase cero, dos semanas: entrevistar de ocho a diez organizadores y clubes, sin gastar nada. Después, un marcador a mano en un torneo. Luego, video manual. Y el experimento de inteligencia artificial, solo si se sigue. El gasto total quedaría por debajo de cuatro mil pesos, una estimación sin verificar. Construir el marcador requiere que los tres lo acordemos. Y aunque la idea muera, le deja al evaluador algo que hoy no tiene: disposición a pagar, medida en pesos reales."
+    },
+    {
+      "slide": 9,
+      "texto": "Cuarta pieza: VetSaaS Morelia, una idea mía, que investigué en mayo. Es un software para clínicas veterinarias independientes, con cartilla digital portátil, seguimiento del paciente y campañas. Las cifras que la sostienen son doscientas dieciséis veterinarias, ochenta por ciento con papel y WhatsApp, y una ventana de dieciocho meses. Salen de mi investigación y no están verificadas. Y hay una tensión: es un software para un solo gremio, y nuestra tesis es software a la medida para pymes. Para retomarla falta cargarla al evaluador, y validarla con tres o cuatro llamadas."
+    },
+    {
+      "slide": 10,
+      "texto": "Y la última: TikTok Shop como intermediario. De esta no hay nada investigado, y prefiero decirlo así. Primero hay que escoger el modelo: ser afiliados con el canal Axelsine, o un canal para negocios locales. Y no sabemos los requisitos y comisiones en México, qué dice lo legal y lo fiscal, ni si cabe en nuestras siete a catorce horas semanales. Hoy no pido aprobar nada. Pido decidir si se investiga, y con qué modelo."
+    },
+    {
+      "slide": 11,
+      "texto": "Entonces, siete decisiones. Una: ¿adoptamos el plan de iteración, con tope de cuatro horas y dos semanas? Dos: ¿cuántas ideas trabajamos en paralelo? Tres: ¿aceptamos el piloto de datos con el DENUE, y dejamos el scraper de Maps para después? Cuatro: ¿hacemos la fase cero del pádel, y quién la hace? Cinco: ¿retomamos VetSaaS? Seis: ¿investigamos TikTok Shop, y con qué modelo? Y siete: ¿cuántos criterios tiene el evaluador? Lo que acordemos queda como decisión en el wiki, y lo demás como pregunta abierta. Y recuerden: antes de construir, medimos."
+    }
+  ]
+}

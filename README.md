@@ -70,7 +70,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /work/seating3dmap/  seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
 /personal/dra/       Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
 /personal/musk/      Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA, con video narrado y música) · 16:9 · 14 slides
-/personal/dra-1102/  Reunión de DRA del 2/nov/2026: investigación de la semana (prospección, Maps, pádel), VetSaaS, TikTok Shop y decisiones · 16:9 · 11 slides
+/personal/dra-1102/  Reunión de DRA del 2/nov/2026: investigación de la semana (prospección, Maps, pádel), VetSaaS, TikTok Shop y decisiones, con video narrado · 16:9 · 11 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features

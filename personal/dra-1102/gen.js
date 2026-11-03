@@ -759,6 +759,7 @@ ${slides.join('\n')}
 ${kit.gsap(__dirname, ['DrawSVG'])}
 ${kit.efectos()}
 ${kit.animador()}
+${kit.reproductor({ src: 'video.mp4', etiqueta: 'Reproducir', tecla: 'v', acento: ACC })}
 ${coreografias}
 <script>
 (function () {
