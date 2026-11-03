@@ -41,6 +41,8 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/suiza/      Worlds 2026 · fase suiza: la ronda 1 en flyers y su cuadro (animado) · 9:16 · 10 slides
 /creator/suiza-r1/   Worlds 2026 · la ronda 1 en números: oro, kills y daño por equipo y por rol (montaje automático) · 9:16 · 26 slides
 /creator/suiza-r5/   Worlds 2026 · ronda 5, los cruces 2–2 del 31/oct (Bo3, el que pierde se va) y a quién le ha ganado cada equipo · 9:16 · 8 slides
+/creator/suiza-qf/   Worlds 2026 · cuartos de final (3–6/nov, Bo5): flyers, camino en la suiza y cara a cara · 9:16 · 10 slides
+/creator/ganan/       «¿Por qué siempre ganan chinos y coreanos?» (Axelsine): láminas para el montaje automático, con la identidad de Worlds 2026 · 9:16 · 22 slides
 /creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
 /creator/elise/      Elise cumple 14 años (láminas para el montaje automático, animado) · 9:16 · 15 slides
@@ -68,6 +70,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /work/seating3dmap/  seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
 /personal/dra/       Charla: DRA · Del pizarrón a la evidencia (método para evaluar ideas) · 16:9 · 18 slides
 /personal/musk/      Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA, con video narrado y música) · 16:9 · 14 slides
+/personal/dra-1102/  Reunión de DRA del 2/nov/2026: investigación de la semana (prospección, Maps, pádel), VetSaaS, TikTok Shop y decisiones · 16:9 · 11 slides
 404.html             página de error con enlaces de regreso
 vercel.json          trailingSlash: true (imprescindible, ver abajo)
 docs/                propuestas de features
