@@ -12,7 +12,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/soloq/      SoloQ Challenge 2026: premios vs salario mínimo · 9:16 · 28 slides
 /creator/lowelo/     Low Elo vs High Elo: el corte por LP · 9:16 · 7 slides
 /personal/estancia/  Propuesta: web, redes y administración para estancia infantil · 16:9 · 10 slides
-/personal/omicron/   Propuesta: sitio web para MT Omicron Sigma (EsteriLife y Zoolubac) · 16:9 · 15 slides · tercera versión
+/personal/omicron/   Propuesta: sitio web para MT Omicron Sigma (EsteriLife y Zoolubac) · 16:9 · 9 slides · cuarta versión
 /creator/ornn/       Ornn cumple 9 años (apoyo visual para TikTok) · 9:16 · 8 slides
 /creator/urgot/      Urgot cumple 16 años (apoyo visual para TikTok) · 9:16 · 5 slides
 /creator/talon/      Talon cumple 15 años (apoyo visual para TikTok) · 9:16 · 7 slides
@@ -48,6 +48,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/elise/      Elise cumple 14 años (láminas para el montaje automático, animado) · 9:16 · 15 slides
 /creator/seraphine/ Seraphine cumple 6 años (láminas para el montaje automático, animado) · 9:16 · 20 slides
 /creator/ksante/    K'Sante cumple 4 años (láminas para el montaje automático, animado) · 9:16 · 18 slides
+/creator/leblanc/   LeBlanc cumple 16 años (láminas para el montaje automático, solo arte oficial) · 9:16 · 21 slides
 /creator/parche2620/ Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /creator/parche2621/ Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
 /creator/guerras/    Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
