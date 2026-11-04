@@ -12,7 +12,12 @@
 // se quita la medición (no se ofrece analítica ni «qué vamos a medir») y el boletín pasa
 // a ser un BLOG, sin suscripción ni correos por ahora, porque Axl no quiere manejar
 // altas ni cobros dentro del sitio.
-// Alcance: el sitio —catálogo, evidencia, cómo comprar— más el blog que se publica en él.
+// CUARTA PASADA (4/11/2026): la presentación pasa a ser de los TRES SERVICIOS, en el orden
+// que pidió Axl —redes sociales, relaciones públicas y, al final, el sitio web—, y la parte
+// del sitio se reduce a dos láminas (el inicio y las ocho secciones). Se quitaron catálogo,
+// evidencia, cómo vende, lo que se dice, blog y plan (siguen en el historial de git). Entra el
+// paquete de redes de Andrea con su precio y una lámina de inversión con los tres servicios.
+// Alcance del sitio: catálogo, evidencia, cómo comprar y un blog.
 //
 // ⚠️ El sitio es PÚBLICO. Por eso el deck NO trae los informes de laboratorio (traen
 // nombres de analistas, del representante legal y del MVZ responsable), ni los
@@ -40,9 +45,23 @@ const CARD = `background: #FFFFFF; border: 1px solid ${LINE}; box-shadow: 0 10px
 
 // El equipo: tres frentes, una sola cara para el cliente.
 const EQUIPO = [
-  ['Axl Guillén', 'Sitio web y blog'],
-  ['Andrea Hasly Guillen Luna', 'Redes sociales y contenido'],
+  ['Andrea Hasly Guillen Luna', 'Redes sociales'],
+  ['Ángeles Luna', 'Relaciones públicas'],
+  ['Axl Guillén', 'Sitio web'],
 ];
+
+// ── Precios (MXN) ────────────────────────────────────────────────────────
+// Redes: el paquete de Andrea que nos dieron —el de ejemplo, Changarro 84 (14 publicaciones,
+// 4 videos, 10 gráficos, 4 coberturas y 4 diseños extraordinarios, $10,000 al mes)—.
+// ⚠️ Confirmar con Andrea que es el que se le ofrece a Omicron.
+// Relaciones corporativas (Ángeles Luna): $5,000 al mes, **en paquete con redes** (5/11/2026,
+// dicho por Axl): redes $10,000 + relaciones $5,000 = **$15,000 al mes**. Su resumen decía
+// «honorarios mensuales por acordar»; ya están acordados y el resumen va tal cual en las notas.
+// Sitio: $5,000 pago único (Axl), aparte del paquete mensual.
+const PRECIO_REDES = '$10,000';
+const PRECIO_RP = '$5,000';
+const PRECIO_PAQUETE = '$15,000';
+const PRECIO_WEB = '$5,000';
 
 // ── Helpers ──────────────────────────────────────────────────────────────
 const logoMT = (alto = 52, claro = false) =>
@@ -77,14 +96,6 @@ const pill = (txt, bg, color = '#FFFFFF') =>
 const etiqueta = (txt, color) =>
   `<span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: ${color};">${txt}</span>`;
 
-const tarjeta = (icono, titulo, texto, acento = TEAL_T, lista = []) => `
-        <div style="${CARD} border-radius: 24px; padding: 38px 36px 34px; display: flex; flex-direction: column; gap: 16px;">
-          <span style="width: 64px; height: 64px; border-radius: 18px; background: ${acento}1F; color: ${acento}; display: inline-flex; align-items: center; justify-content: center; font-size: 28px; font-weight: 700;">${icono}</span>
-          <span style="font-size: 32px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.7px; line-height: 1.18;">${titulo}</span>
-          <span style="font-size: 22px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">${texto}</span>
-          ${lista.length ? `<div style="height: 1px; background: ${LINE}; margin: 6px 0 2px;"></div><div style="display: flex; flex-direction: column; gap: 12px;">${lista.map(x => bullet(x, acento, 21)).join('')}</div>` : ''}
-        </div>`;
-
 const bullet = (txt, acento = TEAL_T, size = 23, color = INK, marca = '✓') => `
           <div style="display: flex; align-items: flex-start; gap: 15px;">
             <span style="flex: none; margin-top: 3px; width: 26px; height: 26px; border-radius: 50%; background: ${acento}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700;">${marca}</span>
@@ -112,7 +123,7 @@ const slides = [];
 
 // ── 1 · Portada ──────────────────────────────────────────────────────────
 slides.push(`
-  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Primera version. Un sitio nuevo donde todos sus productos se ven, se entienden y se pueden cotizar." style="background: ${NAVY}; background-image: radial-gradient(70% 80% at 12% 10%, rgba(98,199,196,0.30) 0%, rgba(0,0,0,0) 60%); font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
+  <section data-label="Portada" data-screen-label="Portada" data-speaker-notes="Tres servicios para que la empresa se vea (redes), se conozca (relaciones publicas) y se compre (sitio web)." style="background: ${NAVY}; background-image: radial-gradient(70% 80% at 12% 10%, rgba(98,199,196,0.30) 0%, rgba(0,0,0,0) 60%); font-family: ${FONT}; color: #FFFFFF; display: flex; flex-direction: column; justify-content: center; padding: 0 130px; box-sizing: border-box; overflow: hidden;">
     <div data-a="ghost" style="position: absolute; inset: 0; background: ${ORANGE}; clip-path: polygon(64% 0, 100% 0, 100% 100%, 50% 100%);"></div>
     <div data-a="ghost" style="position: absolute; inset: 0; background: ${GOLD}; clip-path: polygon(63.2% 0, 64% 0, 50% 100%, 49.2% 100%);"></div>
     <div data-a="up3" style="position: absolute; right: 150px; top: 130px; display: flex; gap: 34px;">
@@ -128,10 +139,10 @@ slides.push(`
     <div data-a="up" style="position: relative; display: flex; align-items: center; gap: 22px;">
       ${logoMT(150, true)}
     </div>
-    <h1 data-a="up2" style="position: relative; margin: 40px 0 0; font-size: 92px; font-weight: 700; letter-spacing: -3.2px; line-height: 1.04; max-width: 1020px;">Un sitio nuevo<br>para todos<br>sus productos</h1>
-    <p data-a="up3" style="position: relative; margin: 30px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.82); line-height: 1.5; max-width: 880px;">Propuesta de sitio web para MT Omicron Sigma Technologies: el catálogo, la evidencia y la forma de comprar, en un solo lugar.</p>
+    <h1 data-a="up2" style="position: relative; margin: 40px 0 0; font-size: 92px; font-weight: 700; letter-spacing: -3.2px; line-height: 1.04; max-width: 1020px;">Que se vea,<br>que se conozca,<br>que se compre</h1>
+    <p data-a="up3" style="position: relative; margin: 30px 0 0; font-size: 27px; font-weight: 400; color: rgba(255,255,255,0.82); line-height: 1.5; max-width: 880px;">Propuesta de tres servicios para MT Omicron Sigma Technologies: redes sociales, relaciones públicas y sitio web.</p>
     <div data-a="up3" style="position: relative; margin-top: 44px; display: flex; gap: 14px;">
-      ${pill('Primera versión · octubre 2026', 'rgba(255,255,255,0.16)')}
+      ${pill('Noviembre 2026', 'rgba(255,255,255,0.16)')}
     </div>
     <div data-a="up3" style="position: relative; margin-top: 30px; display: flex; align-items: center; gap: 26px;">
       ${EQUIPO.map(([nombre, rol]) => `
@@ -177,54 +188,101 @@ slides.push(`
     ${nota(`${fuerte('No es un problema de producto, es de vitrina.')} Quien llega al sitio hoy no puede saber qué venden, para quién ni dónde comprarlo. Eso es lo que resuelve esta propuesta.`)}
   </section>`);
 
-// ── 3 · Lo que busca quien llega ─────────────────────────────────────────
-// (Antes «Dos públicos». Andrea pidió no marcar tanto las dos opciones: aquí el visitante
-// es uno solo y busca lo mismo, sea quien sea.)
-const busca = (n, color, titulo, texto, lista) => `
-      <div style="${CARD} border-radius: 28px; padding: 40px 38px 36px; display: flex; flex-direction: column; gap: 18px; border-top: 6px solid ${color};">
-        <span style="width: 58px; height: 58px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700;">${n}</span>
-        <span style="font-size: 36px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.9px; line-height: 1.15;">${titulo}</span>
-        <span style="font-size: 23px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">${texto}</span>
-        <div style="height: 1px; background: ${LINE}; margin: 4px 0 2px;"></div>
-        <div style="display: flex; flex-direction: column; gap: 13px;">${lista.map(x => bullet(x, color, 22)).join('')}</div>
-      </div>`;
-
-slides.push(`
-  <section data-label="Lo que busca quien llega" data-screen-label="Objetivo" data-speaker-notes="Quien llega al sitio, sea hospital, clinica, veterinario o productor, busca lo mismo: entender, confiar y poder comprar. El sitio se arma alrededor de esas tres cosas, no de quien es el visitante." style="${seccion()}">
-    ${header('Objetivo')}
-    ${h2('Quien llega busca<br>tres cosas', 62)}
-    ${bajada('Sea quien sea, entra con la misma duda: qué es esto, si puede confiar en ello y cómo lo consigue.', 1500)}
-    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px; flex: 1;">
-      ${busca('1', TEAL_T, 'Entender qué es', 'Ver el producto, para qué sirve y en qué presentación viene.', ['Foto y nombre claros', 'Para qué se usa, según el registro', 'Tamaños y presentaciones'])}
-      ${busca('2', NAVY, 'Poder confiar', 'Encontrar lo que respalda al producto, a la mano y sin pedirlo por mensaje.', ['Registros y avisos por producto', 'Ficha técnica y hoja de seguridad', 'Resumen de los estudios de laboratorio'])}
-      ${busca('3', ORANGE, 'Poder conseguirlo', 'Saber a quién escribir y dónde comprarlo, desde cualquier página.', ['Cotizar o escribir por WhatsApp', 'Distribuidores cerca de su zona', 'Teléfono y correo siempre a la vista'])}
-    </div>
-    <div style="height: 24px; flex: none;"></div>
-    ${nota(`${fuerte('Un solo sitio para todos sus productos.')} Todo se organiza por producto y por lo que cada visitante necesita comprobar, no por quién es: nadie tiene que elegir un lado para encontrar lo suyo.`)}
-  </section>`);
-
-// ── 4 · Mapa del sitio ───────────────────────────────────────────────────
-const celdaMapa = (titulo, texto, color, span = 1, lista = null) => `
-        <div style="${CARD} grid-column: span ${span}; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid ${color};">
-          <span style="font-size: 31px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.6px;">${titulo}</span>
-          <span style="font-size: 22px; font-weight: 400; color: ${MUTED}; line-height: 1.42;">${texto}</span>
-          ${lista ? `<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">${lista.map(x => `<span style="background: ${color}1A; color: ${color === TEAL ? TEAL_T : color}; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">${x}</span>`).join('')}</div>` : ''}
+// ── 11 · Un equipo, tres frentes ─────────────────────────────────────────
+const frente = (n, color, titulo, quien, lista, entrega) => `
+        <div style="${CARD} border-radius: 26px; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid ${color};">
+          <div style="display: flex; align-items: center; gap: 14px;">
+            <span style="width: 46px; height: 46px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">${n}</span>
+            <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${color};">${quien}</span>
+          </div>
+          <span style="font-size: 34px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.8px; line-height: 1.18;">${titulo}</span>
+          <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
+            ${lista.map(x => bullet(x, color, 23)).join('')}
+          </div>
+          <div style="flex: 1;"></div>
+          <div style="border-top: 1px solid ${LINE}; padding-top: 16px; font-size: 18px; font-weight: 500; color: ${MUTED}; line-height: 1.4;"><span style="font-weight: 700; color: ${color};">Entrega:</span> ${entrega}</div>
         </div>`;
 
 slides.push(`
-  <section data-label="Mapa del sitio" data-screen-label="Mapa del sitio" data-speaker-notes="Ocho secciones. Los productos son el centro; lo demas existe para que se confie en ellos y se puedan comprar. Prensa y alianzas es donde vive lo que consiga el frente de relaciones corporativas." style="${seccion()}">
-    ${header('Estructura')}
-    ${h2('Un sitio, ocho secciones', 58)}
-    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1; grid-template-rows: auto auto auto;">
-      ${celdaMapa('Inicio', 'Todos los productos a la vista, con cotizar y WhatsApp en cada página.', SLATE)}
-      ${celdaMapa('Nosotros', 'Quién es MT Omicron Sigma, dónde está la planta y por qué hacen lo que hacen.', SLATE)}
-      ${celdaMapa('Evidencia y registros', 'Lo que respalda a cada producto, publicado solo con su visto bueno.', SLATE)}
-      ${celdaMapa('Dónde comprar', 'Cotizar, escribir por WhatsApp o encontrar un distribuidor.', SLATE)}
-      ${celdaMapa('Productos', 'Una ficha por producto, con su presentación, su uso y su descarga. Se agrupan por línea, EsteriLife y Zoolubac, dentro del mismo catálogo.', TEAL, 4, ['Desinfectante de alto nivel', 'Antiséptico', 'Gel antiséptico', 'Antiséptico veterinario', 'Gel veterinario'])}
-      ${celdaMapa('Blog', 'Artículos de la empresa y de sus productos, cada uno con su propia página.', GOLD)}
-      ${celdaMapa('Prensa y alianzas', 'Entrevistas, encuentros y alianzas de la empresa, conforme se vayan dando.', ORANGE, 2)}
-      ${celdaMapa('Contacto', 'WhatsApp, teléfono, correo y mapa de la planta; aviso de privacidad.', GOLD)}
+  <section data-label="Un equipo, tres frentes" data-screen-label="Equipo" data-speaker-notes="Tres servicios, cada uno con su responsable, y una sola cara para el cliente. En este orden se presentan: redes sociales con Andrea, relaciones corporativas con Angeles Luna y al final el sitio web." style="${seccion()}">
+    ${header('Tres servicios')}
+    ${h2('Tres frentes que se<br>refuerzan entre sí', 58)}
+    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
+      ${frente('1', ORANGE, 'Redes sociales', 'Andrea Hasly Guillen Luna', [
+        'Contenido de sus productos y de la empresa, en un tono cercano',
+        'Paquete mensual de publicaciones, videos y coberturas',
+        'Usa la lista de afirmaciones aprobadas'], 'el paquete mensual, todos los meses')}
+      ${frente('2', SLATE, 'Relaciones corporativas', 'Ángeles Luna', [
+        'Contacto con empresarios, organismos e instituciones',
+        'Un encuentro B2B al mes con 10 a 15 prospectos',
+        'Entrevistas, congresos y alianzas para abrir mercados'], 'un programa de 12 meses, con evaluación cada trimestre')}
+      ${frente('3', TEAL_T, 'Sitio web', 'Axl Guillén', [
+        'El sitio nuevo, en su propio dominio y con HTTPS',
+        'Catálogo, evidencia y formas de contacto',
+        'Un blog para publicar artículos'], 'el sitio en línea y el blog al día')}
     </div>
+    <div style="height: 24px;"></div>
+    ${nota(`${fuerte('Así se conectan:')} las redes muestran a la empresa, las relaciones corporativas abren puertas y el sitio convierte todo eso en cotizaciones. Una sola cara para ustedes, tres frentes por detrás.`)}
+  </section>`);
+
+// ── Redes sociales (Andrea) ──────────────────────────────────────────────
+// El paquete mensual: 14 publicaciones (4 videos y 10 gráficos), 4 coberturas de evento y
+// 4 diseños extraordinarios. El precio sale de PRECIO_REDES (ver arriba).
+const paq = (num, titulo, sub, color) => `
+      <div style="${CARD} border-radius: 28px; padding: 36px 32px 32px; display: flex; flex-direction: column; gap: 12px; border-top: 6px solid ${color};">
+        <span style="font-size: 200px; font-weight: 800; color: ${color}; letter-spacing: -8px; line-height: 0.95;">${num}</span>
+        <span style="font-size: 40px; font-weight: 700; color: ${NAVY}; letter-spacing: -1px; line-height: 1.12;">${titulo}</span>
+        <span style="font-size: 26px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">${sub}</span>
+      </div>`;
+
+slides.push(`
+  <section data-label="Redes sociales" data-screen-label="Redes sociales" data-speaker-notes="Paquete mensual de Andrea: 14 publicaciones al mes (4 videos y 10 graficos), 4 coberturas de evento y 4 disenos extraordinarios, por $10,000 al mes. Todo texto pasa por la lista de afirmaciones aprobadas por la empresa. CONFIRMAR con Andrea que este es el paquete y el precio que se le ofrece a Omicron." style="${seccion()}">
+    ${header('Redes sociales', pill('Andrea Hasly Guillen Luna', ORANGE) + pill('Servicio mensual', SLATE))}
+    ${h2('Presencia constante<br>en redes, cada mes', 58)}
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; flex: 1;">
+      ${paq('14', 'publicaciones al mes', 'Son 4 videos y 10 gráficos.', TEAL_T)}
+      ${paq('4', 'coberturas de evento', 'Para que lo que pasa en la empresa también se vea en redes.', NAVY)}
+      ${paq('4', 'diseños extraordinarios', 'Piezas extra, además de las publicaciones del mes.', GOLD)}
+      <div style="border-radius: 28px; background: ${NAVY}; background-image: radial-gradient(90% 70% at 20% 10%, rgba(98,199,196,0.35) 0%, rgba(0,0,0,0) 60%); color: #FFFFFF; padding: 36px 32px 32px; display: flex; flex-direction: column; justify-content: space-between; border-top: 6px solid ${ORANGE};">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: ${TEAL};">Inversión</span>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <span style="display: flex; align-items: baseline; gap: 10px; white-space: nowrap;"><span style="font-size: 76px; font-weight: 800; letter-spacing: -3px; line-height: 1;">${PRECIO_REDES}</span><span style="font-size: 24px; font-weight: 700; color: ${TEAL};">MXN</span></span>
+          <span style="font-size: 26px; font-weight: 500; color: rgba(255,255,255,0.85);">al mes, todos los meses</span>
+        </div>
+      </div>
+    </div>
+    <div style="height: 24px; flex: none;"></div>
+    ${nota(`${fuerte('Todo lo que se publica sale de una lista de afirmaciones aprobada por ustedes.')} COFEPRIS y SENASICA vigilan la publicidad de estos productos, también en internet: lo que se dice se tiene que poder probar.`)}
+  </section>`);
+
+// ── 12 · Relaciones corporativas (la lámina de la mamá de Andrea) ────────
+// Su resumen del 4/11/2026, «Propuesta de colaboración empresarial». Andrea pidió una
+// lámina para que ella hable con sus palabras, así que en pantalla va lo mínimo: las
+// cinco líneas de acción en una frase cada una. El texto completo va en las notas.
+// ⚠️ Su resumen es de ESTERILIFE (no de las dos marcas): el nombre va tal cual.
+// El precio ($5,000 al mes, en paquete con redes) va en la pastilla de la cabecera y en la lámina de
+// inversión. Su resumen decía «por acordar»: queda tal cual en las notas del orador.
+const linea = (n, color, titulo, texto) => `
+      <div style="${CARD} border-radius: 26px; padding: 34px 28px 30px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid ${color};">
+        <span style="width: 54px; height: 54px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">${n}</span>
+        <span style="font-size: 34px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.9px; line-height: 1.15;">${titulo}</span>
+        <span style="font-size: 24px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">${texto}</span>
+      </div>`;
+
+slides.push(`
+  <section data-label="Relaciones corporativas" data-screen-label="Relaciones corporativas" data-speaker-notes="PRECIO: 5 mil pesos al mes, en paquete con las redes de Andrea (15 mil al mes en total). ESPACIO PARA QUE HABLE ANGELES LUNA, con sus palabras. Su resumen (propuesta de colaboracion empresarial de ESTERILIFE): cobertura municipal, estatal y nacional; vigencia de 12 meses con evaluacion trimestral. Objetivo: impulsar la presencia y el crecimiento comercial de EsteriLife con relaciones empresariales de alto nivel, alianzas estrategicas y acercamientos con instituciones publicas y privadas. Lineas de accion: 1) relaciones corporativas e institucionales, con empresarios, directivos, organismos empresariales y autoridades de los tres ordenes de gobierno; 2) encuentros empresariales B2B, una reunion mensual con 10 a 15 prospectos seleccionados; 3) presencia y proyeccion, una entrevista mensual en medios o espacios especializados, el portafolio en encuentros, congresos y actividades empresariales, y presentaciones con contactos estrategicos; 4) alianzas y desarrollo de mercados en los sectores empresarial, medico, educativo, turistico e institucional; 5) punto de exhibicion y distribucion, un espacio permanente en las oficinas de representacion, con condiciones acordadas aparte. Seguimiento: revisiones trimestrales de contactos, reuniones, oportunidades comerciales y negocios concretados. Esquema: participacion estrategica externa, en coordinacion con la direccion, con autonomia profesional y honorarios mensuales por acordar. Proposito: relaciones que trasciendan la promocion de una marca y se vuelvan oportunidades reales de colaboracion, expansion y crecimiento." style="${seccion()}">
+    ${header('Relaciones corporativas', pill('Ángeles Luna', ORANGE) + pill('12 meses · evaluación trimestral', SLATE) + pill(`${PRECIO_RP} MXN al mes`, NAVY))}
+    ${h2('Relaciones que se vuelven<br>oportunidades de negocio', 58)}
+    ${bajada('Presencia y crecimiento comercial de EsteriLife, con alianzas y contactos empresariales e institucionales en lo municipal, lo estatal y lo nacional.', 1500)}
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; flex: 1;">
+      ${linea('1', TEAL_T, 'Relaciones corporativas', 'Empresarios, organismos, instituciones y los tres órdenes de gobierno.')}
+      ${linea('2', NAVY, 'Encuentros B2B', 'Una reunión al mes con 10 a 15 prospectos seleccionados.')}
+      ${linea('3', ORANGE, 'Presencia y proyección', 'Una entrevista al mes en medios, y el portafolio en congresos y encuentros.')}
+      ${linea('4', GOLD, 'Alianzas y mercados', 'Nuevos canales, distribuidores y compradores, de lo regional a lo nacional.')}
+      ${linea('5', SLATE, 'Punto de exhibición', 'Un espacio permanente para exhibir y comercializar los productos.')}
+    </div>
+    <div style="height: 24px;"></div>
+    ${nota(`${fuerte('Lo que se mide cada trimestre:')} contactos establecidos, reuniones realizadas, oportunidades comerciales generadas y negocios concretados.`)}
   </section>`);
 
 // ── 5 · El inicio ────────────────────────────────────────────────────────
@@ -241,7 +299,7 @@ const tileProducto = (img, nombre, color) => `
 
 slides.push(`
   <section data-label="La puerta de entrada" data-screen-label="Inicio del sitio" data-speaker-notes="Maqueta orientativa del inicio, no el diseno final. La idea: que se vea de entrada que venden, que sea facil llegar a cada ficha y que cotizar este siempre a un clic." style="${seccion()}">
-    ${header('El inicio', pill('Maqueta orientativa', SLATE))}
+    ${header('Sitio web', pill('Maqueta orientativa', SLATE))}
     ${h2('Que nadie tenga que adivinar<br>qué venden', 58)}
     <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: 1.7fr 1fr; gap: 44px; flex: 1;">
       ${navegador('mtomicronsigma.com.mx', `
@@ -277,310 +335,75 @@ slides.push(`
     </div>
   </section>`);
 
-// ── 6 · El catálogo ──────────────────────────────────────────────────────
-const prod = (marca, color, img, nombre, pres) => `
-        <div style="${CARD} border-radius: 22px; overflow: hidden; display: flex; flex-direction: column; border-top: 5px solid ${color};">
-          <div style="height: 330px; background: #EEF3F4 url('assets/${img}') center/contain no-repeat;"></div>
-          <div style="padding: 20px 22px 22px; display: flex; flex-direction: column; gap: 7px;">
-            <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${color === TEAL ? TEAL_T : color};">${marca}</span>
-            <span style="font-size: 24px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.4px; line-height: 1.2;">${nombre}</span>
-            <span style="font-size: 18px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">${pres}</span>
-          </div>
+// ── 4 · Mapa del sitio ───────────────────────────────────────────────────
+const celdaMapa = (titulo, texto, color, span = 1, lista = null) => `
+        <div style="${CARD} grid-column: span ${span}; border-radius: 22px; padding: 24px 28px; display: flex; flex-direction: column; gap: 8px; border-top: 5px solid ${color};">
+          <span style="font-size: 31px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.6px;">${titulo}</span>
+          <span style="font-size: 22px; font-weight: 400; color: ${MUTED}; line-height: 1.42;">${texto}</span>
+          ${lista ? `<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px;">${lista.map(x => `<span style="background: ${color}1A; color: ${color === TEAL ? TEAL_T : color}; font-size: 19px; font-weight: 600; border-radius: 999px; padding: 8px 20px;">${x}</span>`).join('')}</div>` : ''}
         </div>`;
 
 slides.push(`
-  <section data-label="El catálogo" data-screen-label="Catálogo" data-speaker-notes="Cinco productos, cada uno con su ficha. Las presentaciones salen de los catalogos actuales y se confirman con el cliente antes de publicar." style="${seccion()}">
-    ${header('El catálogo')}
-    ${h2('Cada producto, con su ficha', 58)}
-    ${bajada('El catálogo en PDF deja de ser un archivo que se manda por mensaje y se vuelve un lugar que se puede buscar, compartir y encontrar.', 1500)}
-    <div data-a="up3" style="margin-top: 30px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px;">
-      ${prod('EsteriLife', TEAL, 'est-galon.jpg', 'Solución desinfectante de alto nivel', '1 L · 3,78 L · 20 L')}
-      ${prod('EsteriLife', TEAL, 'est-antiseptico.jpg', 'Solución antiséptica', '60, 120 y 240 mL · 3,78 L')}
-      <div style="border-radius: 22px; background: ${NAVY}; background-image: radial-gradient(90% 70% at 20% 10%, rgba(98,199,196,0.35) 0%, rgba(0,0,0,0) 60%); color: #FFFFFF; padding: 26px 24px; display: flex; flex-direction: column; justify-content: flex-end; gap: 7px; border-top: 5px solid ${TEAL};">
-        <span style="font-size: 15px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${TEAL};">EsteriLife</span>
-        <span style="font-size: 22px; font-weight: 700; letter-spacing: -0.3px; line-height: 1.2;">Gel antiséptico</span>
-        <span style="font-size: 16px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.4;">150 · 240 · 500 g<br>Foto de catálogo por recibir</span>
-      </div>
-      ${prod('Zoolubac', ORANGE, 'zoo-spray.jpg', 'Solución antiséptica veterinaria', '120 mL · 1 L · 5 L · 20 L')}
-      ${prod('Zoolubac', ORANGE, 'zoo-gel.jpg', 'Gel antiséptico veterinario', '150 y 240 g')}
+  <section data-label="Mapa del sitio" data-screen-label="Mapa del sitio" data-speaker-notes="Ocho secciones. Los productos son el centro; lo demas existe para que se confie en ellos y se puedan comprar. Prensa y alianzas es donde vive lo que consiga el frente de relaciones corporativas." style="${seccion()}">
+    ${header('Sitio web', pill('Unas cuatro semanas · por confirmar', SLATE))}
+    ${h2('Un sitio, ocho secciones', 58)}
+    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1; grid-template-rows: auto auto auto;">
+      ${celdaMapa('Inicio', 'Todos los productos a la vista, con cotizar y WhatsApp en cada página.', SLATE)}
+      ${celdaMapa('Nosotros', 'Quién es MT Omicron Sigma, dónde está la planta y por qué hacen lo que hacen.', SLATE)}
+      ${celdaMapa('Evidencia y registros', 'Lo que respalda a cada producto, publicado solo con su visto bueno.', SLATE)}
+      ${celdaMapa('Dónde comprar', 'Cotizar, escribir por WhatsApp o encontrar un distribuidor.', SLATE)}
+      ${celdaMapa('Productos', 'Una ficha por producto, con su presentación, su uso y su descarga. Se agrupan por línea, EsteriLife y Zoolubac, dentro del mismo catálogo.', TEAL, 4, ['Desinfectante de alto nivel', 'Antiséptico', 'Gel antiséptico', 'Antiséptico veterinario', 'Gel veterinario'])}
+      ${celdaMapa('Blog', 'Artículos de la empresa y de sus productos, cada uno con su propia página.', GOLD)}
+      ${celdaMapa('Prensa y alianzas', 'Entrevistas, encuentros y alianzas de la empresa, conforme se vayan dando.', ORANGE, 2)}
+      ${celdaMapa('Contacto', 'WhatsApp, teléfono, correo y mapa de la planta; aviso de privacidad.', GOLD)}
     </div>
-    <div style="flex: 1;"></div>
-    <div data-a="up3" style="display: grid; grid-template-columns: 1.1fr 1fr; gap: 28px; align-items: stretch;">
-      <div style="display: flex; flex-wrap: wrap; gap: 10px; align-content: center;">
-        ${['Para qué sirve', 'Presentaciones', 'Cómo se usa', 'Ficha técnica en PDF', 'Hoja de seguridad', 'Pedir cotización'].map(x => `<span style="background: #FFFFFF; border: 1px solid ${LINE}; color: ${NAVY}; font-size: 18px; font-weight: 600; border-radius: 999px; padding: 9px 20px;">${x}</span>`).join('')}
-      </div>
-      ${nota(`${fuerte('Presentaciones por confirmar.')} Las de arriba son las de los catálogos actuales: antes de publicar se revisan una por una con ustedes.`, ORANGE)}
-    </div>
+    <div style="height: 22px; flex: none;"></div>
+    ${nota(`${fuerte('Empieza como catálogo y generador de contactos:')} no cobra ni maneja pagos en línea, y todo lo que se publica sale de lo que la empresa aprueba.`)}
   </section>`);
 
-// ── 7 · Evidencia ────────────────────────────────────────────────────────
-slides.push(`
-  <section data-label="Evidencia y registros" data-screen-label="Evidencia" data-speaker-notes="En salud se compra confiando. La seccion de evidencia es la que cierra la venta. Se publica solo lo que el cliente apruebe." style="${seccion()}">
-    ${header('Confianza')}
-    ${h2('En salud se compra<br>cuando se puede verificar', 58)}
-    <div data-a="up3" style="margin-top: 38px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
-      ${tarjeta('◧', 'Registros y avisos', 'Qué autoridad lo respalda y bajo qué clave, por producto. Quien compra para un hospital o una clínica lo revisa antes de pedir cotización.', TEAL_T, ['Autoridad que lo respalda', 'Producto al que corresponde', 'Vigencia y fecha'])}
-      ${tarjeta('▤', 'Fichas técnicas y de seguridad', 'Descargables, siempre la versión vigente, con fecha. Una sola fuente en lugar de PDFs que circulan por correo con versiones distintas.', TEAL_T, ['Ficha técnica en PDF', 'Hoja de seguridad', 'Versión y fecha de cada una'])}
-      ${tarjeta('◎', 'Estudios de laboratorio', 'Un resumen claro de cada estudio: qué se midió, en qué condiciones y con qué resultado, con el informe como respaldo.', TEAL_T, ['Qué se midió', 'En qué condiciones', 'Resultado y documento'])}
-    </div>
-    <div style="height: 26px;"></div>
-    <div data-a="up3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 26px;">
-      ${nota(`${fuerte('Se publica solo lo que ustedes aprueben.')} Antes de que algo aparezca en el sitio, ustedes eligen qué documento se muestra y cuál se queda para quien lo pida.`, TEAL_T)}
-      ${nota(`${fuerte('Resumen en el sitio, informe completo bajo pedido.')} Los informes traen datos de personas y de lotes: se muestra lo que sirve para comprar y lo demás se entrega por correo a quien lo solicite.`, ORANGE)}
-    </div>
-  </section>`);
-
-// ── 8 · Cómo convierte ───────────────────────────────────────────────────
-const paso = (n, titulo, texto, color) => `
-        <div style="${CARD} border-radius: 22px; padding: 26px 24px; display: flex; flex-direction: column; gap: 10px; position: relative;">
-          <span style="width: 46px; height: 46px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">${n}</span>
-          <span style="font-size: 28px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.5px;">${titulo}</span>
-          <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">${texto}</span>
-        </div>`;
-
-slides.push(`
-  <section data-label="Cómo convierte" data-screen-label="De visita a cotización" data-speaker-notes="El sitio arranca como catalogo y generador de contactos, no como tienda. La venta en linea de algunos productos esta regulada, se confirma producto por producto." style="${seccion()}">
-    ${header('Cómo vende')}
-    ${h2('De visita a cotización,<br>en cinco pasos', 58)}
-    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">
-      ${paso('1', 'Te encuentra', 'En Google, en redes o en el blog. Hoy no aparece en ninguno.', TEAL_T)}
-      ${paso('2', 'Revisa', 'La ficha del producto y la evidencia que lo respalda.', TEAL_T)}
-      ${paso('3', 'Pregunta', 'WhatsApp o formulario, con el producto ya elegido.', TEAL_T)}
-      ${paso('4', 'Cotiza', 'Ventas responde con presentación, cantidad y precio.', ORANGE)}
-      ${paso('5', 'Compra', 'Directo con la empresa o con un distribuidor de su zona.', ORANGE)}
-    </div>
-    <div data-a="up3" style="margin-top: 28px; display: grid; grid-template-columns: 1fr 1fr; gap: 26px; flex: 1;">
-      <div style="${CARD} border-radius: 26px; padding: 44px 46px; display: flex; flex-direction: column; gap: 20px; border-top: 6px solid ${TEAL_T};">
-        ${etiqueta('Empezamos así', TEAL_T)}
-        <span style="font-size: 44px; font-weight: 700; color: ${NAVY}; letter-spacing: -1.1px; line-height: 1.15;">Catálogo y generador de contactos</span>
-        <span style="font-size: 27px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">El sitio no cobra ni maneja pagos en línea: junta personas con interés real y se las entrega a ventas con nombre, teléfono y qué producto preguntaron.</span>
-      </div>
-      <div style="${CARD} border-radius: 26px; padding: 44px 46px; display: flex; flex-direction: column; gap: 20px; border-top: 6px solid ${ORANGE};">
-        ${etiqueta('Tienda en línea, después', ORANGE)}
-        <span style="font-size: 44px; font-weight: 700; color: ${NAVY}; letter-spacing: -1.1px; line-height: 1.15;">Producto por producto, si conviene</span>
-        <span style="font-size: 27px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">La venta en línea de algunos productos tiene reglas propias de COFEPRIS y SENASICA. Se confirma con su asesor cuáles sí pueden y se agrega cuando haya claridad.</span>
-      </div>
-    </div>
-  </section>`);
-
-// ── 9 · Lo que se dice ───────────────────────────────────────────────────
-const filtro = (n, titulo, texto, color) => `
-        <div style="${CARD} border-radius: 24px; padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; border-top: 6px solid ${color};">
-          <span style="font-size: 54px; font-weight: 800; color: ${color}; letter-spacing: -2px; line-height: 1;">${n}</span>
-          <span style="font-size: 29px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.6px; line-height: 1.2;">${titulo}</span>
-          <span style="font-size: 21px; font-weight: 400; color: ${MUTED}; line-height: 1.48;">${texto}</span>
-        </div>`;
-
-slides.push(`
-  <section data-label="Lo que se dice" data-screen-label="Afirmaciones aprobadas" data-speaker-notes="En productos de salud un anuncio de mas puede costar mas que no anunciarse. Todo texto sale de una lista aprobada por el cliente." style="${seccion()}">
-    ${header('Cuidado')}
-    ${h2('En salud, lo que se dice<br>se tiene que poder probar', 58)}
-    ${bajada('COFEPRIS y SENASICA vigilan la publicidad de los productos que regulan, también en internet. Por eso cada frase del sitio y de las redes pasa por tres filtros.', 1500)}
-    <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
-      ${filtro('1', 'Tiene respaldo', 'Cada afirmación lleva al lado el estudio, la ficha o el registro que la sostiene.', TEAL_T)}
-      ${filtro('2', 'Coincide con el registro', 'No se dice más —ni distinto— de lo que el producto tiene autorizado.', NAVY)}
-      ${filtro('3', 'La aprueban ustedes', 'Una lista de afirmaciones firmada por la empresa. Nada se publica sin su visto bueno.', ORANGE)}
-    </div>
-    <div style="height: 24px;"></div>
-    <div data-a="up3" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; flex: 1;">
-      <div style="${CARD} border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 13px; border-left: 6px solid ${TEAL_T};">
-        ${etiqueta('Sí se publica', TEAL_T)}
-        ${bullet('Resultados de laboratorio, con el organismo, el tiempo y el informe', TEAL_T, 22)}
-        ${bullet('Para qué se usa, tal como dice el registro', TEAL_T, 22)}
-        ${bullet('Presentaciones y modo de uso de la etiqueta', TEAL_T, 22)}
-      </div>
-      <div style="${CARD} border-radius: 22px; padding: 26px 30px; display: flex; flex-direction: column; gap: 13px; border-left: 6px solid ${ORANGE};">
-        ${etiqueta('Se queda fuera hasta tener respaldo', ORANGE)}
-        ${bullet('Promesas que todavía no tienen un estudio detrás', ORANGE, 22, INK, '–')}
-        ${bullet('Usos que no están en el registro del producto', ORANGE, 22, INK, '–')}
-        ${bullet('Comparaciones con otras marcas', ORANGE, 22, INK, '–')}
-      </div>
-    </div>
-    <div style="height: 20px;"></div>
-    ${nota(`${fuerte('Esto también es un servicio:')} la lista de afirmaciones aprobadas es la misma que usa Andrea para las redes y quien lleve las relaciones públicas. Todos dicen lo mismo, y lo que dicen se puede sostener.`)}
-  </section>`);
-
-// ── 10 · Blog ────────────────────────────────────────────────────────────
-// (Antes «El boletín», con suscripción por correo y dos listas. Axl lo quiso blog: artículos
-// en el sitio y ya; sin altas de correo ni nada que cobrar o administrar por ahora.)
-const entradaBlog = (titulo, color, fecha) => `
-          <div style="display: flex; align-items: center; gap: 18px; padding: 16px 20px; border-radius: 14px; background: #FFFFFF; border: 1px solid ${LINE};">
-            <span style="flex: none; width: 54px; height: 54px; border-radius: 14px; background: ${color}; color: #FFFFFF; font-size: 24px; font-weight: 700; display: inline-flex; align-items: center; justify-content: center;">▤</span>
-            <div style="display: flex; flex-direction: column; gap: 3px; flex: 1;">
-              <span style="font-size: 20px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.2px;">${titulo}</span>
-              <span style="font-size: 15px; font-weight: 500; color: ${MUTED};">${fecha}</span>
-            </div>
-            <span style="font-size: 15px; font-weight: 700; color: ${TEAL_T}; letter-spacing: 0.4px;">Leer →</span>
-          </div>`;
-
-slides.push(`
-  <section data-label="El blog" data-screen-label="Blog" data-speaker-notes="Un blog en lugar de boletin: se escribe una vez y vive en el sitio y en las redes. Sin suscripcion por correo por ahora; si mas adelante conviene, se agrega." style="${seccion()}">
-    ${header('El blog')}
-    ${h2('Un blog que mantiene<br>vivo al sitio', 58)}
-    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px; flex: 1;">
-      <div style="display: flex; flex-direction: column; gap: 22px;">
-        ${bullet(`${fuerte('Se escribe una vez y vive en dos lugares:')} el blog del sitio y las redes`, TEAL_T, 25)}
-        ${bullet(`${fuerte('Cada artículo tiene su propia página:')} se puede compartir y, además, es una razón más para aparecer en las búsquedas`, TEAL_T, 25)}
-        ${bullet(`${fuerte('Por temas,')} como novedades y productos, para encontrar lo que se busca`, TEAL_T, 25)}
-        ${bullet(`${fuerte('Sin suscripción por ahora:')} quien llega solo lee. Si más adelante conviene, se agrega`, TEAL_T, 25)}
-        <div style="flex: 1;"></div>
-        <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">Quién redacta cada artículo se acuerda con el equipo de relaciones públicas y redes. Del lado del sitio, cada artículo se publica y el blog se mantiene al día.</span>
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 14px;">
-        ${navegador('mtomicronsigma.com.mx/blog', `
-        <div style="padding: 26px 28px 30px; background: ${BG}; display: flex; flex-direction: column; gap: 14px;">
-          <div style="display: flex; align-items: center; justify-content: space-between;">
-            <span style="font-size: 30px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.8px;">Blog</span>
-            <div style="display: flex; gap: 8px;">${pill('Novedades', TEAL_T)}${pill('Productos', NAVY)}</div>
-          </div>
-          ${entradaBlog('Título del tercer artículo', TEAL_T, 'Fecha de publicación')}
-          ${entradaBlog('Título del segundo artículo', NAVY, 'Fecha de publicación')}
-          ${entradaBlog('Título del primer artículo', TEAL_T, 'Fecha de publicación')}
-        </div>`)}
-        <span style="font-size: 16px; font-weight: 400; color: ${MUTED}; text-align: center;">Maqueta de ejemplo: los títulos y las fechas son de relleno.</span>
-      </div>
-    </div>
-  </section>`);
-
-// ── 11 · Un equipo, tres frentes ─────────────────────────────────────────
-const frente = (n, color, titulo, quien, lista, entrega) => `
-        <div style="${CARD} border-radius: 26px; padding: 34px 32px; display: flex; flex-direction: column; gap: 14px; border-top: 6px solid ${color};">
-          <div style="display: flex; align-items: center; gap: 14px;">
-            <span style="width: 46px; height: 46px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 21px; font-weight: 700;">${n}</span>
-            <span style="font-size: 17px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: ${color};">${quien}</span>
-          </div>
-          <span style="font-size: 34px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.8px; line-height: 1.18;">${titulo}</span>
-          <div style="display: flex; flex-direction: column; gap: 11px; margin-top: 2px;">
-            ${lista.map(x => bullet(x, color, 23)).join('')}
-          </div>
-          <div style="flex: 1;"></div>
-          <div style="border-top: 1px solid ${LINE}; padding-top: 16px; font-size: 18px; font-weight: 500; color: ${MUTED}; line-height: 1.4;"><span style="font-weight: 700; color: ${color};">Entrega:</span> ${entrega}</div>
-        </div>`;
-
-slides.push(`
-  <section data-label="Un equipo, tres frentes" data-screen-label="Equipo" data-speaker-notes="Tres frentes con una sola cara para el cliente. Las relaciones corporativas las lleva la mama de Andrea, con su propia lamina (la siguiente)." style="${seccion()}">
-    ${header('Equipo')}
-    ${h2('Tres frentes que se<br>refuerzan entre sí', 58)}
-    <div data-a="up3" style="margin-top: 36px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; flex: 1;">
-      ${frente('1', SLATE, 'Relaciones corporativas', 'Relaciones públicas', [
-        'Contacto con empresarios, organismos e instituciones',
-        'Un encuentro B2B al mes con 10 a 15 prospectos',
-        'Entrevistas, congresos y alianzas para abrir mercados'], 'un programa de 12 meses, con evaluación cada trimestre')}
-      ${frente('2', ORANGE, 'Redes sociales', 'Andrea Hasly Guillen Luna', [
-        'Contenido de sus productos y de la empresa, en un tono cercano',
-        'Paquete mensual de publicaciones, videos y coberturas',
-        'Usa la lista de afirmaciones aprobadas'], 'el paquete mensual, por definir')}
-      ${frente('3', TEAL_T, 'Sitio web y blog', 'Axl Guillén', [
-        'El sitio nuevo, en su propio dominio y con HTTPS',
-        'Catálogo, evidencia y formas de contacto',
-        'El blog: cada artículo se publica en el sitio'], 'el sitio en línea y el blog al día')}
-    </div>
-    <div style="height: 24px;"></div>
-    ${nota(`${fuerte('Así se conectan:')} las relaciones corporativas abren puertas, las redes las muestran, el sitio las convierte en cotizaciones y el blog las mantiene vivas. Una sola cara para ustedes, tres frentes por detrás.`)}
-  </section>`);
-
-// ── 12 · Relaciones corporativas (la lámina de la mamá de Andrea) ────────
-// Su resumen del 4/11/2026, «Propuesta de colaboración empresarial». Andrea pidió una
-// lámina para que ella hable con sus palabras, así que en pantalla va lo mínimo: las
-// cinco líneas de acción en una frase cada una. El texto completo va en las notas.
-// ⚠️ Su resumen es de ESTERILIFE (no de las dos marcas): el nombre va tal cual.
-// ⚠️ «Honorarios mensuales por acordar»: sin cifras, ni aquí ni en pantalla.
-const linea = (n, color, titulo, texto) => `
-      <div style="${CARD} border-radius: 26px; padding: 34px 28px 30px; display: flex; flex-direction: column; gap: 16px; border-top: 6px solid ${color};">
-        <span style="width: 54px; height: 54px; border-radius: 50%; background: ${color}; color: #FFFFFF; display: inline-flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700;">${n}</span>
-        <span style="font-size: 34px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.9px; line-height: 1.15;">${titulo}</span>
-        <span style="font-size: 24px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">${texto}</span>
+// ── Inversión · los tres servicios ───────────────────────────────────────
+const servicio = (etq, quien, color, precio, unidad, lista) => `
+      <div style="${CARD} border-radius: 28px; padding: 30px 34px 28px; display: flex; flex-direction: column; gap: 10px; border-top: 6px solid ${color};">
+        ${etiqueta(etq, color)}
+        <span style="font-size: 22px; font-weight: 500; color: ${MUTED};">${quien}</span>
+        <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">
+          ${precio}
+          <span style="font-size: 24px; font-weight: 600; color: ${NAVY};">${unidad}</span>
+        </div>
+        <div style="height: 1px; background: ${LINE}; margin: 10px 0 4px;"></div>
+        <div style="display: flex; flex-direction: column; gap: 11px;">${lista.map(x => bullet(x, color, 22)).join('')}</div>
       </div>`;
 
-slides.push(`
-  <section data-label="Relaciones corporativas" data-screen-label="Relaciones corporativas" data-speaker-notes="ESPACIO PARA QUE HABLE ELLA, con sus palabras. Su resumen (propuesta de colaboracion empresarial de ESTERILIFE): cobertura municipal, estatal y nacional; vigencia de 12 meses con evaluacion trimestral. Objetivo: impulsar la presencia y el crecimiento comercial de EsteriLife con relaciones empresariales de alto nivel, alianzas estrategicas y acercamientos con instituciones publicas y privadas. Lineas de accion: 1) relaciones corporativas e institucionales, con empresarios, directivos, organismos empresariales y autoridades de los tres ordenes de gobierno; 2) encuentros empresariales B2B, una reunion mensual con 10 a 15 prospectos seleccionados; 3) presencia y proyeccion, una entrevista mensual en medios o espacios especializados, el portafolio en encuentros, congresos y actividades empresariales, y presentaciones con contactos estrategicos; 4) alianzas y desarrollo de mercados en los sectores empresarial, medico, educativo, turistico e institucional; 5) punto de exhibicion y distribucion, un espacio permanente en las oficinas de representacion, con condiciones acordadas aparte. Seguimiento: revisiones trimestrales de contactos, reuniones, oportunidades comerciales y negocios concretados. Esquema: participacion estrategica externa, en coordinacion con la direccion, con autonomia profesional y honorarios mensuales por acordar. Proposito: relaciones que trasciendan la promocion de una marca y se vuelvan oportunidades reales de colaboracion, expansion y crecimiento." style="${seccion()}">
-    ${header('Relaciones corporativas', pill('12 meses · evaluación trimestral', SLATE))}
-    ${h2('Relaciones que se vuelven<br>oportunidades de negocio', 58)}
-    ${bajada('Presencia y crecimiento comercial de EsteriLife, con alianzas y contactos empresariales e institucionales en lo municipal, lo estatal y lo nacional.', 1500)}
-    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 22px; flex: 1;">
-      ${linea('1', TEAL_T, 'Relaciones corporativas', 'Empresarios, organismos, instituciones y los tres órdenes de gobierno.')}
-      ${linea('2', NAVY, 'Encuentros B2B', 'Una reunión al mes con 10 a 15 prospectos seleccionados.')}
-      ${linea('3', ORANGE, 'Presencia y proyección', 'Una entrevista al mes en medios, y el portafolio en congresos y encuentros.')}
-      ${linea('4', GOLD, 'Alianzas y mercados', 'Nuevos canales, distribuidores y compradores, de lo regional a lo nacional.')}
-      ${linea('5', SLATE, 'Punto de exhibición', 'Un espacio permanente para exhibir y comercializar los productos.')}
-    </div>
-    <div style="height: 24px;"></div>
-    ${nota(`${fuerte('Lo que se mide cada trimestre:')} contactos establecidos, reuniones realizadas, oportunidades comerciales generadas y negocios concretados.`)}
-  </section>`);
-
-// ── 13 · Plan y tiempos ──────────────────────────────────────────────────
-const barra = (inicio, fin, color, titulo, texto) => `
-        <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px; align-items: center;">
-          <div style="display: flex; flex-direction: column; gap: 3px;">
-            <span style="font-size: 24px; font-weight: 700; color: ${NAVY}; letter-spacing: -0.3px;">${titulo}</span>
-            <span style="font-size: 19px; font-weight: 400; color: ${MUTED}; line-height: 1.4;">${texto}</span>
-          </div>
-          <div style="position: relative; height: 54px; border-radius: 12px; background: ${LINE}66;">
-            <div style="position: absolute; top: 0; bottom: 0; left: ${inicio * 20}%; width: ${(fin - inicio) * 20}%; border-radius: 12px; background: ${color};"></div>
-          </div>
-        </div>`;
+const monto = (cifra, color) =>
+  `<span style="display: flex; align-items: baseline; gap: 10px; white-space: nowrap;"><span style="font-size: 82px; font-weight: 800; color: ${color}; letter-spacing: -3px; line-height: 1;">${cifra}</span><span style="font-size: 24px; font-weight: 700; color: ${color};">MXN</span></span>`;
 
 slides.push(`
-  <section data-label="Plan y tiempos" data-screen-label="Plan" data-speaker-notes="Tiempos por confirmar: dependen de cuando llegue el material y las aprobaciones. El dominio y el correo se migran sin cortar el servicio." style="${seccion()}">
-    ${header('Plan', pill('Tiempos por confirmar', SLATE))}
-    ${h2('De material a sitio en línea,<br>en unas cuatro semanas', 58)}
-    <div data-a="up3" style="margin-top: 34px; display: flex; flex-direction: column; gap: 20px; flex: 1;">
-      <div style="display: grid; grid-template-columns: 330px 1fr; gap: 28px;">
-        <span></span>
-        <div style="display: grid; grid-template-columns: repeat(5, 1fr); font-size: 16px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; color: ${MUTED};">
-          <span>Semana 1</span><span>Semana 2</span><span>Semana 3</span><span>Semana 4</span><span>Después</span>
-        </div>
-      </div>
-      ${barra(0, 1, SLATE, 'Material y mensajes', 'Logos, fotos, fichas y la lista de afirmaciones aprobadas.')}
-      ${barra(1, 2, TEAL_T, 'Diseño', 'Inicio y fichas de producto, con su visto bueno.')}
-      ${barra(2, 3, TEAL_T, 'Construcción', 'Contenido real, versión de celular, WhatsApp y formularios.')}
-      ${barra(3, 4, ORANGE, 'Salida', 'Dominio con HTTPS, correo sin cortes y revisión final.')}
-      ${barra(4, 5, GOLD, 'Blog y mejora', 'Cada artículo publicado; ajustes con lo que ustedes pidan.')}
-    </div>
-    ${nota(`${fuerte('Lo que más mueve las fechas es el material y las aprobaciones,')} no la construcción. Mientras antes lleguen las fichas, las fotos y la lista de afirmaciones, antes sale el sitio. El dominio y el correo se migran sin cortar el servicio actual.`)}
-  </section>`);
-
-// ── 14 · Inversión ───────────────────────────────────────────────────────
-slides.push(`
-  <section data-label="Inversión" data-screen-label="Inversión" data-speaker-notes="Precio: 5 mil pesos por el sitio (decision de Axl, 4/nov/2026). Dos formas de cobro sobre la mesa: proyecto cerrado, o repartido en la primera mensualidad del paquete de redes. Sin tienda en linea ni suscripciones: no se manejan pagos en el sitio." style="${seccion()}">
+  <section data-label="Inversión" data-screen-label="Inversión" data-speaker-notes="Redes: $10,000 al mes (paquete de Andrea, confirmar). Relaciones corporativas: $5,000 al mes (Angeles Luna). Van en paquete: $15,000 al mes en total. Sitio web: $5,000 pago unico, aparte del paquete (decision de Axl, 4/nov/2026). Dos formas de pagar el sitio: proyecto cerrado, o repartido en la primera mensualidad de redes. Sin tienda en linea ni suscripciones: no se manejan pagos en el sitio." style="${seccion()}">
     ${header('Inversión')}
-    ${h2('Qué incluye y cómo se paga', 62)}
-    <div data-a="up3" style="margin-top: 38px; display: grid; grid-template-columns: 1fr 1.05fr; gap: 34px; flex: 1;">
-      <div style="${CARD} border-radius: 28px; padding: 42px 40px; display: flex; flex-direction: column; gap: 24px; border-top: 6px solid ${TEAL_T};">
-        ${etiqueta('El sitio incluye', TEAL_T)}
-        ${bullet('Diseño propio con la identidad de las tres marcas', TEAL_T, 24)}
-        ${bullet('Inicio con todos sus productos y una ficha por cada uno', TEAL_T, 24)}
-        ${bullet('Evidencia y registros, con lo que ustedes aprueben', TEAL_T, 24)}
-        ${bullet('Dónde comprar, WhatsApp y formularios de cotización', TEAL_T, 24)}
-        ${bullet('Blog para publicar artículos, cada uno con su página', TEAL_T, 24)}
-        ${bullet('Dominio propio con HTTPS, y versión de celular', TEAL_T, 24)}
-        ${bullet('Textos y estructura pensados para aparecer en Google', TEAL_T, 24)}
-      </div>
-      <div style="display: flex; flex-direction: column; gap: 22px;">
-        <div style="border-radius: 28px; border: 3px solid ${ORANGE}; background: ${ORANGE}0D; padding: 34px 38px; display: flex; align-items: center; justify-content: space-between; gap: 20px;">
-          <div style="display: flex; flex-direction: column; gap: 6px;">
-            ${etiqueta('Inversión del sitio', ORANGE)}
-            <span style="font-size: 23px; font-weight: 400; color: ${MUTED};">Pago único, sitio completo.</span>
-          </div>
-          <span style="display: flex; align-items: baseline; gap: 10px; white-space: nowrap;"><span style="font-size: 86px; font-weight: 800; color: ${ORANGE}; letter-spacing: -3px; line-height: 1;">$5,000</span><span style="font-size: 26px; font-weight: 700; color: ${ORANGE};">MXN</span></span>
-        </div>
-        <div style="${CARD} border-radius: 24px; padding: 28px 32px; display: flex; flex-direction: column; gap: 12px;">
-          ${etiqueta('Dos formas de pagarlo', NAVY)}
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <span style="font-size: 23px; font-weight: 700; color: ${NAVY};">A · Proyecto cerrado</span>
-            <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">Los $5,000 y la fecha de entrega, definidos desde el inicio.</span>
-          </div>
-          <div style="height: 1px; background: ${LINE};"></div>
-          <div style="display: flex; flex-direction: column; gap: 4px;">
-            <span style="font-size: 23px; font-weight: 700; color: ${NAVY};">B · Dentro de la primera mensualidad</span>
-            <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.45;">La primera mensualidad del paquete de redes se extiende para cubrir los $5,000 del sitio, y no se paga como un costo aparte.</span>
-          </div>
-        </div>
-        <span style="font-size: 20px; font-weight: 400; color: ${MUTED}; line-height: 1.5;">Redes, blog y mantenimiento del sitio son un servicio mensual aparte, por definir.</span>
-      </div>
+    ${h2('Un paquete mensual y un sitio de pago único', 58)}
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; flex: 1;">
+      ${servicio('Redes sociales', 'Andrea Hasly Guillen Luna', ORANGE, monto(PRECIO_REDES, ORANGE), 'al mes', [
+        '14 publicaciones: 4 videos y 10 gráficos',
+        '4 coberturas de evento',
+        '4 diseños extraordinarios'])}
+      ${servicio('Relaciones corporativas', 'Ángeles Luna', SLATE, monto(PRECIO_RP, SLATE), 'al mes', [
+        '12 meses, con evaluación cada trimestre',
+        'Un encuentro B2B al mes',
+        'Una entrevista al mes en medios'])}
+      ${servicio('Sitio web', 'Axl Guillén', TEAL_T, monto(PRECIO_WEB, TEAL_T), 'pago único', [
+        'Inicio con todos sus productos y una ficha por cada uno',
+        'Evidencia, dónde comprar y un blog',
+        'Dominio propio con HTTPS y versión de celular'])}
     </div>
-    <div style="height: 24px;"></div>
-    ${nota(`${fuerte('El precio es para este alcance.')} Si más adelante se suma algo —por ejemplo la tienda en línea de algún producto— se cotiza aparte, sin mover lo ya acordado.`, ORANGE)}
+    <div data-a="up3" style="margin-top: 20px; flex: none; border-radius: 28px; background: ${NAVY}; background-image: radial-gradient(90% 120% at 12% 0%, rgba(98,199,196,0.32) 0%, rgba(0,0,0,0) 60%); color: #FFFFFF; padding: 24px 44px; display: flex; align-items: center; justify-content: space-between; border-left: 10px solid ${ORANGE};">
+      <div style="display: flex; flex-direction: column; gap: 6px;">
+        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: ${TEAL};">Paquete mensual</span>
+        <span style="font-size: 30px; font-weight: 600; letter-spacing: -0.5px;">Redes sociales + relaciones corporativas, juntas</span>
+      </div>
+      <span style="display: flex; align-items: baseline; gap: 12px; white-space: nowrap;"><span style="font-size: 88px; font-weight: 800; letter-spacing: -3px; line-height: 1;">${PRECIO_PAQUETE}</span><span style="font-size: 26px; font-weight: 700; color: ${TEAL};">MXN al mes</span></span>
+    </div>
+    <div style="height: 16px; flex: none;"></div>
+    ${nota(`${fuerte('El sitio se puede pagar de dos formas:')} como proyecto cerrado con su fecha de entrega, o repartido en la primera mensualidad del paquete. El sitio no maneja pagos en línea ni suscripciones. Su mantenimiento y el blog, después de publicar, son un servicio mensual aparte, por definir.`, ORANGE)}
   </section>`);
 
 // ── 15 · Cierre ──────────────────────────────────────────────────────────
@@ -601,7 +424,7 @@ slides.push(`
     <div data-a="up3" style="position: relative; margin-top: 40px; display: flex; align-items: center; gap: 26px;">
       ${logoMT(96, true)}
       <span style="width: 1px; height: 60px; background: rgba(255,255,255,0.3);"></span>
-      <span style="font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.5;">Axl Guillén · sitio web y blog</span>
+      <span style="font-size: 20px; font-weight: 400; color: rgba(255,255,255,0.75); line-height: 1.5;">Andrea Hasly Guillen Luna · Ángeles Luna · Axl Guillén</span>
     </div>
   </section>`);
 
@@ -613,7 +436,7 @@ const html = `<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title>Propuesta · MT Omicron Sigma</title>
-${kit.og({ titulo: 'Propuesta · MT Omicron Sigma', descripcion: 'Un sitio web nuevo para MT Omicron Sigma, con EsteriLife y Zoolubac: el catálogo, la evidencia y la forma de comprar, en un solo lugar.', carpeta: 'personal/omicron' })}
+${kit.og({ titulo: 'Propuesta · MT Omicron Sigma', descripcion: 'Tres servicios para MT Omicron Sigma, con EsteriLife y Zoolubac: redes sociales, relaciones públicas y sitio web.', carpeta: 'personal/omicron' })}
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
