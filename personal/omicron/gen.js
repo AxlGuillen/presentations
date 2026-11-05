@@ -17,6 +17,11 @@
 // del sitio se reduce a dos láminas (el inicio y las ocho secciones). Se quitaron catálogo,
 // evidencia, cómo vende, lo que se dice, blog y plan (siguen en el historial de git). Entra el
 // paquete de redes de Andrea con su precio y una lámina de inversión con los tres servicios.
+// QUINTA PASADA (4/11/2026): llegó el Portafolio EsteriLife (45 págs.: carta, fichas del
+// desinfectante y del antiséptico, estudios, informes de laboratorio y hoja de seguridad). Se
+// nombra la tecnología (superoxidación con pH neutro), el portafolio entra como pieza de
+// «Evidencia» y el cierre pide informes recientes. Su revisión completa, con lo que le falta y
+// lo que no se debe afirmar, vive en INVESTIGACION.md §11 (no se sube).
 // Alcance del sitio: catálogo, evidencia, cómo comprar y un blog.
 //
 // ⚠️ El sitio es PÚBLICO. Por eso el deck NO trae los informes de laboratorio (traen
@@ -162,9 +167,9 @@ slides.push(`
       <div style="${CARD} border-radius: 26px; padding: 38px 34px; display: flex; flex-direction: column; gap: 22px; border-top: 6px solid ${TEAL_T};">
         ${etiqueta('Lo que ya tienen', TEAL_T)}
         <div style="display: flex; flex-direction: column; gap: 17px;">
-          ${bullet('Producto propio, con su marca y su catálogo', TEAL_T, 24)}
+          ${bullet('Productos propios de superoxidación con pH neutro, en dos marcas: EsteriLife y Zoolubac', TEAL_T, 24)}
           ${bullet('Trámites y avisos ante COFEPRIS y SENASICA', TEAL_T, 24)}
-          ${bullet('Fichas técnicas y estudios de laboratorio', TEAL_T, 24)}
+          ${bullet('Portafolio técnico con fichas, estudios de laboratorio y hoja de seguridad', TEAL_T, 24)}
           ${bullet('Planta y almacén propios en Morelia', TEAL_T, 24)}
           ${bullet('Catálogos y flyers ya diseñados', TEAL_T, 24)}
         </div>
@@ -310,7 +315,7 @@ slides.push(`
           </div>
           <div style="text-align: center; display: flex; flex-direction: column; gap: 8px;">
             <span style="font-size: 36px; font-weight: 700; color: ${NAVY}; letter-spacing: -1px;">Soluciones para el control de infecciones</span>
-            <span style="font-size: 18px; font-weight: 400; color: ${MUTED};">Elige un producto o pide tu cotización.</span>
+            <span style="font-size: 18px; font-weight: 400; color: ${MUTED};">Superoxidación con pH neutro. Elige un producto o pide tu cotización.</span>
           </div>
           <div style="display: flex; gap: 16px;">
             ${tileProducto('est-galon.jpg', 'Solución desinfectante de alto nivel', TEAL_T)}
@@ -350,7 +355,7 @@ slides.push(`
     <div data-a="up3" style="margin-top: 32px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; flex: 1; grid-template-rows: auto auto auto;">
       ${celdaMapa('Inicio', 'Todos los productos a la vista, con cotizar y WhatsApp en cada página.', SLATE)}
       ${celdaMapa('Nosotros', 'Quién es MT Omicron Sigma, dónde está la planta y por qué hacen lo que hacen.', SLATE)}
-      ${celdaMapa('Evidencia y registros', 'Lo que respalda a cada producto, publicado solo con su visto bueno.', SLATE)}
+      ${celdaMapa('Evidencia y registros', 'El portafolio técnico, fichas y estudios para descargar, con su visto bueno.', SLATE)}
       ${celdaMapa('Dónde comprar', 'Cotizar, escribir por WhatsApp o encontrar un distribuidor.', SLATE)}
       ${celdaMapa('Productos', 'Una ficha por producto, con su presentación, su uso y su descarga. Se agrupan por línea, EsteriLife y Zoolubac, dentro del mismo catálogo.', TEAL, 4, ['Desinfectante de alto nivel', 'Antiséptico', 'Gel antiséptico', 'Antiséptico veterinario', 'Gel veterinario'])}
       ${celdaMapa('Blog', 'Artículos de la empresa y de sus productos, cada uno con su propia página.', GOLD)}
@@ -374,33 +379,52 @@ const servicio = (etq, quien, color, precio, unidad, lista) => `
         <div style="display: flex; flex-direction: column; gap: 11px;">${lista.map(x => bullet(x, color, 22)).join('')}</div>
       </div>`;
 
-const monto = (cifra, color) =>
-  `<span style="display: flex; align-items: baseline; gap: 10px; white-space: nowrap;"><span style="font-size: 82px; font-weight: 800; color: ${color}; letter-spacing: -3px; line-height: 1;">${cifra}</span><span style="font-size: 24px; font-weight: 700; color: ${color};">MXN</span></span>`;
+const monto = (cifra, color, tam = 82) =>
+  `<span style="display: flex; align-items: baseline; gap: 10px; white-space: nowrap;"><span style="font-size: ${tam}px; font-weight: 800; color: ${color}; letter-spacing: -3px; line-height: 1;">${cifra}</span><span style="font-size: 24px; font-weight: 700; color: ${color};">MXN</span></span>`;
+
+// Un servicio dentro de la tarjeta del paquete (sin tarjeta propia).
+const bloquePaquete = (etq, quien, color, cifra, lista) => `
+        <div style="flex: 1; display: flex; flex-direction: column; gap: 10px;">
+          ${etiqueta(etq, color)}
+          <span style="font-size: 22px; font-weight: 500; color: ${MUTED};">${quien}</span>
+          <div style="margin-top: 4px; display: flex; flex-direction: column; gap: 4px;">
+            ${monto(cifra, color, 66)}
+            <span style="font-size: 24px; font-weight: 600; color: ${NAVY};">al mes</span>
+          </div>
+          <div style="height: 1px; background: ${LINE}; margin: 10px 0 4px;"></div>
+          <div style="display: flex; flex-direction: column; gap: 11px;">${lista.map(x => bullet(x, color, 22)).join('')}</div>
+        </div>`;
 
 slides.push(`
-  <section data-label="Inversión" data-screen-label="Inversión" data-speaker-notes="Redes: $10,000 al mes (paquete de Andrea, confirmar). Relaciones corporativas: $5,000 al mes (Angeles Luna). Van en paquete: $15,000 al mes en total. Sitio web: $5,000 pago unico, aparte del paquete (decision de Axl, 4/nov/2026). Dos formas de pagar el sitio: proyecto cerrado, o repartido en la primera mensualidad de redes. Sin tienda en linea ni suscripciones: no se manejan pagos en el sitio." style="${seccion()}">
+  <section data-label="Inversión" data-screen-label="Inversión" data-speaker-notes="Redes: $10,000 al mes (paquete de Andrea, confirmar). Relaciones corporativas: $5,000 al mes (Angeles Luna). Van en paquete, en una sola tarjeta: $15,000 al mes en total. Sitio web: $5,000 pago unico, aparte del paquete (decision de Axl, 4/nov/2026). Dos formas de pagar el sitio: proyecto cerrado, o repartido en la primera mensualidad de redes. Sin tienda en linea ni suscripciones: no se manejan pagos en el sitio." style="${seccion()}">
     ${header('Inversión')}
     ${h2('Un paquete mensual y un sitio de pago único', 58)}
-    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; flex: 1;">
-      ${servicio('Redes sociales', 'Andrea Hasly Guillen Luna', ORANGE, monto(PRECIO_REDES, ORANGE), 'al mes', [
-        '14 publicaciones: 4 videos y 10 gráficos',
-        '4 coberturas de evento',
-        '4 diseños extraordinarios'])}
-      ${servicio('Relaciones corporativas', 'Ángeles Luna', SLATE, monto(PRECIO_RP, SLATE), 'al mes', [
-        '12 meses, con evaluación cada trimestre',
-        'Un encuentro B2B al mes',
-        'Una entrevista al mes en medios'])}
+    <div data-a="up3" style="margin-top: 34px; display: grid; grid-template-columns: 2fr 1fr; gap: 28px; flex: 1;">
+      <div style="${CARD} border-radius: 28px; padding: 30px 38px 28px; display: flex; flex-direction: column; gap: 22px; border-top: 6px solid ${NAVY};">
+        <div style="display: flex; align-items: center; justify-content: space-between; gap: 24px;">
+          <div style="display: flex; flex-direction: column; gap: 6px;">
+            ${etiqueta('Paquete mensual', NAVY)}
+            <span style="font-size: 30px; font-weight: 600; color: ${NAVY}; letter-spacing: -0.5px;">Redes sociales + relaciones corporativas, juntas</span>
+          </div>
+          <span style="display: flex; align-items: baseline; gap: 12px; white-space: nowrap;"><span style="font-size: 84px; font-weight: 800; color: ${NAVY}; letter-spacing: -3px; line-height: 1;">${PRECIO_PAQUETE}</span><span style="font-size: 24px; font-weight: 700; color: ${TEAL_T};">MXN al mes</span></span>
+        </div>
+        <div style="height: 2px; background: ${LINE};"></div>
+        <div style="display: flex; gap: 38px; flex: 1;">
+          ${bloquePaquete('Redes sociales', 'Andrea Hasly Guillen Luna', ORANGE, PRECIO_REDES, [
+            '14 publicaciones: 4 videos y 10 gráficos',
+            '4 coberturas de evento',
+            '4 diseños extraordinarios'])}
+          <div style="width: 1px; background: ${LINE};"></div>
+          ${bloquePaquete('Relaciones corporativas', 'Ángeles Luna', SLATE, PRECIO_RP, [
+            '12 meses, con evaluación cada trimestre',
+            'Un encuentro B2B al mes',
+            'Una entrevista al mes en medios'])}
+        </div>
+      </div>
       ${servicio('Sitio web', 'Axl Guillén', TEAL_T, monto(PRECIO_WEB, TEAL_T), 'pago único', [
         'Inicio con todos sus productos y una ficha por cada uno',
         'Evidencia, dónde comprar y un blog',
         'Dominio propio con HTTPS y versión de celular'])}
-    </div>
-    <div data-a="up3" style="margin-top: 20px; flex: none; border-radius: 28px; background: ${NAVY}; background-image: radial-gradient(90% 120% at 12% 0%, rgba(98,199,196,0.32) 0%, rgba(0,0,0,0) 60%); color: #FFFFFF; padding: 24px 44px; display: flex; align-items: center; justify-content: space-between; border-left: 10px solid ${ORANGE};">
-      <div style="display: flex; flex-direction: column; gap: 6px;">
-        <span style="font-size: 19px; font-weight: 700; letter-spacing: 2.5px; text-transform: uppercase; color: ${TEAL};">Paquete mensual</span>
-        <span style="font-size: 30px; font-weight: 600; letter-spacing: -0.5px;">Redes sociales + relaciones corporativas, juntas</span>
-      </div>
-      <span style="display: flex; align-items: baseline; gap: 12px; white-space: nowrap;"><span style="font-size: 88px; font-weight: 800; letter-spacing: -3px; line-height: 1;">${PRECIO_PAQUETE}</span><span style="font-size: 26px; font-weight: 700; color: ${TEAL};">MXN al mes</span></span>
     </div>
     <div style="height: 16px; flex: none;"></div>
     ${nota(`${fuerte('El sitio se puede pagar de dos formas:')} como proyecto cerrado con su fecha de entrega, o repartido en la primera mensualidad del paquete. El sitio no maneja pagos en línea ni suscripciones. Su mantenimiento y el blog, después de publicar, son un servicio mensual aparte, por definir.`, ORANGE)}
@@ -415,7 +439,7 @@ slides.push(`
     <h2 data-a="up2" style="position: relative; margin: 26px 0 0; font-size: 80px; font-weight: 700; letter-spacing: -2.6px; line-height: 1.05; max-width: 1180px;">Con cinco cosas de su lado,<br>arrancamos</h2>
     <div data-a="up3" style="position: relative; margin-top: 38px; display: flex; flex-direction: column; gap: 15px; max-width: 1060px;">
       ${bullet('Logos en vectorial y fotos de producto en buena resolución', TEAL, 24, '#FFFFFF')}
-      ${bullet('Fichas técnicas vigentes y qué registros se pueden publicar', TEAL, 24, '#FFFFFF')}
+      ${bullet('Informes de laboratorio recientes y qué registros se pueden publicar', TEAL, 24, '#FFFFFF')}
       ${bullet('Presentaciones vigentes de cada producto', TEAL, 24, '#FFFFFF')}
       ${bullet('Acceso al dominio y al correo actuales', TEAL, 24, '#FFFFFF')}
       ${bullet('Quién aprueba los textos de su lado', TEAL, 24, '#FFFFFF')}
