@@ -49,6 +49,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/seraphine/ Seraphine cumple 6 años (láminas para el montaje automático, animado) · 9:16 · 20 slides
 /creator/ksante/    K'Sante cumple 4 años (láminas para el montaje automático, animado) · 9:16 · 18 slides
 /creator/leblanc/   LeBlanc cumple 16 años (láminas para el montaje automático, solo arte oficial) · 9:16 · 21 slides
+/creator/ambessa/   Ambessa cumple 2 años (láminas para el montaje automático, solo arte oficial) · 9:16 · 23 slides
 /creator/parche2620/ Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /creator/parche2621/ Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
 /creator/guerras/    Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
