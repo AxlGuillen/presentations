@@ -1,0 +1,50 @@
+[
+  {
+    "id": "am-portada",
+    "archivo": "am-portada.webm",
+    "png": "am-portada.png",
+    "dur_anim": 2.5,
+    "dur": 3.5,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 0
+    },
+    "palabras": [],
+    "recorte": "1080:680:0:1240"
+  },
+  {
+    "id": "am-otp",
+    "archivo": "am-otp.webm",
+    "png": "am-otp.png",
+    "dur_anim": 2.5,
+    "dur": 3.5,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 0
+    },
+    "palabras": [
+      "demon king"
+    ],
+    "recorte": "1080:680:0:1240"
+  },
+  {
+    "id": "am-reposo",
+    "archivo": "am-reposo.webm",
+    "png": "am-reposo.png",
+    "dur_anim": 2.5,
+    "dur": 3.5,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 0
+    },
+    "palabras": [],
+    "recorte": "1080:680:0:1240",
+    "reposo": true
+  }
+]

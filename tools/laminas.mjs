@@ -1,12 +1,12 @@
 // Corta las láminas de un deck en miniclips para el montaje automático.
-// Uso: node tools/laminas.mjs <carpeta> [--crop=1080:1370:0:275] [--quieto=1] [--fps=30]
+// Uso: node tools/laminas.mjs <carpeta> [--crop=W:H:X:Y] [--quieto=1] [--fps=30]
 //                                       [--alfa | --alfa=webm] [--sin-render] [--solo=id,id]
 //
 // Cada <section data-lamina="id"> del index.html sale como:
 //   <carpeta>/video-out/laminas/<id>.mp4  la animación completa + `quieto` s del último cuadro
 //   <carpeta>/video-out/laminas/<id>.png  el último cuadro (el estado final de la lámina)
 //   <carpeta>/video-out/laminas/manifest.json
-//     [{ id, archivo, png, dur_anim, dur, alfa, caja, palabras }]
+//     [{ id, archivo, png, dur_anim, dur, alfa, caja, palabras, recorte, reposo? }]
 //
 // Con --alfa las láminas salen con TRANSPARENCIA para ir encima del gameplay:
 // <id>.mov en ProRes 4444 (o <id>.webm en VP9 con --alfa=webm) y el PNG final
@@ -20,26 +20,31 @@
 //             ({ width, x: 'center', bottom }), calculada del recorte
 //   palabras  las palabras del guion que disparan la lámina, de un
 //             data-palabras="k/da, kda" opcional en la <section>
+//   recorte   el recorte del panel (W:H:X:Y) con el que se cortó
+//   reposo    true en la lámina de reposo (data-reposo en la <section>): la
+//             banda decorada sin dato con la que ReelForge llena los huecos
 //
 // Con --solo=<id>,<id> solo se renderizan y recortan esas láminas, y el manifest.json se
-// MEZCLA: conserva las demás si son del mismo formato y sus archivos siguen ahí. Así la API
+// MEZCLA: conserva las demás si son del mismo formato y recorte y sus archivos siguen ahí. Así la API
 // local (api-montaje.mjs) rehace solo lo que cambió.
 //
-// Todo sale recortado al panel del montaje (por defecto 1080×1370 desde
-// y = 275, el encuadre de los flyers de suiza).
+// Todo sale recortado al panel del montaje: el que declare el deck en
+// <deck-stage data-recorte="1080:680:0:1240"> (la banda inferior) o, sin el
+// atributo, 1080×1370 desde y = 275 (el encuadre de los flyers de suiza).
+// --crop gana a los dos.
 //
 // Primero corre capturar.mjs (PNG finales) y cuadros.mjs (animaciones cuadro a
 // cuadro); con --sin-render reutiliza lo que ya haya en video-out/.
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { leerSecciones, medidasDeck, cajaDe, CROP_DEFECTO, QUIETO_DEFECTO } from './laminas-lib.mjs';
+import { leerSecciones, medidasDeck, cajaDe, recorteDe, validarRecorte, CROP_DEFECTO, QUIETO_DEFECTO } from './laminas-lib.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
 const deck = (args.find(a => !a.startsWith('--')) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const opcion = (n, def) => { const a = args.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=')[1] : def; };
-const CROP = opcion('crop', CROP_DEFECTO);
+const CROP_PEDIDO = opcion('crop', '');
 const QUIETO = parseFloat(opcion('quieto', String(QUIETO_DEFECTO)));
 const SOLO = opcion('solo', '').split(',').map(s => s.trim()).filter(Boolean);
 const FPS = parseInt(opcion('fps', '30'), 10);
@@ -59,6 +64,13 @@ if (SOLO.length) {
   const falta = SOLO.filter(id => !ids.includes(id));
   if (falta.length) { console.error(`El deck no tiene las láminas: ${falta.join(', ')}`); process.exit(1); }
 }
+
+// El recorte se valida antes de renderizar: uno que no cabe en el lienzo falla ya, no al final.
+let CROP;
+try {
+  const h0 = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
+  CROP = CROP_PEDIDO ? validarRecorte(CROP_PEDIDO, medidasDeck(h0)) : recorteDe(h0);
+} catch (e) { console.error(e.message); process.exit(1); }
 
 const correr = (cmd, a) => {
   const r = spawnSync(cmd, a, { stdio: 'inherit', cwd: raiz });
@@ -90,7 +102,7 @@ const LEER = EXT === 'webm' ? ['-c:v', 'libvpx-vp9'] : [];
 fs.mkdirSync(destino, { recursive: true });
 
 const manifest = [];
-for (const { n, id, palabras } of SOLO.length ? laminas.filter(s => SOLO.includes(s.id)) : laminas) {
+for (const { n, id, palabras, reposo } of SOLO.length ? laminas.filter(s => SOLO.includes(s.id)) : laminas) {
   const nn = String(n).padStart(2, '0');
   const clip = path.join(dirClips, `anim-${nn}.${EXT}`), png = path.join(out, 'slides', `slide-${nn}.png`);
   const durAnim = (anim.clips.find(c => c.slide === n) || {}).dur || 0;
@@ -110,7 +122,7 @@ for (const { n, id, palabras } of SOLO.length ? laminas.filter(s => SOLO.include
     correr('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', `crop=${CROP}`, '-frames:v', '1', pngFinal]);
   }
   manifest.push({ id, archivo: `${id}.${EXT}`, png: `${id}.png`, dur_anim: +durAnim.toFixed(3), dur: +(durAnim + QUIETO).toFixed(3),
-    alfa: !!ALFA, caja: CAJA, palabras });
+    alfa: !!ALFA, caja: CAJA, palabras, recorte: CROP, ...(reposo ? { reposo: true } : {}) });
   console.log(`  ✓ ${id}  ${durAnim.toFixed(2)} s + ${QUIETO} s`);
 }
 // Con --solo se mezcla con lo que ya hubiera: las demás láminas del mismo formato, con sus archivos todavía ahí.
@@ -120,7 +132,8 @@ if (SOLO.length) {
   const orden = laminas.map(s => s.id);
   const nuevas = new Set(manifest.map(l => l.id));
   const conservadas = (Array.isArray(previo) ? previo : []).filter(l => !nuevas.has(l.id) && orden.includes(l.id)
-    && l.archivo === `${l.id}.${EXT}` && !!l.alfa === !!ALFA && fs.existsSync(path.join(destino, l.archivo)));
+    && l.archivo === `${l.id}.${EXT}` && !!l.alfa === !!ALFA && (l.recorte || CROP_DEFECTO) === CROP
+    && fs.existsSync(path.join(destino, l.archivo)));
   salida = [...conservadas, ...manifest].sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id));
 }
 fs.writeFileSync(path.join(destino, 'manifest.json'), JSON.stringify(salida, null, 2) + '\n', 'utf8');

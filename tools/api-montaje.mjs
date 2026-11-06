@@ -3,7 +3,8 @@
 // api/ en la raíz del repo (Vercel la desplegaría como funciones).
 //
 //   GET  /api/decks[?desk=creator]          [{desk, deck, titulo, laminas, url}] — solo los decks con data-lamina
-//   GET  /api/decks/<desk>/<deck>/laminas   lo mismo que manifest.json (+ ancho y alto), SIN renderizar
+//   GET  /api/decks/<desk>/<deck>/laminas   lo mismo que manifest.json (+ ancho y alto), SIN renderizar; el
+//                                           recorte y la caja salen del data-recorte del <deck-stage>
 //                                           (?alfa=mov|webm elige la extensión de `archivo`; mov por omisión)
 //   POST /api/render {desk, deck, laminas?, alfa:'mov'|'webm', fps}   → 202 {job_id}
 //   GET  /api/render/<job>                  progreso por lámina y, al terminar, las rutas absolutas
@@ -17,7 +18,7 @@ import http from 'node:http';
 import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import {
-  ID_VALIDO, CROP_DEFECTO, QUIETO_DEFECTO, leerSecciones, medidasDeck, cajaDe, tituloDe, buscarChrome,
+  ID_VALIDO, CROP_DEFECTO, QUIETO_DEFECTO, leerSecciones, medidasDeck, cajaDe, recorteDe, tituloDe, buscarChrome,
   clavesDeLaminas, referencias, huellaArchivo, huellaDeCodigo,
 } from './laminas-lib.mjs';
 
@@ -144,7 +145,9 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
     const html = fs.readFileSync(index, 'utf8');
     const secciones = leerSecciones(html).filter(s => s.id);
     if (!secciones.length) throw new ErrorHttp(404, `El deck ${desk}/${deck} no tiene láminas (<section data-lamina="…">).`);
-    return { desk, deck, rel, dir, html, secciones, ...medidasDeck(html) };
+    let recorte;
+    try { recorte = recorteDe(html); } catch (e) { throw new ErrorHttp(422, `${desk}/${deck}: ${e.message}`); }
+    return { desk, deck, rel, dir, html, secciones, recorte, ...medidasDeck(html) };
   }
 
   const memoDecks = new Map();   // index.html → { mtimeMs, size, info }
@@ -207,12 +210,13 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
     if (!FORMATOS.includes(formato)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
     const info = resolverDeck(desk, deck);
     const dur = await duraciones(info);
-    const caja = cajaDe(CROP_DEFECTO, info.alto);
+    const caja = cajaDe(info.recorte, info.alto);
     return info.secciones.map(s => {
       const d = Number.isFinite(dur[s.id]) ? Math.max(dur[s.id], 0) : 0;
       return { id: s.id, archivo: `${s.id}.${formato}`, png: `${s.id}.png`,
         dur_anim: +d.toFixed(3), dur: +(d + QUIETO_DEFECTO).toFixed(3),
-        alfa: true, caja: { ...caja }, palabras: s.palabras, ancho: info.ancho, alto: info.alto };
+        alfa: true, caja: { ...caja }, palabras: s.palabras, recorte: info.recorte, ...(s.reposo ? { reposo: true } : {}),
+        ancho: info.ancho, alto: info.alto };
     });
   }
 
@@ -257,7 +261,7 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       j.estado = 'renderizando';
       const info = resolverDeck(j.desk, j.deck);
       const claves = clavesDeLaminas({ raiz, dir: info.dir, html: info.html,
-        extra: { formato: j.formato, fps: j.fps, crop: CROP_DEFECTO, quieto: QUIETO_DEFECTO, renderizador: renderizador() } });
+        extra: { formato: j.formato, fps: j.fps, crop: info.recorte, quieto: QUIETO_DEFECTO, renderizador: renderizador() } });
       const indice = leerIndice(info.dir);
       const guardadas = indice.claves[j.formato] || (indice.claves[j.formato] = {});
       // El manifest.json es uno solo para todos los formatos: una lámina solo vale si su entrada es del formato pedido
@@ -265,7 +269,7 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       let enManifest = new Set();
       try {
         enManifest = new Set(JSON.parse(fs.readFileSync(path.join(carpetaSalida(info.dir), 'manifest.json'), 'utf8'))
-          .filter(l => l.alfa === true && l.archivo === `${l.id}.${j.formato}`).map(l => l.id));
+          .filter(l => l.alfa === true && l.archivo === `${l.id}.${j.formato}` && (l.recorte || CROP_DEFECTO) === info.recorte).map(l => l.id));
       } catch { /* sin manifest */ }
       const vale = (id) => guardadas[id] === claves.get(id) && enManifest.has(id)
         && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.${j.formato}`)) && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.png`));

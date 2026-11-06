@@ -14,6 +14,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import AjvModulo from 'ajv/dist/2020.js';
 import { crearApi, medirConChrome, ORIGENES_REELFORGE } from '../api-montaje.mjs';
+import { recorteDe, cajaDe, medidasDeck } from '../laminas-lib.mjs';
 import { CHROME, raiz } from './ayudas.mjs';
 
 const Ajv2020 = AjvModulo.default || AjvModulo;
@@ -23,12 +24,12 @@ const hayFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0;
 
 // ── Un entorno de mentira: carpeta temporal + API + servidor HTTP + renderizador falso ──
 
-const deckHtml = ({ t1 = 'Uno', t2 = 'Dos', t3 = 'Tres', css = '' } = {}) => `<!doctype html><html><head><meta charset="utf-8"><title>Demo &amp; Co</title>
+const deckHtml = ({ t1 = 'Uno', t2 = 'Dos', t3 = 'Tres', css = '', recorte = null, reposo = false } = {}) => `<!doctype html><html><head><meta charset="utf-8"><title>Demo &amp; Co</title>
 <style>body{margin:0}${css}</style></head><body>
-<deck-stage width="1080" height="1920">
+<deck-stage width="1080" height="1920"${recorte === null ? '' : ` data-recorte="${recorte}"`}>
 <section data-lamina="d-uno" data-palabras="uno, 1"><img src="assets/a.png"><h1>${t1}</h1></section>
 <section data-lamina="d-dos"><div style="background:url('assets/b.png')">${t2}</div></section>
-<section data-lamina="d-tres" data-palabras="tres"><p>${t3}</p></section>
+<section data-lamina="d-tres" data-palabras="tres"${reposo ? ' data-reposo' : ''}><p>${t3}</p></section>
 <section><p>esta no es una lámina (sin data-lamina)</p></section>
 </deck-stage><script src="deck-stage.js"></script></body></html>`;
 
@@ -59,10 +60,11 @@ async function entorno(t) {
     fs.mkdirSync(salida, { recursive: true });
     let manifest = [];
     try { manifest = JSON.parse(fs.readFileSync(path.join(salida, 'manifest.json'), 'utf8')); } catch { /* nuevo */ }
+    const html = fs.readFileSync(path.join(dir, rel, 'index.html'), 'utf8'), recorte = recorteDe(html), caja = cajaDe(recorte, medidasDeck(html).alto);
     for (const id of ids) {
       fs.writeFileSync(path.join(salida, `${id}.${formato}`), `clip ${id} ${fps} ${Math.random()}`);
       fs.writeFileSync(path.join(salida, `${id}.png`), 'png');
-      manifest = manifest.filter(l => l.id !== id).concat([{ id, archivo: `${id}.${formato}`, png: `${id}.png`, dur_anim: 1, dur: 2, alfa: true, caja: { width: 1080, x: 'center', bottom: 275 }, palabras: [] }]);
+      manifest = manifest.filter(l => l.id !== id).concat([{ id, archivo: `${id}.${formato}`, png: `${id}.png`, dur_anim: 1, dur: 2, alfa: true, caja, palabras: [], recorte }]);
       alLista(id);
     }
     fs.writeFileSync(path.join(salida, 'manifest.json'), JSON.stringify(manifest));
@@ -126,7 +128,8 @@ test('GET laminas: lo mismo que manifest.json (+ ancho y alto) sin renderizar, y
   assert.ok(validarManifest(json), JSON.stringify(validarManifest.errors));
   assert.deepEqual(json.map(l => l.id), ['d-uno', 'd-dos', 'd-tres']);
   assert.deepEqual(json[0], { id: 'd-uno', archivo: 'd-uno.mov', png: 'd-uno.png', dur_anim: 2.5, dur: 3.5, alfa: true,
-    caja: { width: 1080, x: 'center', bottom: 275 }, palabras: ['uno', '1'], ancho: 1080, alto: 1920 });
+    caja: { width: 1080, x: 'center', bottom: 275 }, palabras: ['uno', '1'], recorte: '1080:1370:0:275', ancho: 1080, alto: 1920 });
+  assert.ok(json.every(l => !('reposo' in l)), 'sin data-reposo no hay campo reposo');
   assert.equal(json[1].dur_anim, 0, 'una lámina sin timeline mide 0');
   assert.equal(json[1].dur, 1);
   assert.deepEqual(json[2].palabras, ['tres']);
@@ -147,6 +150,43 @@ test('GET laminas: lo mismo que manifest.json (+ ancho y alto) sin renderizar, y
 
   assert.equal((await e.pedir('/api/decks/creator/demo/laminas?alfa=webm')).json[0].archivo, 'd-uno.webm');
   assert.equal((await e.pedir('/api/decks/creator/demo/laminas?alfa=gif')).status, 400);
+});
+
+test('GET laminas: el recorte y la caja salen del data-recorte del deck; data-reposo da reposo: true', async (t) => {
+  const e = await entorno(t);
+  e.deck({ recorte: '1080:680:0:1240', reposo: true });
+  const { status, json } = await e.pedir('/api/decks/creator/demo/laminas?alfa=webm');
+  assert.equal(status, 200);
+  assert.ok(validarManifest(json), JSON.stringify(validarManifest.errors));
+  for (const l of json) {
+    assert.equal(l.recorte, '1080:680:0:1240');
+    assert.deepEqual(l.caja, { width: 1080, x: 'center', bottom: 0 }, 'la banda inferior llega al borde de abajo');
+  }
+  assert.deepEqual(json.map(l => !!l.reposo), [false, false, true]);
+  assert.equal(json[2].reposo, true);
+
+  e.deck({ recorte: '1080:680:0:1300' });                 // 1300 + 680 > 1920
+  const malo = await e.pedir('/api/decks/creator/demo/laminas');
+  assert.equal(malo.status, 422);
+  assert.match(malo.json.error, /se sale del lienzo/);
+  e.deck({ recorte: '1080x680' });
+  assert.match((await e.pedir('/api/decks/creator/demo/laminas')).json.error, /Recorte inválido/);
+});
+
+test('render: el recorte del deck es parte de la clave de caché', async (t) => {
+  const e = await entorno(t);
+  assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' });
+  assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'cacheada', 'd-dos': 'cacheada', 'd-tres': 'cacheada' });
+  // Declarar la banda inferior lo rehace todo, aunque el resto del deck no cambie.
+  e.deck({ recorte: '1080:680:0:1240' });
+  assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' });
+  const manifest = JSON.parse(fs.readFileSync(path.join(e.dir, 'creator/demo/video-out/laminas/manifest.json'), 'utf8'));
+  assert.ok(manifest.every(l => l.recorte === '1080:680:0:1240' && l.caja.bottom === 0));
+  assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'cacheada', 'd-dos': 'cacheada', 'd-tres': 'cacheada' });
+  // Una entrada del manifest con otro recorte no vale aunque la clave guardada coincida (el manifest se reescribió a mano o con --crop).
+  fs.writeFileSync(path.join(e.dir, 'creator/demo/video-out/laminas/manifest.json'),
+    JSON.stringify(manifest.map(l => l.id === 'd-dos' ? { ...l, recorte: '1080:1370:0:275' } : l)));
+  assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'cacheada', 'd-dos': 'lista', 'd-tres': 'cacheada' });
 });
 
 test('GET laminas: dos pedidos a la vez comparten una sola medición', async (t) => {
@@ -491,6 +531,7 @@ ${kit.animador()}
   const manifest1 = JSON.parse(fs.readFileSync(j1.manifest, 'utf8'));
   assert.ok(validarManifest(manifest1), JSON.stringify(validarManifest.errors));
   assert.deepEqual(manifest1.map(l => [l.id, l.archivo, l.alfa, l.dur_anim]), [['r-uno', 'r-uno.mov', true, 0.6], ['r-dos', 'r-dos.mov', true, 0.6]]);
+  assert.ok(manifest1.every(l => l.recorte === '1080:1370:0:275' && l.caja.bottom === 275), 'sin data-recorte, el recorte de siempre');
   for (const f of ['r-uno.mov', 'r-uno.png', 'r-dos.mov', 'r-dos.png']) assert.ok(fs.statSync(path.join(salidaLam, f)).size > 0, f);
   const antes = { uno: mtime('r-uno.mov'), dos: mtime('r-dos.mov') };
 

@@ -26,6 +26,12 @@ function coherente(manifest) {
     assert.equal(path.parse(l.archivo).name, l.id, `${l.id}: archivo debe ser <id>.<ext>`);
     assert.equal(l.png, `${l.id}.png`, `${l.id}: png debe ser <id>.png`);
     assert.ok(l.dur >= l.dur_anim, `${l.id}: dur (${l.dur}) menor que dur_anim (${l.dur_anim})`);
+    // La caja sale del recorte: mismo ancho y, desde abajo, lo que sobra del lienzo (1920 si no viene el alto).
+    if (l.recorte) {
+      const [w, h, , y] = l.recorte.split(':').map(Number);
+      assert.equal(l.caja.width, w, `${l.id}: caja.width (${l.caja.width}) no es el ancho del recorte ${l.recorte}`);
+      assert.equal(l.caja.bottom, (l.alto || 1920) - (y + h), `${l.id}: caja.bottom no cuadra con el recorte ${l.recorte}`);
+    }
   }
 }
 
@@ -43,8 +49,8 @@ function reales() {
   return out;
 }
 
-test('esquema: los fixtures versionados son válidos (mp4, mov, webm y la respuesta de la API)', () => {
-  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json']) {
+test('esquema: los fixtures versionados son válidos (mp4, mov, webm, la respuesta de la API y la banda inferior)', () => {
+  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json', 'manifest-banda.json']) {
     const m = fixture(n);
     assert.ok(validar(m), `${n}: ${errores()}`);
     coherente(m);
@@ -81,6 +87,9 @@ test('esquema: rechaza lo que no debe', () => {
   malo('caja con campo extra', (l) => { l.caja.top = 3; });
   malo('palabras que no es lista', (l) => { l.palabras = 'kda'; });
   malo('palabra vacía', (l) => { l.palabras = ['']; });
+  malo('recorte mal formado', (l) => { l.recorte = '1080x680'; });
+  malo('recorte con negativos', (l) => { l.recorte = '1080:680:0:-1'; });
+  malo('reposo que no es booleano', (l) => { l.reposo = 'si'; });
   assert.ok(!validar({}), 'el manifest es una lista, no un objeto');
 });
 
@@ -89,4 +98,7 @@ test('coherente(): detecta ids repetidos y archivos que no son <id>', () => {
   assert.throws(() => coherente([base[0], base[0]]), /repetido/);
   assert.throws(() => coherente([{ ...base[0], archivo: 'otro.mp4' }]), /archivo debe ser/);
   assert.throws(() => coherente([{ ...base[0], dur: 1, dur_anim: 2 }]), /menor que dur_anim/);
+  const banda = fixture('manifest-banda.json');
+  assert.throws(() => coherente([{ ...banda[0], caja: { width: 1080, x: 'center', bottom: 275 } }]), /no cuadra con el recorte/);
+  assert.throws(() => coherente([{ ...banda[0], caja: { width: 706, x: 'center', bottom: 0 } }]), /no es el ancho del recorte/);
 });

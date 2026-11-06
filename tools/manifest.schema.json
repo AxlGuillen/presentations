@@ -46,6 +46,15 @@
           "type": "array",
           "items": { "type": "string", "minLength": 1 }
         },
+        "recorte": {
+          "description": "El recorte del panel con el que se cortó la lámina, W:H:X:Y en px del lienzo del deck (el crop de FFmpeg): el data-recorte del <deck-stage> o, sin él, 1080:1370:0:275. Ausente en los manifest.json anteriores al 6/11/2026, que son todos 1080:1370:0:275. La caja sale de aquí.",
+          "type": "string",
+          "pattern": "^[0-9]+:[0-9]+:[0-9]+:[0-9]+$"
+        },
+        "reposo": {
+          "description": "true en la lámina de reposo (data-reposo en la <section>): la banda decorada sin dato con la que ReelForge llena los huecos entre láminas. Las demás no llevan el campo.",
+          "type": "boolean"
+        },
         "ancho": {
           "description": "Solo en la API: el ancho de diseño del deck en px (el del <deck-stage>), que es el del iframe del modo capa.",
           "type": "integer",

@@ -11,12 +11,14 @@ export const QUIETO_DEFECTO = 1;
 /** Lo que vale como id de lámina, de deck y de escritorio (también es parte de una ruta). */
 export const ID_VALIDO = /^[A-Za-z0-9][A-Za-z0-9_-]*$/;
 
-/** Las <section> de un index.html, en orden: `n` es su posición (1-based) y el NN de los archivos de salida. */
+/** Las <section> de un index.html, en orden: `n` es su posición (1-based) y el NN de los archivos de salida.
+ *  `reposo` es la banda decorada sin dato (data-reposo) con la que ReelForge llena los huecos entre láminas. */
 export function leerSecciones(html) {
   return [...html.matchAll(/<section\b([^>]*)>/g)].map((m, i) => ({
     n: i + 1,
     id: (m[1].match(/data-lamina="([^"]+)"/) || [])[1],
     palabras: ((m[1].match(/data-palabras="([^"]+)"/) || [])[1] || '').split(',').map(p => p.trim()).filter(Boolean),
+    reposo: /\sdata-reposo(?=[\s=>]|$)/.test(m[1]),
   }));
 }
 
@@ -24,6 +26,28 @@ export function leerSecciones(html) {
 export function medidasDeck(html) {
   const ds = (html.match(/<deck-stage\b[^>]*>/) || [''])[0];
   return { ancho: +((ds.match(/\bwidth="(\d+)"/) || [])[1] || 1080), alto: +((ds.match(/\bheight="(\d+)"/) || [])[1] || 1920) };
+}
+
+/** Lo que vale como recorte: W:H:X:Y en píxeles enteros, como el `crop` de FFmpeg. */
+export const RECORTE_VALIDO = /^\d+:\d+:\d+:\d+$/;
+
+/** Falla si el recorte no es W:H:X:Y o no cabe en el lienzo del deck. */
+export function validarRecorte(recorte, { ancho, alto }) {
+  if (!RECORTE_VALIDO.test(recorte)) throw new Error(`Recorte inválido: «${recorte}» (debe ser W:H:X:Y, como 1080:680:0:1240).`);
+  const [w, h, x, y] = recorte.split(':').map(Number);
+  if (!w || !h) throw new Error(`Recorte inválido: «${recorte}» (ancho y alto deben ser mayores que 0).`);
+  if (x + w > ancho || y + h > alto) throw new Error(`El recorte ${recorte} se sale del lienzo de ${ancho}×${alto}.`);
+  return recorte;
+}
+
+/**
+ * El recorte del panel que declara el deck (<deck-stage data-recorte="1080:680:0:1240">), validado contra su
+ * lienzo; sin el atributo, CROP_DEFECTO.
+ */
+export function recorteDe(html) {
+  const ds = (html.match(/<deck-stage\b[^>]*>/) || [''])[0];
+  const r = (ds.match(/\bdata-recorte="([^"]*)"/) || [])[1];
+  return r === undefined ? CROP_DEFECTO : validarRecorte(r.trim(), medidasDeck(html));
 }
 
 /** La caja del panel en las claves del montaje de ReelForge: el recorte va centrado a lo ancho y se mide desde abajo del lienzo. */
