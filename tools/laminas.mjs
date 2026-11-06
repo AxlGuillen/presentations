@@ -1,6 +1,6 @@
 // Corta las láminas de un deck en miniclips para el montaje automático.
 // Uso: node tools/laminas.mjs <carpeta> [--crop=1080:1370:0:275] [--quieto=1] [--fps=30]
-//                                       [--alfa | --alfa=webm] [--sin-render]
+//                                       [--alfa | --alfa=webm] [--sin-render] [--solo=id,id]
 //
 // Cada <section data-lamina="id"> del index.html sale como:
 //   <carpeta>/video-out/laminas/<id>.mp4  la animación completa + `quieto` s del último cuadro
@@ -21,6 +21,10 @@
 //   palabras  las palabras del guion que disparan la lámina, de un
 //             data-palabras="k/da, kda" opcional en la <section>
 //
+// Con --solo=<id>,<id> solo se renderizan y recortan esas láminas, y el manifest.json se
+// MEZCLA: conserva las demás si son del mismo formato y sus archivos siguen ahí. Así la API
+// local (api-montaje.mjs) rehace solo lo que cambió.
+//
 // Todo sale recortado al panel del montaje (por defecto 1080×1370 desde
 // y = 275, el encuadre de los flyers de suiza).
 //
@@ -29,13 +33,15 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
+import { leerSecciones, medidasDeck, cajaDe, CROP_DEFECTO, QUIETO_DEFECTO } from './laminas-lib.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
 const deck = (args.find(a => !a.startsWith('--')) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
 const opcion = (n, def) => { const a = args.find(x => x.startsWith(`--${n}=`)); return a ? a.split('=')[1] : def; };
-const CROP = opcion('crop', '1080:1370:0:275');
-const QUIETO = parseFloat(opcion('quieto', '1'));
+const CROP = opcion('crop', CROP_DEFECTO);
+const QUIETO = parseFloat(opcion('quieto', String(QUIETO_DEFECTO)));
+const SOLO = opcion('solo', '').split(',').map(s => s.trim()).filter(Boolean);
 const FPS = parseInt(opcion('fps', '30'), 10);
 const pideAlfa = args.find(a => a === '--alfa' || a.startsWith('--alfa='));
 const ALFA = pideAlfa ? (pideAlfa === '--alfa=webm' ? 'webm' : 'mov') : null;
@@ -45,8 +51,13 @@ const CODEC = ALFA === 'mov' ? ['-c:v', 'prores_ks', '-profile:v', '4444', '-pix
   : ['-c:v', 'libx264', '-crf', '16', '-preset', 'slow', '-pix_fmt', 'yuv420p', '-movflags', '+faststart'];
 const dir = path.join(raiz, deck);
 if (!deck || !fs.existsSync(path.join(dir, 'index.html'))) {
-  console.error('Uso: node tools/laminas.mjs <carpeta> [--crop=W:H:X:Y] [--quieto=s] [--fps=30] [--alfa | --alfa=webm] [--sin-render]');
+  console.error('Uso: node tools/laminas.mjs <carpeta> [--crop=W:H:X:Y] [--quieto=s] [--fps=30] [--alfa | --alfa=webm] [--sin-render] [--solo=id,id]');
   process.exit(1);
+}
+if (SOLO.length) {
+  const ids = leerSecciones(fs.readFileSync(path.join(dir, 'index.html'), 'utf8')).map(s => s.id);
+  const falta = SOLO.filter(id => !ids.includes(id));
+  if (falta.length) { console.error(`El deck no tiene las láminas: ${falta.join(', ')}`); process.exit(1); }
 }
 
 const correr = (cmd, a) => {
@@ -56,21 +67,15 @@ const correr = (cmd, a) => {
 if (!args.includes('--sin-render')) {
   // En modo alfa el PNG final sale del propio clip (capturar.mjs da PNG opacos).
   if (!ALFA) correr(process.execPath, [path.join('tools', 'capturar.mjs'), deck]);
-  correr(process.execPath, [path.join('tools', 'cuadros.mjs'), deck, String(FPS), ...(ALFA ? [pideAlfa] : [])]);
+  correr(process.execPath, [path.join('tools', 'cuadros.mjs'), deck, String(FPS), ...(ALFA ? [pideAlfa] : []), ...(SOLO.length ? [`--solo=${SOLO.join(',')}`] : [])]);
 }
 
 // Las láminas, en el orden del deck: el índice de la <section> es el NN de los archivos.
 const html = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
-const secciones = [...html.matchAll(/<section\b([^>]*)>/g)].map((m, i) => ({
-  n: i + 1,
-  id: (m[1].match(/data-lamina="([^"]+)"/) || [])[1],
-  palabras: ((m[1].match(/data-palabras="([^"]+)"/) || [])[1] || '').split(',').map(p => p.trim()).filter(Boolean),
-}));
+const secciones = leerSecciones(html);
 // La caja del panel en las claves del montaje de ReelForge: el recorte va
 // centrado a lo ancho y se mide desde abajo del lienzo del deck.
-const [cw, ch, , cy] = CROP.split(':').map(Number);
-const altoDeck = +((html.match(/<deck-stage[^>]*\bheight="(\d+)"/) || [])[1] || 1920);
-const CAJA = { width: cw, x: 'center', bottom: altoDeck - (cy + ch) };
+const CAJA = cajaDe(CROP, medidasDeck(html).alto);
 const laminas = secciones.filter(s => s.id);
 if (!laminas.length) { console.error('El deck no tiene ninguna <section data-lamina="…">.'); process.exit(1); }
 
@@ -82,7 +87,7 @@ const destino = path.join(out, 'laminas');
 fs.mkdirSync(destino, { recursive: true });
 
 const manifest = [];
-for (const { n, id, palabras } of laminas) {
+for (const { n, id, palabras } of SOLO.length ? laminas.filter(s => SOLO.includes(s.id)) : laminas) {
   const nn = String(n).padStart(2, '0');
   const clip = path.join(dirClips, `anim-${nn}.${EXT}`), png = path.join(out, 'slides', `slide-${nn}.png`);
   const durAnim = (anim.clips.find(c => c.slide === n) || {}).dur || 0;
@@ -105,5 +110,15 @@ for (const { n, id, palabras } of laminas) {
     alfa: !!ALFA, caja: CAJA, palabras });
   console.log(`  ✓ ${id}  ${durAnim.toFixed(2)} s + ${QUIETO} s`);
 }
-fs.writeFileSync(path.join(destino, 'manifest.json'), JSON.stringify(manifest, null, 2) + '\n', 'utf8');
+// Con --solo se mezcla con lo que ya hubiera: las demás láminas del mismo formato, con sus archivos todavía ahí.
+let salida = manifest;
+if (SOLO.length) {
+  const previo = (() => { try { return JSON.parse(fs.readFileSync(path.join(destino, 'manifest.json'), 'utf8')); } catch { return []; } })();
+  const orden = laminas.map(s => s.id);
+  const nuevas = new Set(manifest.map(l => l.id));
+  const conservadas = (Array.isArray(previo) ? previo : []).filter(l => !nuevas.has(l.id) && orden.includes(l.id)
+    && l.archivo === `${l.id}.${EXT}` && !!l.alfa === !!ALFA && fs.existsSync(path.join(destino, l.archivo)));
+  salida = [...conservadas, ...manifest].sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id));
+}
+fs.writeFileSync(path.join(destino, 'manifest.json'), JSON.stringify(salida, null, 2) + '\n', 'utf8');
 console.log(`\nListo: ${manifest.length} láminas en ${path.relative(raiz, destino)} (recorte ${CROP}${ALFA ? `, con alfa en .${EXT}` : ''})`);
