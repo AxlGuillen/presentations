@@ -84,6 +84,9 @@ const dirClips = path.join(out, ALFA ? 'anim-alfa' : 'anim');
 const anim = JSON.parse(fs.readFileSync(path.join(dirClips, 'anim.json'), 'utf8'));
 if (!!anim.alfa !== !!ALFA) { console.error(`Los clips de ${path.relative(raiz, dirClips)} no son ${ALFA ? 'con alfa' : 'opacos'}: córrelo sin --sin-render.`); process.exit(1); }
 const destino = path.join(out, 'laminas');
+// El decodificador VP9 propio de FFmpeg descarta el alfa de un .webm (sale yuv420p: lo
+// transparente queda negro y opaco); libvpx lo lee (yuva420p). ProRes no tiene ese problema.
+const LEER = EXT === 'webm' ? ['-c:v', 'libvpx-vp9'] : [];
 fs.mkdirSync(destino, { recursive: true });
 
 const manifest = [];
@@ -93,7 +96,7 @@ for (const { n, id, palabras } of SOLO.length ? laminas.filter(s => SOLO.include
   const durAnim = (anim.clips.find(c => c.slide === n) || {}).dur || 0;
   const salida = path.join(destino, `${id}.${EXT}`), pngFinal = path.join(destino, `${id}.png`);
   if (fs.existsSync(clip)) {
-    correr('ffmpeg', ['-y', '-loglevel', 'error', '-i', clip, '-vf', `crop=${CROP},tpad=stop_mode=clone:stop_duration=${QUIETO}`,
+    correr('ffmpeg', ['-y', '-loglevel', 'error', ...LEER, '-i', clip, '-vf', `crop=${CROP},tpad=stop_mode=clone:stop_duration=${QUIETO}`,
       ...CODEC, '-an', salida]);
   } else if (!ALFA) {
     // Lámina sin timeline: el PNG quieto la misma duración que el respiro.
@@ -102,7 +105,7 @@ for (const { n, id, palabras } of SOLO.length ? laminas.filter(s => SOLO.include
   } else { console.error(`Falta ${path.relative(raiz, clip)}: córrelo sin --sin-render.`); process.exit(1); }
   if (ALFA) {
     // El último cuadro del clip, con su transparencia (-update 1 deja el último).
-    correr('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.2', '-i', clip, '-vf', `crop=${CROP}`, '-update', '1', '-pix_fmt', 'rgba', pngFinal]);
+    correr('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.2', ...LEER, '-i', clip, '-vf', `crop=${CROP}`, '-update', '1', '-pix_fmt', 'rgba', pngFinal]);
   } else {
     correr('ffmpeg', ['-y', '-loglevel', 'error', '-i', png, '-vf', `crop=${CROP}`, '-frames:v', '1', pngFinal]);
   }

@@ -511,4 +511,16 @@ ${kit.animador()}
   assert.deepEqual(manifest3.map(l => l.id), ['r-uno', 'r-dos'], 'el manifest.json se mezcla, no se pisa');
   const anim = JSON.parse(fs.readFileSync(path.join(dir, 'video-out', 'anim-alfa', 'anim.json'), 'utf8'));
   assert.deepEqual(anim.clips.map(c => c.slide), [1, 2], 'anim.json conserva la lámina que no se rehízo');
+
+  // En webm el recorte del panel conserva la transparencia: el decodificador VP9 propio de
+  // ffmpeg la descartaba y lo transparente salía negro y opaco (visto en Ambessa, 6/nov).
+  const j4 = await correr({ alfa: 'webm' });
+  assert.equal(j4.estado, 'listo', j4.error);
+  const alfaEn = (args) => {
+    const r = spawnSync('ffmpeg', ['-v', 'error', ...args, '-vf', 'format=rgba,crop=1:1:20:20', '-frames:v', '1', '-f', 'rawvideo', '-']);
+    assert.equal(r.stdout.length, 4, `ffmpeg no devolvió el píxel: ${r.stderr}`);
+    return r.stdout[3];
+  };
+  assert.equal(alfaEn(['-c:v', 'libvpx-vp9', '-i', path.join(salidaLam, 'r-uno.webm')]), 0, 'el clip webm recortado conserva el alfa');
+  assert.equal(alfaEn(['-i', path.join(salidaLam, 'r-uno.png')]), 0, 'el PNG final también');
 });
