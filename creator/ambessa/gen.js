@@ -26,21 +26,25 @@
 // huecos y fuera de orden. Nada toca la <section> (ni `cortina` ni `iris` de lámina):
 // las transiciones van dentro del panel, debajo del riel.
 //
-// 🎯 **Variedad** (pedido de Axl, 6/11: «no siempre horizontal, mismo diseño»). Cada
-// lámina tiene su composición y su transición, todas del catálogo de kit.efectos:
-//   · composiciones: a sangre, diagonal partida, abanico de cartas, pantalla dividida
-//     en diagonal, bento, carta que voltea, círculo, tríptico, nombre en vertical,
-//     fila de seis, rejilla de chromas…
-//   · transiciones: cámara entre focos, rebanadas, cortinillas (persiana, tajo,
-//     iris, diagonal), tinta, ventana, quemado, duotono, pixelado, glitch, voltea,
-//     mazo, bento, sello, impacto, rayo, revuelto, tragamonedas, contador, letras,
-//     palabra, confeti, brasas.
-//   · la estela cruza siempre de izquierda a derecha, pero cada lámina con su ruta
-//     (recta, diagonal, arco u ola) y a su altura.
+// 🎯 **Variedad** (pedidos de Axl del 6/11: «no siempre horizontal, mismo diseño» y,
+// después, «no la misma línea siempre: la transición completa de una lámina a otra»).
+//   · **Cada lámina entra con su transición, y las 24 son distintas**: mueven el
+//     [data-contenido] entero (el riel queda encima, quieto). Iris desde la vela,
+//     persianas verticales y horizontales, barrido diagonal, empuje, puertas, mosaico,
+//     reloj, acercamiento desenfocado, tinta, tajo, quemado, volteo 3D, cortina desde
+//     abajo y desde arriba, pixelado, glitch, alejamiento, caja, sube, giro, ventana,
+//     iris desde la esquina y fundido (tabla TRANSICION de las coreografías).
+//   · En el cuadro 0 de cada lámina se ve solo la banda vacía con el riel —igual en
+//     todas— y la transición destapa la lámina: el fundido de 0,25 s de ReelForge va de
+//     la lámina anterior a esa banda y la siguiente entra con su propia transición.
+//   · Además cada lámina tiene su composición (a sangre, diagonal partida, abanico,
+//     pantalla partida T1/KC, bento, carta que voltea, círculo, nombre en vertical,
+//     fila de seis, rejilla de chromas…) y el dato su receta (letras, palabra, revuelto,
+//     tragamonedas, sello, contador, impacto, rayo, duotono, confeti, brasas).
 // La **imagen de cumpleaños** de Axl (`assets/cumple/cumple.jpg`, no es arte de Riot)
 // sale tres veces con tres encuadres: portada, cierre y reposo.
 // Todo dura 2,5 s como máximo; después el último cuadro queda congelado. Todo es
-// determinista por seek (sin Math.random ni reloj).
+// determinista por seek (sin Math.random ni reloj; el mosaico usa random(semilla)).
 //
 // Arte: Data Dragon (splashes, pantallas de carga, tiles de 380 px y los íconos de la
 // pasiva, Q, W, E y R, de 64 px ampliados 4× con Lanczos), CommunityDragon (los 12
@@ -99,18 +103,6 @@ const RIEL = (() => {
       </svg>`;
 })();
 
-// Las rutas de la estela: siempre de -60 a 1140 (fuera de cuadro en los dos extremos).
-const RUTA = {
-  recta: (y) => `M-60 ${y} L1140 ${y}`,
-  diagonal: (y0, y1) => `M-60 ${y0} L1140 ${y1}`,
-  arco: (y, alto) => `M-60 ${y} Q540 ${y - 2 * alto} 1140 ${y}`,
-  ola: (y, alto) => `M-60 ${y} C300 ${y - alto} 780 ${y + alto} 1140 ${y}`,
-};
-const barrido = (d) => `
-      <svg data-barrido viewBox="0 0 ${PW} ${PH}" style="position: absolute; inset: 0; width: ${PW}px; height: ${PH}px; overflow: visible; pointer-events: none; filter: drop-shadow(0 0 6px ${a(ORO, 0.9)});">
-        <path data-camino d="${d}" fill="none" stroke="${ORO_CL}" stroke-width="3" stroke-linecap="round"/>
-      </svg>`;
-
 // ── Piezas ───────────────────────────────────────────────────────────────
 const SECCION = `background: ${BG}; color: ${CREMA}; font-family: ${DISPLAY}; position: relative; overflow: hidden;`;
 
@@ -163,14 +155,15 @@ const luz = (cx, cy, tam, semilla) => `
       <div data-luz style="position: absolute; left: ${cx - tam / 2}px; top: ${cy - tam / 2}px; width: ${tam}px; height: ${tam}px; opacity: 0.75; pointer-events: none;">${kit.destello({ tam, rayos: 16, color: ORO_CL, semilla })}</div>`;
 
 /**
- * El panel de la banda: arte → (sombra) → riel → destello → dato → estela → chispas.
- * `ruta` es el camino de la estela; `llegada` [x, y] el centro del dato; `sombra` si la
- * estela levanta una sombra sobre el arte (las láminas con su propia transición no la llevan).
+ * El panel de la banda: [data-contenido] (arte → destello → dato → extra) → riel → chispas.
+ * La transición de entrada de cada lámina mueve el [data-contenido] entero; el riel va encima
+ * y no se mueve. `llegada` [x, y] es el centro del dato (destello y chispas).
  */
-function panel({ arte, dato = '', ruta, llegada = null, sombra = false, semilla, extra = '' }) {
+function panel({ arte, dato = '', llegada = null, semilla, extra = '' }) {
   return `
-    <div data-panel${llegada ? ` data-llegada="${llegada.join(' ')}"` : ''} style="position: absolute; left: 0; top: ${PANEL_TOP}px; width: ${PW}px; height: ${PH}px; overflow: hidden; background: ${BG};">${arte}${sombra ? `
-      <div data-sombra style="position: absolute; inset: 0; background: ${a(BG, 0.58)}; pointer-events: none;"></div>` : ''}${RIEL}${llegada ? luz(llegada[0], llegada[1], 340, semilla) : ''}${dato}${extra}${barrido(ruta)}
+    <div data-panel${llegada ? ` data-llegada="${llegada.join(' ')}"` : ''} style="position: absolute; left: 0; top: ${PANEL_TOP}px; width: ${PW}px; height: ${PH}px; overflow: hidden; background: ${BG};">
+      <div data-contenido style="position: absolute; inset: 0; overflow: hidden;">${arte}${llegada ? luz(llegada[0], llegada[1], 340, semilla) : ''}${dato}${extra}
+      </div>${RIEL}
       <div data-chispas style="position: absolute; inset: 0; pointer-events: none;"></div>
     </div>`;
 }
@@ -188,17 +181,16 @@ const CUMPLE = 'cumple/cumple.jpg';
 const slides = [];
 
 // ── 1 · am-portada ─── la imagen de cumpleaños; la cámara sale de la vela del 2 ──
-slides.push(lamina('am-portada', 'Hace dos años salió Ambessa.', panel({ semilla: 'am-portada', ruta: RUTA.arco(330, 120), llegada: [950, 300],
+slides.push(lamina('am-portada', 'Hace dos años salió Ambessa.', panel({ semilla: 'am-portada', llegada: [950, 300],
   arte: `${caja(0, 0, PW, PH, foto(CUMPLE, 'Ambessa celebrando su cumpleaños con un pastel de vela 2'), { attrs: 'data-focos', estilo: 'overflow: hidden;' })}${veloAbajo}`,
   dato: `${texto('2', { x: 830, y: 150, w: 240, tam: 300, propio: true, attrs: 'data-dos' })}
       ${texto('AMBESSA', { x: 40, y: 520, w: 640, tam: 120, clase: 'crema', tracking: 14, propio: true, alinear: 'left', attrs: 'data-nombre' })}` })));
 
 // ── 2 · am-arcane ─── Mel en Arcane entra en rebanadas verticales ──
-slides.push(lamina('am-arcane', 'Sale en Arcane.', panel({ semilla: 'am-arcane', ruta: RUTA.diagonal(600, 120),
-  arte: caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Mel_1'), 'Mel, Arcane: Concejal, splash', { pos: '42% 40%' }), { attrs: 'data-rebanadas', estilo: 'overflow: hidden;' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) })));
+slides.push(lamina('am-arcane', 'Sale en Arcane.', panel({ semilla: 'am-arcane', arte: caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Mel_1'), 'Mel, Arcane: Concejal, splash', { pos: '42% 40%' }), { attrs: 'data-rebanadas', estilo: 'overflow: hidden;' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) })));
 
 // ── 3 · am-t1 ─── diagonal partida: el splash T1 a la derecha, DORAN se decodifica a la izquierda ──
-slides.push(lamina('am-t1', 'Hoy juega T1 y Doran le dio su skin.', panel({ semilla: 'am-t1', ruta: RUTA.recta(340), llegada: [235, 340],
+slides.push(lamina('am-t1', 'Hoy juega T1 y Doran le dio su skin.', panel({ semilla: 'am-t1', llegada: [235, 340],
   arte: `
       <div style="position: absolute; inset: 0; background: radial-gradient(60% 80% at 15% 50%, ${a(T1_ROJO, 0.22)}, ${a(T1_ROJO, 0)} 70%);"></div>
       <div style="position: absolute; inset: 0; clip-path: polygon(40% 0, 100% 0, 100% 100%, 24% 100%);">
@@ -208,7 +200,7 @@ slides.push(lamina('am-t1', 'Hoy juega T1 y Doran le dio su skin.', panel({ semi
   dato: texto('DORAN', { x: 10, y: 245, w: 470, tam: 190, tracking: 10, propio: true, attrs: 'data-revuelto' }) })));
 
 // ── 4 · am-doran ─── abanico de tres cartas T1 y el 2-0 en tragamonedas ──
-slides.push(lamina('am-doran', 'La sacó dos veces en el Mundial y ganó las dos.', panel({ semilla: 'am-doran', ruta: RUTA.ola(430, 90), llegada: [850, 430],
+slides.push(lamina('am-doran', 'La sacó dos veces en el Mundial y ganó las dos.', panel({ semilla: 'am-doran', llegada: [850, 430],
   arte: `${respaldo('skins/Ambessa_8-fondo.jpg', 0.38)}
       <div data-mazo style="position: absolute; left: 0; top: 0; width: 640px; height: ${PH}px;">
         ${carta(50, 140, 230, 400, foto('tiles/Ambessa_8.jpg', 'Ambessa T1, tile'), { rot: -9 })}
@@ -220,7 +212,7 @@ slides.push(lamina('am-doran', 'La sacó dos veces en el Mundial y ganó las dos
       ${texto('2-0', { x: 640, y: 300, w: 420, tam: 260, clase: 'plano', tracking: 10, propio: true, attrs: 'data-tragamonedas', color: ORO_CL })}` })));
 
 // ── 5 · am-kc ─── pantalla partida en diagonal, T1 contra KC; el HOY cae como sello ──
-slides.push(lamina('am-kc', 'Hoy no es la excepción: les toca a los de Karmine.', panel({ semilla: 'am-kc', ruta: RUTA.recta(400), llegada: [540, 400],
+slides.push(lamina('am-kc', 'Hoy no es la excepción: les toca a los de Karmine.', panel({ semilla: 'am-kc', llegada: [540, 400],
   arte: `${vista(splash('Ambessa_8'), 'Ambessa T1, splash oscurecido', { ...SP, cam: [0.5, 0.5, 1, 0.56, 0.48, 1.06], filtro: 'filter: blur(8px) brightness(0.35);' })}
       <div data-lado="t1" style="position: absolute; inset: 0; clip-path: polygon(0 0, 58% 0, 42% 100%, 0 100%); background: linear-gradient(135deg, ${a('#3A0610', 0.92)}, ${a('#0E0406', 0.88)});">
         <img src="assets/logos/T1.png" alt="Logo de T1" style="position: absolute; left: 70px; top: 250px; width: 300px; height: auto; filter: drop-shadow(0 10px 36px rgba(0,0,0,0.85));">
@@ -236,8 +228,7 @@ slides.push(lamina('am-kc', 'Hoy no es la excepción: les toca a los de Karmine.
 
 // ── 6 · am-popular ─── bento de cinco cortes de su arte ──
 const celda = (dentro, extra = '') => `<div style="position: relative; overflow: hidden; outline: 2px solid ${a(ORO, 0.7)}; outline-offset: -2px; ${extra}">${dentro}</div>`;
-slides.push(lamina('am-popular', 'Se ha popularizado muchísimo en competitivo y en rankeds.', panel({ semilla: 'am-popular', ruta: RUTA.ola(340, 120),
-  arte: `
+slides.push(lamina('am-popular', 'Se ha popularizado muchísimo en competitivo y en rankeds.', panel({ semilla: 'am-popular', arte: `
       <div data-bento style="position: absolute; left: 40px; top: 52px; width: 1000px; height: 576px; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(2, 1fr); gap: 12px;">
         ${celda(foto(splash('Ambessa_0'), 'Ambessa, splash base', { pos: '30% 40%' }), 'grid-column: span 2; grid-row: span 2;')}
         ${celda(foto('tiles/Ambessa_1.jpg', 'Ambessa Elegida del Lobo, tile'))}
@@ -247,8 +238,7 @@ slides.push(lamina('am-popular', 'Se ha popularizado muchísimo en competitivo y
       </div>` })));
 
 // ── 7 · am-ksante ─── la carta de Ambessa voltea y es K'Sante ──
-slides.push(lamina('am-ksante', 'Caso contrario a K\'Sante.', panel({ semilla: 'am-ksante', ruta: RUTA.recta(500), sombra: true,
-  arte: `${respaldo('skins/KSante_0-fondo.jpg', 0.42)}
+slides.push(lamina('am-ksante', 'Caso contrario a K\'Sante.', panel({ semilla: 'am-ksante', arte: `${respaldo('skins/KSante_0-fondo.jpg', 0.42)}
       ${caja(365, 40, 350, 600, `
         <div data-voltea style="position: absolute; inset: 0; display: grid;">
           <div data-cara="frente" style="grid-area: 1 / 1; position: relative; overflow: hidden; outline: 2px solid ${a(ORO, 0.8)}; outline-offset: -2px; box-shadow: 0 18px 50px rgba(0,0,0,0.75);">${foto(carga('Ambessa_0'), 'Ambessa, pantalla de carga base')}</div>
@@ -257,7 +247,7 @@ slides.push(lamina('am-ksante', 'Caso contrario a K\'Sante.', panel({ semilla: '
 
 // ── 8 · am-ulti ─── la R cae como sello; la pasiva, Q, W y E se acomodan al lado ──
 const icono = (n, alt) => `<div style="position: relative; overflow: hidden; outline: 2px solid ${a(ORO, 0.7)}; outline-offset: -2px; box-shadow: 0 10px 30px rgba(0,0,0,0.6);"><img src="assets/iconos/Ambessa${n}.png" alt="${alt}" style="display: block; width: 100%; height: 100%;"></div>`;
-slides.push(lamina('am-ulti', 'Es fácil esquivar su ulti.', panel({ semilla: 'am-ulti', ruta: RUTA.recta(340), llegada: [320, 340],
+slides.push(lamina('am-ulti', 'Es fácil esquivar su ulti.', panel({ semilla: 'am-ulti', llegada: [320, 340],
   arte: `${vista(splash('Ambessa_0'), 'Ambessa, splash base desenfocado', { ...SP, cam: [0.5, 0.5, 1, 0.5, 0.5, 1.1], filtro: 'filter: blur(16px) brightness(0.42) saturate(1.1);' })}
       <div data-habilidades style="position: absolute; left: 610px; top: 152px; width: 324px; height: 324px; display: grid; grid-template-columns: 150px 150px; grid-template-rows: 150px 150px; gap: 24px;">
         ${icono('P', 'Pasiva de Ambessa')}${icono('Q', 'Barrido Astuto, la Q de Ambessa')}${icono('W', 'Repudio, la W de Ambessa')}${icono('E', 'Lacerar, la E de Ambessa')}
@@ -267,33 +257,28 @@ slides.push(lamina('am-ulti', 'Es fácil esquivar su ulti.', panel({ semilla: 'a
       <div data-dato="propio" data-r style="position: absolute; left: 150px; top: 170px; width: 340px; height: 340px; box-shadow: 0 0 90px ${a(ORO, 0.4)}, 0 24px 70px rgba(0,0,0,0.75); outline: 3px solid ${ORO_CL}; outline-offset: -3px;"><img src="assets/iconos/AmbessaR.png" alt="Ejecución Pública, la R de Ambessa" style="display: block; width: 340px; height: 340px;"></div>` })));
 
 // ── 9 · am-lore ─── la imagen centrada se destapa a tinta ──
-slides.push(lamina('am-lore', 'Pasemos con su lore.', panel({ semilla: 'am-lore', ruta: RUTA.arco(470, 90),
-  arte: `${kit.tinta('tinta-lore', { ancho: PW, alto: PH, origen: [0.5, 0.42], semilla: 5 })}
+slides.push(lamina('am-lore', 'Pasemos con su lore.', panel({ semilla: 'am-lore', arte: `${kit.tinta('tinta-lore', { ancho: PW, alto: PH, origen: [0.5, 0.42], semilla: 5 })}
       ${vista('centered/Ambessa_0.jpg', 'Ambessa, imagen centrada', { iw: 1280, ih: 720, cam: [0.5, 0.5, 1.2, 0.5, 0.4, 1.12], attrs: 'data-tinta' })}` })));
 
 // ── 10 · am-espadas ─── un tajo dorado cruza y el arte entra en diagonal ──
-slides.push(lamina('am-espadas', 'Recoger las espadas de los soldados muertos.', panel({ semilla: 'am-espadas', ruta: RUTA.diagonal(560, 140),
-  arte: `<div data-tajo style="position: absolute; inset: 0;">${vista(splash('Ambessa_0'), 'Ambessa, splash base: las espadas', { ...SP, cam: [0.72, 0.55, 1.18, 0.8, 0.5, 1.24] })}</div>`,
+slides.push(lamina('am-espadas', 'Recoger las espadas de los soldados muertos.', panel({ semilla: 'am-espadas', arte: `<div data-tajo style="position: absolute; inset: 0;">${vista(splash('Ambessa_0'), 'Ambessa, splash base: las espadas', { ...SP, cam: [0.72, 0.55, 1.18, 0.8, 0.5, 1.24] })}</div>`,
   extra: `<div data-rayo style="position: absolute; inset: 0; pointer-events: none;">${kit.rayo(['M40 700 L1040 -20', 'M-20 560 L760 -40'], { ancho: PW, alto: PH, color: ORO_CL, grosor: 7 })}</div>` })));
 
 // ── 11 · am-general ─── el Bastión de Noxus se enciende a quemado y entra su carta de general ──
-slides.push(lamina('am-general', 'Fue general bien joven.', panel({ semilla: 'am-general', ruta: RUTA.recta(470),
-  arte: `${kit.quemado('quemado-general', { brasa: '#FF8A2A', semilla: 11 })}
+slides.push(lamina('am-general', 'Fue general bien joven.', panel({ semilla: 'am-general', arte: `${kit.quemado('quemado-general', { brasa: '#FF8A2A', semilla: 11 })}
       ${caja(0, 0, PW, PH, foto('noxus/bastion.jpg', 'El Bastión Inmortal de Noxus, Legends of Runeterra', { pos: '50% 45%', filtro: 'filter: brightness(0.8);' }), { attrs: 'data-quemado', estilo: 'overflow: hidden;' })}
       ${veloIzq}
       ${carta(700, 50, 320, 580, foto(carga('Ambessa_1'), 'Ambessa Elegida del Lobo, pantalla de carga'), { rot: 4, attrs: 'data-sube' })}` })));
 
 // ── 12 · am-mel ─── madre e hija: dos cartas inclinadas una hacia la otra ──
-slides.push(lamina('am-mel', 'Embarazada de Mel.', panel({ semilla: 'am-mel', ruta: RUTA.ola(470, 110),
-  arte: `${respaldo('skins/Mel_0-fondo.jpg', 0.42)}
+slides.push(lamina('am-mel', 'Embarazada de Mel.', panel({ semilla: 'am-mel', arte: `${respaldo('skins/Mel_0-fondo.jpg', 0.42)}
       <div data-mazo style="position: absolute; inset: 0;">
         ${carta(235, 60, 300, 560, foto(carga('Ambessa_0'), 'Ambessa, pantalla de carga base'), { rot: -7 })}
         ${carta(545, 60, 300, 560, foto(carga('Mel_0'), 'Mel, pantalla de carga base'), { rot: 7 })}
       </div>` })));
 
 // ── 13 · am-matriarca ─── retrato en círculo con dos anillos de oro ──
-slides.push(lamina('am-matriarca', 'Se quedó como la jefa.', panel({ semilla: 'am-matriarca', ruta: RUTA.arco(330, 100),
-  arte: `${respaldo('skins/Ambessa_0-fondo.jpg', 0.32)}
+slides.push(lamina('am-matriarca', 'Se quedó como la jefa.', panel({ semilla: 'am-matriarca', arte: `${respaldo('skins/Ambessa_0-fondo.jpg', 0.32)}
       ${vista(carga('Ambessa_0'), 'Ambessa, pantalla de carga base', { x: 60, w: 250, h: PH, iw: 308, ih: 560, cam: [0.5, 0.5, 1.1, 0.5, 0.45, 1.16], filtro: 'filter: brightness(0.45) grayscale(0.4);' })}
       ${vista(carga('Ambessa_0'), 'Ambessa, pantalla de carga base', { x: 770, w: 250, h: PH, iw: 308, ih: 560, cam: [0.5, 0.5, 1.1, 0.5, 0.55, 1.16], filtro: 'filter: brightness(0.45) grayscale(0.4);' })}
       <div data-iris style="position: absolute; left: 320px; top: 100px; width: 440px; height: 440px; border-radius: 50%; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.8);">${foto('tiles/Ambessa_0.jpg', 'Ambessa, el rostro', { pos: '50% 40%' })}</div>
@@ -302,31 +287,26 @@ slides.push(lamina('am-matriarca', 'Se quedó como la jefa.', panel({ semilla: '
       </svg>` })));
 
 // ── 14 · am-lobo ─── Elegida del Lobo, de duotono rojo a color ──
-slides.push(lamina('am-lobo', 'Su lema es ser el Lobo en todo.', panel({ semilla: 'am-lobo', ruta: RUTA.diagonal(140, 560),
-  arte: `${kit.duotono('duotono-lobo', '#1A0507', '#E2584A')}
+slides.push(lamina('am-lobo', 'Su lema es ser el Lobo en todo.', panel({ semilla: 'am-lobo', arte: `${kit.duotono('duotono-lobo', '#1A0507', '#E2584A')}
       ${caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Ambessa_1'), 'Ambessa Elegida del Lobo, splash', { pos: '58% 42%' }), { attrs: 'data-duotono' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' })}` })));
 
 // ── 15 · am-piltover ─── persiana de arriba abajo y la cámara viaja de Mel a la ciudad ──
-slides.push(lamina('am-piltover', 'Mandó a Mel a Piltóver.', panel({ semilla: 'am-piltover', ruta: RUTA.recta(560),
-  arte: `<div data-persiana style="position: absolute; inset: 0;">${caja(0, 0, PW, PH, foto(splash('Mel_0'), 'Mel, splash base'), { attrs: 'data-focos', estilo: 'overflow: hidden;' })}</div>` })));
+slides.push(lamina('am-piltover', 'Mandó a Mel a Piltóver.', panel({ semilla: 'am-piltover', arte: `<div data-persiana style="position: absolute; inset: 0;">${caja(0, 0, PW, PH, foto(splash('Mel_0'), 'Mel, splash base'), { attrs: 'data-focos', estilo: 'overflow: hidden;' })}</div>` })));
 
 // ── 16 · am-caitlyn ─── el títere: de pixelado a nítido ──
-slides.push(lamina('am-caitlyn', 'Usó a Caitlyn como su títere.', panel({ semilla: 'am-caitlyn', ruta: RUTA.diagonal(520, 220),
-  arte: caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Caitlyn_50'), 'Caitlyn Comandante, Arcane, splash', { pos: '50% 38%' }), { attrs: 'data-pixelado' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) })));
+slides.push(lamina('am-caitlyn', 'Usó a Caitlyn como su títere.', panel({ semilla: 'am-caitlyn', arte: caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Caitlyn_50'), 'Caitlyn Comandante, Arcane, splash', { pos: '50% 38%' }), { attrs: 'data-pixelado' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) })));
 
 // ── 17 · am-leblanc ─── LeBlanc entra con glitch: la que engaña ──
-slides.push(lamina('am-leblanc', 'La mató LeBlanc.', panel({ semilla: 'am-leblanc', ruta: RUTA.ola(400, 140),
-  arte: `${kit.glitch('glitch-leblanc')}
+slides.push(lamina('am-leblanc', 'La mató LeBlanc.', panel({ semilla: 'am-leblanc', arte: `${kit.glitch('glitch-leblanc')}
       ${caja(0, 0, PW, PH, caja(0, 0, PW, PH, foto(splash('Leblanc_0'), 'LeBlanc, splash base', { pos: '45% 42%' }), { attrs: 'data-glitch' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' })}` })));
 
 // ── 18 · am-muerte ─── Mel se apaga a gris y suben brasas ──
-slides.push(lamina('am-muerte', 'Murió en brazos de Mel.', panel({ semilla: 'am-muerte', ruta: RUTA.recta(480), sombra: true,
-  arte: `${respaldo('skins/Mel_1-fondo.jpg', 0.45, 'data-borroso')}
+slides.push(lamina('am-muerte', 'Murió en brazos de Mel.', panel({ semilla: 'am-muerte', arte: `${respaldo('skins/Mel_1-fondo.jpg', 0.45, 'data-borroso')}
       ${vista(carga('Mel_1'), 'Mel, Arcane: Concejal, pantalla de carga', { ...CENTRO, cam: [0.5, 0.5, 1.04, 0.5, 0.46, 1.1], filtro: 'filter: brightness(1) grayscale(0);' })}
       <div data-brasas style="position: absolute; inset: 0; pointer-events: none;"></div>` })));
 
 // ── 19 · am-otp ─── el nombre en vertical, el emblema cae y la cifra cuenta ──
-slides.push(lamina('am-otp', 'Demon King of Noxus, con más de cuatro millones de puntos, en Platino 4.', panel({ semilla: 'am-otp', ruta: RUTA.recta(340), llegada: [780, 340],
+slides.push(lamina('am-otp', 'Demon King of Noxus, con más de cuatro millones de puntos, en Platino 4.', panel({ semilla: 'am-otp', llegada: [780, 340],
   arte: vista(splash('Ambessa_0'), 'Ambessa, splash base oscurecido', { ...SP, cam: [0.46, 0.5, 1, 0.52, 0.5, 1.08], filtro: 'filter: brightness(0.32);' }),
   dato: `
       <div style="position: absolute; left: -230px; top: 298px; width: 600px; height: 84px; transform: rotate(-90deg);">${texto('DEMONKINGOFNOXUS', { x: 0, y: 0, w: 600, tam: 70, clase: 'crema', tracking: 6, propio: true, attrs: 'data-letras' })}</div>
@@ -334,7 +314,7 @@ slides.push(lamina('am-otp', 'Demon King of Noxus, con más de cuatro millones d
       ${texto('4.245.731', { x: 500, y: 265, w: 560, tam: 150, tracking: 4, propio: true, attrs: 'data-contador' })}` })));
 
 // ── 20 · am-seis ─── seis cartas, una por partida, en fila ──
-slides.push(lamina('am-seis', 'Este año solo la ha jugado seis veces.', panel({ semilla: 'am-seis', ruta: RUTA.ola(470, 80), llegada: [540, 470],
+slides.push(lamina('am-seis', 'Este año solo la ha jugado seis veces.', panel({ semilla: 'am-seis', llegada: [540, 470],
   arte: `${vista(splash('Ambessa_1'), 'Ambessa Elegida del Lobo, splash oscurecido', { ...SP, cam: [0.6, 0.5, 1, 0.52, 0.5, 1.08], filtro: 'filter: blur(14px) brightness(0.3);' })}
       <div data-fila style="position: absolute; left: 75px; top: 60px; width: 930px; height: 220px; display: grid; grid-template-columns: repeat(6, 140px); gap: 18px;">
         ${['0', '1', '8', '0', '1', '8'].map((n, i) => celda(foto(`tiles/Ambessa_${n}.jpg`, `Partida ${i + 1}`))).join('')}
@@ -343,7 +323,7 @@ slides.push(lamina('am-seis', 'Este año solo la ha jugado seis veces.', panel({
 
 // ── 21 · am-skins ─── el 2, sus dos skins en abanico y los doce chromas ──
 const CHROMAS = [2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14].map((n) => 799000 + n);
-slides.push(lamina('am-skins', 'De skins solo tiene dos.', panel({ semilla: 'am-skins', ruta: RUTA.recta(340), llegada: [130, 340],
+slides.push(lamina('am-skins', 'De skins solo tiene dos.', panel({ semilla: 'am-skins', llegada: [130, 340],
   arte: `${respaldo('skins/Ambessa_1-fondo.jpg', 0.36)}
       <div data-mazo style="position: absolute; left: 230px; top: 0; width: 480px; height: ${PH}px;">
         ${carta(20, 120, 210, 390, foto(carga('Ambessa_1'), 'Ambessa Elegida del Lobo, pantalla de carga'), { rot: -5 })}
@@ -355,7 +335,7 @@ slides.push(lamina('am-skins', 'De skins solo tiene dos.', panel({ semilla: 'am-
   dato: texto('2', { x: 20, y: 150, w: 220, tam: 380, propio: true, attrs: 'data-dos' }) })));
 
 // ── 22 · am-legendaria ─── la palabra es la ventana al arte ──
-slides.push(lamina('am-legendaria', 'Elegida del Lobo, la primera campeona en salir con una legendaria.', panel({ semilla: 'am-legendaria', ruta: RUTA.recta(340), llegada: [380, 560],
+slides.push(lamina('am-legendaria', 'Elegida del Lobo, la primera campeona en salir con una legendaria.', panel({ semilla: 'am-legendaria', llegada: [380, 560],
   arte: `${kit.ventana('LEGENDARIA', { id: 'ventana-legendaria', ancho: PW, alto: PH, origen: [0.5, 0.5], tam: 300 })}
       ${vista(splash('Ambessa_1'), 'Ambessa Elegida del Lobo, splash: el rostro', { ...SP, cam: [0.7, 0.36, 1.2, 0.74, 0.3, 1.45], attrs: 'data-ventana' })}
       <div data-velo style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(to top, ${a(BG, 0.9)} 0%, ${a(BG, 0.4)} 30%, ${a(BG, 0)} 55%);"></div>`,
@@ -364,16 +344,18 @@ slides.push(lamina('am-legendaria', 'Elegida del Lobo, la primera campeona en sa
 // ── 23 · am-cierre ─── otra vez el cumpleaños, otro encuadre; GG EZ golpe a golpe y confeti ──
 const veloDer = `
       <div style="position: absolute; inset: 0; pointer-events: none; background: linear-gradient(270deg, ${a(BG, 0.9)} 0%, ${a(BG, 0.6)} 40%, ${a(BG, 0)} 70%);"></div>`;
-slides.push(lamina('am-cierre', 'Ni pedo, solo queda decir gigi easy.', panel({ semilla: 'am-cierre', ruta: RUTA.arco(360, 110), llegada: [790, 340],
+slides.push(lamina('am-cierre', 'Ni pedo, solo queda decir gigi easy.', panel({ semilla: 'am-cierre', llegada: [790, 340],
   arte: `${caja(0, 0, PW, PH, foto(CUMPLE, 'Ambessa celebrando su cumpleaños', { pos: '50% 50%' }), { attrs: 'data-focos', estilo: 'overflow: hidden;' })}${veloDer}`,
   extra: `<div data-confeti style="position: absolute; inset: 0; pointer-events: none;">${kit.patron('confeti', { ancho: PW, alto: PH, paleta: [ORO, ORO_CL, '#E94B85', '#2FB4FF', '#E2012D'], semilla: 'am-cierre', cantidad: 46, tam: 1.1, hueco: [0.45, 0.2, 1, 0.8], estilo: `width: ${PW}px; height: ${PH}px;` })}</div>`,
   dato: texto('GG EZ', { x: 510, y: 215, w: 560, tam: 260, clase: 'plano', tracking: 8, propio: true, attrs: 'data-gg' }) })));
 
 // ── 24 · am-reposo ─── la banda sin dato: el cumpleaños en penumbra, arriba (los globos) ──
-slides.push(lamina('am-reposo', 'Reposo: la banda sin dato, para los huecos entre láminas.', panel({ semilla: 'am-reposo', ruta: RUTA.recta(340),
-  arte: caja(0, 0, PW, PH, foto(CUMPLE, 'Ambessa celebrando su cumpleaños, en penumbra', { pos: '50% 22%', filtro: 'filter: brightness(0.36) saturate(0.85);' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) }), ' data-reposo'));
+slides.push(lamina('am-reposo', 'Reposo: la banda sin dato, para los huecos entre láminas.', panel({ semilla: 'am-reposo', arte: caja(0, 0, PW, PH, foto(CUMPLE, 'Ambessa celebrando su cumpleaños, en penumbra', { pos: '50% 22%', filtro: 'filter: brightness(0.36) saturate(0.85);' }), { attrs: 'data-escala', estilo: 'overflow: hidden;' }) }), ' data-reposo'));
 
 // ── Coreografías GSAP ────────────────────────────────────────────────────
+// Cada lámina entra con SU transición, que mueve el [data-contenido] entero (nunca la
+// <section> ni el riel): en el cuadro 0 se ve solo la banda vacía con el riel —igual en
+// todas— y la transición destapa la lámina. Las 24 son distintas (TRANSICION, abajo).
 const coreografias = `<script>
 (function () {
   if (!window.animar) return;
@@ -381,12 +363,6 @@ const coreografias = `<script>
   var uno = function (s, sel) { return s.querySelector(sel); };
   var PW = ${PW}, PH = ${PH};
   var DUR = 2.5;                    // ninguna lámina pasa de aquí
-  var EN = 0.15, DB = 1.25;         // la estela: arranca y cruza
-  var X0 = -60, X1 = 1140;          // de fuera de cuadro a fuera de cuadro
-
-  // Cuándo pasa la estela por una x (power2.inOut y su inversa; en las rutas curvas, aproximado).
-  function inversa(y) { return y < 0.5 ? Math.sqrt(y / 2) : 1 - Math.sqrt((1 - y) / 2); }
-  function paso(x) { return EN + DB * inversa(Math.min(1, Math.max(0, (x - X0) / (X1 - X0)))); }
 
   function encuadre(vw, vh, cw, ch, cx, cy, z) {
     var cl = function (v, mn, mx) { return Math.min(mx, Math.max(mn, v)); };
@@ -402,140 +378,250 @@ const coreografias = `<script>
       fin.duration = DUR; fin.ease = 'power1.out'; fin.immediateRender = true;
       tl.fromTo(img, ini, fin, 0);
     });
-    // Los envoltorios [data-escala] se asientan de 1.08 a 1 (el empuje de las láminas con receta propia).
     q(s, '[data-escala]').forEach(function (el) {
       tl.fromTo(el, { scale: 1.08 }, { scale: 1, transformOrigin: '50% 50%', duration: DUR, ease: 'power1.out', immediateRender: true }, 0);
     });
   }
 
-  // Lo común: la estela, la sombra (si la hay), el riel que late y el dato genérico.
-  function entrada(tl, s) {
-    var p = uno(s, '[data-panel]');
-    efecto('cometa', tl, uno(p, '[data-barrido]'), { en: EN, dur: DB, ease: 'power2.inOut', radio: 7, color: '${ORO_CL}' });
-    tl.fromTo(uno(p, '[data-camino]'), { opacity: 1 }, { opacity: 0, duration: 0.6, ease: 'power1.in', immediateRender: false }, EN + DB * 0.6);
-
-    var sombra = uno(p, '[data-sombra]');
-    if (sombra) {
-      var est = { p: 0 };
-      var pinta = function () {
-        var x = X0 + (X1 - X0) * est.p;
-        var m = 'linear-gradient(90deg, rgba(0,0,0,0) ' + (x - 60).toFixed(1) + 'px, #000 ' + (x + 20).toFixed(1) + 'px)';
-        sombra.style.webkitMaskImage = m; sombra.style.maskImage = m;
-      };
-      tl.fromTo(est, { p: 0 }, { p: 1, duration: DB, ease: 'power2.inOut', immediateRender: true, onUpdate: pinta, onReverseComplete: pinta }, EN);
-      pinta();
-    }
-
-    // Cada destello del riel late al pasar la estela y vuelve exactamente a como estaba.
-    q(p, '[data-brillo-riel]').forEach(function (b) {
-      var op = +b.getAttribute('opacity'), org = b.dataset.x + ' ' + b.dataset.y;
-      tl.fromTo(b, { scale: 1, opacity: op, svgOrigin: org }, { keyframes: [
-        { scale: 1.9, opacity: 1, duration: 0.16, ease: 'power2.out' },
-        { scale: 1, opacity: op, duration: 0.45, ease: 'power2.in' }], immediateRender: false }, paso(+b.dataset.x) - 0.08);
-    });
-
-    if (!p.dataset.llegada) return null;
-    var c = p.dataset.llegada.split(' ').map(Number), t = paso(c[0]);
-    q(p, '[data-dato]:not([data-dato="propio"])').forEach(function (d, i) {
-      tl.fromTo(d, { opacity: 0, x: -40 }, { opacity: 1, x: 0, duration: 0.55, ease: 'entrada', immediateRender: true }, t - 0.12 + i * 0.08);
-    });
-    var l = uno(p, '[data-luz]');
-    if (l) { efecto('destello', tl, l, { en: t - 0.05, dur: 1.3 }); tl.to(l, { opacity: 0, duration: 0.6, ease: 'power1.in' }, t + 0.6); }
-    efecto('chispas', tl, uno(p, '[data-chispas]'), { en: t, dur: 1, n: 34, fuerza: 620, subida: 120,
-      origen: (100 * c[0] / PW).toFixed(1) + ' ' + (100 * c[1] / PH).toFixed(1), color: '#FFF1C2,${ORO_CL},${ORO}' });
-    return t;
+  // Una transición hecha con un valor p de 0 a 1 que se pinta en cada cuadro (clip-path o máscara).
+  // Al terminar se limpia el estilo: el estado final es el contenido tal cual.
+  function porProgreso(tl, el, dur, ease, pinta, prop) {
+    var est = { p: 0 }, f = function () { pinta(est.p); };
+    tl.fromTo(est, { p: 0 }, { p: 1, duration: dur, ease: ease, immediateRender: true, onUpdate: f, onReverseComplete: f }, 0);
+    f();
+    tl.set(el, prop, dur);
+    return dur;
   }
+  var r1 = function (v) { return v.toFixed(1); };
+  var clip = function (el, v) { el.style.clipPath = v; };
+  var mascara = function (el, v) { el.style.webkitMaskImage = v; el.style.maskImage = v; };
 
-  // Lo propio de cada lámina: su composición entra con su receta.
-  var PROPIO = {
-    'am-portada': function (tl, s, t) {
-      efecto('camara', tl, uno(s, '[data-focos]'), { focos: '47 66 2.3; 46 52 1.3; 50 50 1', en: 0, dur: 1, pausa: 0.1 });
-      efecto('letras', tl, uno(s, '[data-nombre]'), { en: 1.1, escalon: 0.05, dur: 0.6 });
-      efecto('palabra', tl, uno(s, '[data-dos]'), { en: t, golpe: 1.6, duracion: 0.12 });
+  // Las transiciones. Cada una devuelve cuándo termina (el contenido ya está completo).
+  var T = {
+    // Círculo que se abre desde un punto (la vela, la esquina…).
+    iris: function (tl, c, o) {
+      var R = Math.hypot(PW, PH);
+      return porProgreso(tl, c, o.dur || 0.85, 'power2.inOut', function (p) { clip(c, 'circle(' + r1(p * R) + 'px at ' + o.origen + ')'); }, { clipPath: 'none' });
     },
-    'am-arcane': function (tl, s) { efecto('rebanadas', tl, uno(s, '[data-rebanadas]'), { n: 7, dur: 0.9, escalon: 0.07 }); },
-    'am-t1': function (tl, s, t) {
-      efecto('cortinilla', tl, uno(s, '[data-cortinilla]'), { direccion: 'izquierda', dur: 0.9, en: 0 });
-      efecto('dibujo', tl, uno(s, '[data-filo]'), { dur: 0.7, en: 0.2 });
-      efecto('revuelto', tl, uno(s, '[data-revuelto] span'), { dur: 1.1, en: t - 0.3 });
+    // Persianas: franjas que se abren a la vez (verticales u horizontales).
+    persianas: function (tl, c, o) {
+      var paso = o.paso || 120, ang = o.vertical ? 90 : 180;
+      return porProgreso(tl, c, o.dur || 0.8, 'power2.inOut', function (p) {
+        var w = r1(p * paso);
+        mascara(c, 'repeating-linear-gradient(' + ang + 'deg, #000 0px, #000 ' + w + 'px, transparent ' + w + 'px, transparent ' + paso + 'px)');
+      }, { maskImage: 'none', webkitMaskImage: 'none' });
     },
-    'am-doran': function (tl, s, t) {
-      efecto('mazo', tl, uno(s, '[data-mazo]'), { dur: 0.75, escalon: 0.12, semilla: 'am-doran' });
-      efecto('tragamonedas', tl, uno(s, '[data-tragamonedas] span'), { dur: 1.2, en: t - 0.2 });
+    // Barrido en diagonal, de izquierda a derecha.
+    diagonal: function (tl, c, o) {
+      var k = 300;
+      return porProgreso(tl, c, o.dur || 0.75, 'power3.inOut', function (p) {
+        var x = p * (PW + k);
+        clip(c, 'polygon(0 0, ' + r1(x) + 'px 0, ' + r1(x - k) + 'px 100%, 0 100%)');
+      }, { clipPath: 'none' });
     },
-    'am-kc': function (tl, s, t) {
-      tl.from(uno(s, '[data-lado="t1"]'), { xPercent: -70, duration: 0.6, ease: 'entrada' }, 0);
-      tl.from(uno(s, '[data-lado="kc"]'), { xPercent: 70, duration: 0.6, ease: 'entrada' }, 0);
-      efecto('impacto', tl, uno(s, '[data-impacto]'), { en: t + 0.25, dur: 0.6 });
-      efecto('sello', tl, uno(s, '[data-hoy] svg'), { en: t, temblor: 'no', desde: 2.2 });
+    // La lámina entra empujada desde la derecha.
+    empuje: function (tl, c, o) {
+      tl.fromTo(c, { x: PW }, { x: 0, duration: o.dur || 0.7, ease: 'entrada', immediateRender: true }, 0);
+      return o.dur || 0.7;
     },
-    'am-popular': function (tl, s) { efecto('bento', tl, uno(s, '[data-bento]'), { dur: 0.6, escalon: 0.09, desde: 'start' }); },
-    'am-ksante': function (tl, s) { efecto('voltea', tl, uno(s, '[data-voltea]'), { en: 0.8, dur: 1 }); },
-    'am-ulti': function (tl, s, t) {
-      efecto('bento', tl, uno(s, '[data-habilidades]'), { dur: 0.5, escalon: 0.08, desde: 'start' });
-      efecto('sello', tl, uno(s, '[data-r]'), { en: t - 0.1, temblor: 'no', desde: 1.9 });
-      efecto('impacto', tl, uno(s, '[data-impacto]'), { en: t + 0.3, dur: 0.6 });
-      tl.to(uno(s, '[data-habilidades]'), { opacity: 0.45, duration: 0.5, ease: 'power1.inOut' }, t + 0.35);
+    // Dos puertas que se abren desde el centro.
+    puertas: function (tl, c, o) {
+      return porProgreso(tl, c, o.dur || 0.75, 'power3.inOut', function (p) { var m = r1((1 - p) * 50); clip(c, 'inset(0 ' + m + '% 0 ' + m + '%)'); }, { clipPath: 'none' });
     },
-    'am-lore': function (tl, s) { efecto('tinta', tl, uno(s, '[data-tinta]'), { mascara: 'tinta-lore', dur: 1.6, en: 0.05 }); },
-    'am-espadas': function (tl, s) {
-      efecto('rayo', tl, uno(s, '[data-rayo]'), { dur: 0.55, escalon: 0.12, en: 0 });
-      efecto('cortinilla', tl, uno(s, '[data-tajo]'), { forma: 'tajo', dur: 0.85, en: 0.15 });
+    // Mosaico: celdas de 135 × 136 que crecen desde su centro, en un orden de la semilla.
+    mosaico: function (tl, c, o) {
+      var cols = 8, filas = 5, cw = PW / cols, ch = PH / filas, celdas = [], r = random(o.semilla || 'mosaico');
+      for (var i = 0; i < cols * filas; i++) celdas.push({ x: (i % cols) * cw, y: Math.floor(i / cols) * ch, t: r() * 0.55 });
+      return porProgreso(tl, c, o.dur || 0.95, 'none', function (p) {
+        var pts = ['0px 0px'];
+        celdas.forEach(function (k) {
+          var e = Math.min(1, Math.max(0, (p - k.t) / 0.45)); e = 1 - Math.pow(1 - e, 3);
+          if (!e) return;
+          var hw = cw * e / 2 + 0.5, hh = ch * e / 2 + 0.5, cx = k.x + cw / 2, cy = k.y + ch / 2;
+          pts.push(r1(cx - hw) + 'px ' + r1(cy - hh) + 'px', r1(cx + hw) + 'px ' + r1(cy - hh) + 'px', r1(cx + hw) + 'px ' + r1(cy + hh) + 'px',
+            r1(cx - hw) + 'px ' + r1(cy + hh) + 'px', r1(cx - hw) + 'px ' + r1(cy - hh) + 'px', '0px 0px');
+        });
+        clip(c, pts.length > 1 ? 'polygon(' + pts.join(', ') + ')' : 'polygon(0 0, 0 0, 0 0)');
+      }, { clipPath: 'none' });
     },
-    'am-general': function (tl, s) {
-      efecto('quemado', tl, uno(s, '[data-quemado]'), { filtro: 'quemado-general', dur: 1.4, en: 0 });
-      // Al terminar se quita el filtro: con el umbral al tope todavía deja motas sueltas de brasa.
-      tl.set(uno(s, '[data-quemado]'), { filter: 'none' }, 1.4);
-      tl.from(uno(s, '[data-sube]'), { y: 720, duration: 0.8, ease: 'entrada' }, 0.9);
+    // Reloj: una manecilla barre la lámina desde las 12.
+    reloj: function (tl, c, o) {
+      var cx = PW / 2, cy = PH / 2, R = 1400;
+      return porProgreso(tl, c, o.dur || 0.9, 'power2.inOut', function (p) {
+        var pts = [cx + 'px ' + cy + 'px'], fin = p * 360;
+        for (var a = 0; a <= fin; a += 6) pts.push(r1(cx + R * Math.sin(a * Math.PI / 180)) + 'px ' + r1(cy - R * Math.cos(a * Math.PI / 180)) + 'px');
+        pts.push(r1(cx + R * Math.sin(fin * Math.PI / 180)) + 'px ' + r1(cy - R * Math.cos(fin * Math.PI / 180)) + 'px');
+        clip(c, 'polygon(' + pts.join(', ') + ')');
+      }, { clipPath: 'none' });
     },
-    'am-mel': function (tl, s) { efecto('mazo', tl, uno(s, '[data-mazo]'), { dur: 0.8, escalon: 0.14, semilla: 'am-mel' }); },
-    'am-matriarca': function (tl, s) {
-      efecto('cortinilla', tl, uno(s, '[data-iris]'), { forma: 'iris', origen: '50% 40%', dur: 1, en: 0.1 });
-      efecto('dibujo', tl, uno(s, '[data-anillos]'), { dur: 1.3, escalon: 0.2, en: 0.3 });
+    // Acercamiento desde lejos, desenfocado.
+    acerca: function (tl, c, o) {
+      tl.fromTo(c, { scale: 0.62, opacity: 0, filter: 'blur(18px)' }, { scale: 1, opacity: 1, filter: 'blur(0px)', transformOrigin: '50% 50%', duration: o.dur || 0.8, ease: 'entrada', immediateRender: true }, 0);
+      tl.set(c, { filter: 'none' }, o.dur || 0.8);
+      return o.dur || 0.8;
     },
-    'am-lobo': function (tl, s) { efecto('duotono', tl, uno(s, '[data-duotono]'), { filtro: 'duotono-lobo', hacia: 'color', dur: 1.6, en: 0.2 }); },
-    'am-piltover': function (tl, s) {
-      efecto('cortinilla', tl, uno(s, '[data-persiana]'), { direccion: 'abajo', dur: 0.8, en: 0 });
-      efecto('camara', tl, uno(s, '[data-focos]'), { focos: '30 42 1.55; 62 45 1.05', en: 0.4, dur: 1.7 });
+    // Se aleja desde muy cerca mientras aparece (lento: es la muerte).
+    aleja: function (tl, c, o) {
+      tl.fromTo(c, { scale: 1.4, opacity: 0 }, { scale: 1, opacity: 1, transformOrigin: '50% 45%', duration: o.dur || 1.1, ease: 'power2.out', immediateRender: true }, 0);
+      return o.dur || 1.1;
     },
-    'am-caitlyn': function (tl, s) { efecto('pixelado', tl, uno(s, '[data-pixelado]'), { desde: 64, pasos: 6, dur: 1.5, en: 0.1 }); },
-    'am-leblanc': function (tl, s) { efecto('glitch', tl, uno(s, '[data-glitch]'), { filtro: 'glitch-leblanc', dur: 1.1, fuerza: 120, pasos: 12, en: 0 }); },
-    'am-muerte': function (tl, s) {
-      tl.fromTo(uno(s, '[data-cam]'), { filter: 'brightness(1) grayscale(0)' }, { filter: 'brightness(0.24) grayscale(1)', duration: 1.2, ease: 'power1.in', immediateRender: true }, 1.3);
-      tl.fromTo(uno(s, '[data-borroso]'), { opacity: 1 }, { opacity: 0.22, duration: 1.2, ease: 'power1.in', immediateRender: true }, 1.3);
-      efecto('brasas', tl, uno(s, '[data-brasas]'), { en: 0.2, dur: 2.2, n: 30, color: '#FF8A3D,${ORO_CL}', semilla: 'am-muerte' });
+    // Las recetas del kit sobre la lámina entera.
+    tinta: function (tl, c, o) { efecto('tinta', tl, c, { mascara: o.mascara, dur: o.dur || 1.05, en: 0, ease: 'power2.inOut' }); return o.dur || 1.05; },
+    tajo: function (tl, c, o) { efecto('cortinilla', tl, c, { forma: 'tajo', dur: o.dur || 0.8, en: 0 }); return o.dur || 0.8; },
+    quemado: function (tl, c, o) {
+      efecto('quemado', tl, c, { filtro: o.filtro, dur: o.dur || 1.2, en: 0 });
+      tl.set(c, { filter: 'none' }, o.dur || 1.2);   // con el umbral al tope todavía deja motas de brasa
+      return o.dur || 1.2;
     },
-    'am-otp': function (tl, s, t) {
-      efecto('letras', tl, uno(s, '[data-letras]'), { en: 0.1, escalon: 0.035, dur: 0.5 });
-      efecto('sello', tl, uno(s, '[data-emblema]'), { en: 0.5, temblor: 'no', desde: 1.8 });
-      efecto('contador', tl, uno(s, '[data-contador] span'), { cuenta: 4245731, separador: '.', dur: 1.3, en: t - 0.15 });
-      tl.from(uno(s, '[data-contador]'), { opacity: 0, duration: 0.3 }, t - 0.15);
+    ventana: function (tl, c, o) {
+      efecto('ventana', tl, c, { mascara: o.mascara, en: 0.15, dur: o.dur || 1.2, zoom: 12 });
+      tl.set(c, { maskImage: 'none', webkitMaskImage: 'none' }, 0.15 + (o.dur || 1.2));
+      return 0.15 + (o.dur || 1.2);
     },
-    'am-seis': function (tl, s) { efecto('bento', tl, uno(s, '[data-fila]'), { dur: 0.5, escalon: 0.1, desde: 'start', escala: 0.5 }); },
-    'am-skins': function (tl, s, t) {
-      efecto('mazo', tl, uno(s, '[data-mazo]'), { dur: 0.7, escalon: 0.12, semilla: 'am-skins' });
-      efecto('bento', tl, uno(s, '[data-chromas]'), { dur: 0.45, escalon: 0.05, desde: 'end', en: 0.4 });
-      efecto('palabra', tl, uno(s, '[data-dos]'), { en: t, golpe: 1.6, duracion: 0.12 });
+    glitch: function (tl, c, o) {
+      tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: 0.12, ease: 'steps(3)', immediateRender: true }, 0);
+      efecto('glitch', tl, c, { filtro: o.filtro, dur: o.dur || 0.9, fuerza: 170, pasos: 12, en: 0 });
+      tl.set(c, { filter: 'none' }, o.dur || 0.9);
+      return o.dur || 0.9;
     },
-    'am-legendaria': function (tl, s) {
-      efecto('ventana', tl, uno(s, '[data-ventana]'), { mascara: 'ventana-legendaria', en: 0.2, dur: 1.3, zoom: 12 });
-      tl.from(uno(s, '[data-velo]'), { opacity: 0, duration: 0.6 }, 1.2);
+    // Volteo en 3D: la lámina gira sobre su eje vertical.
+    voltea: function (tl, c, o) {
+      tl.fromTo(c, { rotationY: -88, opacity: 0.2 }, { rotationY: 0, opacity: 1, transformPerspective: 1500, transformOrigin: '0% 50%', duration: o.dur || 0.85, ease: 'entrada', immediateRender: true }, 0);
+      return o.dur || 0.85;
     },
-    'am-cierre': function (tl, s, t) {
-      efecto('camara', tl, uno(s, '[data-focos]'), { focos: '72 55 1.9; 50 66 1.5; 36 42 1.15', en: 0, dur: 0.7, pausa: 0.1 });
-      efecto('palabra', tl, uno(s, '[data-gg] span'), { en: t, letras: 'si', escalon: 0.09, golpe: 1.45, color: '#FFF6D6', color2: '${ORO}' });
-      efecto('piezas', tl, uno(s, '[data-confeti]'), { modo: 'cae', en: 0.6, dur: 0.9, abanico: 0.8, semilla: 'am-cierre' });
+    // Cortina: se destapa desde un borde.
+    cortina: function (tl, c, o) {
+      var desde = { abajo: 'inset(100% 0 0 0)', arriba: 'inset(0 0 100% 0)' }[o.desde];
+      tl.fromTo(c, { clipPath: desde }, { clipPath: 'inset(0% 0% 0% 0%)', duration: o.dur || 0.75, ease: 'power3.inOut', immediateRender: true }, 0);
+      tl.set(c, { clipPath: 'none' }, o.dur || 0.75);
+      return o.dur || 0.75;
+    },
+    // Caja que crece desde el centro.
+    caja: function (tl, c, o) {
+      return porProgreso(tl, c, o.dur || 0.75, 'power3.inOut', function (p) { var y = r1((1 - p) * 50), x = r1((1 - p) * 50); clip(c, 'inset(' + y + '% ' + x + '% ' + y + '% ' + x + '%)'); }, { clipPath: 'none' });
+    },
+    // La lámina sube desde abajo, como una carta que se desliza.
+    sube: function (tl, c, o) {
+      tl.fromTo(c, { y: PH }, { y: 0, duration: o.dur || 0.7, ease: 'entrada', immediateRender: true }, 0);
+      return o.dur || 0.7;
+    },
+    // La lámina cae girando y se asienta.
+    giro: function (tl, c, o) {
+      tl.fromTo(c, { rotation: -14, scale: 0.55, opacity: 0 }, { rotation: 0, scale: 1, opacity: 1, transformOrigin: '50% 60%', duration: o.dur || 0.8, ease: 'asentar', immediateRender: true }, 0);
+      return o.dur || 0.8;
+    },
+    // Lo único que hace el arte de la lámina: pixelado a nítido.
+    pixelado: function (tl, c, o) { efecto('pixelado', tl, uno(c, '[data-pixelado]'), { desde: 96, pasos: 7, dur: o.dur || 1.2, en: 0 }); return o.dur || 1.2; },
+    fundido: function (tl, c, o) {
+      tl.fromTo(c, { opacity: 0 }, { opacity: 1, duration: o.dur || 1, ease: 'power1.inOut', immediateRender: true }, 0);
+      return o.dur || 1;
     },
   };
 
-  ['am-portada', 'am-arcane', 'am-t1', 'am-doran', 'am-kc', 'am-popular', 'am-ksante', 'am-ulti', 'am-lore',
-   'am-espadas', 'am-general', 'am-mel', 'am-matriarca', 'am-lobo', 'am-piltover', 'am-caitlyn', 'am-leblanc',
-   'am-muerte', 'am-otp', 'am-seis', 'am-skins', 'am-legendaria', 'am-cierre', 'am-reposo'].forEach(function (id) {
+  // Una transición distinta por lámina (24, ninguna repetida).
+  var TRANSICION = {
+    'am-portada': { tipo: 'iris', origen: '47% 70%' },            // se abre desde la vela del 2
+    'am-arcane': { tipo: 'persianas', vertical: true, paso: 135 },
+    'am-t1': { tipo: 'diagonal' },
+    'am-doran': { tipo: 'empuje' },
+    'am-kc': { tipo: 'puertas' },
+    'am-popular': { tipo: 'mosaico', semilla: 'am-popular' },
+    'am-ksante': { tipo: 'reloj' },
+    'am-ulti': { tipo: 'acerca' },
+    'am-lore': { tipo: 'tinta', mascara: 'tinta-lore' },
+    'am-espadas': { tipo: 'tajo' },
+    'am-general': { tipo: 'quemado', filtro: 'quemado-general' },
+    'am-mel': { tipo: 'persianas', vertical: false, paso: 85 },
+    'am-matriarca': { tipo: 'voltea' },
+    'am-lobo': { tipo: 'cortina', desde: 'abajo' },
+    'am-piltover': { tipo: 'cortina', desde: 'arriba' },
+    'am-caitlyn': { tipo: 'pixelado' },
+    'am-leblanc': { tipo: 'glitch', filtro: 'glitch-leblanc' },
+    'am-muerte': { tipo: 'aleja' },
+    'am-otp': { tipo: 'caja' },
+    'am-seis': { tipo: 'sube' },
+    'am-skins': { tipo: 'giro' },
+    'am-legendaria': { tipo: 'ventana', mascara: 'ventana-legendaria' },
+    'am-cierre': { tipo: 'iris', origen: '100% 100%', dur: 0.9 },
+    'am-reposo': { tipo: 'fundido' },
+  };
+
+  // El dato genérico, el destello y las chispas, cuando la lámina ya entró.
+  function dato(tl, s, t) {
+    var p = uno(s, '[data-panel]');
+    if (!p.dataset.llegada) return;
+    var c = p.dataset.llegada.split(' ').map(Number);
+    q(p, '[data-dato]:not([data-dato="propio"])').forEach(function (d, i) {
+      tl.fromTo(d, { opacity: 0, y: 30 }, { opacity: 1, y: 0, duration: 0.5, ease: 'entrada', immediateRender: true }, t + i * 0.08);
+    });
+    var l = uno(p, '[data-luz]');
+    if (l) { efecto('destello', tl, l, { en: t, dur: 1.1 }); tl.to(l, { opacity: 0, duration: 0.5, ease: 'power1.in' }, t + 0.6); }
+    efecto('chispas', tl, uno(p, '[data-chispas]'), { en: t + 0.05, dur: 0.95, n: 30, fuerza: 600, subida: 120,
+      origen: (100 * c[0] / PW).toFixed(1) + ' ' + (100 * c[1] / PH).toFixed(1), color: '#FFF1C2,${ORO_CL},${ORO}' });
+  }
+
+  // Lo propio de cada lámina, a partir de t (cuando la transición ya destapó casi todo).
+  var PROPIO = {
+    'am-portada': function (tl, s, t) {
+      efecto('camara', tl, uno(s, '[data-focos]'), { focos: '47 66 2.1; 46 52 1.3; 50 50 1', en: 0, dur: 0.95, pausa: 0.1 });
+      efecto('letras', tl, uno(s, '[data-nombre]'), { en: t, escalon: 0.05, dur: 0.55 });
+      efecto('palabra', tl, uno(s, '[data-dos]'), { en: t + 0.35, golpe: 1.6, duracion: 0.12 });
+    },
+    'am-t1': function (tl, s, t) {
+      efecto('dibujo', tl, uno(s, '[data-filo]'), { dur: 0.6, en: 0.3 });
+      efecto('revuelto', tl, uno(s, '[data-revuelto] span'), { dur: 1, en: t - 0.2 });
+    },
+    'am-doran': function (tl, s, t) {
+      efecto('mazo', tl, uno(s, '[data-mazo]'), { dur: 0.7, escalon: 0.1, semilla: 'am-doran', en: 0.35 });
+      efecto('tragamonedas', tl, uno(s, '[data-tragamonedas] span'), { dur: 1.15, en: t });
+    },
+    'am-kc': function (tl, s, t) {
+      efecto('impacto', tl, uno(s, '[data-impacto]'), { en: t + 0.25, dur: 0.6 });
+      efecto('sello', tl, uno(s, '[data-hoy] svg'), { en: t, temblor: 'no', desde: 2.2 });
+    },
+    'am-ksante': function (tl, s) { efecto('voltea', tl, uno(s, '[data-voltea]'), { en: 1.1, dur: 0.9 }); },
+    'am-ulti': function (tl, s, t) {
+      efecto('sello', tl, uno(s, '[data-r]'), { en: t, temblor: 'no', desde: 1.9 });
+      efecto('impacto', tl, uno(s, '[data-impacto]'), { en: t + 0.4, dur: 0.6 });
+      tl.fromTo(uno(s, '[data-habilidades]'), { opacity: 1 }, { opacity: 0.45, duration: 0.5, ease: 'power1.inOut', immediateRender: false }, t + 0.45);
+    },
+    'am-espadas': function (tl, s) { efecto('rayo', tl, uno(s, '[data-rayo]'), { dur: 0.55, escalon: 0.12, en: 0.55 }); },
+    'am-general': function (tl, s, t) { tl.from(uno(s, '[data-sube]'), { y: 720, duration: 0.8, ease: 'entrada' }, t - 0.2); },
+    'am-mel': function (tl, s) { efecto('mazo', tl, uno(s, '[data-mazo]'), { dur: 0.8, escalon: 0.14, semilla: 'am-mel', en: 0.5 }); },
+    'am-matriarca': function (tl, s, t) { efecto('dibujo', tl, uno(s, '[data-anillos]'), { dur: 1.2, escalon: 0.2, en: t - 0.2 }); },
+    'am-lobo': function (tl, s) { efecto('duotono', tl, uno(s, '[data-duotono]'), { filtro: 'duotono-lobo', hacia: 'color', dur: 1.5, en: 0.6 }); },
+    'am-piltover': function (tl, s) { efecto('camara', tl, uno(s, '[data-focos]'), { focos: '30 42 1.55; 62 45 1.05', en: 0.5, dur: 1.6 }); },
+    'am-muerte': function (tl, s) {
+      tl.fromTo(uno(s, '[data-cam]'), { filter: 'brightness(1) grayscale(0)' }, { filter: 'brightness(0.24) grayscale(1)', duration: 1.1, ease: 'power1.in', immediateRender: true }, 1.4);
+      tl.fromTo(uno(s, '[data-borroso]'), { opacity: 1 }, { opacity: 0.22, duration: 1.1, ease: 'power1.in', immediateRender: true }, 1.4);
+      efecto('brasas', tl, uno(s, '[data-brasas]'), { en: 0.3, dur: 2.1, n: 30, color: '#FF8A3D,${ORO_CL}', semilla: 'am-muerte' });
+    },
+    'am-otp': function (tl, s, t) {
+      efecto('letras', tl, uno(s, '[data-letras]'), { en: 0.35, escalon: 0.035, dur: 0.5 });
+      efecto('sello', tl, uno(s, '[data-emblema]'), { en: t - 0.1, temblor: 'no', desde: 1.8 });
+      efecto('contador', tl, uno(s, '[data-contador] span'), { cuenta: 4245731, separador: '.', dur: 1.3, en: t });
+    },
+    'am-seis': function (tl, s, t) { efecto('bento', tl, uno(s, '[data-fila]'), { dur: 0.45, escalon: 0.09, desde: 'start', escala: 0.5, en: t - 0.3 }); },
+    'am-skins': function (tl, s, t) {
+      efecto('bento', tl, uno(s, '[data-chromas]'), { dur: 0.45, escalon: 0.05, desde: 'end', en: t - 0.1 });
+      efecto('palabra', tl, uno(s, '[data-dos]'), { en: t, golpe: 1.6, duracion: 0.12 });
+    },
+    'am-legendaria': function (tl, s, t) { tl.from(uno(s, '[data-velo]'), { opacity: 0, duration: 0.5 }, t - 0.2); },
+    'am-cierre': function (tl, s, t) {
+      efecto('camara', tl, uno(s, '[data-focos]'), { focos: '72 55 1.9; 50 66 1.5; 36 42 1.15', en: 0, dur: 0.75, pausa: 0.1 });
+      efecto('palabra', tl, uno(s, '[data-gg] span'), { en: t, letras: 'si', escalon: 0.09, golpe: 1.45, color: '#FFF6D6', color2: '${ORO}' });
+      efecto('piezas', tl, uno(s, '[data-confeti]'), { modo: 'cae', en: t - 0.1, dur: 0.85, abanico: 0.6, semilla: 'am-cierre' });
+    },
+  };
+
+  Object.keys(TRANSICION).forEach(function (id) {
     animar(id, function (tl, s) {
       camara(tl, s);
-      var t = entrada(tl, s);
+      var tr = TRANSICION[id];
+      var fin = T[tr.tipo](tl, uno(s, '[data-contenido]'), tr);
+      var t = Math.max(0.35, fin - 0.15);          // el dato entra cuando la lámina ya está casi completa
+      dato(tl, s, t);
       if (PROPIO[id]) PROPIO[id](tl, s, t);
-      // Todo cabe en 2,5 s y la timeline dura exactamente eso.
       if (tl.duration() < DUR) tl.set({}, {}, DUR);
     });
   });
