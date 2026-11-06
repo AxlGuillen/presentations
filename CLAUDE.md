@@ -152,6 +152,8 @@ Cada deck añade un botón "Presentar · P" que hace `postMessage({__omelette_pr
 
 **Pasos dentro de una slide** (opt-in): elementos con `data-step="1"`, `"2"`… se revelan por etapas con la navegación normal — → revela el siguiente paso, ← lo oculta; agotados los pasos se cambia de slide. Al llegar avanzando la slide arranca en 0 pasos; al regresar llega con todos. La ocultación es `visibility` (no mueve layout), miniaturas e impresión muestran siempre todo, y `capturar.mjs`/`cuadros.mjs` revelan todo antes de capturar (PNG y video llevan la slide completa). Cada cambio emite `stepchange` (bubbles) con `{slide, step, previousStep, total}`; el pegamento `kit.animador()` ya anima por defecto los elementos recién revelados. Ejemplo: las columnas del tablero en `semana34`. Sin `data-step` el comportamiento es idéntico al de siempre.
 
+**Modo capa** (desde el 5/nov/2026): con `?capa=<id>[&alfa=1]` el runtime muestra solo esa lámina, para incrustarla en un iframe. Ver «Estudio de montaje: modo capa y API local». Las 61 copias de `deck-stage.js` siguen siendo idénticas (un solo hash; lo comprueba `tools/pruebas/runtime.test.mjs`).
+
 Tamaños de diseño: **tabletas 1920×1080**, **soloq 1080×1920**.
 
 ## Carga de assets
@@ -550,6 +552,35 @@ El ASR sería lo que permitiría **grabar su propia voz y sacar los subtítulos
 karaoke solos** —hoy los timestamps solo existen si el audio lo generó el TTS—,
 pero hace falta meter crédito. El CRUD de modelos está en `/model`, no en
 `/v1/models` como dice la doc (ese devuelve 404).
+
+## Estudio de montaje: modo capa y API local (desde el 5/nov/2026)
+
+La vista «Estudio» de ReelForge (puerto 5001) monta las láminas de un deck encima de un video **en vivo**, sin renderizar, y renderiza al final. Este repo pone dos piezas (fase 1 del brief `PKB/proyectos/personales/reel-editor/brief-estudio-de-montaje.md`); la vista es de ReelForge.
+
+**Modo capa de `deck-stage.js`.** `/<escritorio>/<deck>/?capa=<id>` muestra solo la `<section data-lamina="<id>">`, sin tira de miniaturas, cortina ni controles, con su timeline en pausa. Con `&alfa=1` vacía los fondos igual que `cuadros.mjs --alfa` (`html`, `body`, `deck-stage`, la lámina, `:host` y `.canvas`, y oculta `[data-fondo]`).
+- **Protocolo `postMessage`:** entra `{tipo:'seek', t}` → `section.__tl.time(t, false)` (acotado a `[0, duración]`; el mismo seek que `cuadros.mjs`) y `{tipo:'info'}`; sale `{tipo:'listo', id, dur_anim, ancho, alto}` (también solo, al terminar de cargar fuentes, imágenes y timeline) y `{tipo:'error', id, motivo:'lamina-no-encontrada'}`. Una lámina sin timeline responde `dur_anim: 0` e ignora los seeks.
+- **Seguridad:** solo se aceptan mensajes de `window.parent` con origen en la lista (por omisión `http://localhost:5001` y `http://127.0.0.1:5001`; la página puede cambiarla con `window.CAPA_ORIGENES = [...]` antes de cargar el script). Las respuestas van al origen que escribió, nunca a `'*'`.
+- **Tamaño:** el de diseño del deck (1080×1920), igual que `cuadros.mjs`. El recorte del panel (1080×1370 desde y = 275) lo aplica `laminas.mjs` después; el consumidor lo reproduce con `caja`.
+- **Lo que se prueba y lo que no:** `tools/pruebas/capa.test.mjs` compara el modo capa con la ruta de `cuadros.mjs`: el **estado** de la lámina (caja, transform, opacidad, color de cada elemento) es idéntico exacto y los píxeles quedan dentro del ruido de Chrome (≥ 45 dB). **«Diferencia de píxeles 0» literal no se puede pedir**: Chrome no rasteriza igual dos veces, y la propia ruta de `cuadros.mjs` contra sí misma da 84–92 dB. Un control comprueba que ambas comprobaciones detectan otro instante (t = 0 da 14–26 dB; un cuadro de diferencia, 26–53 dB).
+
+**API local en `servidor-local.mjs`** (`tools/api-montaje.mjs`, puerto 3125). Va antes de los redirects y del middleware, así que no pide la contraseña de la galería, y no se publica: no hay carpeta `api/` en la raíz (Vercel la desplegaría como funciones).
+
+| Ruta | Respuesta |
+|---|---|
+| `GET /api/decks[?desk=creator]` | `[{desk, deck, titulo, laminas, url}]`, solo decks con `data-lamina` |
+| `GET /api/decks/<desk>/<deck>/laminas[?alfa=mov\|webm]` | lo mismo que `manifest.json` más `ancho` y `alto`, **sin renderizar**. `dur_anim` sale de un Chrome headless que pregunta a cada timeline; se cachea en `video-out/.laminas-meta.json` por hash del `index.html` y de lo que carga |
+| `POST /api/render {desk, deck, laminas?, alfa:'mov'\|'webm', fps}` | `202 {job_id}`. Corre `laminas.mjs --solo=…` solo con las láminas que cambiaron; un render a la vez, y un pedido idéntico a uno en curso es el mismo trabajo |
+| `GET /api/render/<job>` | `{estado: en_cola\|renderizando\|listo\|error, progreso, laminas:[{id, estado: pendiente\|renderizando\|lista\|cacheada\|error}]}` y, al terminar, `carpeta` (`video-out/laminas/`: los clips y el `manifest.json`), `manifest` y `anim` (`video-out/anim-alfa/`), rutas absolutas |
+
+- **Caché de renders** (`video-out/laminas-cache.json`, ignorado por git): la clave de cada lámina es el hash de **su** `<section>`, de las imágenes que carga (por contenido: tocar un archivo sin cambiarlo no cuenta), del resto de la página (estilos, scripts y los archivos que cargan, `deck-stage.js` incluido), de cuadros.mjs/laminas.mjs/laminas-lib.mjs y de formato + fps. Editar el texto de una lámina rehace solo esa; tocar algo compartido las rehace todas, que es lo correcto. Una lámina cuenta como cacheada solo si su clip, su PNG y su entrada en el `manifest.json` (del formato pedido) siguen ahí.
+- **`manifest.json` es uno solo para todos los formatos**: renderizar en `webm` después de `mov` lo reescribe, y volver a `mov` rehace las láminas.
+- **`--solo=<id>,<id>`** en `cuadros.mjs` y `laminas.mjs`: renderiza solo esas láminas (el NN de los archivos sigue siendo la posición en el deck) y **mezcla** `anim.json` y `manifest.json` con lo que ya hubiera, si es del mismo formato y fps. Sin `--solo` todo funciona como antes. (`capturar.mjs`, el camino sin alfa, no lo entiende y captura todo.)
+- **Seguridad:** solo responde a conexiones desde esta computadora (loopback y `Host` localhost, contra DNS rebinding); CORS solo para los dos orígenes de ReelForge, también en los errores; un `POST` con otro `Origin` se rechaza y exige `application/json`; `desk`, `deck` y los ids se validan contra el disco.
+- **`tools/laminas-lib.mjs`** reúne lo que comparten `laminas.mjs`, `cuadros.mjs` y la API: leer las secciones, la caja, y las claves de caché.
+
+**`tools/manifest.schema.json`** (JSON Schema 2020-12) describe el `manifest.json`: `id`, `archivo`, `png`, `dur_anim`, `dur`, `alfa` (debe coincidir con la extensión), `caja` y `palabras`; `ancho` y `alto` solo en la respuesta de la API. `tools/pruebas/manifest.test.mjs` lo valida con `ajv` (devDependency de `tools/`, solo para pruebas) contra los fixtures de `tools/pruebas/fixtures/` y los `manifest.json` reales que haya en la máquina (`video-out/` está ignorado).
+
+**Pruebas:** `node --test "tools/pruebas/*.test.mjs"` (47). Las que abren Chrome o ffmpeg se saltan si no están. `api-montaje.test.mjs` incluye un render real de un deck mínimo (segunda vez no rehace nada; cambiar una lámina rehace solo esa).
 
 ## Cards al compartir (Open Graph)
 
