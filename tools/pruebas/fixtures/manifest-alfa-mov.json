@@ -1,0 +1,47 @@
+[
+  {
+    "id": "lb-portada",
+    "archivo": "lb-portada.mov",
+    "png": "lb-portada.png",
+    "dur_anim": 2.8,
+    "dur": 3.8,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 275
+    },
+    "palabras": []
+  },
+  {
+    "id": "lb-kit",
+    "archivo": "lb-kit.mov",
+    "png": "lb-kit.png",
+    "dur_anim": 2.8,
+    "dur": 3.8,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 275
+    },
+    "palabras": [
+      "k/da",
+      "kda"
+    ]
+  },
+  {
+    "id": "lb-clon",
+    "archivo": "lb-clon.mov",
+    "png": "lb-clon.png",
+    "dur_anim": 0,
+    "dur": 1,
+    "alfa": true,
+    "caja": {
+      "width": 1080,
+      "x": "center",
+      "bottom": 275
+    },
+    "palabras": []
+  }
+]

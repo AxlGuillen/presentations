@@ -5,5 +5,8 @@
   "description": "Herramientas locales (captura y montaje de video). NO forma parte del sitio estatico.",
   "dependencies": {
     "puppeteer-core": "^23.0.0"
+  },
+  "devDependencies": {
+    "ajv": "^8.20.0"
   }
 }

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://presentations-three-phi.vercel.app/tools/manifest.schema.json",
+  "title": "manifest.json de laminas.mjs",
+  "description": "Las láminas de un deck cortadas para el montaje (video-out/laminas/manifest.json). Lo escribe tools/laminas.mjs y lo lee el módulo montage de ReelForge (id y archivo son lo que ya leía; el resto creció sin romperlo). GET /api/decks/<desk>/<deck>/laminas devuelve lo mismo sin renderizar, más ancho y alto.",
+  "type": "array",
+  "items": { "$ref": "#/$defs/lamina" },
+  "$defs": {
+    "lamina": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "archivo", "png", "dur_anim", "dur", "alfa", "caja", "palabras"],
+      "properties": {
+        "id": {
+          "description": "El data-lamina de la <section>. También es el nombre base de los archivos.",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+        },
+        "archivo": {
+          "description": "El clip: <id>.mp4 (opaco), <id>.mov (ProRes 4444 con alfa) o <id>.webm (VP9 con alfa).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*\\.(mp4|mov|webm)$"
+        },
+        "png": {
+          "description": "El último cuadro de la lámina (con alfa si el clip lo trae).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*\\.png$"
+        },
+        "dur_anim": {
+          "description": "Lo que dura la timeline de la lámina, en segundos (0 si no tiene).",
+          "type": "number",
+          "minimum": 0
+        },
+        "dur": {
+          "description": "dur_anim más el respiro final (--quieto, 1 s por omisión), en segundos.",
+          "type": "number",
+          "minimum": 0
+        },
+        "alfa": {
+          "description": "true si el clip trae transparencia (.mov o .webm).",
+          "type": "boolean"
+        },
+        "caja": { "$ref": "#/$defs/caja" },
+        "palabras": {
+          "description": "Las palabras del guion que disparan la lámina (el data-palabras de la <section>, separado por comas). Vacío si no tiene.",
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "ancho": {
+          "description": "Solo en la API: el ancho de diseño del deck en px (el del <deck-stage>), que es el del iframe del modo capa.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "alto": {
+          "description": "Solo en la API: el alto de diseño del deck en px.",
+          "type": "integer",
+          "minimum": 1
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "alfa": { "const": true } } },
+          "then": { "properties": { "archivo": { "type": "string", "pattern": "\\.(mov|webm)$" } } },
+          "else": { "properties": { "archivo": { "type": "string", "pattern": "\\.mp4$" } } }
+        }
+      ]
+    },
+    "caja": {
+      "description": "Dónde va la lámina sobre el video vertical, con las claves del montaje de ReelForge: ancho en px, alineación horizontal y distancia al borde de abajo del lienzo del deck.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "x", "bottom"],
+      "properties": {
+        "width": { "type": "integer", "minimum": 1 },
+        "x": { "enum": ["center", "left", "right"] },
+        "bottom": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}
