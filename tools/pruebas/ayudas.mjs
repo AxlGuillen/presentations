@@ -126,7 +126,7 @@ export async function porCapa(navegador, url, id, t, alfa) {
   });
   await pagina.setViewport({ width: 1080, height: 1920, deviceScaleFactor: 1 });
   await pagina.goto(`${url}?capa=${id}${alfa ? '&alfa=1' : ''}`, { waitUntil: 'networkidle0' });
-  await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 30000 });
+  await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 30000, polling: 100 });
   await pagina.evaluate((x) => window.postMessage({ tipo: 'seek', t: x }, '*'), t);
   await pagina.evaluate(() => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))));
   const estado = await pagina.evaluate(`(${INSTANTANEA})(document.querySelector('deck-stage section[data-deck-active]'))`);

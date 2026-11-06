@@ -119,7 +119,7 @@ test('modo capa: protocolo postMessage dentro de un iframe', { skip: omitir, tim
   // {tipo:'info'} responde otra vez el 'listo', al origen que preguntó.
   await pagina.evaluate(() => { window.__msgs.length = 0; });
   await enviar(pagina, { tipo: 'info' });
-  await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 5000 });
+  await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 5000, polling: 100 });
 
   // Desde un origen que el deck no autoriza, el seek se ignora.
   const intrusa = await abrir(intruso);
@@ -141,7 +141,7 @@ test('modo capa: una sola lámina, sin rail ni controles; con alfa, fondos vací
     await pagina.evaluateOnNewDocument(() => { window.CAPA_ORIGENES = [location.origin]; window.__msgs = []; addEventListener('message', (e) => { if (e.data && e.data.tipo) window.__msgs.push(e.data); }); });
     await pagina.setViewport({ width: 1080, height: 1920 });
     await pagina.goto(`${web.origen}/${DECK}/?capa=${id}${alfa ? '&alfa=1' : ''}`, { waitUntil: 'networkidle0' });
-    await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 30000 });
+    await pagina.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 30000, polling: 100 });
     const r = await pagina.evaluate((idLamina) => {
       const ds = document.querySelector('deck-stage');
       const activas = [...ds.querySelectorAll(':scope > section[data-deck-active]')].map((s) => s.dataset.lamina);
@@ -186,14 +186,14 @@ test('modo capa: lámina inexistente avisa error; lámina sin timeline responde 
     return pagina;
   };
   const sin = await abrir('capa=b');
-  await sin.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 10000 });
+  await sin.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'listo'), { timeout: 10000, polling: 100 });
   const listo = await sin.evaluate(() => window.__msgs.find((m) => m.tipo === 'listo'));
   assert.deepEqual({ id: listo.id, dur_anim: listo.dur_anim, ancho: listo.ancho, alto: listo.alto }, { id: 'b', dur_anim: 0, ancho: 1080, alto: 1920 });
   await sin.evaluate(() => window.postMessage({ tipo: 'seek', t: 1 }, '*'));    // no debe lanzar
   assert.deepEqual(await sin.evaluate(() => [...document.querySelectorAll('section[data-deck-active]')].map((s) => s.dataset.lamina)), ['b']);
 
   const falta = await abrir('capa=no-existe');
-  await falta.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'error'), { timeout: 10000 });
+  await falta.waitForFunction(() => window.__msgs.some((m) => m.tipo === 'error'), { timeout: 10000, polling: 100 });
   const error = await falta.evaluate(() => window.__msgs.find((m) => m.tipo === 'error'));
   assert.deepEqual({ id: error.id, motivo: error.motivo }, { id: 'no-existe', motivo: 'lamina-no-encontrada' });
 });
