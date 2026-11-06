@@ -126,6 +126,28 @@
 
   const pad2 = (n) => String(n).padStart(2, '0');
 
+  // ── Modo capa ───────────────────────────────────────────────────────────
+  // ?capa=<id>[&alfa=1] muestra SOLO la lámina cuyo data-lamina es <id>, a su
+  // tamaño de diseño, sin tira de miniaturas, cortina ni controles, con su
+  // timeline en pausa. Con &alfa=1 vacía los fondos (la misma regla que
+  // cuadros.mjs --alfa). El estudio de montaje de ReelForge la incrusta en un
+  // iframe y la mueve por postMessage:
+  //   entra  {tipo:'seek', t}  → section.__tl.time(t, false)   (el MISMO seek
+  //                              que cuadros.mjs: lo que se ve es lo que se rinde)
+  //   entra  {tipo:'info'}     → responde el 'listo'
+  //   sale   {tipo:'listo', id, dur_anim, ancho, alto}   (también solo, al
+  //                              terminar de cargar fuentes y timeline)
+  //   sale   {tipo:'error', id, motivo}                  (la lámina no existe)
+  // Solo se aceptan mensajes de window.parent cuyo origen esté en la lista
+  // (por omisión ReelForge, en el puerto 5001); la página puede cambiarla con
+  // window.CAPA_ORIGENES (un arreglo) ANTES de cargar este script. Las
+  // respuestas van al origen que escribió, nunca a '*'.
+  const CAPA_PARAMS = new URLSearchParams(location.search);
+  const CAPA_ID = CAPA_PARAMS.get('capa') || '';
+  const CAPA_ALFA = CAPA_ID !== '' && CAPA_PARAMS.get('alfa') === '1';
+  const CAPA_ORIGENES_BASE = ['http://localhost:5001', 'http://127.0.0.1:5001'];
+  const capaOrigenes = () => (Array.isArray(window.CAPA_ORIGENES) ? window.CAPA_ORIGENES : CAPA_ORIGENES_BASE);
+
   // Label precedence: data-label → data-screen-label (number stripped) → first heading → "Slide".
   const getSlideLabel = (el) => {
     const explicit = el.getAttribute('data-label');
@@ -672,7 +694,9 @@
       // next thumbnails — the rail has no business rendering inside those
       // (wrong scale, and it offsets the stage so the thumb shows a gutter).
       if (/[?&]_snthumb=/.test(location.search)) this.setAttribute('no-rail', '');
+      if (CAPA_ID) this._capaPreparar();
       this._render();
+      if (CAPA_ID) this._capaEstilosSombra();
       this._loadNotes();
       this._syncPrintPageRule();
       this._ensureTextWrapDefaults();
@@ -1339,6 +1363,7 @@
       this._restoreIndex();
       this._applyIndex({ showOverlay: false, broadcast: true, reason: 'init' });
       this._fit();
+      if (CAPA_ID) this._capaArrancar();
     }
 
     _collectSlides() {
@@ -1401,6 +1426,10 @@
     }
 
     _restoreIndex() {
+      if (CAPA_ID) {
+        const c = this._slides.findIndex((s) => s.getAttribute('data-lamina') === CAPA_ID);
+        if (c >= 0) { this._index = c; return; }
+      }
       // The host's ?slide= param is delivered as a #<int> hash (1-indexed) on
       // the iframe src. No hash → slide 1; the deck itself keeps no position
       // state across loads.
@@ -1538,6 +1567,7 @@
     }
 
     _onMessage(e) {
+      if (CAPA_ID) return this._capaMensaje(e);
       const d = e.data;
       if (d && typeof d.__omelette_presenting === 'boolean') {
         this._presenting = d.__omelette_presenting;
@@ -1617,6 +1647,7 @@
     }
 
     _onTap(e) {
+      if (CAPA_ID) return;
       // Touch-only — keyboard + the overlay toolbar cover nav on desktop.
       if (FINE_POINTER_MQ.matches) return;
       // Only taps that land on the stage (slide content or letterbox); the
@@ -1639,6 +1670,7 @@
     }
 
     _onKey(e) {
+      if (CAPA_ID) return;
       // Ignore when the user is typing.
       const t = e.target;
       if (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName))) return;
@@ -2439,6 +2471,118 @@
       this.insertBefore(slide, ref);
       this._collectSlides();
       this._applyIndex({ showOverlay: false, broadcast: true, reason: 'mutation' });
+    }
+
+    // ── Modo capa ─────────────────────────────────────────────────────────
+
+    /** Antes de renderizar: sin rail, en modo presentación (la cortina se va
+     *  sola y el overlay no sale) y sin los botones que el kit pone en la
+     *  página. Es lo que cuadros.mjs hace desde afuera con un postMessage y
+     *  una hoja de estilos. */
+    _capaPreparar() {
+      this._capa = true;
+      this.setAttribute('no-rail', '');
+      this._presenting = true;
+      const st = document.createElement('style');
+      st.id = 'deck-stage-capa';
+      st.setAttribute('data-omelette-injected', '');
+      st.textContent = '#modo-presentacion,#ver-video,#capa-video{display:none!important}' + (CAPA_ALFA
+        ? 'html,body,deck-stage,deck-stage>section{background:transparent!important;background-image:none!important}[data-fondo]{display:none!important}'
+        : '');
+      document.head.appendChild(st);
+    }
+
+    /** Con alfa: los fondos de :host y del lienzo viven dentro del shadow DOM,
+     *  adonde no llega una hoja de afuera. */
+    _capaEstilosSombra() {
+      if (!CAPA_ALFA) return;
+      const st = document.createElement('style');
+      st.textContent = ':host{background:transparent!important}.canvas{background:transparent!important}';
+      this._root.appendChild(st);
+    }
+
+    /** Deja la lámina lista, con los mismos pasos que cuadros.mjs antes de su
+     *  primer seek, y avisa 'listo'. Corre una sola vez. */
+    async _capaArrancar() {
+      if (this.__capaIniciada || !this._slides.length) return;
+      this.__capaIniciada = true;
+      const slide = this._slides.find((s) => s.getAttribute('data-lamina') === CAPA_ID);
+      if (!slide) return this._capaDifundir({ tipo: 'error', id: CAPA_ID, motivo: 'lamina-no-encontrada' });
+      this._capaSlide = slide;
+      const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+      // rAF puede quedar suspendido en un iframe oculto: no se espera sin tope.
+      const dosFrames = () => Promise.race([
+        new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))), esperar(250)]);
+      // El video muestra la lámina completa: todos los pasos revelados.
+      slide.querySelectorAll('[data-step-hidden]').forEach((el) => el.removeAttribute('data-step-hidden'));
+      // El pegamento (kit.animador) crea la timeline al activarse la lámina.
+      if (window.gsap) for (let n = 0; n < 160 && !slide.__tl; n++) await esperar(25);
+      // Assets diferidos: sin esto el primer cuadro saldría sin imágenes.
+      await new Promise((r) => {
+        const listo = () => [...slide.querySelectorAll('img')].every((i) => i.complete);
+        if (listo()) return r();
+        const t = setInterval(() => { if (listo()) { clearInterval(t); r(); } }, 50);
+        setTimeout(() => { clearInterval(t); r(); }, 15000);
+      });
+      // Y los fondos (data-bg se hidrata como background-image) y la decodificación.
+      const urls = new Set();
+      for (const el of [slide, ...slide.querySelectorAll('*')]) {
+        for (const m of getComputedStyle(el).backgroundImage.matchAll(/url\("?([^")]+)"?\)/g)) urls.add(m[1]);
+      }
+      await Promise.all([...urls].map((u) => new Promise((r) => { const im = new Image(); im.onload = () => im.decode().then(r, r); im.onerror = r; im.src = u; })));
+      await Promise.all([...slide.querySelectorAll('img')].map((i) => (i.decode ? i.decode().catch(() => {}) : null)));
+      await dosFrames();
+      // Desde aquí solo avanza con seeks explícitos (callbacks activos: false
+      // en suppressEvents, igual que cuadros.mjs).
+      const tl = slide.__tl;
+      if (tl) { tl.pause(0, false); this._capaTl = tl; }
+      if (document.fonts) await Promise.race([document.fonts.ready, esperar(2500)]);
+      // connectedCallback mantiene el escenario oculto hasta que cargan las fuentes.
+      for (let n = 0; n < 100 && this.hasAttribute('data-fonts-pending'); n++) await esperar(25);
+      this._capaListo = true;
+      if (this._capaT != null) this._capaSeek(this._capaT);
+      this._capaDifundir(this._capaInfo());
+    }
+
+    _capaInfo() {
+      const tl = this._capaSlide && this._capaSlide.__tl;
+      return { tipo: 'listo', id: CAPA_ID, dur_anim: tl ? +tl.duration().toFixed(3) : 0,
+               ancho: this.designWidth, alto: this.designHeight };
+    }
+
+    /** El seek de cuadros.mjs: section.__tl.time(t, false), con t acotado a
+     *  [0, duración]. Si el pegamento reconstruyó la timeline (three.js lo
+     *  hace al cargar su módulo) la nueva se pausa antes de usarla. Sin
+     *  timeline no hace nada. */
+    _capaSeek(t) {
+      if (!this._capaListo) { this._capaT = t; return; }
+      const tl = this._capaSlide.__tl;
+      if (!tl) return;
+      if (tl !== this._capaTl) { this._capaTl = tl; tl.pause(0, false); }
+      tl.time(Math.max(0, Math.min(t, tl.duration())), false);
+    }
+
+    _capaMensaje(e) {
+      if (e.source !== window.parent || capaOrigenes().indexOf(e.origin) < 0) return;
+      const d = e.data;
+      if (!d || typeof d !== 'object') return;
+      if (d.tipo === 'seek') {
+        const t = +d.t;
+        if (Number.isFinite(t)) this._capaSeek(t);
+      } else if (d.tipo === 'info' && this._capaListo) {
+        try { e.source.postMessage(this._capaInfo(), e.origin); } catch (err) {}
+      }
+    }
+
+    /** Mensaje no solicitado al padre: a cada origen permitido (el navegador
+     *  solo lo entrega al que coincide). En Chrome, ancestorOrigins dice cuál
+     *  es y evita avisos de consola por los demás. */
+    _capaDifundir(msg) {
+      const lista = capaOrigenes();
+      const padre = location.ancestorOrigins && location.ancestorOrigins[0];
+      (padre ? lista.filter((o) => o === padre) : lista).forEach((o) => {
+        try { window.parent.postMessage(msg, o); } catch (err) {}
+      });
     }
 
     // Public API ------------------------------------------------------------
