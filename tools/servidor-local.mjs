@@ -4,10 +4,15 @@
 // desplegar. De los patrones solo entiende lo que usa el sitio: rutas exactas
 // y un ':path*' al final. La clave
 // sale de GALERIA_CLAVE (entorno o .env, que está ignorado).
+// Además monta la API local del estudio de montaje de ReelForge (/api/*, ver
+// api-montaje.mjs). Va ANTES de los redirects y del middleware: no pasa por la
+// contraseña de la galería porque solo responde desde esta computadora.
 // Uso: node tools/servidor-local.mjs [puerto]   → http://localhost:3125/
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
+import { pathToFileURL } from 'node:url';
+import { crearApi } from './api-montaje.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const puerto = Number(process.argv[2] || 3125);
@@ -15,7 +20,9 @@ if (!process.env.GALERIA_CLAVE && fs.existsSync(path.join(raiz, '.env'))) {
   const m = fs.readFileSync(path.join(raiz, '.env'), 'utf8').match(/^GALERIA_CLAVE=(.*)$/m);
   if (m) process.env.GALERIA_CLAVE = m[1].trim();
 }
-const { default: middleware, config } = await import(path.join(raiz, 'middleware.ts'));
+// En Windows import() no acepta una ruta absoluta («c:»): hace falta una URL file://.
+const { default: middleware, config } = await import(pathToFileURL(path.join(raiz, 'middleware.ts')).href);
+const api = crearApi({ raiz });
 const { redirects = [] } = JSON.parse(fs.readFileSync(path.join(raiz, 'vercel.json'), 'utf8'));
 /** El resto de la ruta si `patron` la cubre ('' si es exacta), o null. */
 const cubre = (patron, ruta) => {
@@ -29,6 +36,7 @@ const TIPOS = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript', '
 
 http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${puerto}`);
+  if (await api.manejar(req, res, url)) return;
   for (const r of redirects) {
     const resto = cubre(r.source, url.pathname);
     if (resto == null) continue;
