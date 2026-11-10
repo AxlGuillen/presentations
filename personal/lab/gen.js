@@ -2,7 +2,7 @@
 // Ejecutar: node personal/lab/gen.js
 //
 // No es una presentación: es el catálogo de lo que trae el kit desde la
-// propuesta de docs/animaciones-y-assets.md, una lámina por receta, para
+// propuesta de docs/archivo/animaciones-y-assets.md, una lámina por receta, para
 // escoger viéndolas. Cada lámina dice su nombre y la línea exacta para usarla.
 //
 //   · Texto, imagen, contenedores, transiciones y SVG → kit.efectos()
@@ -318,7 +318,7 @@ patronLamina('hilos', 'hilos', { paleta: [BONE], lineas: 46 }, 'dibuja', "kit.pa
 patronLamina('horizonte', 'horizonte', { paleta: [BONE, CORAL, VIOLETA] }, 'dibuja', "kit.patron('horizonte', { horizonte, radiales, filas, sol })");
 patronLamina('guilloche', 'guilloche', { paleta: [VIOLETA, CORAL] }, 'dibuja', "kit.patron('guilloche', { anillos, ondas, amplitud })  · el fondo de un billete");
 
-// ── EDIT (docs/mejoras-oct-2026.md, P3 y P4) ─────────────────────────────
+// ── EDIT (docs/archivo/mejoras-oct-2026.md, P3 y P4) ─────────────────────────────
 // Capas para montar encima de un edit con laminas.mjs --alfa. La de ritmo lee
 // lab/beatmap.json (un beatmap de ejemplo a 120 bpm; la música no se commitea).
 const ED = 'Edit';
@@ -356,7 +356,7 @@ lamina({ grupo: ED, nombre: 'rayo', uso: "${kit.rayo([d, …], { ancho, alto, co
 lamina({ grupo: ED, nombre: 'impacto', uso: "${kit.impacto({ ancho, alto, n, hueco })}  dentro de  data-efecto=\"impacto\"  · data-queda=\"si\" las deja puestas",
   cuerpo: `<div data-efecto="impacto" data-en="0.3" data-queda="si" style="position:relative;width:100%;height:100%;border-radius:22px;overflow:hidden;background:${PANEL}">${imagen('Vi_0.jpg', 'Vi', '50% 30%')}${kit.impacto({ ancho: 912, alto: 960, n: 70, hueco: 0.42, centro: [0.5, 0.36] })}</div>` });
 
-// ── ACABADO (docs/mejoras-oct-2026.md, P7 y P5) ──────────────────────────
+// ── ACABADO (docs/archivo/mejoras-oct-2026.md, P7 y P5) ──────────────────────────
 const AC = 'Acabado';
 const CURVAS = [['entrada', 'llega rápido y frena suave'], ['salida', 'arranca lento y se va'], ['golpe', 'llega de golpe y rebota apenas'], ['asentar', 'se pasa un poco y se asienta'], ['deriva', 'va y viene despacio']];
 lamina({ grupo: AC, nombre: 'curvas', uso: "ease: 'entrada' | 'salida' | 'golpe' | 'asentar' | 'deriva'  · con CustomEase si el deck lo carga",

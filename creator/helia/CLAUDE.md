@@ -1,0 +1,11 @@
+# helia
+
+Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales están en el `CLAUDE.md` de la raíz y el motor en `docs/motor/`.
+
+## Qué es y decisiones
+
+**GENERADO** por `helia/gen.js`. **Episodio 2 de la serie de lore**, con el formato de guerras: no es una presentación sino el paquete de assets, una lámina por bloque del guion y **poco texto por encargo** (arte, una frase y como mucho una línea). **Es la precuela del episodio 1 y es canon**: la cronología de la wiki pone la Ruina y el inicio de las Guerras Rúnicas en el mismo año, y las guerras empiezan porque los artefactos de las bóvedas de Helia quedan sueltos; la lámina del amarre lo cierra con el mismo arte que abre guerras. El arte sale de la **wiki oficial** —las Islas Bendecidas vivas, un barco entrando a Helia por la niebla blanca, Viego e Isolde abrazados y, para el remate, **«Made with Love»: Isolde cosiendo la muñeca que sería Gwen**—, de Legends of Runeterra y de Data Dragon; el índice con códigos y URLs de los originales está en `helia/ASSETS.md`. **El arte va de borde a borde de la pantalla**, fuera de la banda segura por los lados a propósito (la banda protege el texto, no la imagen), así que `qa-deck` reporta 84 px de desborde a lo ancho en casi todas las láminas y es esperado. ⚠️ Como en guerras, **sus assets no pasan por `optimizar-imagenes.mjs`**. ⚠️ Nombres oficiales es-MX: **Islas Bendecidas** (el episodio 1 dijo «Benditas» y estaba mal), **la Ruina** (no «el Aciago», que es el evento recurrente) y Hecarim sin acento.
+
+## Identidad visual
+
+serie de lore #2, misma familia que guerras (banda 300/350, Bebas Neue, alineado a la izquierda, arte entero sobre su copia borrosa). **Dos colores con significado**: todo el arte de las Islas de la Sombra es verde espectral y lo único cálido que existe de este arco es lo de antes de la Ruina, así que el deck usa esa división tal cual: **dorado `#E3BE72` para el antes** (las islas vivas, Helia, Isolde, la muñeca) y **verde espectral `#4FE3C1` para el después** (la Ruina y los que ya no pueden morir), sobre niebla negra `#05090A`. Kalista cruza de uno a otro en su propia lámina: «encontró la cura» en blanco, «llegó tarde» en verde. Dos láminas van **sin arte, solo tipografía**: la daga y el cierre, «Viego», donde el nombre es la imagen.

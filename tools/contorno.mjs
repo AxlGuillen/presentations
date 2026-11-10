@@ -1,5 +1,5 @@
 // Saca el «dibujo de líneas» de una imagen: curvas de nivel de su luminancia.
-// Lo llama kit.contorno() en build-time (como diagrama.mjs, con el Chrome del
+// Lo llama kit.contorno() en build-time (con el Chrome del
 // sistema); no se usa a mano. Entrada: JSON por argv. Salida: JSON por stdout
 // con la rejilla de luminancia ya recortada como `object-fit: cover`.
 //

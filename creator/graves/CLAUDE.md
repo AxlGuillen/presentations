@@ -1,0 +1,11 @@
+# graves
+
+Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales están en el `CLAUDE.md` de la raíz y el motor en `docs/motor/`.
+
+## Qué es y decisiones
+
+**GENERADO** por `graves/gen.js`. Serie Cumplelolero #26, **mismo formato que lux**: panel de 1080×1370 para el montaje automático y `node tools/laminas.mjs creator/graves` para los clips, los PNG finales y el manifest. 13 láminas (el paquete dice 14 pero lista 13). El OTP es un **cartel de «se busca»** con `TOP 1 GRAVES` en Rye y la foto en sepia, que cae con `sello`; el récord `1.866 – 1.867` rueda con `tragamonedas` y la línea de rango 2023–2026 sube a Esmeralda 2 y se desploma (el emblema de Esmeralda cae). Lore con splashes y la carta de **Twisted Fate** (`02BW026`, que se voltea en socios, se quema con `quemado` en la traición y vuelve pareja en el reencuentro); del universo, `u2` es Fate en la Bóveda del Reloj y `u3` es Gangplank. ⚠️ **El puro está verificado**: el splash base de Data Dragon y el de CommunityDragon son la versión censurada; la versión con puro es `Graves_OriginalSkin_HD.jpg` del wiki de **Fandom** (7000 px) y la censurada `Graves_OriginalSkin_Censored_HD.jpg`, idénticas salvo el puro, así que `puro-si.jpg` y `puro-no.jpg` salen del **mismo recorte** y la cortinilla borra solo el puro. El wiki oficial devuelve 403 a curl; el de Fandom sirve las imágenes con `-e https://leagueoflegends.fandom.com/`. ⚠️ El splash de Día Nevado trae un **bastón de caramelo**: la zanahoria es de la animación de regreso a base. Fugitivo va en su HD de Fandom (4800 px). Graves no tiene carta en LoR. Sin dinero. Sus fondos llevan `data-fondo` para sacarlo **con alfa**, como lux.
+
+## Identidad visual
+
+serie Cumplelolero #26, panel del montaje automático como lux. **Aguasturbias de noche**: pólvora y **cobre `#D9773B`** de acento sobre **humo `#0E0D0C`**, con **latón viejo `#B89A62`** para estructura; las cifras van con un degradado de cobre (`.cobre`). El motivo es **la pólvora**: humo hecho con `kit.patron('flujo')` en cobre, desenfocado y a la deriva (`humo()`), y brasas que suben (`brasas()`). El cartel del OTP usa **Rye** para que se lea como «se busca». **El cierre trae la luz de Lux `#FFE9A8`**, porque es la pareja de Academia de Combate.

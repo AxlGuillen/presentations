@@ -17,7 +17,7 @@
 //   malla(colores)     → capas de malla de gradientes (una por color, posiciones fijas)
 //   sombra({...})      → 'box-shadow: …;' en capas: contacto + elevación + halo opcional
 //
-// Animación y recursos (ver docs/animaciones-y-assets.md):
+// Animación y recursos (ver docs/archivo/animaciones-y-assets.md):
 //   gsap(dir, plugins)    → copia GSAP 3.15 + plugins al deck y devuelve los <script>
 //   efectos()             → catálogo de recetas: efecto(nombre, tl, el, o) y data-efecto="…"
 //   pincel/duotono/glitch → piezas de HTML que necesitan esas recetas
@@ -106,25 +106,6 @@ const og = ({ titulo, descripcion, carpeta = '' }) => {
     `<meta property="og:image:height" content="630">`,
     `<meta name="twitter:card" content="summary_large_image">`,
   ].join('\n');
-};
-
-/** Diagrama Mermaid → SVG inline, renderizado en build-time (tools/diagrama.mjs
- *  con el Chrome del sistema). El SVG se incrusta en el HTML generado: el deck
- *  no carga Mermaid en runtime. `config` es el objeto de mermaid.initialize()
- *  — pasa ahí el tema del deck, p. ej.:
- *    kit.diagrama(`flowchart LR\n  A --> B`, {
- *      theme: 'base',
- *      themeVariables: { primaryColor: '#DEEBFF', primaryTextColor: '#172B4D',
- *                        primaryBorderColor: '#0052CC', lineColor: '#5E6C84',
- *                        fontFamily: 'Figtree, sans-serif' },
- *    })
- *  Tarda ~2 s por diagrama (levanta Chrome); solo se paga al correr gen.js. */
-const diagrama = (codigo, config = {}) => {
-  const { execFileSync } = require('child_process');
-  const path = require('path');
-  return execFileSync(process.execPath,
-    [path.join(__dirname, 'diagrama.mjs'), JSON.stringify(config)],
-    { input: codigo, encoding: 'utf8', maxBuffer: 32 * 1024 * 1024 });
 };
 
 /** Botón «Reproducir» + reproductor para los decks que tengan video.
@@ -505,5 +486,5 @@ const banda = () => `<style>deck-stage[data-banda="arriba"] [data-riel] { transf
 /** PRNG con semilla (mulberry32), el mismo que usan kit.patron y las recetas
  *  del runtime: kit.random('confeti')() da la misma secuencia que
  *  random('confeti')() dentro de la página. La semilla puede ser número o texto. */
-module.exports = { banda, alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
+module.exports = { banda, alpha, capa, fondo, puntos, lavado, grano, malla, sombra, animador, reproductor, diferir, og, PROD,
   gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, lineasRuntime, ritmo, voz, golpe, lottieScript, lottie, threeScript, random: prng };

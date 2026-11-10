@@ -1,0 +1,26 @@
+# Lo que no se publica: herramientas, documentación y datos de build.
+# Los decks solo necesitan index.html, deck-stage.js, sus scripts y assets/.
+# ⚠️ Nunca ignorar middleware.ts: es la contraseña de la galería.
+
+tools/
+docs/
+marca/
+.claude/
+skills-lock.json
+.env*
+
+# Documentación y notas (CLAUDE.md, README.md, NOTAS.md, CREDITOS.md, ASSETS.md…)
+*.md
+# …salvo los créditos de licencias CC BY, que van junto al deck que las usa.
+!**/CREDITOS.md
+
+# Datos que solo usa el generador
+**/gen.js
+**/assets.sh
+**/guion.json
+**/guion-marcado.txt
+**/clips.json
+**/recortes.json
+**/partidos.json
+**/beatmap.json
+**/video-out/

@@ -1,0 +1,11 @@
+# dra
+
+Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales están en el `CLAUDE.md` de la raíz y el motor en `docs/motor/`.
+
+## Qué es y decisiones
+
+**GENERADO** por `dra/gen.js`. Charla para el equipo de socios de DRA (Axl, Rodri y Diego): el método común para evaluar ideas, destilado del documento base que Axl pegó el 14/10/2026 en 18 láminas. **No es de UrVenue: sin logos de nadie.** Sigue el embudo de 5 pasos con **una lámina por paso y el embudo en miniatura en la cabecera marcando en cuál estamos** (lo pedía el documento), y el ejemplo de Pádel SoloQ en dos láminas. El glosario no va: sus términos se explican donde aparecen. ⚠️ **El sitio es público**: de la tabla de capacidad solo salen las horas de cada socio; las aportaciones mensuales y las metas de sueldo **no van en pantalla**, y los enlaces a Notion y Miro tampoco. ⚠️ **La liga manual de Pádel dura 4 semanas** aunque la regla general es de máximo 2: así viene en el documento y no se corrige. Las preguntas de «Lo que necesitamos acordar» se revelan una por una con `data-step`. **Lleva video narrado con la voz de Axl**, con la configuración de ultracode (velocidad 1, sin subtítulos, `"recortar": true` y `"aire": [0.08, 0.15]`); el guion habla en primera persona a los socios y tampoco menciona montos.
+
+## Identidad visual
+
+charla para el equipo de socios con **la estética y la coreografía de los reportes semanales** por encargo (blanco con puntitos, sombras en capas, Figtree, portada y cierre a color con orbes, titulares partidos en palabras con entrada 3D), pero con su propio acento: **índigo de plumón `#4B3BD6`**, el del pizarrón donde salieron las seis ideas, con lavado `#ECEAFF` y tinta `#1C1A3A`. La **tríada índigo, teal `#0E8C7A` y magenta `#C2399B`** solo aparece donde hay tres cosas que distinguir (Impacto/Confianza/Facilidad y deseabilidad/viabilidad/factibilidad), y **verde, ámbar y rojo quedan reservados a la decisión final** de una idea (validada, pivote, descartada). Las piezas propias de la coreografía: **el embudo que se estrecha**, el Lean Canvas que **se enciende en orden de llenado y no de lectura**, el **sticky que recorre el pipeline** hasta «En validación» y la agenda de 90 minutos que se llena de izquierda a derecha.
