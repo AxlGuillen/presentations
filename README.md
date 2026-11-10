@@ -43,7 +43,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/suiza-r5/   Worlds 2026 · ronda 5, los cruces 2–2 del 31/oct (Bo3, el que pierde se va) y a quién le ha ganado cada equipo · 9:16 · 8 slides
 /creator/suiza-qf/   Worlds 2026 · cuartos de final (3–6/nov, Bo5): flyers, camino en la suiza y cara a cara · 9:16 · 10 slides
 /creator/t1-blg/     Worlds 2026 · previa de la semifinal T1 vs BLG (8/nov): banda inferior de 1080×680, solo arte oficial · 9:16 · 25 slides
-/creator/vayne-troll/ ¿La Vayne de Doran fue troll? (9/nov): láminas para el montaje y 4 clips en el manifest, solo arte oficial · 9:16 · 22 slides
+/creator/vayne-troll/ ¿La Vayne de Doran fue troll? (9/nov): banda inferior de 1080×680 con 4 clips en el manifest, solo arte oficial · 9:16 · 23 slides
 /creator/ganan/       «¿Por qué siempre ganan chinos y coreanos?» (Axelsine): láminas para el montaje automático, con la identidad de Worlds 2026 · 9:16 · 22 slides
 /creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
@@ -52,6 +52,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/ksante/    K'Sante cumple 4 años (láminas para el montaje automático, animado) · 9:16 · 18 slides
 /creator/leblanc/   LeBlanc cumple 16 años (láminas para el montaje automático, solo arte oficial) · 9:16 · 21 slides
 /creator/ambessa/   Ambessa cumple 2 años (banda inferior de 1080×680 para el montaje, solo arte oficial) · 9:16 · 24 slides
+/creator/senna/     Senna cumple 7 años (banda inferior con layouts A–F, recetas del kit y 6 gráficas, arte oficial) · 9:16 · 29 slides
 /creator/parche2620/ Parche 26.20 en recortes de las notas oficiales (apoyo visual para TikTok, animado) · 9:16 · 17 slides
 /creator/parche2621/ Parche 26.21 en recortes con marcatextos animado (láminas para el montaje automático) · 9:16 · 17 slides
 /creator/guerras/    Guerras Rúnicas · paquete de assets del episodio de lore · 9:16 · 18 slides
