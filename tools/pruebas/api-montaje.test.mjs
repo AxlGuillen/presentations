@@ -14,7 +14,7 @@ import { spawn, spawnSync } from 'node:child_process';
 import { createRequire } from 'node:module';
 import AjvModulo from 'ajv/dist/2020.js';
 import { crearApi, medirConChrome, ORIGENES_REELFORGE } from '../api-montaje.mjs';
-import { recorteDe, cajaDe, medidasDeck } from '../laminas-lib.mjs';
+import { recorteDe, cajaDe, medidasDeck, carpetaLaminas } from '../laminas-lib.mjs';
 import { CHROME, raiz } from './ayudas.mjs';
 
 const Ajv2020 = AjvModulo.default || AjvModulo;
@@ -24,9 +24,9 @@ const hayFfmpeg = spawnSync('ffmpeg', ['-version']).status === 0;
 
 // ── Un entorno de mentira: carpeta temporal + API + servidor HTTP + renderizador falso ──
 
-const deckHtml = ({ t1 = 'Uno', t2 = 'Dos', t3 = 'Tres', css = '', recorte = null, reposo = false } = {}) => `<!doctype html><html><head><meta charset="utf-8"><title>Demo &amp; Co</title>
+const deckHtml = ({ t1 = 'Uno', t2 = 'Dos', t3 = 'Tres', css = '', recorte = null, reposo = false, attrs = '' } = {}) => `<!doctype html><html><head><meta charset="utf-8"><title>Demo &amp; Co</title>
 <style>body{margin:0}${css}</style></head><body>
-<deck-stage width="1080" height="1920"${recorte === null ? '' : ` data-recorte="${recorte}"`}>
+<deck-stage width="1080" height="1920"${recorte === null ? '' : ` data-recorte="${recorte}"`}${attrs}>
 <section data-lamina="d-uno" data-palabras="uno, 1"><img src="assets/a.png"><h1>${t1}</h1></section>
 <section data-lamina="d-dos"><div style="background:url('assets/b.png')">${t2}</div></section>
 <section data-lamina="d-tres" data-palabras="tres"${reposo ? ' data-reposo' : ''}><p>${t3}</p></section>
@@ -52,11 +52,11 @@ async function entorno(t) {
     deck: (opts) => fs.writeFileSync(path.join(dir, 'creator/demo/index.html'), deckHtml(opts)),
   };
   // El renderizador falso hace lo que laminas.mjs --solo: escribe los archivos y MEZCLA el manifest.
-  const ejecutarRender = async ({ rel, formato, fps, ids, alLista }) => {
-    e.llamadas.push({ rel, formato, fps, ids: [...ids] });
+  const ejecutarRender = async ({ rel, formato, banda, fps, ids, alLista }) => {
+    e.llamadas.push({ rel, formato, fps, ids: [...ids], ...(banda ? { banda } : {}) });
     if (e.puerta) await e.puerta;
     if (e.falla) throw new Error('ffmpeg salió con 1');
-    const salida = path.join(dir, rel, 'video-out', 'laminas');
+    const salida = path.join(dir, rel, 'video-out', carpetaLaminas(banda));
     fs.mkdirSync(salida, { recursive: true });
     let manifest = [];
     try { manifest = JSON.parse(fs.readFileSync(path.join(salida, 'manifest.json'), 'utf8')); } catch { /* nuevo */ }
@@ -64,7 +64,7 @@ async function entorno(t) {
     for (const id of ids) {
       fs.writeFileSync(path.join(salida, `${id}.${formato}`), `clip ${id} ${fps} ${Math.random()}`);
       fs.writeFileSync(path.join(salida, `${id}.png`), 'png');
-      manifest = manifest.filter(l => l.id !== id).concat([{ id, archivo: `${id}.${formato}`, png: `${id}.png`, dur_anim: 1, dur: 2, alfa: true, caja, palabras: [], recorte }]);
+      manifest = manifest.filter(l => l.id !== id).concat([{ id, archivo: `${id}.${formato}`, png: `${id}.png`, dur_anim: 1, dur: 2, alfa: formato !== 'mp4', caja, palabras: [], recorte, ...(banda ? { banda } : {}) }]);
       alLista(id);
     }
     fs.writeFileSync(path.join(salida, 'manifest.json'), JSON.stringify(manifest));
@@ -154,8 +154,9 @@ test('GET laminas: lo mismo que manifest.json (+ ancho y alto) sin renderizar, y
 
 test('GET laminas: el recorte y la caja salen del data-recorte del deck; data-reposo da reposo: true', async (t) => {
   const e = await entorno(t);
-  e.deck({ recorte: '1080:680:0:1240', reposo: true });
+  e.deck({ recorte: '1080:680:0:1240', reposo: true, attrs: ' data-alfa="webm"' });
   const { status, json } = await e.pedir('/api/decks/creator/demo/laminas?alfa=webm');
+  assert.ok(json.every(l => l.archivo.endsWith('.webm') && l.alfa === true), 'con data-alfa la banda conserva el webm');
   assert.equal(status, 200);
   assert.ok(validarManifest(json), JSON.stringify(validarManifest.errors));
   for (const l of json) {
@@ -195,8 +196,8 @@ test('render: el recorte del deck es parte de la clave de caché', async (t) => 
   const e = await entorno(t);
   assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' });
   assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'cacheada', 'd-dos': 'cacheada', 'd-tres': 'cacheada' });
-  // Declarar la banda inferior lo rehace todo, aunque el resto del deck no cambie.
-  e.deck({ recorte: '1080:680:0:1240' });
+  // Declarar la banda inferior lo rehace todo, aunque el resto del deck no cambie (con data-alfa, para seguir en webm).
+  e.deck({ recorte: '1080:680:0:1240', attrs: ' data-alfa="webm"' });
   assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' });
   const manifest = JSON.parse(fs.readFileSync(path.join(e.dir, 'creator/demo/video-out/laminas/manifest.json'), 'utf8'));
   assert.ok(manifest.every(l => l.recorte === '1080:680:0:1240' && l.caja.bottom === 0));
@@ -205,6 +206,67 @@ test('render: el recorte del deck es parte de la clave de caché', async (t) => 
   fs.writeFileSync(path.join(e.dir, 'creator/demo/video-out/laminas/manifest.json'),
     JSON.stringify(manifest.map(l => l.id === 'd-dos' ? { ...l, recorte: '1080:1370:0:275' } : l)));
   assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'cacheada', 'd-dos': 'lista', 'd-tres': 'cacheada' });
+});
+
+test('GET laminas: un deck de banda es opaco (mp4, alfa false) aunque se pida alfa, y dice su lado', async (t) => {
+  const e = await entorno(t);
+  e.deck({ recorte: '1080:680:0:1240' });
+  for (const pedido of ['', '?alfa=webm', '?alfa=mov']) {
+    const { status, json } = await e.pedir(`/api/decks/creator/demo/laminas${pedido}`);
+    assert.equal(status, 200);
+    assert.ok(validarManifest(json), JSON.stringify(validarManifest.errors));
+    assert.deepEqual(json.map(l => [l.archivo, l.alfa, l.banda]), [['d-uno.mp4', false, 'abajo'], ['d-dos.mp4', false, 'abajo'], ['d-tres.mp4', false, 'abajo']], pedido);
+  }
+  // Sin data-banda no hay variante de arriba.
+  const sinVariante = await e.pedir('/api/decks/creator/demo/laminas?banda=arriba');
+  assert.equal(sinVariante.status, 422);
+  assert.match(sinVariante.json.error, /no tiene variante de banda/);
+  assert.equal((await e.pedir('/api/decks/creator/demo/laminas?banda=lado')).status, 400);
+
+  // Con data-banda: ?banda=arriba la pide; el recorte y la caja no cambian.
+  e.deck({ recorte: '1080:680:0:1240', attrs: ' data-banda="abajo"' });
+  const arriba = await e.pedir('/api/decks/creator/demo/laminas?banda=arriba');
+  assert.equal(arriba.status, 200);
+  assert.ok(validarManifest(arriba.json), JSON.stringify(validarManifest.errors));
+  assert.ok(arriba.json.every(l => l.banda === 'arriba' && l.archivo.endsWith('.mp4') && l.recorte === '1080:680:0:1240' && l.caja.bottom === 0));
+  assert.ok((await e.pedir('/api/decks/creator/demo/laminas')).json.every(l => l.banda === 'abajo'), 'sin pedir lado, el del data-banda');
+
+  // Un deck que no es de banda no lleva el campo.
+  e.deck();
+  assert.ok((await e.pedir('/api/decks/creator/demo/laminas')).json.every(l => !('banda' in l) && l.alfa === true));
+});
+
+test('render: un deck de banda renderiza en mp4 y cada lado va a su carpeta, con su propia caché', async (t) => {
+  const e = await entorno(t);
+  e.deck({ recorte: '1080:680:0:1240', attrs: ' data-banda="abajo"' });
+  const abajo = await e.correr({ alfa: 'webm' });
+  assert.equal(abajo.estado, 'listo', abajo.error);
+  assert.equal(abajo.formato, 'mp4');
+  assert.equal(abajo.banda, 'abajo');
+  assert.deepEqual(e.llamadas.at(-1), { rel: 'creator/demo', formato: 'mp4', fps: 30, ids: ['d-uno', 'd-dos', 'd-tres'], banda: 'abajo' });
+  assert.equal(abajo.carpeta, path.join(e.dir, 'creator/demo/video-out/laminas'));
+  assert.equal(abajo.anim, path.join(e.dir, 'creator/demo/video-out/anim'));
+  const mAbajo = JSON.parse(fs.readFileSync(abajo.manifest, 'utf8'));
+  assert.ok(validarManifest(mAbajo), JSON.stringify(validarManifest.errors));
+  assert.ok(mAbajo.every(l => l.archivo.endsWith('.mp4') && l.alfa === false && l.banda === 'abajo'));
+
+  const arriba = await e.correr({ banda: 'arriba' });
+  assert.equal(arriba.estado, 'listo', arriba.error);
+  assert.deepEqual(estados(arriba), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' }, 'la variante de arriba es otro render');
+  assert.equal(e.llamadas.at(-1).banda, 'arriba');
+  assert.equal(arriba.carpeta, path.join(e.dir, 'creator/demo/video-out/laminas-arriba'));
+  assert.equal(arriba.anim, path.join(e.dir, 'creator/demo/video-out/anim-arriba'));
+  assert.ok(JSON.parse(fs.readFileSync(arriba.manifest, 'utf8')).every(l => l.banda === 'arriba'));
+
+  // Cada lado conserva su caché: volver a cualquiera no rehace nada.
+  assert.deepEqual(estados(await e.correr({})), { 'd-uno': 'cacheada', 'd-dos': 'cacheada', 'd-tres': 'cacheada' });
+  assert.deepEqual(estados(await e.correr({ banda: 'arriba' })), { 'd-uno': 'cacheada', 'd-dos': 'cacheada', 'd-tres': 'cacheada' });
+
+  // Pedir arriba a un deck sin la variante es un error del pedido.
+  e.deck({ recorte: '1080:680:0:1240' });
+  const malo = await e.render({ banda: 'arriba' });
+  assert.equal(malo.status, 422);
+  assert.equal((await e.render({ banda: 'lado' })).status, 400);
 });
 
 test('GET laminas: dos pedidos a la vez comparten una sola medición', async (t) => {

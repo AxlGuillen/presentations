@@ -1,5 +1,8 @@
 // Captura cada diapositiva de un deck a PNG, a tamaño de diseño real.
-// Uso: node tools/capturar.mjs <carpeta>        (p. ej. ornn)
+// Uso: node tools/capturar.mjs <carpeta> [--banda=arriba]        (p. ej. ornn)
+//
+// Con --banda=arriba abre el deck con ?banda=arriba (la variante de banda superior de los decks
+// con data-banda; ver kit.banda()) y deja los PNG en video-out/slides-arriba/.
 //
 // Usa el Chrome instalado del sistema vía puppeteer-core: no descarga navegador.
 // Sirve el repo con un servidor estático propio para no depender de nada externo.
@@ -9,7 +12,9 @@ import http from 'node:http';
 import puppeteer from 'puppeteer-core';
 
 const raiz = path.resolve(import.meta.dirname, '..');
-const deck = (process.argv[2] || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+const deck = (process.argv.slice(2).find(a => !a.startsWith('--')) || '').replace(/\\/g, '/').replace(/^\/+|\/+$/g, '');
+const BANDA = (process.argv.find(a => a.startsWith('--banda=')) || '').slice('--banda='.length);
+if (BANDA && !['abajo', 'arriba'].includes(BANDA)) { console.error(`--banda debe ser abajo o arriba (no «${BANDA}»).`); process.exit(1); }
 if (!deck || !fs.existsSync(path.join(raiz, deck, 'index.html'))) {
   console.error('Uso: node tools/capturar.mjs <carpeta>   (debe existir <carpeta>/index.html)');
   process.exit(1);
@@ -45,7 +50,7 @@ await new Promise(r => servidor.listen(0, '127.0.0.1', r));
 const puerto = servidor.address().port;
 
 // ── Captura ──────────────────────────────────────────────────────────────
-const salida = path.join(raiz, deck, 'video-out', 'slides');
+const salida = path.join(raiz, deck, 'video-out', BANDA === 'arriba' ? 'slides-arriba' : 'slides');
 fs.mkdirSync(salida, { recursive: true });
 
 // Sin freno: con la pantalla apagada o bloqueada Chrome baja a ~1 cuadro por
@@ -53,7 +58,7 @@ fs.mkdirSync(salida, { recursive: true });
 const navegador = await puppeteer.launch({ executablePath: CHROME, headless: 'new', args: ['--force-device-scale-factor=1', '--hide-scrollbars',
   '--disable-gpu-vsync', '--disable-frame-rate-limit', '--disable-background-timer-throttling', '--disable-renderer-backgrounding', '--disable-backgrounding-occluded-windows'] });
 const pagina = await navegador.newPage();
-await pagina.goto(`http://127.0.0.1:${puerto}/${deck}/`, { waitUntil: 'networkidle0' });
+await pagina.goto(`http://127.0.0.1:${puerto}/${deck}/${BANDA ? `?banda=${BANDA}` : ''}`, { waitUntil: 'networkidle0' });
 
 // Tamaño de diseño del propio deck
 const { w, h, n } = await pagina.evaluate(() => {

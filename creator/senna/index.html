@@ -32,7 +32,7 @@
 </style>
 </head>
 <body>
-<deck-stage width="1080" height="1920" data-recorte="1080:680:0:1240">
+<deck-stage width="1080" height="1920" data-recorte="1080:680:0:1240" data-banda="abajo">
 
   <section data-lamina="sn-portada" data-label="sn-portada" data-screen-label="sn-portada" data-speaker-notes="Hoy cumple siete años la única support que pega más que su adecarry." style="background: #0A0F0E; color: #F3EFE2; font-family: 'Bebas Neue', Impact, sans-serif; position: relative; overflow: hidden;">
     <div data-fondo style="position: absolute; left: 0; top: 297px; width: 1080px; height: 943px; box-sizing: border-box; border: 2px dashed rgba(243,239,226,0.12); display: flex; align-items: center; justify-content: center; font-size: 56px; letter-spacing: 12px; color: rgba(243,239,226,0.12);">GAMEPLAY</div>
@@ -938,6 +938,12 @@
     </div>
   </section>
 </deck-stage>
+<style>deck-stage[data-banda="arriba"] [data-riel] { transform: scaleY(-1); transform-origin: 50% 50%; }</style>
+<script>(function () {
+  var b = new URLSearchParams(location.search).get('banda');
+  var ds = document.querySelector('deck-stage');
+  if (ds && (b === 'arriba' || b === 'abajo')) ds.setAttribute('data-banda', b);
+})();</script>
 <script src="./gsap.min.js"></script>
 <script src="./SplitText.min.js"></script>
 <script src="./MotionPathPlugin.min.js"></script>

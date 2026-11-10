@@ -1,6 +1,6 @@
 // Renderiza las animaciones GSAP de un deck cuadro a cuadro y las encoda
 // en un clip MP4 por diapositiva.
-// Uso: node tools/cuadros.mjs <carpeta> [fps] [--paralelo=N] [--alfa | --alfa=webm] [--solo=id,id]
+// Uso: node tools/cuadros.mjs <carpeta> [fps] [--paralelo=N] [--alfa | --alfa=webm] [--solo=id,id] [--banda=arriba]
 //
 // Cómo: activa cada slide, pausa su timeline (section.__tl, la deja el
 // pegamento kit.animador()) y la recorre con tl.time(t) a 30 fps, tomando una
@@ -38,6 +38,9 @@
 // las demás si fue con los mismos fps y el mismo formato. Lo usa la API local
 // (api-montaje.mjs) para no rehacer lo que no cambió.
 //
+// Con --banda=arriba abre el deck con ?banda=arriba (la variante de banda superior de los decks con
+// data-banda: el riel invertido, ver kit.banda()) y los clips van a anim-arriba/ (o anim-alfa-arriba/).
+//
 // Salida: <carpeta>/video-out/anim/anim-NN.mp4 + anim.json (duraciones y, por
 // lámina, las etiquetas sfx:<receta> de su timeline con su segundo); en modo
 // alfa, video-out/anim-alfa/anim-NN.mov (o .webm) + su propio anim.json.
@@ -47,7 +50,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { spawn } from 'node:child_process';
 import puppeteer from 'puppeteer-core';
-import { leerSecciones } from './laminas-lib.mjs';
+import { leerSecciones, BANDAS, carpetaAnim } from './laminas-lib.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
@@ -57,6 +60,8 @@ const pedido = args.find(a => a.startsWith('--paralelo='));
 const PARALELO = Math.max(1, pedido ? parseInt(pedido.split('=')[1], 10) : Math.min(6, Math.floor(os.cpus().length / 2)));
 const pideAlfa = args.find(a => a === '--alfa' || a.startsWith('--alfa='));
 const SOLO = ((args.find(a => a.startsWith('--solo=')) || '').slice('--solo='.length)).split(',').map(s => s.trim()).filter(Boolean);
+const BANDA = (args.find(a => a.startsWith('--banda=')) || '').slice('--banda='.length) || null;
+if (BANDA && !BANDAS.includes(BANDA)) { console.error(`--banda debe ser ${BANDAS.join(' o ')} (no «${BANDA}»).`); process.exit(1); }
 // Desenfoque de movimiento (P7): data-blur="N" en la lámina, o --blur=N para
 // todas. Cada cuadro sale de N subcuadros repartidos en medio cuadro (un
 // obturador de 180°) y mezclados con tmix. Cuesta N veces más, así que se pide
@@ -116,10 +121,11 @@ const servidor = http.createServer((req, res) => {
   fs.createReadStream(abs).pipe(res);
 });
 await new Promise(r => servidor.listen(0, '127.0.0.1', r));
-const url = `http://127.0.0.1:${servidor.address().port}/${deck}/`;
+const url = `http://127.0.0.1:${servidor.address().port}/${deck}/${BANDA ? `?banda=${BANDA}` : ''}`;
 
-// En modo alfa los clips van a su propia carpeta: video.mjs lee anim/ y espera mp4 opacos.
-const dirAnim = path.join(raiz, deck, 'video-out', ALFA ? 'anim-alfa' : 'anim');
+// En modo alfa los clips van a su propia carpeta: video.mjs lee anim/ y espera mp4 opacos. La variante de
+// banda de arriba, a la suya («-arriba»), para no pisar la de abajo.
+const dirAnim = path.join(raiz, deck, 'video-out', carpetaAnim(ALFA, BANDA));
 fs.mkdirSync(dirAnim, { recursive: true });
 const t0 = performance.now();
 
@@ -273,9 +279,9 @@ const meta = resultados.filter(r => !r.estatica).sort((a, b) => a.i - b.i)
   .map(r => ({ slide: r.i + 1, dur: r.dur, cuadros: r.cuadros, ...(r.sinTimeline ? { sinTimeline: true } : {}), ...(r.blur > 1 ? { blur: r.blur } : {}), ...(r.sfx.length ? { sfx: r.sfx } : {}) }));
 // Con --solo se conserva lo que ya hubiera de las demás láminas, si es del mismo formato y fps.
 const previo = (() => { try { return JSON.parse(fs.readFileSync(path.join(dirAnim, 'anim.json'), 'utf8')); } catch { return null; } })();
-const conservados = SOLO.length && previo && previo.fps === FPS && previo.ext === EXT && !!previo.alfa === !!ALFA
+const conservados = SOLO.length && previo && previo.fps === FPS && previo.ext === EXT && !!previo.alfa === !!ALFA && (previo.banda || null) === BANDA
   ? (previo.clips || []).filter(c => c.slide <= n && !posiciones.includes(c.slide - 1)) : [];
-fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, alfa: ALFA || false, ext: EXT,
+fs.writeFileSync(path.join(dirAnim, 'anim.json'), JSON.stringify({ fps: FPS, alfa: ALFA || false, ext: EXT, ...(BANDA ? { banda: BANDA } : {}),
   clips: [...conservados, ...meta].sort((a, b) => a.slide - b.slide) }, null, 2));
 const total = meta.reduce((a, c) => a + c.cuadros, 0);
 console.log(`\nListo: ${meta.length} clips (${total} cuadros) en ${path.relative(raiz, dirAnim)} · ${((performance.now() - t0) / 1000).toFixed(1)} s`);

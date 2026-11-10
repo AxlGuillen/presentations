@@ -658,9 +658,10 @@ ${kit.og({ titulo: 'Ambessa cumple 2 años', descripcion: 'Cumplelolero #31 en b
 </style>
 </head>
 <body>
-<deck-stage width="1080" height="1920" data-recorte="${RECORTE}">
+<deck-stage width="1080" height="1920" data-recorte="${RECORTE}" data-banda="abajo">
 ${slides.join('\n')}
 </deck-stage>
+${kit.banda()}
 ${kit.gsap(__dirname, ['SplitText'])}
 ${kit.efectos()}
 ${kit.animador()}

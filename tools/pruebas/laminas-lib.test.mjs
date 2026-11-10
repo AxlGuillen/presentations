@@ -6,7 +6,8 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { leerSecciones, recorteDe, validarRecorte, cajaDe, CROP_DEFECTO, leerClips, insertarClips, ponerClips } from '../laminas-lib.mjs';
+import { leerSecciones, recorteDe, validarRecorte, cajaDe, CROP_DEFECTO, leerClips, insertarClips, ponerClips,
+  esDeBanda, bandaDe, formatoDe, carpetaLaminas, carpetaAnim, carpetaSlides } from '../laminas-lib.mjs';
 
 const deck = (attrs = '', secciones = '<section data-lamina="a">x</section>') =>
   `<!doctype html><deck-stage width="1080" height="1920"${attrs}>${secciones}</deck-stage>`;
@@ -42,6 +43,59 @@ test('leerSecciones: data-reposo marca la lámina de reposo (y nada más la marc
     '<section data-lamina="d" data-reposos="no">d</section>',
   ].join('')));
   assert.deepEqual(s.map(x => [x.id, x.reposo]), [['a', false], ['am-reposo', true], ['c', true], ['d', false]]);
+});
+
+// ── Decks de banda: opacos, y con variante arriba/abajo ──
+
+const BANDA = ' data-recorte="1080:680:0:1240"';
+
+test('esDeBanda: data-recorte o data-banda en el <deck-stage>; en una <section> no cuenta', () => {
+  assert.equal(esDeBanda(deck()), false);
+  assert.equal(esDeBanda(deck(BANDA)), true);
+  assert.equal(esDeBanda(deck(' data-banda="abajo"')), true);
+  assert.equal(esDeBanda(deck('', '<section data-lamina="a" data-recorte="10:10:0:0" data-banda="abajo">x</section>')), false);
+});
+
+test('formatoDe: un deck de banda sale en mp4 aunque se pida alfa, salvo que declare data-alfa', () => {
+  // Los decks de siempre: lo pedido.
+  assert.deepEqual(formatoDe(deck(), null), { formato: 'mp4', ignorado: false });
+  assert.deepEqual(formatoDe(deck(), 'mov'), { formato: 'mov', ignorado: false });
+  assert.deepEqual(formatoDe(deck(), 'webm'), { formato: 'webm', ignorado: false });
+  // Banda opaca: mp4, y avisa si se pidió alfa.
+  assert.deepEqual(formatoDe(deck(BANDA), null), { formato: 'mp4', ignorado: false });
+  assert.deepEqual(formatoDe(deck(BANDA), 'webm'), { formato: 'mp4', ignorado: true });
+  assert.deepEqual(formatoDe(deck(' data-banda="abajo"'), 'mov'), { formato: 'mp4', ignorado: true });
+  // Banda que declara transparencia: la declarada sin pedido, la pedida si se pide.
+  assert.deepEqual(formatoDe(deck(BANDA + ' data-alfa="webm"'), null), { formato: 'webm', ignorado: false });
+  assert.deepEqual(formatoDe(deck(BANDA + ' data-alfa="webm"'), 'mov'), { formato: 'mov', ignorado: false });
+  assert.throws(() => formatoDe(deck(BANDA + ' data-alfa="gif"'), null), /data-alfa inválido/);
+});
+
+test('bandaDe: el pedido, el del data-banda o abajo; arriba solo en los decks con la variante', () => {
+  assert.equal(bandaDe(deck(), undefined), null, 'un deck que no es de banda no tiene lado');
+  assert.equal(bandaDe(deck(BANDA), undefined), 'abajo');
+  assert.equal(bandaDe(deck(BANDA), 'abajo'), 'abajo');
+  assert.throws(() => bandaDe(deck(BANDA), 'arriba'), /no tiene variante de banda/);
+  assert.throws(() => bandaDe(deck(), 'abajo'), /no tiene variante de banda/);
+  const conVariante = deck(BANDA + ' data-banda="abajo"');
+  assert.equal(bandaDe(conVariante, undefined), 'abajo');
+  assert.equal(bandaDe(conVariante, ''), 'abajo');
+  assert.equal(bandaDe(conVariante, 'arriba'), 'arriba');
+  assert.equal(bandaDe(deck(BANDA + ' data-banda="arriba"'), undefined), 'arriba');
+  assert.throws(() => bandaDe(conVariante, 'izquierda'), /banda inválida/);
+  assert.throws(() => bandaDe(deck(' data-banda="lado"'), undefined), /data-banda inválido/);
+});
+
+test('carpetas: la banda de abajo conserva las de siempre; la de arriba lleva «-arriba»', () => {
+  assert.equal(carpetaLaminas(null), 'laminas');
+  assert.equal(carpetaLaminas('abajo'), 'laminas');
+  assert.equal(carpetaLaminas('arriba'), 'laminas-arriba');
+  assert.equal(carpetaAnim(null, 'abajo'), 'anim');
+  assert.equal(carpetaAnim('webm', null), 'anim-alfa');
+  assert.equal(carpetaAnim(null, 'arriba'), 'anim-arriba');
+  assert.equal(carpetaAnim('mov', 'arriba'), 'anim-alfa-arriba');
+  assert.equal(carpetaSlides('arriba'), 'slides-arriba');
+  assert.equal(carpetaSlides(null), 'slides');
 });
 
 // ── Clips en el manifest (clips.json) ──

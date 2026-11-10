@@ -47,15 +47,18 @@ function reales() {
     const base = path.join(raiz, esc);
     if (!fs.existsSync(base)) continue;
     for (const d of fs.readdirSync(base)) {
-      const f = path.join(base, d, 'video-out', 'laminas', 'manifest.json');
-      if (fs.existsSync(f)) out.push(f);
+      for (const c of ['laminas', 'laminas-arriba']) {
+        const f = path.join(base, d, 'video-out', c, 'manifest.json');
+        if (fs.existsSync(f)) out.push(f);
+      }
     }
   }
   return out;
 }
 
-test('esquema: los fixtures versionados son válidos (mp4, mov, webm, la respuesta de la API y la banda inferior)', () => {
-  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json', 'manifest-banda.json', 'manifest-clips.json']) {
+test('esquema: los fixtures versionados son válidos (mp4, mov, webm, la respuesta de la API y la banda, abajo y arriba)', () => {
+  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json', 'manifest-banda.json',
+    'manifest-banda-mp4.json', 'manifest-banda-arriba.json', 'manifest-clips.json']) {
     const m = fixture(n);
     assert.ok(validar(m), `${n}: ${errores()}`);
     coherente(m);
@@ -95,6 +98,8 @@ test('esquema: rechaza lo que no debe', () => {
   malo('recorte mal formado', (l) => { l.recorte = '1080x680'; });
   malo('recorte con negativos', (l) => { l.recorte = '1080:680:0:-1'; });
   malo('reposo que no es booleano', (l) => { l.reposo = 'si'; });
+  malo('banda desconocida', (l) => { l.banda = 'izquierda'; });
+  malo('banda como booleano', (l) => { l.banda = true; });
   assert.ok(!validar({}), 'el manifest es una lista, no un objeto');
 
   // Los clips: su propia forma, sin los campos de lámina.
@@ -117,6 +122,10 @@ test('coherente(): detecta ids repetidos y archivos que no son <id>', () => {
   assert.throws(() => coherente([base[0], base[0]]), /repetido/);
   assert.throws(() => coherente([{ ...base[0], archivo: 'otro.mp4' }]), /archivo debe ser/);
   assert.throws(() => coherente([{ ...base[0], dur: 1, dur_anim: 2 }]), /menor que dur_anim/);
+  // La banda opaca: mp4 sin alfa, y el lado en el campo banda.
+  const opaca = fixture('manifest-banda-mp4.json');
+  assert.ok(opaca.every(l => l.alfa === false && l.archivo.endsWith('.mp4') && l.banda === 'abajo'));
+  assert.ok(fixture('manifest-banda-arriba.json').every(l => l.banda === 'arriba' && l.recorte === '1080:680:0:1240'), 'la variante de arriba conserva el recorte');
   const banda = fixture('manifest-banda.json');
   assert.throws(() => coherente([{ ...banda[0], caja: { width: 1080, x: 'center', bottom: 275 } }]), /no cuadra con el recorte/);
   assert.throws(() => coherente([{ ...banda[0], caja: { width: 706, x: 'center', bottom: 0 } }]), /no es el ancho del recorte/);

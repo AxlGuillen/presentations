@@ -6,8 +6,11 @@
 //   GET  /api/decks/<desk>/<deck>/laminas   lo mismo que manifest.json (+ ancho y alto), SIN renderizar; el
 //                                           recorte y la caja salen del data-recorte del <deck-stage>, y
 //                                           los clips de clips.json van tras su lámina (tipo: "clip")
-//                                           (?alfa=mov|webm elige la extensión de `archivo`; mov por omisión)
-//   POST /api/render {desk, deck, laminas?, alfa:'mov'|'webm', fps}   → 202 {job_id}
+//                                           (?alfa=mov|webm elige la extensión de `archivo`; mov por omisión.
+//                                           Los decks de banda son opacos: `archivo` es <id>.mp4 y alfa false,
+//                                           salvo que declaren data-alfa. ?banda=abajo|arriba elige la variante
+//                                           de los que declaran data-banda; sale en el campo `banda`)
+//   POST /api/render {desk, deck, laminas?, alfa:'mov'|'webm', banda?:'abajo'|'arriba', fps}   → 202 {job_id}
 //   GET  /api/render/<job>                  progreso por lámina y, al terminar, las rutas absolutas
 //
 // Seguridad: solo atiende conexiones desde esta computadora (loopback y Host localhost, contra DNS rebinding);
@@ -21,6 +24,7 @@ import { spawn } from 'node:child_process';
 import {
   ID_VALIDO, CROP_DEFECTO, QUIETO_DEFECTO, leerSecciones, medidasDeck, cajaDe, recorteDe, tituloDe, buscarChrome,
   clavesDeLaminas, referencias, huellaArchivo, huellaDeCodigo, leerClips, sondearClip, entradaClip, insertarClips, ponerClips,
+  formatoDe, bandaDe, carpetaLaminas, carpetaAnim, BANDAS,
 } from './laminas-lib.mjs';
 
 /** Los orígenes de ReelForge: los mismos que acepta el modo capa de deck-stage.js. */
@@ -92,10 +96,11 @@ export async function medirConChrome({ raiz, rel, ids }) {
 
 // ── Renderizar con laminas.mjs ─────────────────────────────────────────────
 
-/** Corre `node tools/laminas.mjs <deck> --alfa=<formato> --fps=N --solo=…` y avisa cada lámina que termina. */
-export function renderConProceso({ raiz, rel, formato, fps, ids, alLista }) {
+/** Corre `node tools/laminas.mjs <deck> [--alfa=<formato>] [--banda=<lado>] --fps=N --solo=…` y avisa cada lámina que termina. */
+export function renderConProceso({ raiz, rel, formato, banda, fps, ids, alLista }) {
   return new Promise((ok, mal) => {
-    const hijo = spawn(process.execPath, [path.join('tools', 'laminas.mjs'), rel, `--alfa=${formato}`, `--fps=${fps}`, `--solo=${ids.join(',')}`],
+    const hijo = spawn(process.execPath, [path.join('tools', 'laminas.mjs'), rel, ...(formato === 'mp4' ? [] : [`--alfa=${formato}`]),
+      ...(banda ? [`--banda=${banda}`] : []), `--fps=${fps}`, `--solo=${ids.join(',')}`],
       { cwd: raiz, stdio: ['ignore', 'pipe', 'pipe'] });
     const cola = [];
     const recordar = (l) => { cola.push(l); if (cola.length > 15) cola.shift(); };
@@ -120,7 +125,7 @@ export function renderConProceso({ raiz, rel, formato, fps, ids, alLista }) {
  * @param {object} [o.escritorios]     escritorio → carpeta relativa a la raíz
  * @param {string[]} [o.origenes]      orígenes con CORS
  * @param {Function} [o.medirDuraciones]  ({raiz, rel, ids}) → { id: segundos }   (para pruebas)
- * @param {Function} [o.ejecutarRender]   ({raiz, rel, formato, fps, ids, alLista}) → Promise   (para pruebas)
+ * @param {Function} [o.ejecutarRender]   ({raiz, rel, formato, banda, fps, ids, alLista}) → Promise   (para pruebas)
  */
 export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_REELFORGE, medirDuraciones = medirConChrome, ejecutarRender = renderConProceso } = {}) {
   raiz = path.resolve(raiz);
@@ -149,6 +154,14 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
     let recorte;
     try { recorte = recorteDe(html); } catch (e) { throw new ErrorHttp(422, `${desk}/${deck}: ${e.message}`); }
     return { desk, deck, rel, dir, html, secciones, recorte, ...medidasDeck(html) };
+  }
+
+  /** El formato efectivo (un deck de banda es mp4 salvo que declare data-alfa) y el lado de la banda. */
+  function variante(info, pedido, bandaPedida) {
+    if (!FORMATOS.includes(pedido)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
+    if (bandaPedida !== undefined && bandaPedida !== null && !BANDAS.includes(bandaPedida)) throw new ErrorHttp(400, `banda debe ser ${BANDAS.join(' o ')}.`);
+    try { return { formato: formatoDe(info.html, pedido).formato, banda: bandaDe(info.html, bandaPedida) }; }
+    catch (e) { throw new ErrorHttp(422, `${info.desk}/${info.deck}: ${e.message}`); }
   }
 
   const memoDecks = new Map();   // index.html → { mtimeMs, size, info }
@@ -207,9 +220,10 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
   }
 
   async function laminasDe(desk, deck, url) {
-    const formato = url.searchParams.get('alfa') || 'mov';
-    if (!FORMATOS.includes(formato)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
+    const pedido = url.searchParams.get('alfa') || 'mov';
+    if (!FORMATOS.includes(pedido)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
     const info = resolverDeck(desk, deck);
+    const { formato, banda } = variante(info, pedido, url.searchParams.get('banda'));
     const dur = await duraciones(info);
     const caja = cajaDe(info.recorte, info.alto);
     // Los clips de clips.json van tras su lámina, medidos en su origen (se copian al renderizar).
@@ -224,7 +238,7 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       const d = Number.isFinite(dur[s.id]) ? Math.max(dur[s.id], 0) : 0;
       return { id: s.id, archivo: `${s.id}.${formato}`, png: `${s.id}.png`,
         dur_anim: +d.toFixed(3), dur: +(d + QUIETO_DEFECTO).toFixed(3),
-        alfa: true, caja: { ...caja }, palabras: s.palabras, recorte: info.recorte, ...(s.reposo ? { reposo: true } : {}),
+        alfa: formato !== 'mp4', caja: { ...caja }, palabras: s.palabras, recorte: info.recorte, ...(banda ? { banda } : {}), ...(s.reposo ? { reposo: true } : {}),
         ancho: info.ancho, alto: info.alto };
     }), clips);
   }
@@ -232,17 +246,19 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
   // ── POST /api/render ──
   const archivoIndice = (dir) => path.join(dir, 'video-out', 'laminas-cache.json');
   const leerIndice = (dir) => { try { const j = JSON.parse(fs.readFileSync(archivoIndice(dir), 'utf8')); return j && j.claves ? j : { version: 1, claves: {} }; } catch { return { version: 1, claves: {} }; } };
-  const carpetaSalida = (dir) => path.join(dir, 'video-out', 'laminas');
+  const carpetaSalida = (dir, banda) => path.join(dir, 'video-out', carpetaLaminas(banda));
   const renderizador = () => huellaDeCodigo(['cuadros.mjs', 'laminas.mjs', 'laminas-lib.mjs'].map(f => path.join(raiz, 'tools', f)));
 
   function validarRender(b) {
     if (!b || typeof b !== 'object' || Array.isArray(b)) throw new ErrorHttp(400, 'El cuerpo debe ser un objeto JSON.');
     if (typeof b.desk !== 'string' || typeof b.deck !== 'string') throw new ErrorHttp(400, 'Faltan desk y deck.');
-    const formato = b.alfa === undefined ? 'mov' : b.alfa;
-    if (!FORMATOS.includes(formato)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
+    const pedido = b.alfa === undefined ? 'mov' : b.alfa;
+    if (!FORMATOS.includes(pedido)) throw new ErrorHttp(400, `alfa debe ser ${FORMATOS.join(' o ')}.`);
+    if (b.banda !== undefined && !BANDAS.includes(b.banda)) throw new ErrorHttp(400, `banda debe ser ${BANDAS.join(' o ')}.`);
     const fps = b.fps === undefined ? 30 : b.fps;
     if (!Number.isInteger(fps) || fps < 1 || fps > 60) throw new ErrorHttp(400, 'fps debe ser un entero entre 1 y 60.');
     const info = resolverDeck(b.desk, b.deck);
+    const { formato, banda } = variante(info, pedido, b.banda);
     let ids = info.secciones.map(s => s.id);
     if (b.laminas !== undefined) {
       if (!Array.isArray(b.laminas) || !b.laminas.length || b.laminas.some(x => typeof x !== 'string')) throw new ErrorHttp(400, 'laminas debe ser una lista de ids no vacía.');
@@ -250,11 +266,11 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       if (falta.length) throw new ErrorHttp(400, `El deck no tiene las láminas: ${falta.join(', ')}.`);
       ids = ids.filter(x => b.laminas.includes(x));       // en el orden del deck, sin repetidas
     }
-    return { info, formato, fps, ids };
+    return { info, formato, banda, fps, ids };
   }
 
   const vistaTrabajo = (j) => ({
-    job_id: j.id, estado: j.estado, progreso: j.progreso, desk: j.desk, deck: j.deck, formato: j.formato, fps: j.fps,
+    job_id: j.id, estado: j.estado, progreso: j.progreso, desk: j.desk, deck: j.deck, formato: j.formato, ...(j.banda ? { banda: j.banda } : {}), fps: j.fps,
     laminas: j.laminas.map(l => ({ ...l })),
     ...(j.error ? { error: j.error } : {}),
     ...(j.estado === 'listo' ? { carpeta: j.carpeta, manifest: j.manifest, anim: j.anim } : {}),
@@ -269,25 +285,29 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
     try {
       j.estado = 'renderizando';
       const info = resolverDeck(j.desk, j.deck);
+      const salida = carpetaSalida(info.dir, j.banda);
       const claves = clavesDeLaminas({ raiz, dir: info.dir, html: info.html,
-        extra: { formato: j.formato, fps: j.fps, crop: info.recorte, quieto: QUIETO_DEFECTO, renderizador: renderizador() } });
+        extra: { formato: j.formato, fps: j.fps, crop: info.recorte, quieto: QUIETO_DEFECTO, renderizador: renderizador(), ...(j.banda ? { banda: j.banda } : {}) } });
       const indice = leerIndice(info.dir);
-      const guardadas = indice.claves[j.formato] || (indice.claves[j.formato] = {});
+      // Cada variante lleva su índice: el formato y, si es la banda de arriba, «-arriba» (su carpeta es otra).
+      const llave = `${j.formato}${j.banda === 'arriba' ? '-arriba' : ''}`;
+      const guardadas = indice.claves[llave] || (indice.claves[llave] = {});
       // El manifest.json es uno solo para todos los formatos: una lámina solo vale si su entrada es del formato pedido
       // (tras renderizar en webm, el manifest ya no describe los .mov aunque sus archivos sigan ahí).
       let enManifest = new Set();
       try {
-        enManifest = new Set(JSON.parse(fs.readFileSync(path.join(carpetaSalida(info.dir), 'manifest.json'), 'utf8'))
-          .filter(l => !l.tipo && l.alfa === true && l.archivo === `${l.id}.${j.formato}` && (l.recorte || CROP_DEFECTO) === info.recorte).map(l => l.id));
+        enManifest = new Set(JSON.parse(fs.readFileSync(path.join(salida, 'manifest.json'), 'utf8'))
+          .filter(l => !l.tipo && l.alfa === (j.formato !== 'mp4') && l.archivo === `${l.id}.${j.formato}` && (l.recorte || CROP_DEFECTO) === info.recorte
+            && (l.banda || null) === j.banda).map(l => l.id));
       } catch { /* sin manifest */ }
       const vale = (id) => guardadas[id] === claves.get(id) && enManifest.has(id)
-        && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.${j.formato}`)) && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.png`));
+        && fs.existsSync(path.join(salida, `${id}.${j.formato}`)) && fs.existsSync(path.join(salida, `${id}.png`));
       for (const l of j.laminas) l.estado = vale(l.id) ? 'cacheada' : 'pendiente';
       const pendientes = j.laminas.filter(l => l.estado === 'pendiente').map(l => l.id);
       actualizarProgreso(j);
       if (pendientes.length) {
         for (const l of j.laminas) if (l.estado === 'pendiente') l.estado = 'renderizando';
-        await ejecutarRender({ raiz, rel: info.rel, formato: j.formato, fps: j.fps, ids: pendientes,
+        await ejecutarRender({ raiz, rel: info.rel, formato: j.formato, banda: j.banda, fps: j.fps, ids: pendientes,
           alLista: (id) => { const l = j.laminas.find(x => x.id === id); if (l) { l.estado = 'lista'; actualizarProgreso(j); } } });
         for (const id of pendientes) guardadas[id] = claves.get(id);
         fs.mkdirSync(path.dirname(archivoIndice(info.dir)), { recursive: true });
@@ -296,10 +316,10 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       }
       actualizarProgreso(j);
       // Los clips se reponen siempre, aunque todo saliera de la caché: clips.json no es parte de la clave.
-      ponerClips({ dir: info.dir, destino: carpetaSalida(info.dir), idsLaminas: info.secciones.map(s => s.id) });
-      j.carpeta = carpetaSalida(info.dir);
-      j.manifest = path.join(carpetaSalida(info.dir), 'manifest.json');
-      j.anim = path.join(info.dir, 'video-out', 'anim-alfa');
+      ponerClips({ dir: info.dir, destino: salida, idsLaminas: info.secciones.map(s => s.id) });
+      j.carpeta = salida;
+      j.manifest = path.join(salida, 'manifest.json');
+      j.anim = path.join(info.dir, 'video-out', carpetaAnim(j.formato !== 'mp4', j.banda));
       j.estado = 'listo';
     } catch (e) {
       j.estado = 'error';
@@ -309,11 +329,11 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
   }
 
   function pedirRender(cuerpo) {
-    const { info, formato, fps, ids } = validarRender(cuerpo);
+    const { info, formato, banda, fps, ids } = validarRender(cuerpo);
     // Un pedido idéntico a uno que sigue en curso es el mismo trabajo (un doble clic no rinde dos veces).
-    const firma = JSON.stringify([info.desk, info.deck, formato, fps, ids]);
+    const firma = JSON.stringify([info.desk, info.deck, formato, banda, fps, ids]);
     for (const j of trabajos.values()) if (j.firma === firma && (j.estado === 'en_cola' || j.estado === 'renderizando')) return j;
-    const j = { id: crypto.randomBytes(6).toString('hex'), firma, estado: 'en_cola', progreso: 0, desk: info.desk, deck: info.deck, formato, fps,
+    const j = { id: crypto.randomBytes(6).toString('hex'), firma, estado: 'en_cola', progreso: 0, desk: info.desk, deck: info.deck, formato, banda, fps,
       laminas: ids.map(id => ({ id, estado: 'pendiente' })) };
     trabajos.set(j.id, j);
     while (trabajos.size > MAX_TRABAJOS) trabajos.delete(trabajos.keys().next().value);

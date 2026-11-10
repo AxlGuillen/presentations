@@ -488,8 +488,22 @@ const threeScript = (dir) => {
   return `<script type="module">import * as THREE from './three.module.js'; window.THREE = THREE; if (window.relanzar) window.relanzar();</${'script'}>`;
 };
 
+// ── Variante de banda (arriba / abajo) ───────────────────────────────────
+/** La variante de banda de un deck «banda inferior»: con <deck-stage data-banda="abajo"> el deck dice que
+ *  tiene las dos, y con ?banda=arriba en la URL (lo que pasan capturar.mjs, cuadros.mjs y laminas.mjs
+ *  --banda=arriba, y lo que puede pedir el iframe del modo capa) el script cambia el data-banda y el CSS
+ *  invierte en vertical todo lo marcado con data-riel: el riel (rombo y destellos del lado del gameplay,
+ *  marcas y líneas) y sus velos de orientación. El contenido de las láminas no se toca. Va después del
+ *  </deck-stage>. Una sola fuente: no hay decks duplicados. */
+const banda = () => `<style>deck-stage[data-banda="arriba"] [data-riel] { transform: scaleY(-1); transform-origin: 50% 50%; }</style>
+<script>(function () {
+  var b = new URLSearchParams(location.search).get('banda');
+  var ds = document.querySelector('deck-stage');
+  if (ds && (b === 'arriba' || b === 'abajo')) ds.setAttribute('data-banda', b);
+})();</${'script'}>`;
+
 /** PRNG con semilla (mulberry32), el mismo que usan kit.patron y las recetas
  *  del runtime: kit.random('confeti')() da la misma secuencia que
  *  random('confeti')() dentro de la página. La semilla puede ser número o texto. */
-module.exports = { alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
+module.exports = { banda, alpha, capa, fondo, puntos, lavado, grano, malla, sombra, diagrama, animador, reproductor, diferir, og, PROD,
   gsap, efectos, pincel, duotono, glitch, quemado, tinta, ventana, sello, grafica, contorno, destello, impacto, rayo, multikill, letrero, dona, radar, patron, patronFondo, icono, ilustracion, lineas, lineasRuntime, ritmo, voz, golpe, lottieScript, lottie, threeScript, random: prng };

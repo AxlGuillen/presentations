@@ -674,9 +674,10 @@ ${kit.og({ titulo: 'El draft de Tom', descripcion: 'El draft de T1 contra BLG, m
 </style>
 </head>
 <body>
-<deck-stage width="1080" height="1920" data-recorte="${RECORTE}">
+<deck-stage width="1080" height="1920" data-recorte="${RECORTE}" data-banda="abajo">
 ${slides.join('\n')}
 </deck-stage>
+${kit.banda()}
 ${kit.gsap(__dirname, ['SplitText', 'MotionPath'])}
 ${kit.efectos()}
 ${kit.animador()}

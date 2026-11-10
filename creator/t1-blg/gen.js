@@ -625,9 +625,10 @@ ${kit.og({ titulo: 'T1 vs BLG · Semifinal del Mundial 2026', descripcion: 'La p
 </style>
 </head>
 <body>
-<deck-stage width="1080" height="1920" data-recorte="${RECORTE}">
+<deck-stage width="1080" height="1920" data-recorte="${RECORTE}" data-banda="abajo">
 ${slides.join('\n')}
 </deck-stage>
+${kit.banda()}
 ${kit.gsap(__dirname)}
 ${kit.efectos()}
 ${kit.animador()}

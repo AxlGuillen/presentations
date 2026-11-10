@@ -51,6 +51,70 @@ export function recorteDe(html) {
   return r === undefined ? CROP_DEFECTO : validarRecorte(r.trim(), medidasDeck(html));
 }
 
+// ── Decks de banda: opacos y con dos variantes (abajo / arriba) ──────────
+// Un deck «de banda» declara data-recorte o data-banda en su <deck-stage> (t1-blg, vayne-troll, tom-draft…).
+// La banda es opaca de borde a borde, así que sus láminas salen en mp4 (H.264, sin alfa) aunque se pida
+// --alfa; si un deck de banda SÍ necesita transparencia, lo declara con data-alfa="webm" (o "mov").
+// data-banda="abajo|arriba" dice además que el deck tiene la variante: con ?banda=arriba en la URL (o
+// --banda=arriba en laminas.mjs) el riel y los adornos de orientación ([data-riel]) se invierten, y el
+// contenido de cada lámina no cambia (ver kit.banda()).
+
+/** Los dos lados de la banda. */
+export const BANDAS = ['abajo', 'arriba'];
+/** Los formatos con alfa que puede declarar un deck en data-alfa. */
+export const FORMATOS_ALFA = ['mov', 'webm'];
+
+/** El valor de un atributo del <deck-stage> (undefined si no lo tiene; '' si va sin valor). */
+function atributoDeck(html, nombre) {
+  const ds = (html.match(/<deck-stage\b[^>]*>/) || [''])[0];
+  const m = ds.match(new RegExp(`\\s${nombre}(?:="([^"]*)")?(?=[\\s>/])`));
+  return m ? (m[1] ?? '').trim() : undefined;
+}
+
+/** true si el deck es de banda: declara data-recorte o data-banda en su <deck-stage>. */
+export function esDeBanda(html) {
+  return atributoDeck(html, 'data-recorte') !== undefined || atributoDeck(html, 'data-banda') !== undefined;
+}
+
+/**
+ * El lado para el que se exporta un deck: el pedido o, sin pedido, el de su data-banda; un deck de banda sin
+ * data-banda es 'abajo' (la banda inferior del prereel), y uno que no es de banda, null. Pedir 'arriba' a un
+ * deck sin data-banda falla: no tiene la variante y saldría igual que abajo con la etiqueta cambiada.
+ */
+export function bandaDe(html, pedida) {
+  const declarada = atributoDeck(html, 'data-banda');
+  if (declarada !== undefined && !BANDAS.includes(declarada)) throw new Error(`data-banda inválido: «${declarada}» (debe ser ${BANDAS.join(' o ')}).`);
+  if (pedida !== undefined && pedida !== null && pedida !== '') {
+    if (!BANDAS.includes(pedida)) throw new Error(`banda inválida: «${pedida}» (debe ser ${BANDAS.join(' o ')}).`);
+    if (declarada === undefined && !(pedida === 'abajo' && esDeBanda(html))) {
+      throw new Error(`El deck no tiene variante de banda (le falta data-banda en el <deck-stage>): no puede salir para ${pedida}.`);
+    }
+    return pedida;
+  }
+  if (declarada !== undefined) return declarada;
+  return esDeBanda(html) ? 'abajo' : null;
+}
+
+/**
+ * El formato de los clips: 'mp4' (opaco) o 'mov'/'webm' (con alfa). Un deck de banda sale en mp4 aunque se
+ * pida alfa (`ignorado: true`), salvo que declare data-alfa: entonces sale el formato con alfa pedido o, sin
+ * pedido, el declarado. Los demás decks, lo pedido (mp4 sin pedido), como siempre.
+ */
+export function formatoDe(html, pedido) {
+  const declarado = atributoDeck(html, 'data-alfa');
+  if (declarado !== undefined && !FORMATOS_ALFA.includes(declarado)) throw new Error(`data-alfa inválido: «${declarado}» (debe ser ${FORMATOS_ALFA.join(' o ')}).`);
+  const conAlfa = FORMATOS_ALFA.includes(pedido) ? pedido : null;
+  if (declarado) return { formato: conAlfa || declarado, ignorado: false };
+  if (esDeBanda(html)) return { formato: 'mp4', ignorado: !!conAlfa };
+  return { formato: conAlfa || 'mp4', ignorado: false };
+}
+
+/** Las carpetas de video-out/ por variante: la de abajo conserva las de siempre; la de arriba lleva «-arriba». */
+const sufijo = (banda) => (banda === 'arriba' ? '-arriba' : '');
+export const carpetaLaminas = (banda) => `laminas${sufijo(banda)}`;
+export const carpetaAnim = (alfa, banda) => `${alfa ? 'anim-alfa' : 'anim'}${sufijo(banda)}`;
+export const carpetaSlides = (banda) => `slides${sufijo(banda)}`;
+
 /** La caja del panel en las claves del montaje de ReelForge: el recorte va centrado a lo ancho y se mide desde abajo del lienzo. */
 export function cajaDe(crop, altoDeck) {
   const [cw, ch, , cy] = crop.split(':').map(Number);

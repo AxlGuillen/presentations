@@ -35,7 +35,7 @@
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
         },
         "archivo": {
-          "description": "El clip: <id>.mp4 (opaco), <id>.mov (ProRes 4444 con alfa) o <id>.webm (VP9 con alfa).",
+          "description": "El clip: <id>.mp4 (opaco, H.264 yuv420p; es lo que dan los decks de banda), <id>.mov (ProRes 4444 con alfa) o <id>.webm (VP9 con alfa).",
           "type": "string",
           "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*\\.(mp4|mov|webm)$"
         },
@@ -55,7 +55,7 @@
           "minimum": 0
         },
         "alfa": {
-          "description": "true si el clip trae transparencia (.mov o .webm).",
+          "description": "true si el clip trae transparencia (.mov o .webm). Los decks de banda (data-recorte o data-banda) son opacos: false y .mp4, salvo que declaren data-alfa en su <deck-stage>.",
           "type": "boolean"
         },
         "caja": {
@@ -73,6 +73,13 @@
           "description": "El recorte del panel con el que se cortó la lámina, W:H:X:Y en px del lienzo del deck (el crop de FFmpeg): el data-recorte del <deck-stage> o, sin él, 1080:1370:0:275. Ausente en los manifest.json anteriores al 6/11/2026, que son todos 1080:1370:0:275. La caja sale de aquí.",
           "type": "string",
           "pattern": "^[0-9]+:[0-9]+:[0-9]+:[0-9]+$"
+        },
+        "banda": {
+          "description": "Solo en los decks de banda: el lado para el que se exportó. «abajo» es la banda inferior del prereel; «arriba», la variante para una banda superior (el riel y los adornos de orientación invertidos, el contenido igual; laminas.mjs --banda=arriba la deja en video-out/laminas-arriba/). Ausente en los decks que no son de banda y en los manifest.json anteriores al 10/11/2026.",
+          "enum": [
+            "abajo",
+            "arriba"
+          ]
         },
         "reposo": {
           "description": "true en la lámina de reposo (data-reposo en la <section>): la banda decorada sin dato con la que ReelForge llena los huecos entre láminas. Las demás no llevan el campo.",
