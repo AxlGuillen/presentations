@@ -43,6 +43,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/suiza-r5/   Worlds 2026 · ronda 5, los cruces 2–2 del 31/oct (Bo3, el que pierde se va) y a quién le ha ganado cada equipo · 9:16 · 8 slides
 /creator/suiza-qf/   Worlds 2026 · cuartos de final (3–6/nov, Bo5): flyers, camino en la suiza y cara a cara · 9:16 · 10 slides
 /creator/t1-blg/     Worlds 2026 · previa de la semifinal T1 vs BLG (8/nov): banda inferior de 1080×680, solo arte oficial · 9:16 · 25 slides
+/creator/vayne-troll/ ¿La Vayne de Doran fue troll? (9/nov): láminas para el montaje y 4 clips en el manifest, solo arte oficial · 9:16 · 22 slides
 /creator/ganan/       «¿Por qué siempre ganan chinos y coreanos?» (Axelsine): láminas para el montaje automático, con la identidad de Worlds 2026 · 9:16 · 22 slides
 /creator/lux/        Lux cumple 16 años (láminas para el montaje automático, animado) · 9:16 · 11 slides
 /creator/graves/     Graves cumple 15 años (láminas para el montaje automático, animado) · 9:16 · 13 slides
