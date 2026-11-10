@@ -4,7 +4,8 @@
 //
 //   GET  /api/decks[?desk=creator]          [{desk, deck, titulo, laminas, url}] — solo los decks con data-lamina
 //   GET  /api/decks/<desk>/<deck>/laminas   lo mismo que manifest.json (+ ancho y alto), SIN renderizar; el
-//                                           recorte y la caja salen del data-recorte del <deck-stage>
+//                                           recorte y la caja salen del data-recorte del <deck-stage>, y
+//                                           los clips de clips.json van tras su lámina (tipo: "clip")
 //                                           (?alfa=mov|webm elige la extensión de `archivo`; mov por omisión)
 //   POST /api/render {desk, deck, laminas?, alfa:'mov'|'webm', fps}   → 202 {job_id}
 //   GET  /api/render/<job>                  progreso por lámina y, al terminar, las rutas absolutas
@@ -19,7 +20,7 @@ import crypto from 'node:crypto';
 import { spawn } from 'node:child_process';
 import {
   ID_VALIDO, CROP_DEFECTO, QUIETO_DEFECTO, leerSecciones, medidasDeck, cajaDe, recorteDe, tituloDe, buscarChrome,
-  clavesDeLaminas, referencias, huellaArchivo, huellaDeCodigo,
+  clavesDeLaminas, referencias, huellaArchivo, huellaDeCodigo, leerClips, sondearClip, entradaClip, insertarClips, ponerClips,
 } from './laminas-lib.mjs';
 
 /** Los orígenes de ReelForge: los mismos que acepta el modo capa de deck-stage.js. */
@@ -211,13 +212,21 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
     const info = resolverDeck(desk, deck);
     const dur = await duraciones(info);
     const caja = cajaDe(info.recorte, info.alto);
-    return info.secciones.map(s => {
+    // Los clips de clips.json van tras su lámina, medidos en su origen (se copian al renderizar).
+    let clips;
+    try {
+      clips = leerClips(info.dir, info.secciones.map(s => s.id)).map((c) => {
+        if (!fs.existsSync(c.origen)) throw new Error(`no existe el clip «${c.id}» (${c.origen})`);
+        return entradaClip(c, sondearClip(c.origen));
+      });
+    } catch (e) { throw new ErrorHttp(422, `${info.desk}/${info.deck}: ${e.message}`); }
+    return insertarClips(info.secciones.map(s => {
       const d = Number.isFinite(dur[s.id]) ? Math.max(dur[s.id], 0) : 0;
       return { id: s.id, archivo: `${s.id}.${formato}`, png: `${s.id}.png`,
         dur_anim: +d.toFixed(3), dur: +(d + QUIETO_DEFECTO).toFixed(3),
         alfa: true, caja: { ...caja }, palabras: s.palabras, recorte: info.recorte, ...(s.reposo ? { reposo: true } : {}),
         ancho: info.ancho, alto: info.alto };
-    });
+    }), clips);
   }
 
   // ── POST /api/render ──
@@ -269,7 +278,7 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
       let enManifest = new Set();
       try {
         enManifest = new Set(JSON.parse(fs.readFileSync(path.join(carpetaSalida(info.dir), 'manifest.json'), 'utf8'))
-          .filter(l => l.alfa === true && l.archivo === `${l.id}.${j.formato}` && (l.recorte || CROP_DEFECTO) === info.recorte).map(l => l.id));
+          .filter(l => !l.tipo && l.alfa === true && l.archivo === `${l.id}.${j.formato}` && (l.recorte || CROP_DEFECTO) === info.recorte).map(l => l.id));
       } catch { /* sin manifest */ }
       const vale = (id) => guardadas[id] === claves.get(id) && enManifest.has(id)
         && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.${j.formato}`)) && fs.existsSync(path.join(carpetaSalida(info.dir), `${id}.png`));
@@ -286,6 +295,8 @@ export function crearApi({ raiz, escritorios = ESCRITORIOS, origenes = ORIGENES_
         for (const l of j.laminas) if (l.estado === 'renderizando') l.estado = 'lista';
       }
       actualizarProgreso(j);
+      // Los clips se reponen siempre, aunque todo saliera de la caché: clips.json no es parte de la clave.
+      ponerClips({ dir: info.dir, destino: carpetaSalida(info.dir), idsLaminas: info.secciones.map(s => s.id) });
       j.carpeta = carpetaSalida(info.dir);
       j.manifest = path.join(carpetaSalida(info.dir), 'manifest.json');
       j.anim = path.join(info.dir, 'video-out', 'anim-alfa');

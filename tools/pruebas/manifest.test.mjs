@@ -25,6 +25,11 @@ function coherente(manifest) {
     vistos.add(l.id);
     assert.equal(path.parse(l.archivo).name, l.id, `${l.id}: archivo debe ser <id>.<ext>`);
     assert.equal(l.png, `${l.id}.png`, `${l.id}: png debe ser <id>.png`);
+    if (l.tipo === 'clip') {
+      // Un clip va tras una lámina que exista y esté antes que él.
+      if (l.despues) assert.ok(manifest.findIndex(x => x.id === l.despues) > -1 && manifest.findIndex(x => x.id === l.despues) < manifest.indexOf(l), `${l.id}: su lámina «${l.despues}» no está antes que él`);
+      continue;
+    }
     assert.ok(l.dur >= l.dur_anim, `${l.id}: dur (${l.dur}) menor que dur_anim (${l.dur_anim})`);
     // La caja sale del recorte: mismo ancho y, desde abajo, lo que sobra del lienzo (1920 si no viene el alto).
     if (l.recorte) {
@@ -50,7 +55,7 @@ function reales() {
 }
 
 test('esquema: los fixtures versionados son válidos (mp4, mov, webm, la respuesta de la API y la banda inferior)', () => {
-  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json', 'manifest-banda.json']) {
+  for (const n of ['manifest-mp4.json', 'manifest-alfa-mov.json', 'manifest-alfa-webm.json', 'manifest-api.json', 'manifest-banda.json', 'manifest-clips.json']) {
     const m = fixture(n);
     assert.ok(validar(m), `${n}: ${errores()}`);
     coherente(m);
@@ -91,6 +96,20 @@ test('esquema: rechaza lo que no debe', () => {
   malo('recorte con negativos', (l) => { l.recorte = '1080:680:0:-1'; });
   malo('reposo que no es booleano', (l) => { l.reposo = 'si'; });
   assert.ok(!validar({}), 'el manifest es una lista, no un objeto');
+
+  // Los clips: su propia forma, sin los campos de lámina.
+  const clips = fixture('manifest-clips.json'), clip = clips.find(l => l.tipo === 'clip');
+  const maloClip = (nombre, cambio) => {
+    const c = structuredClone(clip);
+    cambio(c);
+    assert.ok(!validar([c]), `clip ${nombre}: debería ser inválido`);
+  };
+  maloClip('sin dur', (c) => { delete c.dur; });
+  maloClip('dur en cero', (c) => { c.dur = 0; });
+  maloClip('con campo de lámina (caja)', (c) => { c.caja = { width: 1080, x: 'center', bottom: 0 }; });
+  maloClip('tipo desconocido', (c) => { c.tipo = 'video'; });
+  maloClip('archivo con otra extensión', (c) => { c.archivo = `${c.id}.avi`; });
+  maloClip('sin ancho', (c) => { delete c.ancho; });
 });
 
 test('coherente(): detecta ids repetidos y archivos que no son <id>', () => {
@@ -101,4 +120,6 @@ test('coherente(): detecta ids repetidos y archivos que no son <id>', () => {
   const banda = fixture('manifest-banda.json');
   assert.throws(() => coherente([{ ...banda[0], caja: { width: 1080, x: 'center', bottom: 275 } }]), /no cuadra con el recorte/);
   assert.throws(() => coherente([{ ...banda[0], caja: { width: 706, x: 'center', bottom: 0 } }]), /no es el ancho del recorte/);
+  const clips = fixture('manifest-clips.json'), clip = clips.find(l => l.tipo === 'clip');
+  assert.throws(() => coherente([clip, ...clips.filter(l => l !== clip)]), /no está antes que él/);
 });

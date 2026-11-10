@@ -3,6 +3,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import crypto from 'node:crypto';
+import { spawnSync } from 'node:child_process';
 
 /** El recorte del panel del montaje: 1080×1370 desde y = 275 (el encuadre de los flyers de suiza). */
 export const CROP_DEFECTO = '1080:1370:0:275';
@@ -131,4 +132,92 @@ export function clavesDeLaminas({ raiz, dir, html, extra = {} }) {
 /** sha256 de varios archivos (el renderizador: si cambia cuadros.mjs o laminas.mjs, lo cacheado ya no vale). */
 export function huellaDeCodigo(archivos) {
   return sha(...archivos.map(f => huellaArchivo(f) || '-'));
+}
+
+// ── Clips en el manifest ─────────────────────────────────────────────────
+// Un deck puede pedir clips de video ya cortados (material del canal: un gank, un draft…) en su
+// manifest, para que el montaje los ponga encima en su sitio. Se declaran en `<deck>/clips.json`:
+//   [{ "id": "gank-min2", "origen": "C:/…/Gank minuto 2.mp4", "despues": "vt-caedrel", "palabras": ["minuto dos"] }]
+// `despues` es la lámina tras la que va en el manifest (el orden del guion); `palabras`, opcional.
+// No se dibujan ni se renderizan: se copian tal cual a video-out/laminas/<id>.<ext>, con un <id>.png
+// (su último cuadro), y entran en el manifest como { tipo: "clip", id, archivo, png, dur, ancho, alto, … }.
+
+const EXT_CLIP = ['mp4', 'mov', 'webm'];
+
+/** Los clips de `<dir>/clips.json`, validados ([] si no hay archivo). */
+export function leerClips(dir, idsLaminas = []) {
+  const f = path.join(dir, 'clips.json');
+  if (!fs.existsSync(f)) return [];
+  let lista;
+  try { lista = JSON.parse(fs.readFileSync(f, 'utf8')); } catch (e) { throw new Error(`clips.json no es JSON válido: ${e.message}`); }
+  if (!Array.isArray(lista)) throw new Error('clips.json debe ser una lista.');
+  const vistos = new Set();
+  return lista.map((c, i) => {
+    const donde = `clips.json[${i}]`;
+    if (!c || typeof c !== 'object' || !ID_VALIDO.test(c.id || '')) throw new Error(`${donde}: id inválido.`);
+    if (vistos.has(c.id) || idsLaminas.includes(c.id)) throw new Error(`${donde}: el id «${c.id}» ya existe (los clips no pueden repetir id ni chocar con una lámina).`);
+    vistos.add(c.id);
+    if (typeof c.origen !== 'string' || !c.origen) throw new Error(`${donde}: falta «origen» (la ruta del video).`);
+    const origen = path.resolve(dir, c.origen);
+    const ext = path.extname(origen).slice(1).toLowerCase();
+    if (!EXT_CLIP.includes(ext)) throw new Error(`${donde}: «${path.basename(origen)}» no es ${EXT_CLIP.join(', ')}.`);
+    if (c.despues !== undefined && c.despues !== null && !idsLaminas.includes(c.despues)) throw new Error(`${donde}: la lámina «${c.despues}» no existe.`);
+    const palabras = c.palabras === undefined ? [] : c.palabras;
+    if (!Array.isArray(palabras) || palabras.some(p => typeof p !== 'string' || !p.trim())) throw new Error(`${donde}: «palabras» debe ser una lista de textos.`);
+    return { id: c.id, origen, ext, despues: c.despues ?? null, palabras: palabras.map(p => p.trim()) };
+  });
+}
+
+/** Ancho, alto y duración de un video, con ffprobe. */
+export function sondearClip(archivo) {
+  const r = spawnSync('ffprobe', ['-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=width,height:format=duration', '-of', 'json', archivo], { encoding: 'utf8' });
+  if (r.status !== 0) throw new Error(`ffprobe no pudo leer ${archivo}: ${(r.stderr || '').trim()}`);
+  const j = JSON.parse(r.stdout), s = (j.streams || [])[0] || {};
+  return { ancho: s.width, alto: s.height, dur: +(+j.format.duration).toFixed(3) };
+}
+
+/** La entrada del manifest de un clip (sin tocar disco más que para medirlo). */
+export function entradaClip(c, medidas) {
+  return { id: c.id, tipo: 'clip', archivo: `${c.id}.${c.ext}`, png: `${c.id}.png`, dur: medidas.dur, ancho: medidas.ancho, alto: medidas.alto,
+    ...(c.despues ? { despues: c.despues } : {}), palabras: c.palabras };
+}
+
+/** Quita los clips del manifest y los vuelve a meter, cada uno tras su lámina (o al final), en el orden de clips.json. */
+export function insertarClips(manifest, entradas) {
+  const salida = manifest.filter(l => l.tipo !== 'clip');
+  for (const e of entradas) {
+    let i = salida.length;
+    if (e.despues) {
+      const k = salida.findIndex(l => l.id === e.despues);
+      if (k >= 0) { i = k + 1; while (i < salida.length && salida[i].tipo === 'clip') i++; }
+    }
+    salida.splice(i, 0, e);
+  }
+  return salida;
+}
+
+/**
+ * Copia los clips de clips.json a `destino` (solo si cambiaron), saca su PNG final y reescribe el manifest.json
+ * de `destino` con los clips en su sitio. Lo usan laminas.mjs y la API del estudio. Devuelve las entradas.
+ */
+export function ponerClips({ dir, destino, idsLaminas }) {
+  const clips = leerClips(dir, idsLaminas);
+  const fManifest = path.join(destino, 'manifest.json');
+  let manifest = [];
+  try { manifest = JSON.parse(fs.readFileSync(fManifest, 'utf8')); } catch { /* sin manifest */ }
+  if (!clips.length && !manifest.some(l => l.tipo === 'clip')) return [];
+  fs.mkdirSync(destino, { recursive: true });
+  const entradas = clips.map((c) => {
+    if (!fs.existsSync(c.origen)) throw new Error(`No existe el clip «${c.id}»: ${c.origen}`);
+    const copia = path.join(destino, `${c.id}.${c.ext}`), png = path.join(destino, `${c.id}.png`);
+    const so = fs.statSync(c.origen), sc = fs.existsSync(copia) ? fs.statSync(copia) : null;
+    if (!sc || sc.size !== so.size || sc.mtimeMs < so.mtimeMs) fs.copyFileSync(c.origen, copia);
+    if (!fs.existsSync(png) || fs.statSync(png).mtimeMs < fs.statSync(copia).mtimeMs) {
+      const r = spawnSync('ffmpeg', ['-y', '-loglevel', 'error', '-sseof', '-0.2', '-i', copia, '-update', '1', png]);
+      if (r.status !== 0) throw new Error(`ffmpeg no pudo sacar el último cuadro de ${copia}`);
+    }
+    return entradaClip(c, sondearClip(copia));
+  });
+  fs.writeFileSync(fManifest, JSON.stringify(insertarClips(manifest, entradas), null, 2) + '\n', 'utf8');
+  return entradas;
 }

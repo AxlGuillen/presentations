@@ -173,6 +173,24 @@ test('GET laminas: el recorte y la caja salen del data-recorte del deck; data-re
   assert.match((await e.pedir('/api/decks/creator/demo/laminas')).json.error, /Recorte inválido/);
 });
 
+test('GET laminas: los clips de clips.json van tras su lámina, medidos; un clip que falta es un 422', { skip: hayFfmpeg ? false : 'no hay ffmpeg' }, async (t) => {
+  const e = await entorno(t);
+  const video = path.join(e.dir, 'clips', 'gank.mp4');
+  fs.mkdirSync(path.dirname(video), { recursive: true });
+  assert.equal(spawnSync('ffmpeg', ['-v', 'error', '-y', '-f', 'lavfi', '-i', 'color=c=blue:s=320x568:d=2:r=30', '-pix_fmt', 'yuv420p', video]).status, 0);
+  fs.writeFileSync(path.join(e.dir, 'creator/demo/clips.json'), JSON.stringify([{ id: 'gank', origen: '../../clips/gank.mp4', despues: 'd-uno', palabras: ['minuto dos'] }]));
+  const { status, json } = await e.pedir('/api/decks/creator/demo/laminas?alfa=webm');
+  assert.equal(status, 200);
+  assert.ok(validarManifest(json), JSON.stringify(validarManifest.errors));
+  assert.deepEqual(json.map(l => l.id), ['d-uno', 'gank', 'd-dos', 'd-tres']);
+  const c = json[1];
+  assert.deepEqual({ ...c, dur: Math.round(c.dur) }, { id: 'gank', tipo: 'clip', archivo: 'gank.mp4', png: 'gank.png', dur: 2, ancho: 320, alto: 568, despues: 'd-uno', palabras: ['minuto dos'] });
+  fs.rmSync(video);
+  const falta = await e.pedir('/api/decks/creator/demo/laminas');
+  assert.equal(falta.status, 422);
+  assert.match(falta.json.error, /no existe el clip «gank»/);
+});
+
 test('render: el recorte del deck es parte de la clave de caché', async (t) => {
   const e = await entorno(t);
   assert.deepEqual(estados(await e.correr({ alfa: 'webm' })), { 'd-uno': 'lista', 'd-dos': 'lista', 'd-tres': 'lista' });

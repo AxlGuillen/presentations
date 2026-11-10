@@ -2,14 +2,32 @@
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://presentations-three-phi.vercel.app/tools/manifest.schema.json",
   "title": "manifest.json de laminas.mjs",
-  "description": "Las láminas de un deck cortadas para el montaje (video-out/laminas/manifest.json). Lo escribe tools/laminas.mjs y lo lee el módulo montage de ReelForge (id y archivo son lo que ya leía; el resto creció sin romperlo). GET /api/decks/<desk>/<deck>/laminas devuelve lo mismo sin renderizar, más ancho y alto.",
+  "description": "Las láminas de un deck cortadas para el montaje (video-out/laminas/manifest.json). Lo escribe tools/laminas.mjs y lo lee el módulo montage de ReelForge (id y archivo son lo que ya leía; el resto creció sin romperlo). GET /api/decks/<desk>/<deck>/laminas devuelve lo mismo sin renderizar, más ancho y alto. Si el deck trae clips.json, sus clips de video ya cortados van en la lista tras su lámina, con tipo \"clip\".",
   "type": "array",
-  "items": { "$ref": "#/$defs/lamina" },
+  "items": {
+    "oneOf": [
+      {
+        "$ref": "#/$defs/lamina"
+      },
+      {
+        "$ref": "#/$defs/clip"
+      }
+    ]
+  },
   "$defs": {
     "lamina": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["id", "archivo", "png", "dur_anim", "dur", "alfa", "caja", "palabras"],
+      "required": [
+        "id",
+        "archivo",
+        "png",
+        "dur_anim",
+        "dur",
+        "alfa",
+        "caja",
+        "palabras"
+      ],
       "properties": {
         "id": {
           "description": "El data-lamina de la <section>. También es el nombre base de los archivos.",
@@ -40,11 +58,16 @@
           "description": "true si el clip trae transparencia (.mov o .webm).",
           "type": "boolean"
         },
-        "caja": { "$ref": "#/$defs/caja" },
+        "caja": {
+          "$ref": "#/$defs/caja"
+        },
         "palabras": {
           "description": "Las palabras del guion que disparan la lámina (el data-palabras de la <section>, separado por comas). Vacío si no tiene.",
           "type": "array",
-          "items": { "type": "string", "minLength": 1 }
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
         },
         "recorte": {
           "description": "El recorte del panel con el que se cortó la lámina, W:H:X:Y en px del lienzo del deck (el crop de FFmpeg): el data-recorte del <deck-stage> o, sin él, 1080:1370:0:275. Ausente en los manifest.json anteriores al 6/11/2026, que son todos 1080:1370:0:275. La caja sale de aquí.",
@@ -68,9 +91,29 @@
       },
       "allOf": [
         {
-          "if": { "properties": { "alfa": { "const": true } } },
-          "then": { "properties": { "archivo": { "type": "string", "pattern": "\\.(mov|webm)$" } } },
-          "else": { "properties": { "archivo": { "type": "string", "pattern": "\\.mp4$" } } }
+          "if": {
+            "properties": {
+              "alfa": {
+                "const": true
+              }
+            }
+          },
+          "then": {
+            "properties": {
+              "archivo": {
+                "type": "string",
+                "pattern": "\\.(mov|webm)$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "archivo": {
+                "type": "string",
+                "pattern": "\\.mp4$"
+              }
+            }
+          }
         }
       ]
     },
@@ -78,11 +121,90 @@
       "description": "Dónde va la lámina sobre el video vertical, con las claves del montaje de ReelForge: ancho en px, alineación horizontal y distancia al borde de abajo del lienzo del deck.",
       "type": "object",
       "additionalProperties": false,
-      "required": ["width", "x", "bottom"],
+      "required": [
+        "width",
+        "x",
+        "bottom"
+      ],
       "properties": {
-        "width": { "type": "integer", "minimum": 1 },
-        "x": { "enum": ["center", "left", "right"] },
-        "bottom": { "type": "integer", "minimum": 0 }
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "x": {
+          "enum": [
+            "center",
+            "left",
+            "right"
+          ]
+        },
+        "bottom": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "clip": {
+      "description": "Un clip de video del canal ya cortado (clips.json del deck): no se dibuja ni se renderiza; laminas.mjs lo copia a video-out/laminas/<id>.<ext> con su <id>.png (el último cuadro) y lo pone en la lista tras su lámina.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "tipo",
+        "archivo",
+        "png",
+        "dur",
+        "ancho",
+        "alto",
+        "palabras"
+      ],
+      "properties": {
+        "id": {
+          "description": "El id del clip en clips.json (no choca con ninguna lámina).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+        },
+        "tipo": {
+          "const": "clip"
+        },
+        "archivo": {
+          "description": "La copia del clip: <id>.mp4, <id>.mov o <id>.webm, tal cual el original.",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*\\.(mp4|mov|webm)$"
+        },
+        "png": {
+          "description": "El último cuadro del clip.",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*\\.png$"
+        },
+        "dur": {
+          "description": "Lo que dura el clip, en segundos.",
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "ancho": {
+          "description": "Ancho del clip en px.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "alto": {
+          "description": "Alto del clip en px.",
+          "type": "integer",
+          "minimum": 1
+        },
+        "despues": {
+          "description": "La lámina tras la que entra (el orden del guion).",
+          "type": "string",
+          "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]*$"
+        },
+        "palabras": {
+          "description": "Palabras del guion que disparan el clip (opcional en clips.json; vacío si no tiene).",
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
       }
     }
   }

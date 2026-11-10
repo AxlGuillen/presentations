@@ -1,0 +1,35 @@
+[
+  {
+    "id": "vt-renek-skarner",
+    "archivo": "vt-renek-skarner.mp4",
+    "png": "vt-renek-skarner.png",
+    "dur_anim": 2.8,
+    "dur": 3.8,
+    "alfa": false,
+    "caja": { "width": 1080, "x": "center", "bottom": 275 },
+    "palabras": [],
+    "recorte": "1080:1370:0:275"
+  },
+  {
+    "id": "caedrel-draft",
+    "tipo": "clip",
+    "archivo": "caedrel-draft.mp4",
+    "png": "caedrel-draft.png",
+    "dur": 11.4,
+    "ancho": 1920,
+    "alto": 1080,
+    "despues": "vt-renek-skarner",
+    "palabras": []
+  },
+  {
+    "id": "vt-nerf",
+    "archivo": "vt-nerf.mp4",
+    "png": "vt-nerf.png",
+    "dur_anim": 2.8,
+    "dur": 3.8,
+    "alfa": false,
+    "caja": { "width": 1080, "x": "center", "bottom": 275 },
+    "palabras": [],
+    "recorte": "1080:1370:0:275"
+  }
+]

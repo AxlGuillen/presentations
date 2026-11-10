@@ -24,6 +24,11 @@
 //   reposo    true en la lámina de reposo (data-reposo en la <section>): la
 //             banda decorada sin dato con la que ReelForge llena los huecos
 //
+// Si el deck trae clips.json, sus clips (video del canal ya cortado) se copian a
+// video-out/laminas/<id>.<ext> con su <id>.png y entran en el manifest tras su
+// lámina como { tipo: "clip", id, archivo, png, dur, ancho, alto, despues?, palabras }.
+// No se renderizan ni se recortan (ver ponerClips en laminas-lib.mjs).
+//
 // Con --solo=<id>,<id> solo se renderizan y recortan esas láminas, y el manifest.json se
 // MEZCLA: conserva las demás si son del mismo formato y recorte y sus archivos siguen ahí. Así la API
 // local (api-montaje.mjs) rehace solo lo que cambió.
@@ -38,7 +43,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { leerSecciones, medidasDeck, cajaDe, recorteDe, validarRecorte, CROP_DEFECTO, QUIETO_DEFECTO } from './laminas-lib.mjs';
+import { leerSecciones, medidasDeck, cajaDe, recorteDe, validarRecorte, leerClips, ponerClips, CROP_DEFECTO, QUIETO_DEFECTO } from './laminas-lib.mjs';
 
 const raiz = path.resolve(import.meta.dirname, '..');
 const args = process.argv.slice(2);
@@ -65,11 +70,14 @@ if (SOLO.length) {
   if (falta.length) { console.error(`El deck no tiene las láminas: ${falta.join(', ')}`); process.exit(1); }
 }
 
-// El recorte se valida antes de renderizar: uno que no cabe en el lienzo falla ya, no al final.
+// El recorte y los clips se validan antes de renderizar: un error falla ya, no al final.
 let CROP;
 try {
   const h0 = fs.readFileSync(path.join(dir, 'index.html'), 'utf8');
   CROP = CROP_PEDIDO ? validarRecorte(CROP_PEDIDO, medidasDeck(h0)) : recorteDe(h0);
+  for (const c of leerClips(dir, leerSecciones(h0).map(s => s.id).filter(Boolean))) {
+    if (!fs.existsSync(c.origen)) throw new Error(`No existe el clip «${c.id}»: ${c.origen}`);
+  }
 } catch (e) { console.error(e.message); process.exit(1); }
 
 const correr = (cmd, a) => {
@@ -131,10 +139,15 @@ if (SOLO.length) {
   const previo = (() => { try { return JSON.parse(fs.readFileSync(path.join(destino, 'manifest.json'), 'utf8')); } catch { return []; } })();
   const orden = laminas.map(s => s.id);
   const nuevas = new Set(manifest.map(l => l.id));
-  const conservadas = (Array.isArray(previo) ? previo : []).filter(l => !nuevas.has(l.id) && orden.includes(l.id)
+  const conservadas = (Array.isArray(previo) ? previo : []).filter(l => !l.tipo && !nuevas.has(l.id) && orden.includes(l.id)
     && l.archivo === `${l.id}.${EXT}` && !!l.alfa === !!ALFA && (l.recorte || CROP_DEFECTO) === CROP
     && fs.existsSync(path.join(destino, l.archivo)));
   salida = [...conservadas, ...manifest].sort((a, b) => orden.indexOf(a.id) - orden.indexOf(b.id));
 }
 fs.writeFileSync(path.join(destino, 'manifest.json'), JSON.stringify(salida, null, 2) + '\n', 'utf8');
-console.log(`\nListo: ${manifest.length} láminas en ${path.relative(raiz, destino)} (recorte ${CROP}${ALFA ? `, con alfa en .${EXT}` : ''})`);
+// Los clips de clips.json (si el deck trae) se copian y entran en el manifest tras su lámina.
+let clips = [];
+try { clips = ponerClips({ dir, destino, idsLaminas: laminas.map(s => s.id) }); }
+catch (e) { console.error(e.message); process.exit(1); }
+for (const c of clips) console.log(`  ✓ clip ${c.id}  ${c.dur} s  ${c.ancho}×${c.alto}${c.despues ? `  tras ${c.despues}` : ''}`);
+console.log(`\nListo: ${manifest.length} láminas${clips.length ? ` y ${clips.length} clips` : ''} en ${path.relative(raiz, destino)} (recorte ${CROP}${ALFA ? `, con alfa en .${EXT}` : ''})`);
