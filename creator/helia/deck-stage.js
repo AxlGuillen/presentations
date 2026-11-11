@@ -1571,6 +1571,12 @@
       const d = e.data;
       if (d && typeof d.__omelette_presenting === 'boolean') {
         this._presenting = d.__omelette_presenting;
+        // En modo presentación la cortina se quita de golpe, sin sus 420 ms de
+        // fundido: capturar.mjs y cuadros.mjs activan este modo y capturan
+        // enseguida, y a media transición el cuadro salía con la cortina
+        // encima a medio desvanecer. Quitar la transición también corta una
+        // que ya estuviera en curso.
+        if (this._presenting && this._cortina) this._cortina.style.transition = 'none';
         if (this._presenting && this.__cerrarCortina) this.__cerrarCortina();
         if (this._presenting && this._overlay) {
           this._overlay.removeAttribute('data-visible');
@@ -2506,10 +2512,33 @@
     async _capaArrancar() {
       if (this.__capaIniciada || !this._slides.length) return;
       this.__capaIniciada = true;
+      // Esto corre con el primer slotchange, cuando el parser aún no llega al
+      // final: faltan láminas (la pedida podía no existir todavía y salía
+      // 'lamina-no-encontrada') y los <script> del final (sin window.gsap no
+      // se esperaba la timeline y el 'listo' salía sin ella).
+      if (document.readyState === 'loading') {
+        await new Promise((r) => document.addEventListener('DOMContentLoaded', r, { once: true }));
+      }
       const slide = this._slides.find((s) => s.getAttribute('data-lamina') === CAPA_ID);
       if (!slide) return this._capaDifundir({ tipo: 'error', id: CAPA_ID, motivo: 'lamina-no-encontrada' });
       this._capaSlide = slide;
+      // Si el pegamento (kit.animador) arma o vuelve a armar la timeline
+      // después de que el modo capa tomó el control —otra activación de la
+      // lámina, three.js—, la nueva arrancaría sola. Se intercepta la
+      // asignación: desde el control, toda timeline nueva se pausa en el acto,
+      // en el último seek (o en 0).
+      let tlActual = slide.__tl;
+      Object.defineProperty(slide, '__tl', {
+        configurable: true,
+        get: () => tlActual,
+        set: (v) => {
+          tlActual = v;
+          if (v && this._capaControl) { this._capaTl = v; v.pause(this._capaUltimo || 0, false); }
+        },
+      });
       const esperar = (ms) => new Promise((r) => setTimeout(r, ms));
+      // La primera lámina arma su timeline tras document.fonts.ready.
+      if (window.gsap && document.fonts) await Promise.race([document.fonts.ready, esperar(2500)]);
       // rAF puede quedar suspendido en un iframe oculto: no se espera sin tope.
       const dosFrames = () => Promise.race([
         new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r))), esperar(250)]);
@@ -2535,6 +2564,7 @@
       // Desde aquí solo avanza con seeks explícitos (callbacks activos: false
       // en suppressEvents, igual que cuadros.mjs).
       const tl = slide.__tl;
+      this._capaControl = true;
       if (tl) { tl.pause(0, false); this._capaTl = tl; }
       if (document.fonts) await Promise.race([document.fonts.ready, esperar(2500)]);
       // connectedCallback mantiene el escenario oculto hasta que cargan las fuentes.
@@ -2560,6 +2590,7 @@
       if (!tl) return;
       if (tl !== this._capaTl) { this._capaTl = tl; tl.pause(0, false); }
       tl.time(Math.max(0, Math.min(t, tl.duration())), false);
+      this._capaUltimo = tl.time();
     }
 
     _capaMensaje(e) {

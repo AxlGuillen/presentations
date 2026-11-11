@@ -68,7 +68,7 @@ Resultado: **29 MB → 23 MB** de assets, 96 archivos reescritos y 142 dejados i
 
 ### La cortina de carga
 
-`deck-stage.js` monta un overlay en su shadow DOM con el monograma **4XL** inline (nada que pedir a la red, el deck sigue autocontenido) sobre el carbón de La cartelera `#16130E`, con una barra de progreso ámbar `#E8B54D`. Espera a **todo lo que pinta la primera diapositiva** — sus `<img>` y también el `url()` del `background-image`, porque media serie Cumplelolero tiene la portada como fondo de la `<section>`. Techo duro de 3 s para que una imagen colgada no deje el deck tapado, y se suprime en **modo presentación**, que es lo que activan las cuatro herramientas de `tools/` antes de capturar: por eso nunca sale en un PNG.
+`deck-stage.js` monta un overlay en su shadow DOM con el monograma **4XL** inline (nada que pedir a la red, el deck sigue autocontenido) sobre el carbón de La cartelera `#16130E`, con una barra de progreso ámbar `#E8B54D`. Espera a **todo lo que pinta la primera diapositiva** — sus `<img>` y también el `url()` del `background-image`, porque media serie Cumplelolero tiene la portada como fondo de la `<section>`. Techo duro de 3 s para que una imagen colgada no deje el deck tapado, y se suprime en **modo presentación** —desde el 10/nov/2026 de golpe, sin sus 420 ms de fundido: antes, si la captura caía a media transición, el cuadro salía con la cortina encima a medio desvanecer (lo destapó `capa.test.mjs`, con el estado de la lámina idéntico y 21 dB de PSNR)—, que es lo que activan las cuatro herramientas de `tools/` antes de capturar: por eso nunca sale en un PNG.
 
 Si un deck nuevo no emite `data-src`, no se rompe nada — simplemente carga como antes.
 

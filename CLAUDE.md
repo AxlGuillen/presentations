@@ -43,12 +43,13 @@ docs/                 motor, propuestas abiertas y archivo
 | `creator/ganan`, `creator/parche2621` | Panel 1080×1370 | Video de análisis y serie de parches |
 | `creator/ambessa`, `senna` | Banda inferior | Cumplelolero #31 y #32 |
 | `creator/t1-blg`, `vayne-troll`, `tom-draft` | Banda inferior | Canal Axelsine: previas y análisis |
+| `creator/jhin-build` | **Banda superior** | Canal Axelsine: la build de Jhin; el primero con la banda arriba y con `tarjeta-item` |
 
 ## Regla crítica: generado vs. escrito a mano
 
 - **Todo `index.html` de deck lo GENERA su `gen.js`.** Nunca lo edites a mano: edita `gen.js` y corre `node <escritorio>/<deck>/gen.js`. Los datos van como constantes arriba del generador.
 - A mano solo: `index.html` raíz, `404.html` y `middleware.ts`.
-- **El kit se incrusta en cada deck al generarlo** (`kit.animador()`, `kit.efectos()`…), así que regenerar un deck viejo le cambia el runtime aunque no toques su contenido. Los decks terminados se consideran **congelados**: no se regeneran salvo que haya que cambiarlos, y al hacerlo se revisa el diff completo. El 10/nov/2026 los 64 generadores corrían sin error.
+- **El kit se incrusta en cada deck al generarlo** (`kit.animador()`, `kit.efectos()`…), así que regenerar un deck viejo le cambia el runtime aunque no toques su contenido. Los decks terminados se consideran **congelados**: no se regeneran salvo que haya que cambiarlos, y al hacerlo se revisa el diff completo. El 10/nov/2026, antes de la limpieza, corrían sin error los 64 generadores que había entonces; hoy quedan 25.
 - Cada generador termina con `fs.writeFileSync(__dirname + '/index.html', kit.diferir(html), 'utf8')` (carga diferida de imágenes; ver `docs/motor/runtime-y-assets.md`).
 
 ## Formatos
@@ -145,7 +146,7 @@ Skill **`nuevo-deck`**. En corto:
 
 ## Pruebas
 
-`node --test "tools/pruebas/*.test.mjs"`. Las que abren Chrome o ffmpeg se saltan si no están. ⚠️ `capa.test.mjs` es **intermitente** (medido el 10/nov/2026): a veces falla «empieza en pausa, en 0» (la lámina arranca en ~0,14 s) y a veces la comparación de píxeles con `cuadros.mjs` (21 dB en `lb-kit` a 1,2 s); al repetir pasan. Es de tiempos de Chrome, no del código, y está pendiente de estabilizar.
+`node --test "tools/pruebas/*.test.mjs"`. Las que abren Chrome o ffmpeg se saltan si no están. `capa.test.mjs` era intermitente hasta el 10/nov/2026 y se arregló en `deck-stage.js` (ver «Modo capa» en `docs/motor/montaje.md`): pasó 8 de 8 veces seguidas.
 
 ## Notas de entorno
 
