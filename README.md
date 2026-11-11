@@ -12,7 +12,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /personal/dra/        Charla: DRA · Del pizarrón a la evidencia · 16:9 · 18 slides
 /personal/musk/       Charla: Borrar antes de acelerar (iteración estilo Musk aplicada a DRA) · 16:9 · 14 slides
 /personal/dra-1102/   Reunión de DRA del 2/nov/2026, con video narrado · 16:9 · 11 slides
-/personal/lab/        Laboratorio de efectos: catálogo vivo del kit · 9:16 · 60 slides
+/personal/lab/        Laboratorio de efectos: catálogo vivo del kit · 9:16 · 81 slides
 /work/seating3dmap/   seating3dmap: el nuevo mapa 3D de UrVenue, fase por fase (en inglés) · 16:9 · 19 slides
 /work/semana42/       Reporte semanal Jira: semana 42 (13–19 oct 2026) · 16:9 · 12 slides
 /work/ultracode/      Charla: Ultracode en la práctica (caso Minuto Dulce) · 16:9 · 15 slides
@@ -25,6 +25,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/t1-blg/      Worlds 2026 · previa de la semifinal T1 vs BLG (banda inferior) · 9:16 · 25 slides
 /creator/vayne-troll/ ¿La Vayne de Doran fue troll? (banda inferior) · 9:16 · 23 slides
 /creator/tom-draft/   El draft de Tom (banda inferior) · 9:16 · 29 slides
+/creator/jhin-build/  La build rara de Jhin (banda superior) · 9:16 · 26 slides
 /creator/lux/         Lux cumple 16 años (montaje automático) · 9:16 · 11 slides
 /creator/graves/      Graves cumple 15 años (montaje automático) · 9:16 · 13 slides
 /creator/elise/       Elise cumple 14 años (montaje automático) · 9:16 · 15 slides
