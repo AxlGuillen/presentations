@@ -42,7 +42,7 @@ docs/                 motor, propuestas abiertas y archivo
 | `creator/lux`, `graves`, `elise`, `seraphine`, `ksante`, `leblanc` | Panel 1080×1370 | Cumplelolero #25–#30 para el montaje automático |
 | `creator/ganan`, `creator/parche2621` | Panel 1080×1370 | Video de análisis y serie de parches |
 | `creator/ambessa`, `senna` | Banda inferior | Cumplelolero #31 y #32 |
-| `creator/t1-blg`, `vayne-troll`, `tom-draft` | Banda inferior | Canal Axelsine: previas y análisis |
+| `creator/t1-blg`, `vayne-troll`, `tom-draft`, `blg-final` | Banda inferior | Canal Axelsine: previas y análisis; blg-final con el molde de presentación por jugador |
 | `creator/jhin-build` | **Banda superior** | Canal Axelsine: la build de Jhin; el primero con la banda arriba y con `tarjeta-item` |
 
 ## Regla crítica: generado vs. escrito a mano
