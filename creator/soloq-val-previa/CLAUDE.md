@@ -6,24 +6,25 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
 
 **GENERADO** por `soloq-val-previa/gen.js`. «75 streamers, 22 días y 44 mil euros: arranca el SoloQ de Valorant» (canal Axelsine, domingo 16/11/2026) es la previa del SoloQ Challenge de VALORANT de Mixwell (del 16/11 al 07/12/2026). Sale del paquete `2026-11-16_arranca-el-soloq-de-valorant--paquete.md` (PKB de Axl, `videos/2026-11/`). Es el primer video de VALORANT del canal en láminas.
 
-- **Versión 3 (13/11): son 19 láminas y `sv-reposo`.**
-  - Salieron `sv-mixwell`, `sv-horcus`, `sv-sirmaza` y `sv-black`.
-  - Entraron `sv-top-pro`, `sv-top-elo` y `sv-top-casual` (layout G, `topCinco()`): los cinco canales más grandes de cada categoría, con foto de Twitch, nombre, seguidores y una línea chica (CAMPEÓN 2022 y 2021, LA JUBILONA).
-  - `sv-cierre` dice «HOY 5 PM (CDMX): DÍA 1».
-  - El guion marcado es el de la versión 3.
+- **Versión 4 (13/11): son 18 láminas y `sv-reposo`.**
+  - Salió la lámina del canal de Axl: no queda nada de él como desarrollador en el deck.
+  - **🚫 Ningún número de seguidores en pantalla** (pedido de Axl). Los top 5 (`sv-top-pro`, `sv-top-elo` y `sv-top-casual`, layout G, `topCinco()`) van solo con la foto de Twitch y el nombre.
+    - Bajo Horcus va CAMPEÓN 2022, bajo SirMaza CAMPEÓN 2021 y bajo Black LA JUBILONA.
+    - Los títulos dicen «PRO · LOS 5 MÁS GRANDES», «ELO ALTO · LOS 5 MÁS GRANDES» y «CASUAL · LOS 5 MÁS GRANDES».
+  - El guion marcado es el de la versión 4.
+- **Versiones anteriores:**
+  - La versión 3 cambió `sv-mixwell`, `sv-horcus`, `sv-sirmaza` y `sv-black` por los tres top 5, y puso «HOY 5 PM (CDMX): DÍA 1» en `sv-cierre`.
   - La versión 1 tenía 20 láminas y el reposo; el paquete decía 21.
 - **Banda ARRIBA con el formato de jhin-letalidad:**
   - De `jhin-letalidad/gen.js` se copiaron el riel (con otra semilla y los colores de VALORANT), el panel, la sección, la guía y `dato`.
-  - Clips: `node tools/laminas.mjs creator/soloq-val-previa --banda=arriba` deja en `video-out/laminas-arriba/` 21 mp4 H.264 de 1080×680 con `alfa: false` y `banda: "arriba"`, sus PNG, `manifest.json` y `guion-marcado.txt` (la sección 3 del paquete sin las comillas de bloque).
-- **Fondo:** azul noche con el patrón de contornos de la web, imitado con `kit.patron('curvas')` al 8 %. Va en `assets/contornos.svg`, que escribe `gen.js`: en línea y repetido en las 21 láminas, el `index.html` pesaba 740 KB. Todas las láminas se ven desde el cuadro 0.
+  - Clips: `node tools/laminas.mjs creator/soloq-val-previa --banda=arriba` deja en `video-out/laminas-arriba/` 19 mp4 H.264 de 1080×680 con `alfa: false` y `banda: "arriba"`, sus PNG, `manifest.json` y `guion-marcado.txt` (la sección 3 del paquete sin las comillas de bloque).
+- **Fondo:** azul noche con el patrón de contornos de la web, imitado con `kit.patron('curvas')` al 8 %. Va en `assets/contornos.svg`, que escribe `gen.js`: en línea y repetido en cada lámina, el `index.html` pesaba 740 KB. Todas las láminas se ven desde el cuadro 0.
 - **Capturas de soloqvalorant.com** (del 12/11, en el `--assets` del paquete):
   - En `assets/capturas/` están las cinco recortadas en la fila 2276, justo antes del aviso de cookies, y en WebP. `web-pickem-caras.jpg` es el recorte de la rejilla de caras.
   - `ventana()` las enmarca como ventana de navegador: barra con `soloqvalorant.com`, esquinas de 10 px y sombra. Nunca van a pantalla completa sin marco.
   - Las tres láminas de capturas (`sv-arranca`, `sv-mas-retos` y `sv-web`) llevan su dato en una `placa()` sobre la ventana.
 - **Las caras son la foto de perfil de Twitch** (300×300, de `static-cdn.jtvnw.net`), en círculo de 150 px con borde de 3 px.
   - La URL de cada foto salió de la consulta pública de Twitch (`gql.twitch.tv`, `profileImageURL`), porque cuatro páginas no la traen en el HTML.
-  - Los seguidores del paquete (TwitchTracker, 12/11) se confirmaron ahí el 13/11. En pantalla van redondeados como dice el paquete: Horcus 1.004.174 sale como 1,0 M y Santipatico 74.655 como 75 MIL.
-  - Las cifras van en rojo, con el «M» o «MIL» a media altura: a 64 px enteros se juntaban entre columnas.
 - **Logos e íconos:**
   - De Wikimedia Commons: el logo de VALORANT (la V con la palabra, versión negra pasada a hueso), el ícono de TikTok (sin su fondo negro, en hueso) y la bandera de Argentina.
   - De valorant-api: el ícono de Radiante (tier 27).
@@ -35,7 +36,7 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
   - En `sv-kadnita`, la bandera ondea a mano y las líneas entran con `lineas`.
   - En `sv-clips` la frase entra con `golpe` en vez de `palabra`.
 - **Los tres top 5:**
-  - La receta principal es el `contador` de los seguidores, que puede repetirse.
+  - La receta principal es `maquina` en los nombres, que puede repetirse.
   - Las caras entran con la curva golpe y `data-paso`: en la Pro desde arriba, en Elo alto desde la derecha y en Casual desde abajo.
   - `sv-top-pro` y `sv-jubilona` van seguidas y las dos dejan caer las caras desde arriba, pero la principal de `sv-jubilona` es la separación del final.
 - **`crece` del kit es el FLIP de una celda:** las columnas de `sv-ladders` suben a mano (scaleY desde abajo con la curva `entrada`).
@@ -57,7 +58,7 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
 ## Identidad visual
 
 - **Azul noche `#0F1923`**, con los contornos de la web al 8 %.
-- **Rojo VALORANT `#FF4655`** para lo protagonista: 44.000 €, 200 €, 269, el 1.º de la Pro, AXL, las cifras de seguidores, MI APUESTA, el filo de las placas, el rombo del riel y los bordes de las caras.
+- **Rojo VALORANT `#FF4655`** para lo protagonista: 44.000 €, 200 €, 269, el 1.º de la Pro, las líneas chicas de los top 5, MI APUESTA, el filo de las placas, el rombo del riel y los bordes de las caras.
 - **Hueso `#ECE8E1`** para cifras y texto.
 - **Verde de la web `#53FC18`** solo para lo que viene de la web: los botes y los premios.
 - **Gris `#5B6B78`** para lo secundario.
