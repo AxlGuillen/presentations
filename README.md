@@ -28,6 +28,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/jhin-build/  La build rara de Jhin (banda superior) · 9:16 · 26 slides
 /creator/jhin-letalidad/ La build que dije que no servía (banda superior) · 9:16 · 25 slides
 /creator/blg-final/   BLG: de romperme el corazón a mi equipo (banda inferior) · 9:16 · 28 slides
+/creator/final-pronostico/ Gen.G vs BLG · pronóstico de la final (banda superior) · 9:16 · 25 slides
 /creator/soloq-val-previa/ Arranca el SoloQ de Valorant (banda superior) · 9:16 · 21 slides
 /creator/lux/         Lux cumple 16 años (montaje automático) · 9:16 · 11 slides
 /creator/graves/      Graves cumple 15 años (montaje automático) · 9:16 · 13 slides
