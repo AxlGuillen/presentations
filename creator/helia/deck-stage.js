@@ -649,6 +649,14 @@
         page-break-after: auto;
       }
       ::slotted([data-deck-skip]) { display: none !important; }
+      /* Decks de banda (data-recorte="W:H:X:Y"): cada página es solo la banda; el
+         documento corre el contenido de cada lámina con translate (ver
+         _syncPrintPageRule) y la lámina de reposo (data-reposo) no se imprime. */
+      :host([data-recorte]) ::slotted(*) {
+        width: var(--deck-print-w, var(--deck-design-w)) !important;
+        height: var(--deck-print-h, var(--deck-design-h)) !important;
+      }
+      ::slotted([data-deck-print-skip]) { display: none !important; }
       .overlay, .rail, .rail-resize, .ctxmenu, .confirm-backdrop { display: none !important; }
     }
   `;
@@ -695,6 +703,7 @@
       // (wrong scale, and it offsets the stage so the thumb shows a gutter).
       if (/[?&]_snthumb=/.test(location.search)) this.setAttribute('no-rail', '');
       if (CAPA_ID) this._capaPreparar();
+      else if (!/[?&]_snthumb=/.test(location.search)) this._botonPdf();
       this._render();
       if (CAPA_ID) this._capaEstilosSombra();
       this._loadNotes();
@@ -720,7 +729,12 @@
         this._freezeStyle = document.createElement('style');
         this._freezeStyle.textContent = '*,*::before,*::after{transition-duration:0s !important}';
         document.head.appendChild(this._freezeStyle);
-        this._slides.forEach((s) => s.setAttribute('data-deck-active', ''));
+        this._slides.forEach((s) => { if (!s.hasAttribute('data-deck-active')) s.setAttribute('data-deck-active', ''); });
+        // El animador del kit arma una timeline por cada lámina que se activa (en un
+        // MutationObserver, o sea en una microtarea): esta va después y las deja todas
+        // en su final, como en capturar.mjs. Sin esto el PDF salía con lo que las
+        // coreografías esconden al arrancar.
+        Promise.resolve().then(() => this._timelinesAlFinal());
       };
       this._onAfterPrint = () => {
         this._applyIndex({ showOverlay: false, broadcast: false });
@@ -1302,6 +1316,77 @@
       }
     }
 
+    /** Todas las timelines de las láminas (section.__tl, del animador del kit) en su
+     *  estado final y en pausa: la impresión las captura completas. */
+    _timelinesAlFinal() {
+      this._slides.forEach((s) => { if (s.__tl) { try { s.__tl.pause(); s.__tl.progress(1); } catch (e) {} } });
+    }
+
+    /** El recorte de un deck de banda (data-recorte="W:H:X:Y") o null. */
+    _recortePdf() {
+      const m = /^(\d+):(\d+):(\d+):(\d+)$/.exec((this.getAttribute('data-recorte') || '').trim());
+      return m ? { w: +m[1], h: +m[2], x: +m[3], y: +m[4] } : null;
+    }
+
+    /** Botón «Descargar PDF» junto al de «Presentar»: carga todos los assets, deja las
+     *  coreografías en su final e imprime (una lámina por página; en los decks de banda,
+     *  solo la banda). Va en el documento, como el de «Presentar», y toma su estilo. */
+    _botonPdf() {
+      if (document.getElementById('descargar-pdf')) return;
+      const css = document.createElement('style');
+      css.id = 'deck-stage-pdf';
+      css.textContent =
+        '#descargar-pdf{position:fixed;top:16px;right:16px;z-index:2147483000;padding:9px 18px;border:1px solid rgba(255,255,255,.4);' +
+        'border-radius:999px;background:rgba(0,0,0,.6);color:#fff;cursor:pointer;font:600 13px/1 system-ui,sans-serif;letter-spacing:.6px;' +
+        'opacity:.5;transition:opacity 160ms ease}#descargar-pdf:hover{opacity:1}#descargar-pdf[disabled]{cursor:progress}' +
+        '#descargar-pdf[data-oculto]{display:none}@media print{#descargar-pdf,#modo-presentacion,#ver-video{display:none!important}}';
+      const btn = document.createElement('button');
+      btn.id = 'descargar-pdf';
+      btn.type = 'button';
+      btn.textContent = 'Descargar PDF';
+      btn.title = 'Descargar las láminas en PDF (Guardar como PDF en el diálogo de impresión)';
+      btn.addEventListener('click', async () => {
+        btn.blur();
+        if (btn.disabled) return;
+        btn.disabled = true;
+        const texto = btn.textContent;
+        btn.textContent = 'Preparando…';
+        try {
+          await Promise.race([this.cargarTodo(), new Promise((r) => setTimeout(r, 15000))]);
+          if (document.fonts && document.fonts.ready) await document.fonts.ready;
+        } catch (e) {}
+        btn.textContent = texto;
+        btn.disabled = false;
+        window.print();
+      });
+      // Junto al de «Presentar» (lo arma cada deck al final del body): a su izquierda y con su estilo.
+      // En los decks con video narrado, «Ver video» (kit.reproductor) ya va ahí: el PDF va a su izquierda.
+      const colocar = () => {
+        // (getClientRects y no offsetParent: un elemento position:fixed no tiene offsetParent.)
+        const visible = (e) => !!e && e.getClientRects().length > 0;
+        const p = document.getElementById('modo-presentacion');
+        if (visible(p)) {
+          const r = p.getBoundingClientRect(), c = getComputedStyle(p);
+          const v = document.getElementById('ver-video'), rv = visible(v) ? v.getBoundingClientRect() : null;
+          const izq = rv && rv.width ? Math.min(r.left, rv.left) : r.left;
+          btn.style.right = Math.round(window.innerWidth - izq + 8) + 'px';
+          btn.style.top = Math.round(r.top) + 'px';
+          ['background', 'color', 'border', 'borderRadius', 'font', 'letterSpacing', 'padding'].forEach((k) => { btn.style[k] = c[k]; });
+        }
+      };
+      this._colocarPdf = colocar;
+      const montar = () => {
+        if (!btn.isConnected) { document.head.appendChild(css); document.body.appendChild(btn); }
+        colocar();
+      };
+      if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', montar);
+      else montar();
+      window.addEventListener('load', colocar);
+      window.addEventListener('resize', colocar);
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(colocar);
+      this._btnPdf = btn;
+    }
+
     /** @page must live in the document stylesheet — it's a no-op inside
      *  shadow DOM. (Re-)append so any author @page landing later in
      *  source order can't reintroduce a margin and push each slide onto
@@ -1314,8 +1399,17 @@
         tag.id = id;
       }
       (document.body || document.head).appendChild(tag);
+      const rc = this._recortePdf();
+      if (rc) { this.style.setProperty('--deck-print-w', rc.w + 'px'); this.style.setProperty('--deck-print-h', rc.h + 'px'); }
       tag.textContent =
-        '@page { size: ' + this.designWidth + 'px ' + this.designHeight + 'px; margin: 0; } ' +
+        '@page { size: ' + (rc ? rc.w : this.designWidth) + 'px ' + (rc ? rc.h : this.designHeight) + 'px; margin: 0; } ' +
+        // La banda es el [data-panel] de cada lámina (formato 4): se sube a 0 y lo demás (la guía de
+        // GAMEPLAY) no se imprime. Con translate en vez de top, Chrome contaba para paginar lo que
+        // desborda (los fondos desenfocados con inset negativo) y salía una página en blanco al final.
+        // Una lámina sin [data-panel] se corre entera con translate.
+        (rc ? '@media print { deck-stage[data-recorte] > section > [data-panel] { top: 0 !important; left: 0 !important; } ' +
+          'deck-stage[data-recorte] > section:has(> [data-panel]) > :not([data-panel]) { display: none !important; } ' +
+          'deck-stage[data-recorte] > section:not(:has(> [data-panel])) > * { translate: ' + (-rc.x) + 'px ' + (-rc.y) + 'px !important; } } ' : '') +
         '@media print { html, body { margin: 0 !important; padding: 0 !important; background: none !important; overflow: visible !important; height: auto !important; } ' +
         '* { -webkit-print-color-adjust: exact; print-color-adjust: exact; } ' +
         // Jump authored animations/transitions to their end state so print
@@ -1385,6 +1479,7 @@
         }
 
         slide.setAttribute('data-deck-slide', String(i));
+        if (this.hasAttribute('data-recorte') && slide.hasAttribute('data-reposo')) slide.setAttribute('data-deck-print-skip', '');
       });
 
       if (this._totalEl) this._totalEl.textContent = String(this._slides.length || 1);
@@ -1400,7 +1495,7 @@
       let last = null;
       this._slides.forEach((s) => {
         s.removeAttribute('data-deck-last-visible');
-        if (!s.hasAttribute('data-deck-skip')) last = s;
+        if (!s.hasAttribute('data-deck-skip') && !s.hasAttribute('data-deck-print-skip')) last = s;
       });
       if (last) last.setAttribute('data-deck-last-visible', '');
     }
@@ -1571,6 +1666,10 @@
       const d = e.data;
       if (d && typeof d.__omelette_presenting === 'boolean') {
         this._presenting = d.__omelette_presenting;
+        if (this._btnPdf) {
+          if (this._presenting) this._btnPdf.setAttribute('data-oculto', '');
+          else { this._btnPdf.removeAttribute('data-oculto'); if (this._colocarPdf) requestAnimationFrame(this._colocarPdf); }
+        }
         // En modo presentación la cortina se quita de golpe, sin sus 420 ms de
         // fundido: capturar.mjs y cuadros.mjs activan este modo y capturan
         // enseguida, y a media transición el cuadro salía con la cortina
@@ -2492,7 +2591,7 @@
       const st = document.createElement('style');
       st.id = 'deck-stage-capa';
       st.setAttribute('data-omelette-injected', '');
-      st.textContent = '#modo-presentacion,#ver-video,#capa-video{display:none!important}' + (CAPA_ALFA
+      st.textContent = '#modo-presentacion,#descargar-pdf,#ver-video,#capa-video{display:none!important}' + (CAPA_ALFA
         ? 'html,body,deck-stage,deck-stage>section{background:transparent!important;background-image:none!important}[data-fondo]{display:none!important}'
         : '');
       document.head.appendChild(st);

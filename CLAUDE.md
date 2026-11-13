@@ -82,6 +82,7 @@ Cuatro formatos asentados. Un deck nuevo parte del más reciente de su formato.
 
 `deck-stage.js` define `<deck-stage width height>`; las láminas son `<section>` hermanas. Aporta:
 - navegación, escalado, rail de miniaturas, impresión (una lámina por página) y notas del orador (`data-speaker-notes`);
+- el botón **«Descargar PDF»** junto a «Presentar»: carga todos los assets e imprime con las timelines en su final. En los decks con `data-recorte`, cada página es el `[data-panel]` (la banda) y el reposo no sale. Las herramientas de captura lo ocultan (`#descargar-pdf`);
 - pasos dentro de una lámina (`data-step="1..N"`);
 - la cortina de carga;
 - el modo capa `?capa=<id>[&alfa=1][&banda=arriba]` para el estudio de ReelForge.

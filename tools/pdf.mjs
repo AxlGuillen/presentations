@@ -70,7 +70,7 @@ try {
   await pagina.goto(`http://127.0.0.1:${puerto}/${deck}/${BANDA ? `?banda=${BANDA}` : ''}`, { waitUntil: 'networkidle0' });
   // Modo presentación (sin miniaturas ni pie) y fuera toda interfaz que no sea la lámina.
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
+  await pagina.addStyleTag({ content: '#modo-presentacion,#descargar-pdf,#ver-video,#capa-video{display:none!important}' });
   await pagina.evaluate(() => document.fonts.ready);
   const cdp = await pagina.createCDPSession();
 

@@ -59,7 +59,7 @@ git checkout archivo-2026-11 -- creator/jinx
 |---|---|
 | Navegar | `←` `→`, espacio, `Inicio`/`Fin`, o número de diapositiva |
 | Modo presentación | tecla **P** (pantalla completa, oculta miniaturas); `Esc` para salir |
-| Exportar a PDF | `node tools/pdf.mjs <carpeta>`: una lámina por página, en su estado final; en los decks de banda, solo la banda (detalle abajo). Desde el navegador, `Ctrl+P` → Guardar como PDF (una diapositiva por página, a lienzo completo) |
+| Exportar a PDF | Botón **Descargar PDF** (junto a «Presentar») o `Ctrl+P` → Guardar como PDF: una diapositiva por página, con las animaciones en su estado final; en los decks de banda, solo la banda y sin el reposo. Desde la terminal, `node tools/pdf.mjs <carpeta>` (detalle abajo) |
 | Ver el video | tecla **V** — solo en los decks que traen `video.mp4`; se abre sobre el propio deck y `Esc` lo cierra |
 | Móvil | toca la mitad izquierda/derecha para retroceder/avanzar |
 

@@ -8,6 +8,19 @@
 
 Cada deck añade un botón "Presentar · P" que hace `postMessage({__omelette_presenting: true})` — el runtime ya escuchaba ese mensaje y oculta miniaturas y pie de navegación. No hace falta tocar `deck-stage.js` para eso.
 
+**Botón «Descargar PDF» (13/nov/2026).** Lo pone `deck-stage.js` en el documento, a la izquierda de «Presentar» (y de «Ver video» si el deck trae `kit.reproductor`), con el mismo estilo que el «Presentar» del deck. No sale en modo capa, en las miniaturas del presentador (`_snthumb`), en modo presentación ni al imprimir.
+- **Al hacer clic:** hidrata todos los assets diferidos (`cargarTodo()`, con un tope de 15 s), espera las fuentes y llama `window.print()`: el usuario elige «Guardar como PDF».
+- **Al imprimir (también con `Ctrl+P`):**
+  - `beforeprint` ya no vuelve a poner `data-deck-active` en la lámina que lo tenía, porque el animador del kit relanzaba su timeline desde el estado inicial.
+  - En una microtarea, después de que el animador arma las demás, deja todas las `section.__tl` en `progress(1)`. Antes el PDF podía salir con lo que las coreografías esconden al arrancar.
+- **Decks de banda (`data-recorte`):**
+  - `@page` es del tamaño del recorte y cada `<section>` mide eso.
+  - El `[data-panel]` de cada lámina sube a `top: 0` y lo demás (la guía de GAMEPLAY) no se imprime.
+  - Las láminas `data-reposo` llevan `data-deck-print-skip` y no salen.
+  - **No uses `translate` para correr el panel:** con él, Chrome contaba para paginar lo que desborda (los fondos desenfocados con `inset: -40px`) y salía una página en blanco al final. Una lámina sin `[data-panel]` sí se corre entera con `translate`.
+- **Captura:** las herramientas que capturan (`capturar`, `cuadros`, `og`, `portadas`, `pdf`, `qa-anim`) ocultan `#descargar-pdf` junto con `#modo-presentacion`.
+- **Prueba:** `tools/pruebas/pdf.test.mjs` (dos páginas de 1080×680 en un deck de banda con reposo y un fondo que desborda).
+
 **Pasos dentro de una slide** (opt-in): elementos con `data-step="1"`, `"2"`… se revelan por etapas con la navegación normal — → revela el siguiente paso, ← lo oculta; agotados los pasos se cambia de slide. Al llegar avanzando la slide arranca en 0 pasos; al regresar llega con todos. La ocultación es `visibility` (no mueve layout), miniaturas e impresión muestran siempre todo, y `capturar.mjs`/`cuadros.mjs` revelan todo antes de capturar (PNG y video llevan la slide completa). Cada cambio emite `stepchange` (bubbles) con `{slide, step, previousStep, total}`; el pegamento `kit.animador()` ya anima por defecto los elementos recién revelados. Ejemplo: las columnas del tablero en `semana34`. Sin `data-step` el comportamiento es idéntico al de siempre.
 
 **Modo capa** (desde el 5/nov/2026): con `?capa=<id>[&alfa=1]` el runtime muestra solo esa lámina, para incrustarla en un iframe. Ver «Estudio de montaje: modo capa y API local». Las 61 copias de `deck-stage.js` siguen siendo idénticas (un solo hash; lo comprueba `tools/pruebas/runtime.test.mjs`).

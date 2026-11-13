@@ -43,7 +43,7 @@ if (ALFA) {
   // Lo mismo que cuadros.mjs --alfa: modo presentación (sin riel ni botones),
   // fondo de página vacío y data-fondo fuera, también dentro del shadow DOM.
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
+  await pagina.addStyleTag({ content: '#modo-presentacion,#descargar-pdf,#ver-video,#capa-video{display:none!important}' });
   await pagina.addStyleTag({ content: 'html,body,deck-stage,deck-stage>section{background:transparent!important;background-image:none!important}[data-fondo]{display:none!important}' });
   await pagina.evaluate(() => {
     const st = document.createElement('style');

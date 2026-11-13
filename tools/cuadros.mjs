@@ -144,7 +144,7 @@ async function abrir() {
   });
   await pagina.setViewport({ width: info.w, height: info.h, deviceScaleFactor: 1 });
   await pagina.evaluate(() => window.postMessage({ __omelette_presenting: true }, '*'));
-  await pagina.addStyleTag({ content: '#modo-presentacion,#ver-video,#capa-video{display:none!important}' });
+  await pagina.addStyleTag({ content: '#modo-presentacion,#descargar-pdf,#ver-video,#capa-video{display:none!important}' });
   if (ALFA) {
     await pagina.addStyleTag({ content: 'html,body,deck-stage,deck-stage>section{background:transparent!important;background-image:none!important}[data-fondo]{display:none!important}' });
     // Una hoja de afuera no entra al shadow DOM (salvo :host desde el documento):
