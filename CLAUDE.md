@@ -42,6 +42,7 @@ docs/                 motor, propuestas abiertas y archivo
 | `creator/lux`, `graves`, `elise`, `seraphine`, `ksante`, `leblanc` | Panel 1080×1370 | Cumplelolero #25–#30 para el montaje automático |
 | `creator/ganan`, `creator/parche2621` | Panel 1080×1370 | Video de análisis y serie de parches |
 | `creator/ambessa`, `senna` | Banda inferior | Cumplelolero #31 y #32 |
+| `creator/zed` | **Banda superior** | Cumplelolero #33, el primero con la banda arriba (formato de jhin-letalidad, estilo de senna) |
 | `creator/t1-blg`, `vayne-troll`, `tom-draft`, `blg-final` | Banda inferior | Canal Axelsine: previas y análisis; blg-final con el molde de presentación por jugador |
 | `creator/jhin-build`, `jhin-letalidad` | **Banda superior** | Canal Axelsine: las builds de Jhin; jhin-build es el primero con la banda arriba y con `tarjeta-item`, y jhin-letalidad los reutiliza y suma el draft enemigo (sin nombres de jugador) |
 

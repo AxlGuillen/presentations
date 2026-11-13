@@ -36,6 +36,7 @@ Portafolio de presentaciones web interactivas generadas con IA. La raíz es una 
 /creator/leblanc/     LeBlanc cumple 16 años (montaje automático, solo arte oficial) · 9:16 · 21 slides
 /creator/ambessa/     Ambessa cumple 2 años (banda inferior) · 9:16 · 24 slides
 /creator/senna/       Senna cumple 7 años (banda inferior) · 9:16 · 29 slides
+/creator/zed/         Zed cumple 14 años (banda superior) · 9:16 · 33 slides
 404.html              página de error
 vercel.json           trailingSlash: true (imprescindible, ver abajo)
 docs/                 documentación del motor y propuestas
