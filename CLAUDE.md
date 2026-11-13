@@ -120,6 +120,7 @@ Reglas que rompen cosas si se olvidan:
 - **Video narrado**: `node tools/video.mjs <carpeta>` lee `guion.json`, captura, pide la voz a Fish Audio (`s2.1-pro-free`, gratis; `FISH_API_KEY` en `.env`) y monta con ffmpeg. Si el deck anima, `cuadros.mjs` renderiza cuadro a cuadro. Música opcional desde `MUSICA_DIR` (nunca al repo). Skill `guion-video`; detalle en `docs/motor/video.md`.
 - **Láminas para ReelForge**: `node tools/laminas.mjs <carpeta> [--banda=arriba] [--solo=id,…]` corta cada `<section data-lamina="id">` en `video-out/laminas/<id>.mp4` + `.png` + `manifest.json` (schema en `tools/manifest.schema.json`) y copia `guion-marcado.txt`. Los clips de `clips.json` entran al manifest tras su lámina.
 - **API local** en `node tools/servidor-local.mjs` (puerto 3125, solo loopback) para el estudio de ReelForge. Detalle en `docs/motor/montaje.md`.
+- **PDF de las láminas**: `node tools/pdf.mjs <carpeta> [--completa] [--con-reposo] [--banda=arriba] [--calidad=90]` deja una lámina por página en su estado final: en los decks con `data-recorte` solo la banda y sin el reposo (`video-out/laminas[-arriba].pdf`); en los demás, la diapositiva completa (`video-out/slides.pdf`). Lo prueba `tools/pruebas/pdf.test.mjs`.
 - `video-out/` está ignorado y se regenera.
 
 ## Galería

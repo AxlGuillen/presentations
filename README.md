@@ -58,7 +58,7 @@ git checkout archivo-2026-11 -- creator/jinx
 |---|---|
 | Navegar | `←` `→`, espacio, `Inicio`/`Fin`, o número de diapositiva |
 | Modo presentación | tecla **P** (pantalla completa, oculta miniaturas); `Esc` para salir |
-| Exportar a PDF | `Ctrl+P` → Guardar como PDF (una diapositiva por página) |
+| Exportar a PDF | `node tools/pdf.mjs <carpeta>`: una lámina por página, en su estado final; en los decks de banda, solo la banda (detalle abajo). Desde el navegador, `Ctrl+P` → Guardar como PDF (una diapositiva por página, a lienzo completo) |
 | Ver el video | tecla **V** — solo en los decks que traen `video.mp4`; se abre sobre el propio deck y `Esc` lo cierra |
 | Móvil | toca la mitad izquierda/derecha para retroceder/avanzar |
 
@@ -72,7 +72,15 @@ Con el skill `nuevo-deck`. En corto: carpeta `<escritorio>/<nombre>/` con su `ge
 node tools/servidor-local.mjs
 ```
 
-Imita a Vercel (barra final, 404 y la contraseña de la galería) en el puerto 3125. Todos los `index.html` de los decks **se generan** con su `gen.js`: no se editan a mano. Ver [CLAUDE.md](CLAUDE.md).
+Imita a Vercel (barra final, 404 y la contraseña de la galería) en el puerto 3125.
+
+**PDF de las láminas** (cualquier deck, con el Chrome del sistema):
+
+```bash
+node tools/pdf.mjs creator/soloq-val-previa
+```
+
+Deja `video-out/laminas[-arriba].pdf` en los decks de banda (cada página es la banda recortada, sin la guía de GAMEPLAY ni el reposo) y `video-out/slides.pdf` en los demás. Opciones: `--completa` (el lienzo entero), `--con-reposo`, `--banda=abajo|arriba` y `--calidad=90` (JPEG de cada página). `video-out/` no se sube. Todos los `index.html` de los decks **se generan** con su `gen.js`: no se editan a mano. Ver [CLAUDE.md](CLAUDE.md).
 
 ## Deploy
 
