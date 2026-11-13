@@ -17,16 +17,17 @@
 //   · Ninguna lámina arranca en negro (el azul noche con el patrón se ve desde el cuadro 0) ni tarda más de
 //     2,8 s en entrar.
 //
+// VERSIÓN 3 (13/11): salen sv-mixwell, sv-horcus, sv-sirmaza y sv-black; entran sv-top-pro, sv-top-elo y
+// sv-top-casual (layout G: los cinco canales más grandes de cada categoría, con sus seguidores en Twitch),
+// y sv-cierre dice «HOY 5 PM (CDMX): DÍA 1». Son 19 láminas y el reposo.
+//
 // ⚠️ Recetas que el paquete pide y se cambiaron (anotadas también en el paquete):
-//   · La tabla pide `letrero` en seis láminas, tres de ellas seguidas (sv-mixwell, sv-horcus, sv-sirmaza),
-//     y `palabra` en tres; su propia regla dice que ninguna receta pasa de dos (salvo contador y maquina)
-//     y que dos seguidas no repiten la principal. El MOLDE del letrero (foto, nombre, barra) se repite en
-//     todos; la RECETA `letrero` solo en sv-septimo y sv-mixwell. Las demás:
-//       - sv-horcus: la principal es `maquina` (las tres líneas se teclean); la foto cae con la curva golpe;
-//       - sv-sirmaza: la principal es el `destello` detrás de CAMPEÓN;
-//       - sv-black: entra desde la derecha con `cortinilla`;
+//   · `letrero` y `palabra` no pasan de dos: el molde del letrero (foto, nombre, barra) va en sv-septimo y
+//     sv-kadnita, pero la RECETA `letrero` solo en sv-septimo. Además:
 //       - sv-kadnita: la bandera `ondea` a mano (no existe en el kit) y las líneas entran con `lineas`;
 //       - sv-clips: la frase entra con `golpe` (palabra por palabra), no con `palabra`.
+//   · sv-top-pro, sv-top-elo y sv-top-casual: la receta principal es el `contador` de los seguidores (que sí
+//     puede repetirse); las caras entran con la curva golpe desde arriba, desde la derecha y desde abajo.
 //   · `crece` del kit es el FLIP de una celda: las columnas de sv-ladders suben a mano (scaleY desde abajo,
 //     curva `entrada`). `pulso` no existe: latido de escala con la curva golpe (nota de jhin-build).
 //   · sv-jubilona: las caras caen con la curva golpe y al final se separan a mano; `rebanadas` del kit
@@ -267,28 +268,38 @@ slides.push(lamina('sv-chamba', 'Yo soy desarrollador web.', `
       ${dato('DESARROLLADOR WEB', { x: 62, y: 400, w: 900, tam: 96, tracking: 6, k: 'rol', nowrap: true })}
       ${dato('<span data-k="url">AXL13.DEV</span>', { x: 62, y: 518, w: 900, tam: 96, tracking: 8, color: a(LUZ, 0.9), nowrap: true })}`));
 
-// ── 13 · sv-mixwell · F ─── 1,28 M en Twitch · PRO ── (letrero + contador)
-slides.push(lamina('sv-mixwell', 'Mixwell, con más de un millón de seguidores en Twitch.', `
-      <div data-k="letrero" style="position: absolute; left: 60px; top: 192px;">${perfil('MIXWELL', 'mixwell')}</div>
-      <div style="position: absolute; left: 60px; top: 380px; display: flex; align-items: baseline; gap: 22px; white-space: nowrap; text-shadow: 0 6px 30px rgba(0,0,0,.6);">
-        <span style="font-size: 160px; line-height: 1; letter-spacing: 3px; color: ${ROJO};"><span data-k="seguidores">1,28</span>&nbsp;M</span><span data-k="twitch" style="font-size: 66px; line-height: 1; letter-spacing: 5px;">EN TWITCH</span>
-      </div>
-      ${categoria('PRO', { x: 790, y: 210 })}`));
+// ── Layout G: los cinco canales más grandes de cada categoría (versión 3) ──
+// Seguidores en Twitch del 12/11 (TwitchTracker, en el paquete; confirmados con Twitch el 13/11).
+// [cara, nombre, valor, decimales, sufijo, línea chica]
+const TOP = {
+  'sv-top-pro': { titulo: 'PRO', desde: 'arriba', notas: 'En la Pro los cinco canales más grandes son Mixwell, Horcus, ViiZzzm, SirMaza y Borja.', filas: [
+    ['mixwell', 'MIXWELL', 1.28, 2, 'M', ''], ['horcus', 'HORCUS', 1.0, 1, 'M', 'CAMPEÓN 2022'], ['viizzzm', 'VIIZZZM', 618, 0, 'MIL', ''],
+    ['sirmaza', 'SIRMAZA', 488, 0, 'MIL', 'CAMPEÓN 2021'], ['borja', 'BORJA', 182, 0, 'MIL', '']] },
+  'sv-top-elo': { titulo: 'ELO ALTO', desde: 'derecha', notas: 'En Elo alto el canal más grande es el de Black; luego Leviathan, The akaleina, SergioFFerra y Santipatico.', filas: [
+    ['black', 'BLACK', 952, 0, 'MIL', 'LA JUBILONA'], ['leviathan', 'LEVIATHAN', 291, 0, 'MIL', ''], ['akaleina', 'THE AKALEINA', 249, 0, 'MIL', ''],
+    ['sergiofferra', 'SERGIOFFERRA', 203, 0, 'MIL', ''], ['santipatico', 'SANTIPATICO', 75, 0, 'MIL', '']] },
+  'sv-top-casual': { titulo: 'CASUAL', desde: 'abajo', notas: 'En Casual arriba está Franluque; luego Jesskiu, Patalea, HiaRaTW y Paula Quintela.', filas: [
+    ['franluque', 'FRANLUQUE', 228, 0, 'MIL', ''], ['jesskiu', 'JESSKIU', 103, 0, 'MIL', ''], ['patalea', 'PATALEA', 43, 0, 'MIL', ''],
+    ['hiaratw', 'HIARATW', 34, 0, 'MIL', ''], ['paulaquintela', 'PAULA QUINTELA', 30, 0, 'MIL', '']] },
+};
+const FX = (PW - (5 * 150 + 4 * 36)) / 2;
+const topCinco = (id) => {
+  const t = TOP[id];
+  return lamina(id, t.notas, `
+      ${dato(`<span style="color: ${ROJO};">${t.titulo}</span> · TOP 5 EN TWITCH`, { x: 60, y: 190, w: 960, tam: 58, tracking: 6, alinear: 'center', k: 'titulo', nowrap: true })}
+      ${t.filas.map(([c, nombre, valor, dec, suf, extra], i) => `
+      <div data-top data-paso="${i + 1}" style="position: absolute; left: ${FX + i * 186 - 18}px; top: 278px; width: 186px; text-align: center;">
+        <div style="margin: 0 auto; width: 150px;">${cara(c)}</div>
+        <div style="margin-top: 12px; font-size: 30px; line-height: 1; letter-spacing: 1px; white-space: nowrap;">${nombre}</div>
+        <div data-cifra style="margin-top: 10px; font-size: 64px; line-height: 1; letter-spacing: 2px; color: ${ROJO}; white-space: nowrap;"><span data-valor data-cuenta="${valor}" data-dec="${dec}">${valor.toFixed(dec).replace('.', ',')}</span><span style="margin-left: 6px; font-size: .5em; letter-spacing: 2px;">${suf}</span></div>
+        ${extra ? `<div style="margin-top: 8px; font-size: 28px; line-height: 1; letter-spacing: 2px; color: ${a(LUZ, 0.7)}; white-space: nowrap;">${extra}</div>` : ''}
+      </div>`).join('')}`, ` data-desde="${t.desde}"`);
+};
 
-// ── 14 · sv-horcus · F ─── campeón 2022, Radiant 645 RR, 2 meses lesionado ── (maquina; la foto cae con la curva golpe)
-slides.push(lamina('sv-horcus', 'Horcus ganó el de 2022 y este año se perdió dos meses por una lesión.', `
-      <div data-k="letrero" style="position: absolute; left: 60px; top: 192px;">${perfil('HORCUS', 'horcus')}</div>
-      ${dato('<span data-k="l1">CAMPEÓN 2022</span>', { x: 62, y: 384, w: 900, tam: 96, tracking: 5, nowrap: true })}
-      ${dato('<span data-k="l2">RADIANT 645 RR</span>', { x: 62, y: 482, w: 900, tam: 66, tracking: 4, color: a(LUZ, 0.8), nowrap: true })}
-      ${dato(`<span data-k="l3">2026: 2 MESES LESIONADO</span>`, { x: 62, y: 562, w: 900, tam: 66, tracking: 4, color: ROJO, nowrap: true })}`));
+// ── 13 · sv-top-pro · G ─── los cinco canales más grandes de la Pro ── (caen con la curva golpe + contador)
+slides.push(topCinco('sv-top-pro'));
 
-// ── 15 · sv-sirmaza · F ─── campeón 2021 ── (destello en CAMPEÓN)
-slides.push(lamina('sv-sirmaza', 'SirMaza ganó el de 2021.', `
-      <div data-k="letrero" style="position: absolute; left: 60px; top: 192px;">${perfil('SIRMAZA', 'sirmaza')}</div>
-      <div data-k="destello" style="position: absolute; left: ${300 - 280}px; top: ${470 - 280}px; pointer-events: none;">${kit.destello({ tam: 560, rayos: 18, color: '#FFD2D6', semilla: 'sirmaza' })}</div>
-      ${dato('<span data-k="campeon" style="display: inline-block;">CAMPEÓN 2021</span>', { x: 56, y: 400, w: 900, tam: 170, tracking: 6, nowrap: true })}`));
-
-// ── 16 · sv-jubilona · G ─── La Jubilona: cinco caras en fila ── (caen con la curva golpe; al final se separan)
+// ── 14 · sv-jubilona · G ─── La Jubilona: cinco caras en fila ── (caen con la curva golpe; al final se separan)
 const JUB = [['mixwell', 'MIXWELL'], ['horcus', 'HORCUS'], ['sirmaza', 'SIRMAZA'], ['borja', 'BORJA'], ['nixerino', 'NIXERINO']];
 const JX = (PW - (5 * 150 + 4 * 36)) / 2;
 slides.push(lamina('sv-jubilona', 'Mixwell, Horcus, SirMaza, Borja y Nixerino juegan juntos en La Jubilona, que en abril ganó el Premier; ahora los cinco están en la Pro.', `
@@ -301,17 +312,10 @@ slides.push(lamina('sv-jubilona', 'Mixwell, Horcus, SirMaza, Borja y Nixerino ju
       </div>`).join('')}
       ${dato(`5 EN LA PRO <span style="color: ${GRIS};">·</span> <span style="color: ${VERDE};">8.000&nbsp;€</span> AL ${ord(1, 'O')}`, { x: 60, y: 574, w: 900, tam: 56, tracking: 4, alinear: 'center', k: 'pie', nowrap: true })}`));
 
-// ── 17 · sv-black · F ─── Black, Elo alto, 952 mil en Twitch ── (cortinilla desde la derecha)
-slides.push(lamina('sv-black', 'Black, también de La Jubilona, se fue a Elo alto con casi un millón de seguidores.', `
-      <div data-k="grupo" style="position: absolute; inset: 0;">
-        <div data-k="letrero" style="position: absolute; left: 60px; top: 192px;">${perfil('BLACK', 'black')}</div>
-        <div style="position: absolute; left: 60px; top: 380px; display: flex; align-items: baseline; gap: 22px; white-space: nowrap; text-shadow: 0 6px 30px rgba(0,0,0,.6);">
-          <span data-k="seguidores" style="font-size: 160px; line-height: 1; letter-spacing: 3px; color: ${ROJO};">952</span><span style="font-size: 66px; line-height: 1; letter-spacing: 5px;">MIL EN TWITCH</span>
-        </div>
-        ${categoria('ELO ALTO', { x: 690, y: 210 })}
-      </div>`));
+// ── 15 · sv-top-elo · G ─── los cinco canales más grandes de Elo alto ── (entran desde la derecha + contador)
+slides.push(topCinco('sv-top-elo'));
 
-// ── 18 · sv-kadnita · F ─── Kadnita, Argentina, Elo alto ── (la bandera ondea a mano + lineas)
+// ── 16 · sv-kadnita · F ─── Kadnita, Argentina, Elo alto ── (la bandera ondea a mano + lineas)
 const TIRAS = 12, BAND = { x: 700, y: 400, w: 260, h: 162 };
 slides.push(lamina('sv-kadnita', 'De Latinoamérica solo encontré a Kadnita, que es argentina.', `
       <div data-k="letrero" style="position: absolute; left: 60px; top: 192px;">${perfil('KADNITA', 'kadnita')}</div>
@@ -324,7 +328,10 @@ slides.push(lamina('sv-kadnita', 'De Latinoamérica solo encontré a Kadnita, qu
       ${dato('<span data-k="lineas" style="display: block;">ARGENTINA<br>LA ÚNICA LATINA</span>', { x: 62, y: 400, w: 620, tam: 88, lh: 1.04, tracking: 5, nowrap: true })}
       ${categoria('ELO ALTO', { x: 690, y: 210 })}`));
 
-// ── 19 · sv-apuesta · F ─── mi apuesta: Horcus; top 1 Radiant x6 ── (sello rojo + barrido de luz en el ícono)
+// ── 17 · sv-top-casual · G ─── los cinco canales más grandes de Casual ── (entran desde abajo + contador)
+slides.push(topCinco('sv-top-casual'));
+
+// ── 18 · sv-apuesta · F ─── mi apuesta: Horcus; top 1 Radiant x6 ── (sello rojo + barrido de luz en el ícono)
 slides.push(lamina('sv-apuesta', 'Mi apuesta es Horcus: seis veces top uno Radiant, regresa de una lesión y quiere su segundo título.', `
       ${VINETA_ROJA}
       <div style="position: absolute; left: 60px; top: 196px;">${cara('horcus', { k: 'cara' })}</div>
@@ -335,13 +342,13 @@ slides.push(lamina('sv-apuesta', 'Mi apuesta es Horcus: seis veces top uno Radia
       </div>
       ${dato(`TOP 1 RADIANT <span style="color: ${ROJO};">X6</span>`, { x: 316, y: 440, w: 660, tam: 112, tracking: 5, k: 'top', nowrap: true })}`));
 
-// ── 20 · sv-cierre · A ─── ¿quién gana? mañana: día 1 ── (palabra + chispas rojas)
-slides.push(lamina('sv-cierre', 'Díganme quién creen que gana. Mañana arranca el día uno.', `
+// ── 19 · sv-cierre · A ─── ¿quién gana? hoy 5 PM (CDMX): día 1 ── (palabra + chispas rojas)
+slides.push(lamina('sv-cierre', 'Díganme quién creen que gana. Hoy a las cinco de la tarde, hora de México, arranca el día uno.', `
       <div style="position: absolute; inset: 0; overflow: hidden;"><div style="position: absolute; inset: -40px; background-image: url('assets/capturas/web-pickem-caras.jpg'); background-size: cover; background-position: center; filter: blur(6px) brightness(.3);"></div></div>
       <div style="position: absolute; inset: 0; background: linear-gradient(90deg, ${a(BG, 0.85)} 0%, ${a(BG, 0.4)} 60%, ${a(BG, 0.1)} 100%);"></div>
       <div data-k="chispas" style="position: absolute; left: 0; top: 190px; width: 760px; height: 260px;"></div>
       ${dato('<span data-k="pregunta" style="display: inline-block;">¿QUIÉN GANA?</span>', { x: 56, y: 196, w: 900, tam: 200, tracking: 6, nowrap: true })}
-      ${dato(`MAÑANA: <span style="color: ${ROJO};">DÍA 1</span>`, { x: 62, y: 430, w: 900, tam: 110, tracking: 6, k: 'manana', nowrap: true })}`));
+      ${dato(`HOY 5 PM (CDMX): <span style="color: ${ROJO};">DÍA 1</span>`, { x: 62, y: 440, w: 900, tam: 92, tracking: 5, k: 'manana', nowrap: true })}`));
 
 // ── reposo · A ─── azul noche con el patrón ──
 slides.push(lamina('sv-reposo', 'Reposo: la banda sin dato, para los huecos entre láminas.', `
@@ -359,6 +366,18 @@ const coreografias = `<script>
   // «pulso» no existe en el kit: latido de escala con la curva golpe (nota de jhin-build).
   var pulso = function (tl, el, en) { if (el) tl.to(el, { scale: 1.1, duration: 0.22, ease: 'golpe', yoyo: true, repeat: 1, transformOrigin: '0% 50%' }, en); };
   var muestra = function (tl, el, en) { if (el) tl.fromTo(el, { opacity: 0 }, { opacity: 1, duration: 0.2, immediateRender: true }, en); };
+  // Layout G de la versión 3: cada cara entra cuando la voz la nombra (data-paso) con la curva golpe, desde el
+  // lado que dice data-desde (Pro desde arriba, Elo alto desde la derecha, Casual desde abajo), y su cifra cuenta.
+  var topCinco = function (tl, s) {
+    aparece(tl, k(s, 'titulo'), 0, 0.35);
+    var d = s.getAttribute('data-desde'), de = d === 'derecha' ? { x: 90 } : d === 'abajo' ? { y: 70 } : { y: -70 };
+    q(s, '[data-top]').forEach(function (el, i) {
+      var t = 0.2 + i * 0.32, v = el.querySelector('[data-valor]');
+      tl.from(el, Object.assign({ opacity: 0, scale: 1.15, duration: 0.5, ease: 'golpe' }, de), t);
+      muestra(tl, el.querySelector('[data-cifra]'), t + 0.15);
+      efecto('contador', tl, v, { en: t + 0.15, dur: 0.8, cuenta: +v.getAttribute('data-cuenta'), decimales: +v.getAttribute('data-dec') });
+    });
+  };
   var C = {
     'sv-portada': function (tl, s) {
       aparece(tl, k(s, 'logo'), 0, 0.4);
@@ -435,27 +454,7 @@ const coreografias = `<script>
       // El cursor parpadea al terminar: el tecleo arranca en 0,6 para que todo acabe antes de 2,8 s.
       efecto('maquina', tl, k(s, 'url'), { en: 0.6, ritmo: 0.05, color: '${ROJO}' });
     },
-    'sv-mixwell': function (tl, s) {
-      efecto('letrero', tl, k(s, 'letrero').firstElementChild, { en: 0.1 });
-      muestra(tl, k(s, 'seguidores').parentNode.parentNode, 0.75);
-      efecto('contador', tl, k(s, 'seguidores'), { en: 0.75, dur: 1.2, cuenta: 1.28, decimales: 2 });
-      aparece(tl, k(s, 'categoria'), 1.4, 0.4);
-    },
-    'sv-horcus': function (tl, s) {
-      var l = k(s, 'letrero');
-      cae(tl, l.querySelector('[data-retrato]'), 0.05);
-      tl.from(l.querySelector('[data-barra]'), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.4, ease: 'entrada' }, 0.25);
-      aparece(tl, l.querySelector('[data-nombre]'), 0.3, 0.35);
-      ['l1', 'l2', 'l3'].forEach(function (n, i) { efecto('maquina', tl, k(s, n), { en: 0.7 + i * 0.55, ritmo: 0.035, cursor: 'no' }); });
-    },
-    'sv-sirmaza': function (tl, s) {
-      var l = k(s, 'letrero');
-      tl.from(l.querySelector('[data-retrato]'), { opacity: 0, scale: 0.85, duration: 0.45, ease: 'asentar' }, 0.05);
-      tl.from(l.querySelector('[data-barra]'), { scaleX: 0, transformOrigin: '0% 50%', duration: 0.4, ease: 'entrada' }, 0.2);
-      aparece(tl, l.querySelector('[data-nombre]'), 0.25, 0.35);
-      efecto('destello', tl, k(s, 'destello'), { en: 0.75, dur: 1.5, semilla: 'sirmaza' });
-      tl.from(k(s, 'campeon'), { opacity: 0, scale: 1.15, transformOrigin: '0% 60%', duration: 0.4, ease: 'golpe' }, 0.85);
-    },
+    'sv-top-pro': function (tl, s) { topCinco(tl, s); },
     'sv-jubilona': function (tl, s) {
       aparece(tl, k(s, 'titulo'), 0, 0.35); aparece(tl, k(s, 'premier'), 0.2, 0.35);
       var caras = q(s, '[data-jub]');
@@ -465,13 +464,7 @@ const coreografias = `<script>
       // Al final se separan hacia los lados (a mano: rebanadas del kit parte imágenes, no elementos).
       caras.forEach(function (el, i) { tl.to(el, { x: (i - 2) * 14, duration: 0.5, ease: 'power3.out' }, 2.0); });
     },
-    'sv-black': function (tl, s) {
-      // Entra desde la derecha: va aparte del grupo.
-      efecto('cortinilla', tl, k(s, 'grupo'), { direccion: 'izquierda', dur: 0.8, en: 0.05 });
-      tl.from(k(s, 'grupo'), { x: 90, duration: 0.8, ease: 'power3.out' }, 0.05);
-      muestra(tl, k(s, 'seguidores'), 0.8);
-      efecto('contador', tl, k(s, 'seguidores'), { en: 0.8, dur: 1.2, cuenta: 952 });
-    },
+    'sv-top-elo': function (tl, s) { topCinco(tl, s); },
     'sv-kadnita': function (tl, s) {
       aparece(tl, k(s, 'letrero'), 0.05, 0.45);
       aparece(tl, k(s, 'categoria'), 0.3, 0.4);
@@ -482,6 +475,7 @@ const coreografias = `<script>
       tl.from(k(s, 'bandera'), { opacity: 0, x: 40, duration: 0.45, ease: 'entrada' }, 0.3);
       efecto('lineas', tl, k(s, 'lineas'), { en: 0.7, dur: 0.8, escalon: 0.3 });
     },
+    'sv-top-casual': function (tl, s) { topCinco(tl, s); },
     'sv-apuesta': function (tl, s) {
       tl.from(k(s, 'cara'), { opacity: 0, scale: 0.85, duration: 0.4, ease: 'asentar' }, 0);
       efecto('sello', tl, k(s, 'apuesta'), { en: 0.25, fuerza: 10 });

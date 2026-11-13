@@ -6,7 +6,12 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
 
 **GENERADO** por `soloq-val-previa/gen.js`. «75 streamers, 22 días y 44 mil euros: arranca el SoloQ de Valorant» (canal Axelsine, domingo 16/11/2026) es la previa del SoloQ Challenge de VALORANT de Mixwell (del 16/11 al 07/12/2026). Sale del paquete `2026-11-16_arranca-el-soloq-de-valorant--paquete.md` (PKB de Axl, `videos/2026-11/`). Es el primer video de VALORANT del canal en láminas.
 
-- **Son 20 láminas y `sv-reposo`.** El paquete dice «21 + reposo», pero su guion y su tabla traen 20 marcas: van las 20, sin inventar otra.
+- **Versión 3 (13/11): son 19 láminas y `sv-reposo`.**
+  - Salieron `sv-mixwell`, `sv-horcus`, `sv-sirmaza` y `sv-black`.
+  - Entraron `sv-top-pro`, `sv-top-elo` y `sv-top-casual` (layout G, `topCinco()`): los cinco canales más grandes de cada categoría, con foto de Twitch, nombre, seguidores y una línea chica (CAMPEÓN 2022 y 2021, LA JUBILONA).
+  - `sv-cierre` dice «HOY 5 PM (CDMX): DÍA 1».
+  - El guion marcado es el de la versión 3.
+  - La versión 1 tenía 20 láminas y el reposo; el paquete decía 21.
 - **Banda ARRIBA con el formato de jhin-letalidad:**
   - De `jhin-letalidad/gen.js` se copiaron el riel (con otra semilla y los colores de VALORANT), el panel, la sección, la guía y `dato`.
   - Clips: `node tools/laminas.mjs creator/soloq-val-previa --banda=arriba` deja en `video-out/laminas-arriba/` 21 mp4 H.264 de 1080×680 con `alfa: false` y `banda: "arriba"`, sus PNG, `manifest.json` y `guion-marcado.txt` (la sección 3 del paquete sin las comillas de bloque).
@@ -17,7 +22,8 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
   - Las tres láminas de capturas (`sv-arranca`, `sv-mas-retos` y `sv-web`) llevan su dato en una `placa()` sobre la ventana.
 - **Las caras son la foto de perfil de Twitch** (300×300, de `static-cdn.jtvnw.net`), en círculo de 150 px con borde de 3 px.
   - La URL de cada foto salió de la consulta pública de Twitch (`gql.twitch.tv`, `profileImageURL`), porque cuatro páginas no la traen en el HTML.
-  - Los seguidores se confirmaron ahí el 12/11: Mixwell 1.282.268 y Black 952.013.
+  - Los seguidores del paquete (TwitchTracker, 12/11) se confirmaron ahí el 13/11. En pantalla van redondeados como dice el paquete: Horcus 1.004.174 sale como 1,0 M y Santipatico 74.655 como 75 MIL.
+  - Las cifras van en rojo, con el «M» o «MIL» a media altura: a 64 px enteros se juntaban entre columnas.
 - **Logos e íconos:**
   - De Wikimedia Commons: el logo de VALORANT (la V con la palabra, versión negra pasada a hueso), el ícono de TikTok (sin su fondo negro, en hueso) y la bandera de Argentina.
   - De valorant-api: el ícono de Radiante (tier 27).
@@ -25,13 +31,13 @@ Notas de este deck (se cargan al trabajar en su carpeta). Las reglas generales e
 - **La entrada más larga dura 2,65 s** (`sv-mas-retos`).
 
 ⚠️ **Recetas cambiadas** (anotadas también en el paquete):
-- **La tabla pide `letrero` en seis láminas (tres seguidas) y `palabra` en tres.** Su propia regla dice que nada salvo `contador` y `maquina` pasa de dos, y que dos seguidas no repiten la principal.
-  - El molde del letrero (foto, nombre y barra) se repite en todas; la receta `letrero` solo va en `sv-septimo` y `sv-mixwell`.
-  - En `sv-horcus` la principal es `maquina`, y la foto cae con la curva golpe.
-  - En `sv-sirmaza` la principal es el `destello`.
-  - En `sv-black` es `cortinilla` desde la derecha.
+- **`letrero` y `palabra` no pasan de dos.** El molde del letrero (foto, nombre y barra) va en `sv-septimo` y `sv-kadnita`, pero la receta `letrero` solo en `sv-septimo`.
   - En `sv-kadnita`, la bandera ondea a mano y las líneas entran con `lineas`.
   - En `sv-clips` la frase entra con `golpe` en vez de `palabra`.
+- **Los tres top 5:**
+  - La receta principal es el `contador` de los seguidores, que puede repetirse.
+  - Las caras entran con la curva golpe y `data-paso`: en la Pro desde arriba, en Elo alto desde la derecha y en Casual desde abajo.
+  - `sv-top-pro` y `sv-jubilona` van seguidas y las dos dejan caer las caras desde arriba, pero la principal de `sv-jubilona` es la separación del final.
 - **`crece` del kit es el FLIP de una celda:** las columnas de `sv-ladders` suben a mano (scaleY desde abajo con la curva `entrada`).
 - **`pulso` no existe:** el de `CASUAL` es un latido con la curva golpe.
 - **`ondea` no existe:** la bandera son 12 tiras que suben y bajan con un desfase que se apaga.
